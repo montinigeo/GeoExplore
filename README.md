@@ -142,11 +142,11 @@ L'animazione si articola in sei fasi sequenziali:
 
 **File:** `visibilita_sar_frane.html`
 
-Dashboard interattivo per l'analisi della **visibilità geometrica SAR** di superfici in frana, basato sui principi della geometria di acquisizione dei satelliti radar ad apertura sintetica (SAR/InSAR).
+Dashboard interattivo per l'analisi della **visibilità geometrica SAR** di aree in frana, basato sui principi della geometria di acquisizione dei satelliti radar ad apertura sintetica (SAR/InSAR).
 
 ### Contenuto
 
-La visibilità di un versante da satellite dipende dall'orientazione della superficie (aspect e slope) rispetto alla geometria di acquisizione del satellite (azimut e angolo off-nadir). Lo strumento calcola per ogni combinazione di aspect/slope la percentuale di visibilità nelle orbite ascendente e discendente, tenendo conto dei fenomeni di layover, foreshortening e shadow.
+La visibilità di una frana da satellite dipende dall'orientazione della direzione principale di movimento della frana rispetto alla geometria di acquisizione del satellite (azimut e angolo off-nadir). Lo strumento, ipotizzando che il dissesto gravitativo si muova lungo la direzione di massima pendenza del versante, calcola, per ogni combinazione di aspect/slope configurabile dall'utente, quale è la percentuale di movimento effettivamente rilevabile dal satellite nelle orbite ascendente e discendente. Inoltre, viene proposto un diagramma conbinato di visibilità confrontando le due orbite.
 
 ### Funzionalità
 
