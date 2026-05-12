@@ -9,6 +9,7 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | 🌀 Moto Armonico Periodico | [Apri](https://montinigeo.github.io/Simulazioni/moto_armonico.html) |
 | ⚛️ Diffrattometro XRD | [Apri](https://montinigeo.github.io/Simulazioni/diffrattometro_xrd_v5.html) |
 | 📡 DInSAR — Interferometria Radar Differenziale | [Apri](https://montinigeo.github.io/Simulazioni/dinsar.html) |
+| 🛰️ Visibilità SAR Frane | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
 
 ---
 
@@ -140,7 +141,7 @@ L'animazione si articola in sei fasi sequenziali:
 
 ## Autore
 
-Giovanni Montini con l'assistenza di Claude (Anthropic).
+Simulazioni sviluppate con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
@@ -229,6 +230,34 @@ La diffrazione a raggi X è una tecnica fondamentale per la determinazione della
 - Campione rappresentato come rettangolo rotante (BB) o fisso (θ-θ) con piani reticolari visibili
 - Angoli θ e 2θ visualizzati come archi crescenti sul goniometro
 - Layout responsive (PC: schema e diffrattogramma affiancati; mobile: verticale)
+
+---
+
+## 🛰️ Visibilità SAR Frane
+
+**File:** `visibilita_sar_frane.html`
+
+Dashboard interattivo per l'analisi della **visibilità geometrica SAR** di superfici in frana, basato sui principi della geometria di acquisizione dei satelliti radar ad apertura sintetica (SAR/InSAR).
+
+### Contenuto
+
+La visibilità di un versante da satellite dipende dall'orientazione della superficie (aspect e slope) rispetto alla geometria di acquisizione del satellite (azimut e angolo off-nadir). Lo strumento calcola per ogni combinazione di aspect/slope la percentuale di visibilità nelle orbite ascendente e discendente, tenendo conto dei fenomeni di layover, foreshortening e shadow.
+
+### Funzionalità
+
+- **Diagrammi polari** (aspect 0°–360° × slope 0°–90°) per orbita ascendente, discendente e visibilità combinata
+- Scala di colore continua 0–100% per i diagrammi singoli
+- Mappa a quattro classi per il diagramma combinato:
+  - 🟢 ASC ≥50% e DESC ≥50% — ottima copertura
+  - 🔴 ASC <50% e DESC <50% — scarsa copertura
+  - 🔵 Solo ASC ≥50% — visibile solo in ascendente
+  - 🟠 Solo DESC ≥50% — visibile solo in discendente
+- **Calcolo puntuale** interattivo: inserendo aspect e slope si ottengono percentuali di visibilità e classe per il satellite selezionato
+- Tooltip con valori precisi al passaggio del mouse sui diagrammi
+- Preset per i principali satelliti SAR: Sentinel-1, ALOS-2, COSMO-SkyMed, ICEYE e altri
+- Parametri personalizzabili (azimut e off-nadir per orbite ASC e DESC)
+- Tre livelli di risoluzione del diagramma (1°, 2°, 5°)
+- Layout responsive (PC: tre pannelli affiancati; tablet/mobile: ridisposizione automatica)
 
 ---
 

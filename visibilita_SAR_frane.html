@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PSI VIS — Dashboard</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#080c12">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&display=swap');
+:root{--bg:#080c12;--sur:#0f1520;--pan:#141c28;--brd:#1e2d42;--acc:#4a9eff;--txt:#cdd6e8;--dim:#4a5a72;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  padding:8px 16px;background:var(--sur);border-bottom:1px solid var(--brd);}
+.hl h1{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.2em;
+  color:var(--acc);text-transform:uppercase;}
+.hl p{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim);
+  letter-spacing:.08em;margin-top:2px;}
+.hr{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.cg{display:flex;flex-direction:column;gap:3px;}
+.cg label{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;
+  color:var(--dim);text-transform:uppercase;}
+.cg select{background:var(--pan);border:1px solid var(--brd);color:var(--txt);
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 8px;
+  border-radius:4px;min-width:180px;cursor:pointer;}
+.cg select:focus{outline:none;border-color:var(--acc);}
+main{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;flex:1;overflow:auto;}
+@media(max-width:920px){main{grid-template-columns:1fr 1fr;}body{height:auto;overflow:auto;}}
+@media(max-width:580px){main{grid-template-columns:1fr;}header{padding:8px 10px;}}
+.card{background:var(--sur);border:1px solid var(--brd);border-radius:10px;
+  display:flex;flex-direction:column;overflow:hidden;
+  animation:fi .4s ease both;}
+.card:nth-child(1){animation-delay:.05s;}
+.card:nth-child(2){animation-delay:.10s;}
+.card:nth-child(3){animation-delay:.15s;}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ch{padding:5px 10px 4px;border-bottom:1px solid var(--brd);display:flex;align-items:baseline;gap:8px;}
+.ct{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--acc);}
+.cs{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim);letter-spacing:.06em;}
+.cb{flex:1;display:flex;flex-direction:column;align-items:center;padding:4px 6px 2px;gap:4px;}
+.pw{position:relative;width:100%;aspect-ratio:1/1;max-width:460px;}
+.pw canvas{display:block;width:100%;height:100%;position:absolute;top:0;left:0;}
+.pw canvas:first-child{position:relative;}
+.cbw{display:flex;align-items:center;gap:6px;width:100%;max-width:380px;}
+.cbw canvas{height:10px;flex:1;border-radius:2px;}
+.cbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim);}
+.leg{display:flex;flex-wrap:wrap;gap:5px 12px;justify-content:center;padding:4px 6px 6px;}
+.li{display:flex;align-items:center;gap:5px;font-family:'Share Tech Mono',monospace;
+  font-size:9px;color:var(--txt);}
+.ld{width:10px;height:10px;border-radius:2px;flex-shrink:0;}
+.ht{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim);
+  text-align:center;min-height:12px;padding:0 4px 2px;}
+.calc-bar{background:var(--sur);border-top:1px solid var(--brd);
+  padding:7px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;}
+.slbl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.15em;
+  color:var(--acc);text-transform:uppercase;}
+.cgi{display:flex;flex-direction:column;gap:3px;}
+.cgi label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim);
+  letter-spacing:.1em;text-transform:uppercase;}
+.cgi input{background:var(--pan);border:1px solid var(--brd);color:var(--txt);
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 6px;
+  border-radius:4px;width:80px;}
+.cgi input:focus{outline:none;border-color:var(--acc);}
+.cr{display:flex;gap:16px;flex-wrap:wrap;}
+.ri{display:flex;flex-direction:column;gap:2px;}
+.ri .l{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim);
+  letter-spacing:.1em;text-transform:uppercase;}
+.rv{font-family:'Share Tech Mono',monospace;font-size:18px;font-weight:bold;line-height:1;}
+.sw{width:32px;height:20px;border-radius:3px;border:1px solid var(--brd);align-self:flex-end;}
+
+.custom-panel{display:none;flex-wrap:wrap;gap:10px;justify-content:center;
+  background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  padding:10px 16px;max-width:680px;width:100%;margin-bottom:12px;}
+.custom-panel.visible{display:flex;}
+.custom-panel .sect{font-family:'Share Tech Mono',monospace;font-size:9px;
+  letter-spacing:.14em;color:var(--accent);text-transform:uppercase;
+  width:100%;margin-bottom:2px;}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="hl"><h1>PSI VIS — Dashboard</h1>
+    <p>Persistent Scatterer Interferometry · Visibilità geometrica SAR</p></div>
+  <div class="hr">
+    <div class="cg"><label>Satellite</label><select id="sat"></select></div>
+    <div class="cg"><label>Risoluzione</label>
+      <select id="res"><option value="1">Alta (1°)</option>
+        <option value="2" selected>Media (2°)</option>
+        <option value="5">Bassa (5°)</option></select>
+    </div>
+  </div>
+</header>
+<div class="custom-panel" id="custom-panel"><div class="sect">▸ Parametri personalizzati</div><div class="cg"><label>Azimut ASC (°)</label><input type="number" id="c-az-a" value="-11" step="0.5" min="-180" max="360" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 8px;border-radius:4px;width:100%" oninput="onCustomChange()"></div><div class="cg"><label>Off-nadir ASC (°)</label><input type="number" id="c-on-a" value="42" step="0.5" min="1" max="89" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 8px;border-radius:4px;width:100%" oninput="onCustomChange()"></div><div class="cg"><label>Azimut DESC (°)</label><input type="number" id="c-az-d" value="191" step="0.5" min="-180" max="360" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 8px;border-radius:4px;width:100%" oninput="onCustomChange()"></div><div class="cg"><label>Off-nadir DESC (°)</label><input type="number" id="c-on-d" value="38" step="0.5" min="1" max="89" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;padding:5px 8px;border-radius:4px;width:100%" oninput="onCustomChange()"></div></div>
+<main>
+  <!-- ASC -->
+  <div class="card">
+    <div class="ch"><span class="ct">Ascendente</span><span class="cs" id="sub-a">—</span></div>
+    <div class="cb">
+      <div class="pw"><canvas id="cv-a" width="460" height="460"></canvas>
+        <canvas id="mk-a" width="460" height="460" style="pointer-events:none;position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+        <canvas id="ov-a" width="460" height="460" style="cursor:crosshair"></canvas></div>
+      <div class="cbw"><span class="cbl">0%</span><canvas id="cb-a" height="10"></canvas><span class="cbl">100%</span></div>
+      <div class="ht" id="tip-a">— hover —</div>
+    </div>
+  </div>
+  <!-- DESC -->
+  <div class="card">
+    <div class="ch"><span class="ct">Discendente</span><span class="cs" id="sub-d">—</span></div>
+    <div class="cb">
+      <div class="pw"><canvas id="cv-d" width="460" height="460"></canvas>
+        <canvas id="mk-d" width="460" height="460" style="pointer-events:none;position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+        <canvas id="ov-d" width="460" height="460" style="cursor:crosshair"></canvas></div>
+      <div class="cbw"><span class="cbl">0%</span><canvas id="cb-d" height="10"></canvas><span class="cbl">100%</span></div>
+      <div class="ht" id="tip-d">— hover —</div>
+    </div>
+  </div>
+  <!-- BOTH -->
+  <div class="card">
+    <div class="ch"><span class="ct">ASC + DESC</span><span class="cs">visibilità combinata</span></div>
+    <div class="cb">
+      <div class="pw"><canvas id="cv-b" width="460" height="460"></canvas>
+        <canvas id="mk-b" width="460" height="460" style="pointer-events:none;position:absolute;top:0;left:0;width:100%;height:100%"></canvas>
+        <canvas id="ov-b" width="460" height="460" style="cursor:crosshair"></canvas></div>
+      <div class="leg">
+        <div class="li"><div class="ld" style="background:#22c55e"></div><span>ASC ≥50% e DESC ≥50%</span></div>
+        <div class="li"><div class="ld" style="background:#ef4444"></div><span>ASC &lt;50% e DESC &lt;50%</span></div>
+        <div class="li"><div class="ld" style="background:#3b82f6"></div><span>ASC ≥50%, DESC &lt;50%</span></div>
+        <div class="li"><div class="ld" style="background:#f97316"></div><span>DESC ≥50%, ASC &lt;50%</span></div>
+      </div>
+      <div class="ht" id="tip-b">— hover —</div>
+    </div>
+  </div>
+</main>
+<div class="calc-bar">
+  <span class="slbl">▸ Calcolo puntuale</span>
+  <div class="cgi"><label>Aspect (°)</label>
+    <input type="number" id="ca" value="80" min="0" max="360" step="1" oninput="calc()"></div>
+  <div class="cgi"><label>Slope (°)</label>
+    <input type="number" id="cs" value="40" min="0" max="90" step="1" oninput="calc()"></div>
+  <div class="cr">
+    <div class="ri"><div class="l">ASC</div><div class="rv" id="ra" style="color:#ff00dc">—</div></div>
+    <div class="ri"><div class="l">DESC</div><div class="rv" id="rd" style="color:#00d2d2">—</div></div>
+    <div class="ri"><div class="l">Classe</div><div class="sw" id="rc"></div></div>
+  </div>
+</div>
+<script>
+// ── Presets (da InSAR Suite dialog.py) ───────────────────────────────────────
+const SATS = {
+  's1egms':  { label:'Sentinel-1 (EGMS)',     asc:{az:-11.0,on:42.0}, desc:{az:191.0,on:38.0} },
+  's1gen':   { label:'Sentinel-1 (generico)', asc:{az:-12.0,on:33.0}, desc:{az:192.0,on:33.0} },
+  'ers':     { label:'ERS / Envisat',         asc:{az:-13.0,on:23.0}, desc:{az:193.0,on:23.0} },
+  'alos':    { label:'ALOS / ALOS-2',         asc:{az:-10.0,on:34.0}, desc:{az:190.0,on:34.0} },
+  'rs2':     { label:'RADARSAT-2',            asc:{az:-10.0,on:35.0}, desc:{az:190.0,on:35.0} },
+  'csk':     { label:'COSMO-SkyMed',          asc:{az:-15.0,on:30.0}, desc:{az:195.0,on:30.0} },
+  'tsx':     { label:'TerraSAR-X / TanDEM-X', asc:{az:-10.0,on:35.0}, desc:{az:190.0,on:35.0} },
+  'custom':  { label:'Personalizzato',         asc:{az:-11.0,on:42.0}, desc:{az:191.0,on:38.0} },
+};
+
+// ── Formula pc_mov ────────────────────────────────────────────────────────────
+function pcMov(slp, asp, az, on) {
+  if (slp <= 3) return Math.cos(on*Math.PI/180)*100;
+  const phi=az*Math.PI/180, theta=on*Math.PI/180;
+  const a=slp*Math.PI/180, b=asp*Math.PI/180;
+  return Math.abs(Math.cos(a)*Math.sin(theta)*Math.sin(b-phi)+Math.sin(a)*Math.cos(theta))*100;
+}
+
+// ── Scala colore pc_mov ───────────────────────────────────────────────────────
+const PC_STOPS=[[0,[122,16,16]],[25,[196,74,24]],[50,[200,160,16]],[75,[58,170,56]],[100,[16,128,80]]];
+function pcColor(v) {
+  v=Math.max(0,Math.min(100,v));
+  for(let i=0;i<PC_STOPS.length-1;i++){
+    const[v0,c0]=PC_STOPS[i],[v1,c1]=PC_STOPS[i+1];
+    if(v<=v1){const t=(v-v0)/(v1-v0);return c0.map((c,j)=>Math.round(c+t*(c1[j]-c)));}
+  }
+  return PC_STOPS[PC_STOPS.length-1][1];
+}
+
+// ── Classe combinata ──────────────────────────────────────────────────────────
+function classRgb(a,d){
+  const ha=a>=50,hd=d>=50;
+  if(ha&&hd)  return[34,197,94];
+  if(!ha&&!hd)return[239,68,68];
+  if(ha&&!hd) return[59,130,246];
+  return[249,115,22];
+}
+function classCSS(a,d){const[r,g,b]=classRgb(a,d);return`rgb(${r},${g},${b})`;}
+
+// ── Griglia polare ────────────────────────────────────────────────────────────
+function drawGrid(ctx,cx,cy,R){
+  ctx.save();
+  for(let s=10;s<=90;s+=10){
+    const r=(s/90)*R;
+    ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);
+    ctx.strokeStyle=s===90?'rgba(0,0,0,1)':'rgba(0,0,0,0.6)';
+    ctx.lineWidth=s===90?2:0.7;ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=0.7;
+  for(let a=0;a<360;a+=10){
+    const rad=(a-90)*Math.PI/180;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(rad),cy+R*Math.sin(rad));ctx.stroke();
+  }
+  ctx.fillStyle='rgba(0,0,0,0.8)';ctx.font='8px "Share Tech Mono"';ctx.textAlign='left';
+  for(let s=10;s<90;s+=10){const r=(s/90)*R;ctx.fillText(s+'°',cx+3,cy-r+9);}
+  const dirs=['N','NE','E','SE','S','SW','W','NW'];
+  ctx.fillStyle='rgba(210,220,235,0.95)';ctx.font='bold 10px "Barlow Condensed"';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let i=0;i<8;i++){
+    const rad=(i*45-90)*Math.PI/180;
+    ctx.fillText(dirs[i],cx+(R+16)*Math.cos(rad),cy+(R+16)*Math.sin(rad));
+  }
+  ctx.restore();
+}
+
+// ── Freccia AZ + LOS ──────────────────────────────────────────────────────────
+function drawAzLOS(ctx,cx,cy,R,az,on,color,label){
+  const azRad=(az-90)*Math.PI/180;
+  const tipX=cx+R*Math.cos(azRad),tipY=cy+R*Math.sin(azRad);
+  const tailX=cx-R*Math.cos(azRad),tailY=cy-R*Math.sin(azRad);
+  const alen=8;
+  ctx.save();
+  ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.moveTo(tailX,tailY);ctx.lineTo(tipX,tipY);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(tipX,tipY);
+  ctx.lineTo(tipX-alen*Math.cos(azRad-0.38),tipY-alen*Math.sin(azRad-0.38));
+  ctx.lineTo(tipX-alen*Math.cos(azRad+0.38),tipY-alen*Math.sin(azRad+0.38));
+  ctx.closePath();ctx.fill();
+  if(label){
+    ctx.font='9px "Share Tech Mono"';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(label,cx+(R+20)*Math.cos(azRad),cy+(R+20)*Math.sin(azRad));
+  }
+  const lookRad=(az+90)*Math.PI/180 - Math.PI/2;  // az+90 → look dir, -90 per conv canvas Nord=su
+  const losLen=R*0.46;
+  const lx=cx+losLen*Math.cos(lookRad),ly=cy+losLen*Math.sin(lookRad);
+  ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(lx,ly);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lx,ly);
+  ctx.lineTo(lx-alen*Math.cos(lookRad-0.38),ly-alen*Math.sin(lookRad-0.38));
+  ctx.lineTo(lx-alen*Math.cos(lookRad+0.38),ly-alen*Math.sin(lookRad+0.38));
+  ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+
+// ── Disegna celle polari pc_mov ───────────────────────────────────────────────
+function drawCellsPcMov(ctx,cx,cy,R,az,on,res){
+  const nA=Math.round(360/res),nS=Math.round(90/res);
+  for(let ai=0;ai<nA;ai++){
+    const asp0=ai*res,asp1=asp0+res,aspM=(asp0+asp1)/2;
+    const a0=(asp0-90)*Math.PI/180,a1=(asp1-90)*Math.PI/180;
+    for(let si=0;si<nS;si++){
+      const slp0=si*res,slp1=slp0+res,slpM=(slp0+slp1)/2;
+      const r0=(slp0/90)*R,r1=(slp1/90)*R;
+      const[r,g,b]=pcColor(pcMov(slpM,aspM,az,on));
+      ctx.beginPath();ctx.arc(cx,cy,r1,a0,a1);ctx.arc(cx,cy,r0,a1,a0,true);
+      ctx.closePath();ctx.fillStyle=`rgba(${r},${g},${b},0.93)`;ctx.fill();
+    }
+  }
+}
+
+// ── Disegna celle polari combinato ────────────────────────────────────────────
+function drawCellsBoth(ctx,cx,cy,R,azA,onA,azD,onD,res){
+  const nA=Math.round(360/res),nS=Math.round(90/res);
+  for(let ai=0;ai<nA;ai++){
+    const asp0=ai*res,asp1=asp0+res,aspM=(asp0+asp1)/2;
+    const a0=(asp0-90)*Math.PI/180,a1=(asp1-90)*Math.PI/180;
+    for(let si=0;si<nS;si++){
+      const slp0=si*res,slp1=slp0+res,slpM=(slp0+slp1)/2;
+      const r0=(slp0/90)*R,r1=(slp1/90)*R;
+      const pcA=pcMov(slpM,aspM,azA,onA),pcD=pcMov(slpM,aspM,azD,onD);
+      const[r,g,b]=classRgb(pcA,pcD);
+      ctx.beginPath();ctx.arc(cx,cy,r1,a0,a1);ctx.arc(cx,cy,r0,a1,a0,true);
+      ctx.closePath();ctx.fillStyle=`rgba(${r},${g},${b},0.93)`;ctx.fill();
+    }
+  }
+}
+
+// ── Sfondo cerchio ────────────────────────────────────────────────────────────
+function drawBg(ctx,cx,cy,R,bg){
+  ctx.save();ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
+  ctx.fillStyle=bg;ctx.fill();ctx.restore();
+}
+
+// ── Crosshair overlay ─────────────────────────────────────────────────────────
+function drawCrosshair(ov,mx,my,R){
+  const ctx=ov.getContext('2d');ctx.clearRect(0,0,ov.width,ov.height);
+  const cx=ov.width/2,cy=ov.height/2,ox=cx+mx,oy=cy+my;
+  ctx.save();ctx.strokeStyle='rgba(255,255,255,0.65)';ctx.lineWidth=1;
+  ctx.setLineDash([2,3]);
+  ctx.beginPath();ctx.moveTo(ox,cy-R);ctx.lineTo(ox,cy+R);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-R,oy);ctx.lineTo(cx+R,oy);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(ox,oy,5,0,2*Math.PI);
+  ctx.strokeStyle='rgba(255,255,255,0.85)';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.restore();
+}
+
+// ── Marker puntuale ───────────────────────────────────────────────────────────
+function drawMarker(ov,slp,asp,R){
+  const ctx=ov.getContext('2d');ctx.clearRect(0,0,ov.width,ov.height);
+  const cx=ov.width/2,cy=ov.height/2;
+  const r=(slp/90)*R,rad=(asp-90)*Math.PI/180;
+  const mx=cx+r*Math.cos(rad),my=cy+r*Math.sin(rad);
+  ctx.save();ctx.strokeStyle='rgba(255,255,255,0.8)';ctx.lineWidth=1.2;
+  ctx.setLineDash([2,3]);
+  ctx.beginPath();ctx.moveTo(mx,cy-R);ctx.lineTo(mx,cy+R);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-R,my);ctx.lineTo(cx+R,my);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath();ctx.arc(mx,my,6,0,2*Math.PI);
+  ctx.strokeStyle='white';ctx.lineWidth=1.5;ctx.stroke();
+  ctx.beginPath();ctx.arc(mx,my,2,0,2*Math.PI);
+  ctx.fillStyle='white';ctx.fill();ctx.restore();
+}
+
+// ── Colorbar ──────────────────────────────────────────────────────────────────
+function drawColorbar(cb){
+  if(!cb)return;const ctx=cb.getContext('2d');const W=cb.width,H=cb.height;
+  for(let x=0;x<W;x++){const[r,g,b]=pcColor((x/W)*100);
+    ctx.fillStyle=`rgb(${r},${g},${b})`;ctx.fillRect(x,0,1,H);}
+}
+
+// ── Coords hover ──────────────────────────────────────────────────────────────
+function hoverCoords(e,ov,R){
+  const rect=ov.getBoundingClientRect();
+  const scX=ov.width/rect.width,scY=ov.height/rect.height;
+  const mx=(e.clientX-rect.left)*scX-ov.width/2;
+  const my=(e.clientY-rect.top)*scY-ov.height/2;
+  const dist=Math.sqrt(mx*mx+my*my);
+  if(dist>R||dist<1)return null;
+  const asp=((Math.atan2(mx,-my)*180/Math.PI)+360)%360;
+  const slp=(dist/R)*90;
+  return{asp,slp,mx,my};
+}
+
+// ── Opzioni select satellite ──────────────────────────────────────────────────
+
+function getSat(){
+  const key=document.getElementById('sat').value;
+  if(key!=='custom')return SATS[key];
+  return{label:'Personalizzato',
+    asc:{az:parseFloat(document.getElementById('c-az-a').value)||0,
+         on:parseFloat(document.getElementById('c-on-a').value)||39},
+    desc:{az:parseFloat(document.getElementById('c-az-d').value)||0,
+          on:parseFloat(document.getElementById('c-on-d').value)||39}};
+}
+function onSatChange(){
+  const isC=document.getElementById('sat').value==='custom';
+  document.getElementById('custom-panel').classList.toggle('visible',isC);
+  drawAll();
+}
+function onCustomChange(){ if(document.getElementById('sat').value==='custom')drawAll(); }
+
+function buildSatOptions(selId){
+  const sel=document.getElementById(selId);
+  Object.entries(SATS).forEach(([k,v])=>{
+    const o=document.createElement('option');o.value=k;o.textContent=v.label;sel.appendChild(o);
+  });
+}
+
+const Ra=460/2-26, Rb=460/2-26;
+
+function drawOne(cvId, az, on, res, color, label){
+  const cv=document.getElementById(cvId),ctx=cv.getContext('2d');
+  const cx=cv.width/2,cy=cv.height/2,R=cv.width/2-26;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  drawBg(ctx,cx,cy,R,'#080c12');
+  drawCellsPcMov(ctx,cx,cy,R,az,on,res);
+  drawGrid(ctx,cx,cy,R);
+  drawAzLOS(ctx,cx,cy,R,az,on,color,label);
+}
+function drawBoth(cvId, azA,onA,azD,onD, res){
+  const cv=document.getElementById(cvId),ctx=cv.getContext('2d');
+  const cx=cv.width/2,cy=cv.height/2,R=cv.width/2-26;
+  ctx.clearRect(0,0,cv.width,cv.height);
+  drawBg(ctx,cx,cy,R,'#080c12');
+  drawCellsBoth(ctx,cx,cy,R,azA,onA,azD,onD,res);
+  drawGrid(ctx,cx,cy,R);
+  drawAzLOS(ctx,cx,cy,R,azA,onA,'rgba(255,0,220,0.95)','ASC');
+  drawAzLOS(ctx,cx,cy,R,azD,onD,'rgba(0,210,210,0.95)','DESC');
+}
+
+function setupHover(ovId,tipId,mode,sat){
+  const ov=document.getElementById(ovId);
+  const clone=ov.cloneNode(true);
+  ov.parentNode.replaceChild(clone,ov);
+  const nov=document.getElementById(ovId);
+  const R=nov.width/2-26;
+  nov.addEventListener('mousemove',e=>{
+    const c=hoverCoords(e,nov,R);
+    if(!c){nov.getContext('2d').clearRect(0,0,nov.width,nov.height);
+      document.getElementById(tipId).textContent='— hover —';return;}
+    const a=pcMov(c.slp,c.asp,sat.asc.az,sat.asc.on);
+    const d=pcMov(c.slp,c.asp,sat.desc.az,sat.desc.on);
+    drawCrosshair(nov,c.mx,c.my,R);
+    const tip=document.getElementById(tipId);
+    if(mode==='a')
+      tip.innerHTML=`<b style="color:#4a9eff">${c.asp.toFixed(1)}°</b> `+
+        `<b style="color:#4a9eff">${c.slp.toFixed(1)}°</b> `+
+        `<b style="color:#ff00dc">${a.toFixed(1)}%</b>`;
+    else if(mode==='d')
+      tip.innerHTML=`<b style="color:#4a9eff">${c.asp.toFixed(1)}°</b> `+
+        `<b style="color:#4a9eff">${c.slp.toFixed(1)}°</b> `+
+        `<b style="color:#00d2d2">${d.toFixed(1)}%</b>`;
+    else{
+      const col=classCSS(a,d);
+      tip.innerHTML=`<b style="color:#4a9eff">${c.asp.toFixed(1)}°</b> `+
+        `<b style="color:#4a9eff">${c.slp.toFixed(1)}°</b> `+
+        `ASC <b style="color:#ff00dc">${a.toFixed(1)}%</b> `+
+        `DESC <b style="color:#00d2d2">${d.toFixed(1)}%</b> `+
+        `<span style="display:inline-block;width:8px;height:8px;border-radius:1px;`+
+        `background:${col};vertical-align:middle"></span>`;
+    }
+  });
+  nov.addEventListener('mouseleave',()=>{
+    nov.getContext('2d').clearRect(0,0,nov.width,nov.height);
+    document.getElementById(tipId).textContent='— hover —';
+  });
+}
+
+function clearMarkers(){
+  ['mk-a','mk-d','mk-b'].forEach(id=>{
+    const mk=document.getElementById(id);
+    if(mk)mk.getContext('2d').clearRect(0,0,mk.width,mk.height);
+  });
+}
+function drawAll(){
+  const satKey=document.getElementById('sat').value;
+  const res=parseInt(document.getElementById('res').value)||2;
+  const sat=getSat();
+  document.getElementById('sub-a').textContent=`az ${sat.asc.az}°  on ${sat.asc.on}°`;
+  document.getElementById('sub-d').textContent=`az ${sat.desc.az}°  on ${sat.desc.on}°`;
+  drawOne('cv-a',sat.asc.az, sat.asc.on, res,'rgba(255,0,220,0.95)');
+  drawOne('cv-d',sat.desc.az,sat.desc.on,res,'rgba(0,210,210,0.95)');
+  drawBoth('cv-b',sat.asc.az,sat.asc.on,sat.desc.az,sat.desc.on,res);
+  drawColorbar(document.getElementById('cb-a'));
+  drawColorbar(document.getElementById('cb-d'));
+  setupHover('ov-a','tip-a','a',sat);
+  setupHover('ov-d','tip-d','d',sat);
+  setupHover('ov-b','tip-b','b',sat);
+  clearMarkers();
+  calc();
+}
+
+function calc(){
+  const asp=parseFloat(document.getElementById('ca').value);
+  const slp=parseFloat(document.getElementById('cs').value);
+  if(isNaN(asp)||isNaN(slp))return;
+  const sat=getSat();
+  const a=pcMov(slp,asp,sat.asc.az,sat.asc.on);
+  const d=pcMov(slp,asp,sat.desc.az,sat.desc.on);
+  document.getElementById('ra').textContent=a.toFixed(1)+'%';
+  document.getElementById('rd').textContent=d.toFixed(1)+'%';
+  document.getElementById('rc').style.background=classCSS(a,d);
+  [['ov-a','mk-a'],['ov-d','mk-d'],['ov-b','mk-b']].forEach(([oid,mid])=>{
+    const mk=document.getElementById(mid);
+    const R=mk.width/2-26;
+    drawMarker(mk,slp,asp,R);
+  });
+}
+
+document.getElementById('sat').addEventListener('change',onSatChange);
+document.getElementById('res').addEventListener('change',drawAll);
+buildSatOptions('sat');
+drawAll();
+</script></body></html>
