@@ -168,7 +168,7 @@ La visibilità di un versante da satellite dipende dall'orientazione della super
 
 ## Autore
 
-Simulazioni sviluppate con l'assistenza di Claude (Anthropic).
+Simulazioni sviluppate da Giovanni Montini con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
