@@ -10,6 +10,54 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | ⚛️ Diffrattometro XRD | [Apri](https://montinigeo.github.io/Simulazioni/diffrattometro_xrd_v5.html) |
 | 📡 DInSAR — Interferometria Radar Differenziale | [Apri](https://montinigeo.github.io/Simulazioni/dinsar.html) |
 | 🛰️ Visibilità SAR Frane | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
+| 🔥 Diagrammi di Fase — Fusi Silicatici | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
+
+---
+
+## 🔥 Diagrammi di Fase — Fusi Silicatici Binari
+
+**File:** `diagrammi_fase.html`
+
+Simulazioni interattive dei quattro principali diagrammi di fase binari della petrologia ignea. Ogni diagramma anima il percorso di raffreddamento di un fuso silicatico, mostrando in tempo reale la posizione del liquido (punto rosso), del solido (punto blu) e la temperatura corrente (punto verde).
+
+### I. Albite — Anortite (Ab-An): soluzione solida completa
+
+Ab (NaAlSi₃O₈) e An (CaAl₂Si₂O₈) sono completamente miscibili allo stato solido e liquido. Il liquidus è fortemente curvo, il solidus quasi lineare. Durante il raffreddamento il solido che cristallizza è sempre più ricco in An rispetto al liquido coesistente (principio della leva). La composizione finale del solido coincide con la composizione iniziale del fuso per conservazione della massa.
+
+**Dati:** tabelle termodinamiche sperimentali (Bowen 1913).
+
+### II. Diopside — Anortite (Di-An): eutettico semplice
+
+Di (CaMgSi₂O₆) e An non sono miscibili allo stato solido. Il sistema presenta un eutettico E a 42% An, 1274°C. A sinistra di E cristallizza Di puro, a destra An puro; all'eutettico la temperatura rimane costante fino alla completa solidificazione. La pausa all'eutettico è animata esplicitamente (2 secondi).
+
+**Dati:** Bowen (1915).
+
+### III. Leucite — SiO₂ (Lc-SiO₂): peritettico + eutettico
+
+Il sistema più complesso dei quattro. Il K-feldspato/Sanidino (Sa) è un composto intermedio che si forma per reazione peritettica Lc+L→Sa a 1557°C. Sono simulate tre situazioni distinte in base alla composizione iniziale:
+
+- **cx ≤ 17.8%** — il liquido si esaurisce al peritettico: solido finale **Lc + Sa**
+- **17.8% < cx < 40%** — tutta la Lc si converte, il liquido residuo raggiunge l'eutettico: solido finale **Sa + SiO₂**
+- **cx ≥ 40%** — nessuna Lc, percorso diretto verso l'eutettico a 1080°C: solido finale **Sa + SiO₂**
+
+La composizione percentuale del solido finale è calcolata dalla regola della leva e visualizzata al termine dell'animazione.
+
+**Dati:** Bowen (1914), Schairer & Bowen (1947).
+
+### IV. Albite — Ortoclasio (Ab-Or): due soluzioni solide + solvus
+
+Ab (NaAlSi₃O₈) e Or/Sanidino (KAlSi₃O₈) mostrano due campi di soluzione solida completa che convergono a un minimo di fusione a 37% Or, 1063°C (punto termodinamico, non un minerale specifico). Sotto il solidus si forma una soluzione solida omogenea (alkali feldspar). Sotto il solvus (picco a ~660°C) la diversa dimensione di Na⁺ e K⁺ provoca l'essoluzione pertitica: i due feldspati si separano per diffusione allo stato solido in lamelle alternate di Ab-ricca e Or-ricca (pertite). La velocità di raffreddamento determina la grossolanità della pertite. Il diagramma usa un **asse spezzato** per mostrare simultaneamente i due lobi L+S (1000–1170°C) e la campana del solvus (400–800°C).
+
+**Dati:** Bowen & Tuttle (1950), Morse (1970), Thompson & Waldbaum (1969).
+
+### Funzionalità comuni
+
+- Slider composizione iniziale (% componente B)
+- Animazione con controllo velocità (0.5×–3×) e pausa/riavvio
+- Punto rosso sul liquidus, punto blu sul solidus, punto verde sulla composizione totale
+- Pause di 2 secondi agli invarianti (eutettico, peritettico)
+- Composizione finale del solido calcolata dalla regola della leva e visualizzata nel pannello laterale
+- Velocità di raffreddamento uniforme in tutte le zone del diagramma
 
 ---
 
