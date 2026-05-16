@@ -54,10 +54,11 @@ Ab (NaAlSi₃O₈) e Or/Sanidino (KAlSi₃O₈) mostrano due campi di soluzione 
 
 - Slider composizione iniziale (% componente B)
 - Animazione con controllo velocità (0.5×–3×) e pausa/riavvio
-- Punto rosso sul liquidus, punto blu sul solidus, punto verde sulla composizione totale
+- Punto **ciano** sul liquidus, punto **arancio** sul solidus, punto **verde** sulla composizione totale
 - Pause di 2 secondi agli invarianti (eutettico, peritettico)
 - Composizione finale del solido calcolata dalla regola della leva e visualizzata nel pannello laterale
 - Velocità di raffreddamento uniforme in tutte le zone del diagramma
+- Interfaccia dark theme coerente con le altre simulazioni della raccolta
 
 ---
 
