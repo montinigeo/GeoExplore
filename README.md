@@ -135,7 +135,9 @@ L'animazione si articola in sei fasi sequenziali:
 - Banda C (Sentinel-1): λ = 5.6 cm
 - Angolo di incidenza LOS: 35°
 - Baseline orbitale: 0 m (per semplicità didattica)
-- Spostamento del bersaglio Δd: regolabile con slider (−14 ÷ +14 cm)
+- Spostamento del bersaglio Δd: regolabile con slider (−λ/4 ÷ +λ/4 = −1.4 ÷ +1.4 cm)
+
+Il range è limitato a **±λ/4** perché questo è il massimo spostamento misurabile senza ambiguità di fase. Il segnale radar percorre il tragitto andata+ritorno, quindi la fase accumulata è Δφ = 4π·Δd/λ: uno spostamento di λ/4 produce esattamente Δφ = 180°, il massimo distinguibile. Superato questo valore la fase si "avvolge" (phase wrapping) e il satellite non è in grado di distinguere lo spostamento reale da quello apparente. Per questo motivo lo sfasamento misurato è sempre espresso come Δd_mis ± n·λ/2, dove n è un intero incognito che rappresenta l'ambiguità di fase intera.
 
 ---
 

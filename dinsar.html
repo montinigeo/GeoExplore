@@ -76,7 +76,7 @@ canvas{width:100%;height:100%;display:block}
     <div class="sl">Spostamento bersaglio</div>
     <div class="cr">
       <div class="ch">Δd lungo LOS <span class="cv" id="dspV">0.7 cm</span></div>
-      <input type="range" id="dspS" min="-14" max="14" step="0.2" value="0.7">
+      <input type="range" id="dspS" min="-1.4" max="1.4" step="0.05" value="0.7">
     </div>
   </div>
   <div>
@@ -95,7 +95,7 @@ canvas{width:100%;height:100%;display:block}
       L'onda di <b>ritorno</b> riparte da zero al bersaglio con la fase accumulata φ = 4πR/λ.<br><br>
       La fase residua (mod 2π) cambia di Δφ = 4πΔd/λ tra T1 e T2.<br><br>
       1 frangia = λ/2 ≈ <b>2.8 cm</b><br>
-      (Δd=λ/2 → Δφ=π, Δd=λ → Δφ=2π≡0)
+      Range non ambiguo: |Δd| &le; λ/4 = 1.4 cm &rarr; |Δφ| &le; 180°
     </div>
   </div>
   <div>
@@ -440,7 +440,8 @@ function drawPhase(){
 
   const ph1=phi_ret(R1);
   const ph2=phi_ret(R1+DSP);
-  const dph=(ph2-ph1+2*Math.PI)%(2*Math.PI);
+  let dph=(ph2-ph1+2*Math.PI)%(2*Math.PI);
+  if(dph>Math.PI) dph-=2*Math.PI; // porta in (-pi, +pi)
 
   const xS=W*0.08, xE=W*0.92;
   const nCy=2.5, wl=(xE-xS)/nCy, k=2*Math.PI/wl;
@@ -505,7 +506,7 @@ function drawPhase(){
     gPh.setLineDash([]);
 
     // Label Δφ sopra la freccia
-    const dphDeg=(dph*180/Math.PI).toFixed(1);
+    const dphDeg=(dph*180/Math.PI).toFixed(1); // dph e' gia' in (-pi,+pi)
     gPh.font='bold 10px Space Mono'; gPh.fillStyle='#b4ff6b'; gPh.textAlign='center';
     gPh.fillText(`Δφ = ${dphDeg}°`, (xL+xR)/2, yArr-8);
 
@@ -515,8 +516,11 @@ function drawPhase(){
       gPh.globalAlpha=da*fa;
       gPh.font='700 10px Space Mono'; gPh.fillStyle='#b4ff6b';
       gPh.textAlign='center';
-      const dspCm=(DSP*100).toFixed(1);
-      gPh.fillText(`Δd = λ · Δφ / (4π) = ${dspCm} cm  (± n · λ/2)`, W/2, H*0.93);
+      // Lo spostamento "misurato" dal satellite e' calcolato dalla Df osservata
+      // Dd_mis = Dphi * lambda / (4*pi)  con Dphi in (-pi, +pi)
+      const dspMisCm=(dph*LAMBDA/(4*Math.PI)*100).toFixed(2);
+      const halfLamCm=(LAMBDA/2*100).toFixed(1);
+      gPh.fillText(`Sfasamento misurato = ${dspMisCm} cm  (± n·λ/2 = ± n·${halfLamCm} cm)`, W/2, H*0.93);
     }
 
     gPh.restore();
@@ -556,7 +560,8 @@ function drawSinFull(g,x1,x2,yM,amp,k,phase,col,alpha,label){
 // ─── INFO ─────────────────────────────────────────────
 function updateInfo(){
   const ph1=phi_ret(R1), ph2=phi_ret(R1+DSP);
-  const dph=(ph2-ph1+2*Math.PI)%(2*Math.PI);
+  let dph=(ph2-ph1+2*Math.PI)%(2*Math.PI);
+  if(dph>Math.PI) dph-=2*Math.PI;
   document.getElementById('phi1v').textContent=(ph1*180/Math.PI).toFixed(1)+'°';
   document.getElementById('phi2v').textContent=(ph2*180/Math.PI).toFixed(1)+'°';
   document.getElementById('dphiv').textContent=(dph*180/Math.PI).toFixed(1)+'°';
