@@ -423,18 +423,17 @@ function drawPhase(){
   // Mostra onda T2 dalla fine della fase 4 (ritorno T2)
   const ph=STATE.ph, t=eIO(clamp(STATE.t,0,1));
 
-  // a1: appare all'inizio della fase 2 (subito dopo T1 ritorno)
-  //     dissolvenza rapida nei primi ~60% della fase 2 (0.8s totali -> ~0.5s)
+  // a1: appare negli ultimi 0.5s della fase 1 (T1 ritorno, 3s totali)
+  // t da 0.833 a 1.0 -> dissolvenza in 0.5s reali
   let a1=0;
-  if(ph===2)      a1=clamp(t/0.6,0,1);
-  else if(ph>=3)  a1=1;
+  if(ph===1)      a1=clamp((t-0.833)/0.167,0,1);
+  else if(ph>=2)  a1=1;
 
-  // a2: appare subito all'inizio della fase 5, stessa durata reale di T1
-  // fase 2 dura 0.8s con fade in t=0..0.6 -> 0.48s reali
-  // fase 5 dura 4s -> 0.48s reali = t=0..0.12
+  // a2: appare negli ultimi 0.5s della fase 4 (T2 ritorno, 3s totali)
+  // stessa logica speculare di a1
   let a2=0;
-  if(ph===5)      a2=clamp(t/0.12,0,1);
-  else if(ph>=6)  a2=1;
+  if(ph===4)      a2=clamp((t-0.833)/0.167,0,1);
+  else if(ph>=5)  a2=1;
 
   // Niente da disegnare
   if(a1<0.01 && a2<0.01) return;
