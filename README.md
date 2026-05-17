@@ -12,6 +12,7 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | [🛰️ Visibilità SAR Frane](#sar-frane) | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
 | [🔥 Diagrammi di Fase — Fusi Silicatici](#diagrammi-fase) | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
 | [🔬 Microscopio Polarizzato](#microscopio) | [Apri](https://montinigeo.github.io/Simulazioni/microscopio_polarizzato.html) |
+| [🌋 Serie di Bowen](#serie-bowen) | [Apri](https://montinigeo.github.io/Simulazioni/serie_bowen.html) |
 
 ---
 
@@ -239,6 +240,25 @@ Simulazione interattiva del microscopio ottico a luce polarizzata per lo studio 
 - **Lamina compensatrice λ (550 nm)**: inseribile in modalità conoscopica per la determinazione del segno ottico; asse lento a 45° NE-SW con visualizzazione dell'effetto di addizione/sottrazione sulle isocromi
 - **Tavola di Michel-Lévy**: visualizzata in tempo reale nel pannello destro con indicatore mobile della posizione corrente e linee diagonali degli spessori (10–60 µm)
 - Pannello informativo con Δn apparente, ritardo Γ (nm) e ordine di interferenza aggiornati in tempo reale
+---
+
+<a name="serie-bowen"></a>
+## 🌋 Serie di Bowen — Cristallizzazione Magmatica
+
+**File:** `serie_bowen.html`
+
+Simulazione interattiva della cristallizzazione frazionata dei magmi secondo la serie di Bowen. Il diagramma mostra le due serie su scala termica (1950°C → 580°C): la **serie discontinua** a sinistra (olivina → pirosseno → anfibolo → biotite → K-feldspato) e la **serie continua** a destra (plagioclasi da An₁₀₀ ad An₀), con il quarzo come termine finale di convergenza.
+
+### Funzionalità
+
+- Quattro tipi di magma selezionabili: **Basaltico**, **Andesitico**, **Riolitico** e **Ideale** (sequenza completa teorica di Bowen)
+- Animazione del raffreddamento con linea di temperatura mobile e riempimento progressivo delle barre dei minerali
+- Evidenziazione lampeggiante dei minerali in cristallizzazione; quando più fasi cristallizzano simultaneamente vengono mostrate tutte nel pannello laterale
+- Scheda informativa per ogni minerale: formula, sistema cristallino, clivaggio, note petrologiche e rocce tipiche
+- Al termine della cristallizzazione: composizione percentuale approssimativa della roccia risultante (normalizzata a 100%)
+- La serie continua dei plagioclasi è rappresentata come unica barra a gradiente con indicatore mobile della composizione An corrente
+
+
 ---
 
 ## Autore

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Serie di Bowen — Cristallizzazione Magmatica</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--panel:#111318;--border:#1e2230;
+  --accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;
+  --text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:1rem}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.1rem;color:var(--accent)}
+.main{display:flex;flex:1;min-height:0}
+
+/* SIDEBAR */
+.sb{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto}
+.sl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.12rem;margin-bottom:.1rem}
+.cr{display:flex;flex-direction:column;gap:.08rem}
+.ch{display:flex;justify-content:space-between;font-size:.58rem;color:var(--muted)}
+.cv{color:var(--accent);font-size:.62rem}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;margin-top:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 5px var(--accent)}
+.btn{width:100%;padding:.25rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;text-transform:uppercase;letter-spacing:.05em;transition:all .15s}
+.btn:hover,.btn.on{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.magma-btn{width:100%;padding:.22rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.72rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.5rem}
+.magma-btn:hover,.magma-btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.06)}
+#btnIde:hover,#btnIde.on{border-color:#ffcc44;color:#ffcc44;background:rgba(255,204,68,.06)}
+.info{background:#070910;border:1px solid var(--border);border-radius:3px;padding:.4rem;font-size:.6rem;line-height:1.7;color:var(--muted);font-family:'Crimson Pro',serif;font-style:italic}
+.info b{color:var(--text);font-style:normal;font-size:.63rem}
+.info .val{color:var(--accent);font-family:'Space Mono',monospace;font-style:normal;font-size:.6rem}
+
+/* CANVAS PRINCIPALE */
+.cw{flex:1;min-width:0;position:relative}
+canvas#cMain{width:100%;height:100%;display:block}
+
+/* BARRA INFERIORE */
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.58rem;color:var(--muted)}
+.ibar span{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Serie di Bowen &mdash; Cristallizzazione Magmatica</h1>
+</header>
+<div class="main">
+
+<aside class="sb">
+  <div>
+    <div class="sl">Controlli</div>
+    <div style="display:flex;gap:.25rem;margin-bottom:.3rem">
+      <button class="btn on" id="btnPlay" style="flex:1">&#9654; Raffredda</button>
+      <button class="btn" id="btnReset" style="width:auto;padding:.25rem .4rem">&#8635;</button>
+    </div>
+    <div class="cr">
+      <div class="ch">Velocità <span class="cv" id="vSpd">1×</span></div>
+      <input type="range" id="sSpd" min="0.5" max="4" step="0.5" value="1">
+    </div>
+  </div>
+
+  <div>
+    <div class="sl">Tipo di magma</div>
+    <button class="magma-btn on" id="btnBas">🌋 Basaltico (~1300°C)</button>
+    <button class="magma-btn" id="btnAnd" style="margin-top:.2rem">🪨 Andesitico (~1100°C)</button>
+    <button class="magma-btn" id="btnRio" style="margin-top:.2rem">🔴 Riolitico (~900°C)</button>
+    <button class="magma-btn" id="btnIde" style="margin-top:.2rem">⭐ Ideale — Bowen completo</button>
+  </div>
+
+  <div>
+    <div class="sl">Temperatura corrente</div>
+    <div style="font-size:1.1rem;font-family:'Space Mono',monospace;color:var(--accent2);padding:.3rem 0;text-align:center" id="vTemp">— °C</div>
+  </div>
+
+  <div>
+    <div class="sl">Minerale attivo</div>
+    <div class="info" id="infoMin">
+      <b>—</b><br>
+      Seleziona un magma e avvia il raffreddamento
+    </div>
+  </div>
+</aside>
+
+<div class="cw">
+  <canvas id="cMain"></canvas>
+</div>
+
+</div>
+<div class="ibar">
+  <div>T: <span id="iT">—</span></div>
+  <div>Magma: <span id="iMag">Basaltico</span></div>
+  <div>Fase solida: <span id="iSol">—</span></div>
+  <div>Fase liquida: <span id="iLiq">—</span></div>
+</div>
+
+<script>
+// =====================================================================
+// UTILITA GRAFICHE
+// =====================================================================
+function drawTextShadow(ctx2, text, x, y, fillColor, font, align='center'){
+  ctx2.font=font;
+  ctx2.textAlign=align;
+  // Alone scuro
+  ctx2.strokeStyle='rgba(0,0,0,0.85)';
+  ctx2.lineWidth=3;
+  ctx2.lineJoin='round';
+  ctx2.strokeText(text,x,y);
+  // Testo
+  ctx2.fillStyle=fillColor;
+  ctx2.fillText(text,x,y);
+}
+
+// =====================================================================
+// DATI FISICI — SERIE DI BOWEN
+// =====================================================================
+const DISC = [
+  { nome:'Olivina',     formula:'(Mg,Fe)₂SiO₄',  Ts:1890, Te:1600,
+    colore:'#8bc34a', sistema:'Ortorombico', clivaggio:'Imperfetto {010}{100}',
+    note:'Prima a cristallizzare nei magmi basaltici. La composizione varia da forsterite (Mg-ricca) a fayalite (Fe-ricca) al calare della temperatura.',
+    rocce:'Basalto, peridotite, dunite' },
+  { nome:'Pirosseno',   formula:'(Mg,Fe,Ca)SiO₃', Ts:1650, Te:1400,
+    colore:'#546e7a', sistema:'Ortorombico/Monoclino', clivaggio:'A 90°',
+    note:'Orto- (enstatite) e clinopirosseni (augite). Si forma per reazione del fuso con l\'olivina già cristallizzata.',
+    rocce:'Basalto, gabbro, peridotite' },
+  { nome:'Anfibolo',    formula:'Ca₂(Mg,Fe)₅Si₈O₂₂(OH)₂', Ts:1200, Te:1000,
+    colore:'#37474f', sistema:'Monoclino', clivaggio:'A 60°/120°',
+    note:'Hornblenda. Contiene ossidrili (OH⁻): richiede acqua nel magma. Tipico dei magmi idratati.',
+    rocce:'Diorite, andesite, granodiorite' },
+  { nome:'Biotite',     formula:'K(Mg,Fe)₃AlSi₃O₁₀(OH)₂', Ts:1050, Te:900,
+    colore:'#6d4c41', sistema:'Monoclino', clivaggio:'Perfetto basale {001}',
+    note:'Mica nera. Ricca in K e OH⁻. Cristallizza in magmi molto differenziati. Forte pleocroismo bruno.',
+    rocce:'Granito, granodiorite, riolite' },
+  { nome:'K-feldspato', formula:'KAlSi₃O₈', Ts:900, Te:700,
+    colore:'#e0a070', sistema:'Monoclino/Triclino', clivaggio:'Perfetto a 90°',
+    note:'Sanidino (vulcanico), ortoclasio, microclino. Ultimi a cristallizzare insieme ai plagioclasi sodici e al quarzo.',
+    rocce:'Granito, sienite, riolite' },
+];
+
+const CONT = [
+  { nome:'Anortite',    An:100, formula:'CaAl₂Si₂O₈',   Ts:1553, Te:1500, colore:'#b0bec5' },
+  { nome:'Bytownite',   An:80,  formula:'An₈₀Ab₂₀',      Ts:1500, Te:1430, colore:'#90a4ae' },
+  { nome:'Labradorite', An:60,  formula:'An₆₀Ab₄₀',      Ts:1430, Te:1330, colore:'#6fa0c0' },
+  { nome:'Andesina',    An:40,  formula:'An₄₀Ab₆₀',      Ts:1330, Te:1250, colore:'#7ec8e3' },
+  { nome:'Oligoclasio', An:20,  formula:'An₂₀Ab₈₀',      Ts:1250, Te:1170, colore:'#a0d8ef' },
+  { nome:'Albite',      An:0,   formula:'NaAlSi₃O₈',     Ts:1170, Te:1118, colore:'#c8e6f5' },
+];
+
+const QUARZO = {
+  nome:'Quarzo', formula:'SiO₂', Ts:700, Te:580, colore:'#e8d5b0',
+  note:'Ultimo a cristallizzare. Solo nei magmi molto differenziati (graniti, rioliti). SiO₂ puro.',
+  rocce:'Granito, riolite, quarzo-porfido'
+};
+
+// =====================================================================
+// TIPI DI MAGMA
+// =====================================================================
+const MAGMI = {
+  bas: {
+    nome:'Basaltico', T0:1950, SiO2_i:50,
+    colore_fuso:'#1a0a00',
+    disc_attivi:[0,1],       // olivina, pirosseno
+    cont_range:[0,3],        // An100 -> An40
+    quarzo:false,
+    desc:'Magma primario povero in SiO₂. Cristallizza olivina e pirosseno presto, plagioclasi An-ricchi. Non arriva a formare quarzo.'
+  },
+  and: {
+    nome:'Andesitico', T0:1950, SiO2_i:60,
+    colore_fuso:'#1a0a05',
+    disc_attivi:[1,2,3],     // pirosseno, anfibolo, biotite
+    cont_range:[2,4],        // An60 -> An20
+    quarzo:false,
+    desc:'Magma intermedio. Caratteristico dei margini continentali. Anfibolo abbondante per la presenza di acqua.'
+  },
+  rio: {
+    nome:'Riolitico', T0:1950, SiO2_i:70,
+    colore_fuso:'#2a1a10',
+    disc_attivi:[3,4],       // biotite, K-feldspato
+    cont_range:[4,5],        // An20 -> An0
+    quarzo:true,
+    desc:'Magma acido molto differenziato. Forma graniti e rioliti. Ricco in SiO₂, K, Na. Cristallizza quarzo.'
+  },
+  ide: {
+    nome:'Ideale (Bowen)', T0:1950, SiO2_i:50,
+    colore_fuso:'#0a0a1a',
+    disc_attivi:[0,1,2,3,4], // tutta la serie discontinua
+    cont_range:[0,5],        // An100 -> An0 (tutta la serie continua)
+    quarzo:true,
+    desc:'Fuso teorico di Bowen: cristallizzano in sequenza tutti i minerali di entrambe le serie. Non esiste in natura ma illustra la sequenza completa di cristallizzazione frazionata.'
+  }
+};
+
+// =====================================================================
+// STATO
+// =====================================================================
+let magmaType='bas', spd=1, anim=false, T=1300, lastTs=null;
+let activeMin=null;
+
+const C=document.getElementById('cMain');
+const ctx=C.getContext('2d');
+
+
+// =====================================================================
+// LAYOUT
+// =====================================================================
+// Il diagramma ha due colonne e un termometro a sinistra
+// Colonna sinistra: serie discontinua (dall'alto verso il basso)
+// Colonna destra: serie continua (plagioclasi, dall'alto verso il basso)
+// In basso: quarzo (convergenza)
+
+function layout(){
+  const W=C.width, H=C.height;
+  const padL=55, padR=15, padT=30, padB=40;
+  const gW=W-padL-padR, gH=H-padT-padB;
+  const colW=gW/2-10;
+  return {W,H,padL,padR,padT,padB,gW,gH,colW,
+    cx_disc:padL+colW/2,
+    cx_cont:padL+gW/2+10+colW/2,
+    thermX:padL-30,
+  };
+}
+
+function tempToY(T_val, ly){
+  const T_top=1950, T_bot=550;
+  return ly.padT + (T_top-T_val)/(T_top-T_bot)*ly.gH;
+}
+
+function currentMagma(){ return MAGMI[magmaType]; }
+
+// =====================================================================
+// DISEGNO PRINCIPALE
+// =====================================================================
+function draw(){
+  const W=C.width, H=C.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#07090e'; ctx.fillRect(0,0,W,H);
+
+  const ly=layout();
+  const mg=currentMagma();
+  const T_top=1950, T_bot=550;
+
+  // ---- TITOLI COLONNE ----
+  ctx.font='bold 11px Crimson Pro'; ctx.textAlign='center';
+  ctx.fillStyle='var(--accent)';
+  ctx.fillStyle='#00d4ff';
+  ctx.fillText('Serie Discontinua',ly.cx_disc, ly.padT-18);
+  ctx.fillStyle='#ff6b35';
+  ctx.fillText('Serie Continua',ly.cx_cont, ly.padT-18);
+  ctx.font='italic 9px Crimson Pro'; ctx.fillStyle='#8a8e9a';
+  ctx.fillText('(reazione)',ly.cx_disc,ly.padT-6);
+  ctx.fillText('(plagioclasi)',ly.cx_cont,ly.padT-6);
+
+  // ---- FRECCIA CONVERGENZA ----
+  const yQuarzo=tempToY(QUARZO.Ts, ly)-20;
+  ctx.strokeStyle='rgba(200,204,216,0.15)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(ly.cx_disc,yQuarzo);
+  ctx.lineTo(W/2,yQuarzo+40);
+  ctx.moveTo(ly.cx_cont,yQuarzo);
+  ctx.lineTo(W/2,yQuarzo+40);
+  ctx.stroke();ctx.setLineDash([]);
+
+  // ---- GRIGLIA T ----
+  ctx.font='9px Space Mono'; ctx.textAlign='right'; ctx.fillStyle='#8a8e9a';
+  for(let Tg=600;Tg<=1900;Tg+=100){
+    const y=tempToY(Tg,ly);
+    if(y<ly.padT||y>ly.padT+ly.gH) continue;
+    ctx.strokeStyle='rgba(30,34,48,0.8)'; ctx.lineWidth=0.5; ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(ly.padL-20,y);ctx.lineTo(W-ly.padR,y);ctx.stroke();
+    ctx.fillText(Tg+'°',ly.padL-22,y+3);
+  }
+
+  // ---- TERMOMETRO ----
+  const thX=ly.thermX, thTop=ly.padT, thBot=ly.padT+ly.gH;
+  const thW=8;
+  // Sfondo
+  ctx.fillStyle='#1e2230';
+  ctx.fillRect(thX-thW/2,thTop,thW,thBot-thTop);
+  // Livello T corrente
+  const yT=tempToY(T,ly);
+  const thGrad=ctx.createLinearGradient(0,thBot,0,thTop);
+  thGrad.addColorStop(0,'#ff4400');
+  thGrad.addColorStop(0.4,'#ff8800');
+  thGrad.addColorStop(0.7,'#ffcc44');
+  thGrad.addColorStop(1,'#ffffff');
+  ctx.fillStyle=thGrad;
+  ctx.fillRect(thX-thW/2,Math.max(yT,thTop),thW,thBot-Math.max(yT,thTop));
+  // Linea T corrente
+  ctx.strokeStyle='#ff8800'; ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(thX-thW,yT);ctx.lineTo(thX+thW,yT);ctx.stroke();
+
+  // ---- FUSO MAGMATICO (sfondo) ----
+  // Regione ancora liquida: sopra la T corrente
+  const fusoAlpha=Math.max(0,Math.min(0.25,(T-600)/800));
+  const fusoGrad=ctx.createLinearGradient(0,ly.padT,0,yT);
+  fusoGrad.addColorStop(0,'rgba(255,100,0,0)');
+  fusoGrad.addColorStop(1,`rgba(255,80,0,${fusoAlpha})`);
+  ctx.fillStyle=fusoGrad;
+  ctx.fillRect(ly.padL,ly.padT,ly.gW,Math.max(0,yT-ly.padT));
+
+  // ---- SERIE DISCONTINUA ----
+  DISC.forEach((m,i)=>{
+    if(!mg.disc_attivi.includes(i)) return;
+    const yTop=tempToY(m.Ts,ly);
+    const yBot=tempToY(m.Te,ly);
+    const barW=ly.colW*0.65;
+    const bx=ly.cx_disc-barW/2;
+
+    // Calcola alpha: 0=non ancora cristallizzato, 1=completamente
+    let alpha=0;
+    if(T<=m.Ts && T>=m.Te) alpha=(m.Ts-T)/(m.Ts-m.Te);
+    else if(T<m.Te) alpha=1;
+
+    // Barra del minerale
+    const barH=Math.max(4,yBot-yTop);
+    // Sfondo barra (sempre presente ma trasparente)
+    ctx.fillStyle=`rgba(30,34,48,0.5)`;
+    ctx.fillRect(bx,yTop,barW,barH);
+    // Fill cristallizzato
+    if(alpha>0){
+      ctx.fillStyle=m.colore;
+      ctx.globalAlpha=0.15+alpha*0.7;
+      ctx.fillRect(bx,yTop,barW,barH);
+      ctx.globalAlpha=1;
+      // Bordo
+      ctx.strokeStyle=m.colore;
+      ctx.lineWidth=alpha>0.05?1.5:0.5;
+      ctx.strokeRect(bx,yTop,barW,barH);
+    } else {
+      ctx.strokeStyle='rgba(100,110,130,0.3)';
+      ctx.lineWidth=0.5; ctx.setLineDash([2,2]);
+      ctx.strokeRect(bx,yTop,barW,barH);
+      ctx.setLineDash([]);
+    }
+
+    // Nome minerale
+    const midY=yTop+(yBot-yTop)/2;
+    const discCol=alpha>0.1?m.colore:'rgba(160,170,185,0.7)';
+    ctx.globalAlpha=Math.max(0.5, alpha>0?0.7+alpha*0.3:0.5);
+    drawTextShadow(ctx, m.nome, ly.cx_disc, midY+4, discCol, 'bold 12px Crimson Pro');
+    if((yBot-yTop)>38){
+      drawTextShadow(ctx, m.formula, ly.cx_disc, midY+17, discCol, 'italic 9px Crimson Pro');
+    }
+    ctx.globalAlpha=1;
+
+    // Evidenzia minerale in cristallizzazione
+    if(T>=m.Te && T<=m.Ts && alpha>0){
+      ctx.strokeStyle=m.colore; ctx.lineWidth=2;
+      ctx.globalAlpha=0.6+Math.sin(Date.now()/300)*0.3;
+      ctx.strokeRect(bx-2,yTop-2,barW+4,barH+4);
+      ctx.globalAlpha=1;
+    }
+  });
+
+  // ---- SERIE CONTINUA: unica barra con gradiente e indicatore mobile ----
+  {
+    const [rangeStart,rangeEnd]=mg.cont_range;
+    const contAttivi=CONT.filter((_,i)=>i>=rangeStart&&i<=rangeEnd);
+    if(contAttivi.length>0){
+      const yTop=tempToY(contAttivi[0].Ts,ly);
+      const yBot=tempToY(contAttivi[contAttivi.length-1].Te,ly);
+      const barW=ly.colW*0.65;
+      const bx=ly.cx_cont-barW/2;
+      const barH=Math.max(10,yBot-yTop);
+
+      // Gradiente da An-ricco (grigio scuro) a Ab-ricco (azzurro chiaro)
+      const grad=ctx.createLinearGradient(0,yTop,0,yTop+barH);
+      grad.addColorStop(0,'#b0bec5');  // anortite (grigio)
+      grad.addColorStop(1,'#c8e6f5');  // albite (azzurro chiaro)
+
+      // Sfondo barra
+      ctx.fillStyle='rgba(30,34,48,0.5)';
+      ctx.fillRect(bx,yTop,barW,barH);
+
+      // Determina la frazione cristallizzata
+      const TsMax=contAttivi[0].Ts, TeMin=contAttivi[contAttivi.length-1].Te;
+      let alphaTotal=0;
+      if(T<=TsMax && T>=TeMin) alphaTotal=(TsMax-T)/(TsMax-TeMin);
+      else if(T<TeMin) alphaTotal=1;
+
+      if(alphaTotal>0){
+        ctx.fillStyle=grad;
+        ctx.globalAlpha=0.2+alphaTotal*0.65;
+        ctx.fillRect(bx,yTop,barW,barH*alphaTotal);
+        ctx.globalAlpha=1;
+      }
+
+      // Bordo barra
+      ctx.strokeStyle='rgba(100,150,200,0.5)'; ctx.lineWidth=1;
+      ctx.setLineDash([3,3]); ctx.strokeRect(bx,yTop,barW,barH); ctx.setLineDash([]);
+
+      // Etichette: nome + An per ogni membro
+      contAttivi.forEach((m,ii)=>{
+        const yM=tempToY((m.Ts+m.Te)/2,ly);
+        let alp=0;
+        if(T<=m.Ts&&T>=m.Te) alp=(m.Ts-T)/(m.Ts-m.Te);
+        else if(T<m.Te) alp=1;
+        const contCol=alp>0.1?m.colore:'rgba(160,180,200,0.7)';
+        ctx.globalAlpha=Math.max(0.5,alp>0?0.6+alp*0.4:0.5);
+        drawTextShadow(ctx, m.nome, ly.cx_cont, yM+4, contCol, 'bold 10px Crimson Pro');
+        drawTextShadow(ctx, 'An'+m.An, ly.cx_cont, yM+15, contCol, 'italic 9px Crimson Pro');
+        ctx.globalAlpha=1;
+        // Linea separatrice tra i membri
+        if(ii<contAttivi.length-1){
+          const ySep=tempToY(m.Te,ly);
+          ctx.strokeStyle='rgba(100,150,200,0.2)'; ctx.lineWidth=0.5;
+          ctx.beginPath();ctx.moveTo(bx,ySep);ctx.lineTo(bx+barW,ySep);ctx.stroke();
+        }
+      });
+
+      // Indicatore An corrente (composizione del cristallo in crescita)
+      if(T<=TsMax && T>TeMin && alphaTotal<1){
+        // Trova il membro attivo
+        const mAtt=contAttivi.find(m=>T<=m.Ts&&T>=m.Te);
+        if(mAtt){
+          const AnCurr=mAtt.An+(CONT[rangeStart].An-mAtt.An)*(mAtt.Ts-T)/(mAtt.Ts-mAtt.Te);
+          const yAtt=tempToY(T,ly);
+          // Freccia indicatrice
+          ctx.strokeStyle='#00d4ff'; ctx.lineWidth=1.5;
+          ctx.globalAlpha=0.8+Math.sin(Date.now()/300)*0.15;
+          ctx.beginPath();ctx.moveTo(bx-12,yAtt);ctx.lineTo(bx-2,yAtt);ctx.stroke();
+          ctx.font='bold 9px Space Mono'; ctx.fillStyle='#00d4ff';
+          ctx.textAlign='right';
+          ctx.fillText('An'+Math.round(AnCurr),bx-14,yAtt+3);
+          ctx.globalAlpha=1;
+        }
+      }
+
+      // Bordo lampeggiante se in cristallizzazione
+      if(alphaTotal>0&&alphaTotal<1){
+        ctx.strokeStyle='rgba(100,180,255,0.7)'; ctx.lineWidth=1.5;
+        ctx.globalAlpha=0.6+Math.sin(Date.now()/300)*0.3;
+        ctx.strokeRect(bx-2,yTop-2,barW+4,barH+4);
+        ctx.globalAlpha=1;
+      }
+    }
+  }
+
+  // ---- QUARZO ----
+  if(mg.quarzo){
+    const yQ=tempToY(QUARZO.Ts,ly);
+    const yQb=tempToY(QUARZO.Te,ly);
+    let alphaQ=0;
+    if(T<=QUARZO.Ts && T>=QUARZO.Te) alphaQ=(QUARZO.Ts-T)/(QUARZO.Ts-QUARZO.Te);
+    else if(T<QUARZO.Te) alphaQ=1;
+    const qW=ly.colW*0.5;
+    const qx=W/2-qW/2;
+    const qH=Math.max(4,yQb-yQ);
+    ctx.fillStyle='rgba(30,34,48,0.5)';
+    ctx.fillRect(qx,yQ,qW,qH);
+    if(alphaQ>0){
+      ctx.fillStyle=QUARZO.colore; ctx.globalAlpha=0.15+alphaQ*0.7;
+      ctx.fillRect(qx,yQ,qW,qH); ctx.globalAlpha=1;
+      ctx.strokeStyle=QUARZO.colore; ctx.lineWidth=1.5;
+      ctx.strokeRect(qx,yQ,qW,qH);
+    } else {
+      ctx.strokeStyle='rgba(100,110,130,0.3)'; ctx.lineWidth=0.5;
+      ctx.setLineDash([2,2]); ctx.strokeRect(qx,yQ,qW,qH);
+      ctx.setLineDash([]);
+    }
+    const qzCol=alphaQ>0.1?QUARZO.colore:'rgba(160,170,185,0.7)';
+    ctx.globalAlpha=Math.max(0.5,alphaQ>0?0.7+alphaQ*0.3:0.5);
+    drawTextShadow(ctx,'Quarzo',W/2,yQ+qH/2+4,qzCol,'bold 11px Crimson Pro');
+    ctx.globalAlpha=1;
+
+    if(T>=QUARZO.Te && T<=QUARZO.Ts && alphaQ>0){
+      ctx.strokeStyle=QUARZO.colore; ctx.lineWidth=2;
+      ctx.globalAlpha=0.6+Math.sin(Date.now()/300)*0.3;
+      ctx.strokeRect(qx-2,yQ-2,qW+4,qH+4);
+      ctx.globalAlpha=1;
+    }
+  }
+
+  // ---- LINEA TEMPERATURA CORRENTE ----
+  const yTline=tempToY(T,ly);
+  ctx.strokeStyle='rgba(255,140,0,0.6)'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+  ctx.beginPath();ctx.moveTo(ly.padL-15,yTline);ctx.lineTo(W-ly.padR,yTline);
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // ---- LABEL T CORRENTE ----
+  ctx.font='bold 10px Space Mono'; ctx.fillStyle='#ff8800';
+  ctx.textAlign='left';
+  ctx.fillText(Math.round(T)+'°C', W-ly.padR-50, yTline-4);
+
+  // ---- COMPOSIZIONE RESIDUA ----
+  updateInfo();
+}
+
+// =====================================================================
+// INFO MINERALE ATTIVO
+// =====================================================================
+function updateInfo(){
+  const mg=currentMagma();
+  let min=null;
+
+  // Trova TUTTE le fasi in cristallizzazione contemporaneamente
+  const attivi=[];
+  for(const i of mg.disc_attivi){
+    const m=DISC[i];
+    if(T<=m.Ts && T>=m.Te) attivi.push({...m, tipo:'disc'});
+  }
+  const [rs,re]=mg.cont_range;
+  for(let i=rs;i<=re;i++){
+    const m=CONT[i];
+    if(T<=m.Ts && T>=m.Te) attivi.push({...m, tipo:'cont'});
+  }
+  if(mg.quarzo && T<=QUARZO.Ts && T>=QUARZO.Te) attivi.push({...QUARZO, tipo:'qz'});
+
+  document.getElementById('vTemp').textContent=Math.round(T)+'°C';
+
+  if(attivi.length>0){
+    let html='';
+    if(attivi.length===1){
+      const m=attivi[0];
+      const note=m.note||'';
+      const rocce=m.rocce?`<br><b>Rocce:</b> <span class="val">${m.rocce}</span>`:'';
+      const clivaggio=m.clivaggio?`<br><b>Clivaggio:</b> <span class="val">${m.clivaggio}</span>`:'';
+      const sistema=m.sistema?`<br><b>Sistema:</b> <span class="val">${m.sistema}</span>`:'';
+      html=`<b>${m.nome}</b><br><span class="val">${m.formula}</span>${sistema}${clivaggio}${rocce}<br><br>${note}`;
+    } else {
+      // Più fasi contemporanee: mostra tutte con separatori
+      html='<b>Cristallizzazione simultanea:</b><br>';
+      attivi.forEach(m=>{
+        html+=`<hr style="border-color:var(--border);margin:.3rem 0">`;
+        html+=`<span style="color:${m.colore||'#a0c4ff'}"><b>${m.nome}</b></span> `;
+        html+=`<span class="val">${m.formula}</span>`;
+        if(m.sistema) html+=`<br><span style="font-size:.56rem">${m.sistema}</span>`;
+        if(m.note) html+=`<br><span style="font-size:.56rem;font-style:italic">${m.note.substring(0,80)}${m.note.length>80?'…':''}</span>`;
+      });
+    }
+    document.getElementById('infoMin').innerHTML=html;
+  } else if(T>mg.T0){
+    document.getElementById('infoMin').innerHTML='<b>Fuso omogeneo</b><br>Tutto ancora liquido. Avvia il raffreddamento.';
+  } else {
+    // Calcola percentuali finali
+    const T_fine_map2={bas:1250, and:900, rio:580, ide:580};
+    const T_fine2=T_fine_map2[magmaType]||600;
+    if(T>T_fine2+10){
+      // Gap tra minerali: nessuna fase attiva ma non ancora finita
+      document.getElementById('infoMin').innerHTML=
+        '<b>In raffreddamento</b><br><span style="color:var(--dim)">Nessuna fase in cristallizzazione a questa temperatura.</span>';
+    } else if(T<=T_fine2+10){
+      // Calcola frazioni grezze (range T di ciascun minerale clippato al range del magma)
+      const fracs=[];
+      for(const i of mg.disc_attivi){
+        const m2=DISC[i];
+        const Ts_eff=Math.min(m2.Ts, mg.T0);
+        const Te_eff=Math.max(m2.Te, T_fine2);
+        if(Ts_eff<=Te_eff) continue;
+        fracs.push({nome:m2.nome, col:m2.colore, raw:Ts_eff-Te_eff});
+      }
+      // Plagioclasi come gruppo unico
+      const [rsp,rep]=mg.cont_range;
+      const contAttivi2=CONT.filter((_,ii2)=>ii2>=rsp&&ii2<=rep);
+      if(contAttivi2.length>0){
+        const Ts_c=Math.min(contAttivi2[0].Ts, mg.T0);
+        const Te_c=Math.max(contAttivi2[contAttivi2.length-1].Te, T_fine2);
+        if(Ts_c>Te_c) fracs.push({nome:'Plagioclasi', col:'#a0c4ff', raw:Ts_c-Te_c});
+      }
+      // Quarzo
+      if(mg.quarzo){
+        const Ts_q=Math.min(QUARZO.Ts, mg.T0);
+        const Te_q=Math.max(QUARZO.Te, T_fine2);
+        if(Ts_q>Te_q) fracs.push({nome:'Quarzo', col:QUARZO.colore, raw:Ts_q-Te_q});
+      }
+      // Normalizza a 100%
+      const totRaw=fracs.reduce((s,f)=>s+f.raw,0);
+      let rows='', totPerc=0;
+      fracs.forEach((f,ii2)=>{
+        const perc=ii2<fracs.length-1
+          ? Math.round(f.raw/totRaw*100)
+          : 100-totPerc;  // ultimo minerale: il resto per arrivare a 100%
+        totPerc+=perc;
+        rows+=`<span style="color:${f.col}">■</span> ${f.nome}: <span class="val">~${perc}%</span><br>`;
+      });
+      document.getElementById('infoMin').innerHTML=
+        '<b>Cristallizzazione completata</b><br><br>'+
+        '<b>Composizione % approssimativa:</b><br>'+rows+
+        '<br><span style="font-size:.55rem;font-style:italic;color:var(--dim)">Proporzioni basate sul range di T di cristallizzazione</span>';
+    }
+  }
+
+  document.getElementById('iT').textContent=Math.round(T)+'°C';
+  document.getElementById('iMag').textContent=mg.nome;
+
+  // Conta minerali cristallizzati
+  const cryst=[];
+  for(const i of mg.disc_attivi){
+    if(T<DISC[i].Ts) cryst.push(DISC[i].nome);
+  }
+  const [rs3,re3]=mg.cont_range;
+  for(let i=rs3;i<=re3;i++){
+    if(T<CONT[i].Ts) cryst.push(CONT[i].nome==='Anortite'?'Anortite':CONT[i].nome);
+  }
+  if(mg.quarzo && T<QUARZO.Ts) cryst.push('Quarzo');
+  document.getElementById('iSol').textContent=cryst.length>0?cryst.join(', '):'—';
+
+  const liq=T>600?'Basaltico→'+Math.round(currentMagma().SiO2_i+(75-currentMagma().SiO2_i)*Math.max(0,(currentMagma().T0-T)/(currentMagma().T0-600)))+'% SiO₂':'—';
+  document.getElementById('iLiq').textContent=liq;
+}
+
+// =====================================================================
+// ANIMAZIONE
+// =====================================================================
+let animRaf=null;
+function animLoop(ts){
+  if(!anim) return;
+  if(lastTs!==null){
+    const dt=(ts-lastTs)/1000;
+    T-=dt*spd*30; // 30°C/s a velocità 1
+    if(T<580){ T=580; anim=false; document.getElementById('btnPlay').textContent='▶ Raffredda'; }
+  }
+  lastTs=ts;
+  draw();
+  if(anim) animRaf=requestAnimationFrame(animLoop);
+}
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+function setMagma(type){
+  magmaType=type;
+  T=MAGMI[type].T0+50;
+  anim=false; lastTs=null;
+  if(animRaf){ cancelAnimationFrame(animRaf); animRaf=null; }
+  document.getElementById('btnPlay').textContent='▶ Raffredda';
+  ['btnBas','btnAnd','btnRio','btnIde'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  const map={bas:'btnBas',and:'btnAnd',rio:'btnRio',ide:'btnIde'};
+  document.getElementById(map[type]).classList.add('on');
+  draw();
+}
+
+document.getElementById('btnBas').addEventListener('click',()=>setMagma('bas'));
+document.getElementById('btnAnd').addEventListener('click',()=>setMagma('and'));
+document.getElementById('btnRio').addEventListener('click',()=>setMagma('rio'));
+document.getElementById('btnIde').addEventListener('click',()=>setMagma('ide'));
+
+document.getElementById('btnPlay').addEventListener('click',()=>{
+  if(anim){
+    anim=false; lastTs=null;
+    document.getElementById('btnPlay').textContent='▶ Raffredda';
+  } else {
+    if(T<=580){ T=MAGMI[magmaType].T0+50; }
+    anim=true; lastTs=null;
+    document.getElementById('btnPlay').textContent='⏸ Pausa';
+    animRaf=requestAnimationFrame(animLoop);
+  }
+});
+
+document.getElementById('btnReset').addEventListener('click',()=>{
+  anim=false; lastTs=null;
+  if(animRaf){ cancelAnimationFrame(animRaf); animRaf=null; }
+  T=MAGMI[magmaType].T0+50;
+  document.getElementById('btnPlay').textContent='▶ Raffredda';
+  draw();
+});
+
+document.getElementById('sSpd').addEventListener('input',e=>{
+  spd=parseFloat(e.target.value);
+  document.getElementById('vSpd').textContent=spd+'×';
+});
+
+// =====================================================================
+// RESIZE
+// =====================================================================
+function resize(){
+  const cw=document.querySelector('.cw');
+  C.width=cw.clientWidth; C.height=cw.clientHeight;
+  draw();
+}
+window.addEventListener('resize',resize);
+
+// Init
+setMagma('bas');
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>
