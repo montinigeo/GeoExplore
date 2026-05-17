@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Birifrangenza — Microscopio Ottico Polarizzato</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--panel:#111318;--border:#1e2230;
+  --accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;
+  --text:#ffffff;--muted:#c8ccd8;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.4rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018 0%,transparent 100%);display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.1rem;color:var(--accent)}
+.modetabs{display:flex;gap:.3rem}
+.modetab{padding:.22rem .7rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.05em;text-transform:uppercase;transition:all .15s}
+.modetab.on,.modetab:hover{border-color:var(--accent);color:var(--accent)}
+.main{display:flex;flex:1;min-height:0;overflow:hidden}
+/* Pannello sinistro: controlli */
+.sb{width:200px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto}
+.sl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:.12rem;margin-bottom:.1rem}
+.cr{display:flex;flex-direction:column;gap:.08rem}
+.ch{display:flex;justify-content:space-between;font-size:.58rem;color:var(--muted)}
+.cv{color:var(--accent);font-size:.62rem}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;margin-top:2px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 5px var(--accent)}
+select{width:100%;background:#070910;border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:.58rem;padding:.2rem .3rem;border-radius:3px;outline:none;cursor:pointer}
+.btn{width:100%;padding:.25rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;text-transform:uppercase;letter-spacing:.05em;transition:all .15s;margin-bottom:.1rem}
+.btn:hover,.btn.on{border-color:var(--accent);color:var(--accent)}
+.btn.on{background:rgba(0,212,255,.08)}
+.info{background:#070910;border:1px solid var(--border);border-radius:3px;padding:.35rem;font-size:.58rem;line-height:1.6;color:var(--muted);font-family:'Crimson Pro',serif;font-style:italic}
+.info b{color:var(--text);font-style:normal}
+.info .val{color:var(--accent);font-family:'Space Mono',monospace;font-style:normal}
+/* Pannello centrale: campo visivo */
+.cv-panel{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:.5rem;gap:.4rem;position:relative}
+.field-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+#cField{border-radius:50%;border:2px solid var(--border);display:block}
+.field-label{font-size:.55rem;color:var(--muted);text-align:center;letter-spacing:.1em;text-transform:uppercase}
+/* Pannello destra: Michel-Lévy */
+.levy{width:200px;flex-shrink:0;background:var(--panel);border-left:1px solid var(--border);display:flex;flex-direction:column}
+.levy-title{padding:.4rem .6rem;border-bottom:1px solid var(--border);font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#cLevy{flex:1;display:block;width:100%}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.2rem 1rem;background:var(--panel);display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.58rem;color:var(--muted)}
+.ibar span{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Birifrangenza &mdash; Microscopio Ottico Polarizzato</h1>
+  <div class="modetabs">
+    <button class="modetab on" id="btnOrtho">Ortocopica</button>
+    <button class="modetab" id="btnCono">Conoscopica</button>
+  </div>
+</header>
+<div class="main">
+
+<!-- CONTROLLI -->
+<aside class="sb">
+  <div>
+    <div class="sl">Minerale</div>
+    <select id="selMin">
+      <option value="custom">— Personalizzato —</option>
+      <option value="Quarzo">Quarzo (uniassico+)</option>
+      <option value="Calcite">Calcite (uniassico−)</option>
+      <option value="Muscovite">Muscovite (biassico−)</option>
+      <option value="Biotite">Biotite (biassico−)</option>
+      <option value="Olivina" selected>Olivina (biassico+)</option>
+      <option value="Ortopirosseno">Ortopirosseno (biassico+)</option>
+      <option value="Clinopirosseno">Clinopirosseno (biassico+)</option>
+      <option value="Plagioclasio">Plagioclasio (biassico−)</option>
+      <option value="K-feldspato">K-feldspato (biassico−)</option>
+      <option value="Sillimanite">Sillimanite (biassico+)</option>
+      <option value="Andalusite">Andalusite (biassico−)</option>
+      <option value="Cianite">Cianite (biassico−)</option>
+    </select>
+  </div>
+  <div>
+    <div class="sl">Birifrangenza &Delta;n</div>
+    <div class="cr"><div class="ch">valore <span class="cv" id="vDn">0.035</span></div>
+    <input type="range" id="sDn" min="0.001" max="0.180" step="0.001" value="0.035"></div>
+  </div>
+  <div>
+    <div class="sl">Spessore (µm)</div>
+    <div class="cr"><div class="ch">t <span class="cv" id="vT">30 µm</span></div>
+    <input type="range" id="sT" min="1" max="60" step="1" value="30"></div>
+  </div>
+
+  <div id="conoExtra" style="display:none">
+    <!-- Uniassico: slider angolo taglio -->
+    <div id="cutUni">
+      <div class="sl">Taglio sezione</div>
+      <div class="cr"><div class="ch">angolo asse ottico <span class="cv" id="vCut">0°</span></div>
+      <input type="range" id="sCut" min="0" max="90" step="1" value="0"></div>
+    </div>
+    <!-- Biassico: slider angolo rispetto Bxa -->
+    <div id="cutBi" style="display:none">
+      <div class="sl">Inclinazione sezione</div>
+      <div class="cr"><div class="ch">angolo rispetto Bxa <span class="cv" id="vCutBi">0°</span></div>
+      <input type="range" id="sCutBi" min="0" max="90" step="1" value="0"></div>
+      <div style="font-size:.55rem;color:var(--muted);margin-top:.3rem;font-family:'Crimson Pro',serif;font-style:italic">
+        0° = &perp; Bxa (figura centrata)<br>90° = &parallel; Bxa (melatopi fuori campo)
+      </div>
+    </div>
+    <div class="sl" style="margin-top:.4rem">Lamina compensatrice</div>
+    <button class="btn" id="btnLamina">&lambda; inserita (550 nm)</button>
+    <div class="info" style="margin-top:.2rem;font-size:.57rem" id="laminaInfo">
+      Asse lento lamina: NE-SW (45°)<br>
+      <b>Addizione</b> (blu/II ord): segno <span class="val">+</span><br>
+      <b>Sottrazione</b> (giallo/I ord): segno <span class="val">−</span>
+    </div>
+  </div>
+  <div id="orthoExtra">
+    <div class="sl">Orientazione sezione</div>
+    <!-- Uniassico -->
+    <div id="orthoUni">
+      <div class="cr"><div class="ch">angolo rispetto asse ottico <span class="cv" id="vCutO">90°</span></div>
+      <input type="range" id="sCutO" min="0" max="90" step="1" value="90"></div>
+      <div style="font-size:.55rem;color:var(--muted);margin-top:.3rem;font-family:'Crimson Pro',serif;font-style:italic">
+        0° = lungo asse ottico (estinzione)<br>90° = perp. asse ottico (&Delta;n max)
+      </div>
+    </div>
+    <!-- Biassico -->
+    <div id="orthoBi" style="display:none">
+      <div class="cr"><div class="ch">angolo rispetto Bxa <span class="cv" id="vCutO2">90°</span></div>
+      <input type="range" id="sCutO" min="0" max="90" step="1" value="90"></div>
+      <div style="font-size:.55rem;color:var(--muted);margin-top:.3rem;font-family:'Crimson Pro',serif;font-style:italic">
+        0° = sezione &perp; Bxa (&Delta;n max)<br>90° = sezione &parallel; Bxa (&Delta;n variabile)
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sl">Rotazione piatto</div>
+    <div class="cr"><div class="ch">angolo <span class="cv" id="vAng">0°</span></div>
+    <input type="range" id="sAng" min="0" max="360" step="1" value="0"></div>
+    <button class="btn" id="btnRot" style="margin-top:.3rem">&#9654; &#9654; Ruota piatto</button>
+  </div>
+  <div>
+    <div class="sl">Nicol</div>
+    <button class="btn on" id="btnNX">Incrociati (NX)</button>
+    <button class="btn" id="btnNP">Paralleli (NP)</button>
+  </div>
+
+<div class="info" id="infoMin">
+    <b>Olivina</b><br>
+    Tipo: <span class="val">biassico+</span><br>
+    &Delta;n: <span class="val">0.035</span><br>
+    2V: <span class="val">~82°</span>
+  </div>
+  <div class="info" style="margin-top:.2rem">
+    &Delta;n apparente: <span class="val" id="vDnApp">—</span><br>
+    Ritardo &Gamma;: <span class="val" id="vGamma">—</span><br>
+    Ordine: <span class="val" id="vOrd">—</span>
+  </div>
+</aside>
+
+<!-- CAMPO VISIVO -->
+<div class="cv-panel">
+  <div class="field-label" id="modeLabel">CAMPO ORTOCOPICO — NICOL INCROCIATI</div>
+  <div class="field-wrap">
+    <canvas id="cField"></canvas>
+  </div>
+  <div style="font-size:.55rem;color:var(--muted);text-align:center">
+    ↕ Polarizzatore E-W &nbsp;|&nbsp; ↔ Analizzatore N-S
+  </div>
+</div>
+
+<!-- TAVOLA MICHEL-LÉVY -->
+<div class="levy">
+  <div class="levy-title">Tavola di Michel-Lévy</div>
+  <canvas id="cLevy"></canvas>
+</div>
+
+</div>
+<div class="ibar">
+  <div>&Delta;n: <span id="ibDn">—</span></div>
+  <div>t: <span id="ibT">—</span></div>
+  <div>&Gamma;: <span id="ibG">—</span> nm</div>
+  <div>Ordine: <span id="ibOrd">—</span></div>
+  <div>Piatto: <span id="ibAng">—</span></div>
+</div>
+
+<script>
+// =====================================================================
+// DATI FISICI
+// =====================================================================
+const MINERALS = {
+  'Quarzo':          {dn:0.009, tipo:'uniassico+', v2:null,  info:'Uniassico positivo. Sezione perpendicolare all\'asse ottico: figura a croce nera. Colori grigi I ordine a 30µm.'},
+  'Calcite':         {dn:0.172, tipo:'uniassico-', v2:null,  info:'Uniassico negativo. Birifrangenza elevatissima: colori alti (bianco perla). Rombomero tipico.'},
+  'Muscovite':       {dn:0.040, tipo:'biassico-',  v2:40,   info:'Biassico negativo. 2V~40°. Colori II-III ordine. Estinzione obliqua nelle sezioni basali.'},
+  'Biotite':         {dn:0.050, tipo:'biassico-',  v2:25,   info:'Biassico negativo. 2V~25°. Forte pleocroismo. Colori marroni mascherano spesso i colori di interferenza.'},
+  'Olivina':         {dn:0.035, tipo:'biassico+',  v2:82,   info:'Biassico positivo. 2V~82° (quasi centrato). Colori vivaci I-II ordine. Figura con 2 melatopi visibili.'},
+  'Ortopirosseno':   {dn:0.015, tipo:'biassico+',  v2:60,   info:'Biassico positivo. 2V~60°. Colori I ordine. Estinzione parallela. Clivaggio a 90°.'},
+  'Clinopirosseno':  {dn:0.025, tipo:'biassico+',  v2:58,   info:'Biassico positivo. 2V~58°. Colori I-II ordine. Estinzione obliqua. Clivaggio a 87°.'},
+  'Plagioclasio':    {dn:0.012, tipo:'biassico-',  v2:80,   info:'Biassico negativo. 2V variabile con composizione. Colori grigi I ordine. Geminazioni polisinteti.'},
+  'K-feldspato':     {dn:0.006, tipo:'biassico-',  v2:60,   info:'Biassico negativo. 2V~60°. Colori grigi I ordine bassi. Geminazioni Carlsbad.'},
+  'Sillimanite':     {dn:0.020, tipo:'biassico+',  v2:30,   info:'Biassico positivo. 2V~30°. Colori I-II ordine. Abito fibroso (fibrolite) o prismatico.'},
+  'Andalusite':      {dn:0.010, tipo:'biassico-',  v2:85,   info:'Biassico negativo. 2V~85°. Colori I ordine. Forte pleocroismo rosa-verde. Inclusioni a croce (chiasostolite).'},
+  'Cianite':         {dn:0.016, tipo:'biassico-',  v2:82,   info:'Biassico negativo. 2V~82°. Colori I ordine. Durezza anisotropa. Estinzione obliqua su {100}.'},
+};
+
+// =====================================================================
+// TABELLA COLORI MICHEL-LÉVY (ritardo nm -> RGB)
+// Basata su dati spettroscopici reali degli ordini di interferenza
+// =====================================================================
+const LEVY_COLORS = [
+  [0,   [0,0,0]],
+  [20,  [40,40,40]],
+  [40,  [80,80,90]],
+  [80,  [140,140,155]],
+  [100, [175,170,185]],
+  [150, [210,210,220]],
+  [190, [235,230,215]],
+  [210, [240,235,190]],
+  [230, [245,230,140]],
+  [250, [240,200,80]],
+  [260, [235,160,40]],
+  [265, [220,100,30]],
+  [270, [200,60,60]],
+  [273, [170,50,100]],
+  [280, [120,50,150]],
+  [295, [70,60,180]],
+  [320, [40,100,200]],
+  [370, [30,160,200]],
+  [430, [40,190,140]],
+  [480, [80,200,80]],
+  [510, [150,210,60]],
+  [530, [210,220,50]],
+  [545, [240,210,60]],
+  [555, [245,185,55]],
+  [565, [240,145,45]],
+  [575, [225,100,80]],
+  [582, [200,70,120]],
+  [592, [160,60,170]],
+  [620, [90,70,200]],
+  [660, [50,110,210]],
+  [710, [40,170,190]],
+  [750, [60,195,130]],
+  [800, [100,205,80]],
+  [840, [160,210,70]],
+  [870, [210,215,80]],
+  [900, [235,200,100]],
+  [920, [235,175,120]],
+  [940, [225,145,130]],
+  [960, [205,110,150]],
+  [985, [175,90,180]],
+  [1010,[120,90,200]],
+  [1060,[70,120,205]],
+  [1100,[55,165,195]],
+  [1130,[65,190,160]],
+  [1160,[80,200,120]],
+  [1200,[110,205,85]],
+  [1250,[160,210,75]],
+  [1300,[200,210,85]],
+  [1400,[220,205,120]],
+  [1500,[215,195,150]],
+  [1600,[210,190,170]],
+  [1700,[205,195,185]],
+  [1800,[200,200,200]],
+];
+
+function gammaToRGB(gamma){
+  if(gamma<=0) return [0,0,0];
+  const g=gamma%1800; // oltre III ordine tende al bianco
+  for(let i=0;i<LEVY_COLORS.length-1;i++){
+    const [g0,c0]=LEVY_COLORS[i];
+    const [g1,c1]=LEVY_COLORS[i+1];
+    if(g>=g0&&g<=g1){
+      const t=(g-g0)/(g1-g0);
+      return [
+        Math.round(c0[0]+(c1[0]-c0[0])*t),
+        Math.round(c0[1]+(c1[1]-c0[1])*t),
+        Math.round(c0[2]+(c1[2]-c0[2])*t)
+      ];
+    }
+  }
+  return [200,200,200];
+}
+
+function gammaOrder(gamma){
+  if(gamma<550) return 'I';
+  if(gamma<1100) return 'II';
+  if(gamma<1650) return 'III';
+  return '>III';
+}
+
+// =====================================================================
+// STATO
+// =====================================================================
+let dn=0.035, thick=30, ang=0, crossed=true, mode='ortho', cutAngle=0, cutOrtho=90, laminaOn=false, cutBiAngle=0;
+let rotating=false, rotTimer=null;
+let currentMin='Olivina';
+
+const cF=document.getElementById('cField');
+const ctxF=cF.getContext('2d');
+const cL=document.getElementById('cLevy');
+const ctxL=cL.getContext('2d');
+
+// =====================================================================
+// RESIZE
+// =====================================================================
+function resize(){
+  const main=document.querySelector('.main');
+  const sb=document.querySelector('.sb');
+  const levy=document.querySelector('.levy');
+  const cvp=document.querySelector('.cv-panel');
+  const avail=Math.min(cvp.clientWidth-20, cvp.clientHeight-60);
+  const sz=Math.max(200,Math.min(avail,500));
+  cF.width=sz; cF.height=sz;
+  cL.width=levy.clientWidth;
+  cL.height=levy.clientHeight-30;
+  drawAll();
+}
+window.addEventListener('resize',resize);
+
+// =====================================================================
+// DISEGNO CAMPO ORTOCOPICO
+// =====================================================================
+function drawOrtho(){
+  const W=cF.width, H=cF.height, R=W/2;
+  ctxF.clearRect(0,0,W,H);
+
+  // Ritaglio circolare
+  ctxF.save();
+  ctxF.beginPath();
+  ctxF.arc(R,R,R-2,0,2*Math.PI);
+  ctxF.clip();
+
+  // Δn apparente dipende dall'orientazione della sezione rispetto all'asse ottico
+  // phi=0: sezione perp. all'asse -> Δn_app=0 (estinzione sempre)
+  // phi=90: sezione paral. all'asse -> Δn_app=Δn_max
+  const cutOrthoRad = cutOrtho * Math.PI / 180;
+  const dnApp = dn * Math.sin(cutOrthoRad);
+  const gamma = dnApp * thick * 1000; // nm
+  const angRad=ang*Math.PI/180;
+
+  if(!crossed){
+    // Nicol paralleli: si vede luce (sfondo bianco-crema)
+    ctxF.fillStyle='#f5f0e0';
+    ctxF.fillRect(0,0,W,H);
+    // Il cristallo è sempre luminoso con colorazione debole
+    const [r,g,b]=gammaToRGB(gamma*0.3);
+    ctxF.fillStyle=`rgba(${r},${g},${b},0.4)`;
+    ctxF.fillRect(0,0,W,H);
+  } else {
+    // Nicol incrociati: sfondo nero
+    ctxF.fillStyle='#000005';
+    ctxF.fillRect(0,0,W,H);
+
+    // Intensità: I = sin²(2θ) * sin²(πΓ/λ)
+    // dove θ = angolo tra asse lento e polarizzatore
+    // λ = 560nm (verde, luce bianca approssimata)
+    // Usiamo gamma per il colore, sin²(2θ) per l'intensità
+
+    const theta=angRad; // angolo stage
+    // I = sin²(2θ) × sin²(πΓ/λ)
+    // sin²(2θ): estinzione ogni 90° di rotazione piatto
+    // sin²(πΓ/λ): modula intensità massima in funzione del ritardo (e quindi dell'orientazione)
+    const lambda_eff=560; // nm, picco sensibilità occhio
+    const factorTheta=Math.pow(Math.sin(2*theta),2);
+    const factorGamma=gamma>0 ? Math.pow(Math.sin(Math.PI*gamma/lambda_eff),2) : 0;
+    const intensity=factorTheta*factorGamma;
+
+    if(intensity>0.005){
+      const [r,g,b]=gammaToRGB(gamma);
+      const alpha=Math.min(1,intensity*1.3);
+      ctxF.fillStyle=`rgba(${r},${g},${b},${alpha})`;
+      ctxF.fillRect(0,0,W,H);
+    }
+
+    // Posizioni di estinzione: ogni 90° -> croce scura
+    // Mostra croci di estinzione sottili per orientamento
+    const ext=Math.abs(Math.sin(2*theta))<0.08;
+    if(ext){
+      ctxF.fillStyle='rgba(0,0,0,0.7)';
+      ctxF.fillRect(0,0,W,H);
+    }
+  }
+
+  // Indicatore orientazione (cross-hair)
+  ctxF.strokeStyle='rgba(255,255,255,0.15)';
+  ctxF.lineWidth=1;
+  ctxF.beginPath();ctxF.moveTo(R,2);ctxF.lineTo(R,H-2);ctxF.stroke();
+  ctxF.beginPath();ctxF.moveTo(2,R);ctxF.lineTo(W-2,R);ctxF.stroke();
+
+  // Indicatore polarizzatori
+  ctxF.strokeStyle='rgba(0,212,255,0.5)';
+  ctxF.lineWidth=2;
+  // Polarizzatore: E-W (orizzontale)
+  ctxF.beginPath();ctxF.moveTo(10,R);ctxF.lineTo(30,R);ctxF.stroke();
+  if(crossed){
+    // Analizzatore: N-S (verticale)
+    ctxF.strokeStyle='rgba(255,107,53,0.5)';
+    ctxF.beginPath();ctxF.moveTo(R,10);ctxF.lineTo(R,30);ctxF.stroke();
+  }
+
+  // Indicatore asse del cristallo rotante
+  const axLen=R*0.7;
+  ctxF.save();
+  ctxF.translate(R,R);
+  ctxF.rotate(angRad);
+  ctxF.strokeStyle='rgba(168,255,120,0.6)';
+  ctxF.lineWidth=1.5;
+  ctxF.setLineDash([4,3]);
+  ctxF.beginPath();ctxF.moveTo(-axLen,0);ctxF.lineTo(axLen,0);ctxF.stroke();
+  ctxF.setLineDash([]);
+  // Freccia asse lento
+  ctxF.fillStyle='rgba(168,255,120,0.8)';
+  ctxF.font='bold 10px Space Mono';
+  ctxF.textAlign='center';
+  ctxF.fillText('Z\'',axLen+14,4);
+  ctxF.restore();
+
+  ctxF.restore(); // fine clip
+
+  // Bordo circolare
+  ctxF.beginPath();
+  ctxF.arc(R,R,R-2,0,2*Math.PI);
+  ctxF.strokeStyle='#1e2230';
+  ctxF.lineWidth=3;
+  ctxF.stroke();
+}
+
+// =====================================================================
+// DISEGNO CAMPO CONOSCOPICO
+// =====================================================================
+function drawCono(){
+  const W=cF.width, H=cF.height, R=W/2;
+  ctxF.clearRect(0,0,W,H);
+  ctxF.save();
+  ctxF.beginPath();
+  ctxF.arc(R,R,R-2,0,2*Math.PI);
+  ctxF.clip();
+
+  ctxF.fillStyle='#000005';
+  ctxF.fillRect(0,0,W,H);
+
+  const gamma=dn*thick*1000;
+  const angRad=ang*Math.PI/180;
+  const cutRad=cutAngle*Math.PI/180;
+  const isUniaxial=MINERALS[currentMin]&&MINERALS[currentMin].tipo.includes('uniassico');
+  const v2deg=MINERALS[currentMin]&&MINERALS[currentMin].v2?MINERALS[currentMin].v2:70;
+
+  // Disegna isocromi e isogiure pixel per pixel
+  const imgData=ctxF.createImageData(W,H);
+  const data=imgData.data;
+
+  for(let py=0;py<H;py++){
+    for(let px=0;px<W;px++){
+      const dx=px-R, dy=py-R;
+      const r2=dx*dx+dy*dy;
+      if(r2>=(R-2)*(R-2)) continue;
+
+      const rho=Math.sqrt(r2)/R; // 0..1 (bordo campo)
+      const phi=Math.atan2(dy,dx); // angolo nel campo
+
+      // Angolo dal centro = inclinazione del raggio luminoso
+      // rho=0 -> asse ottico; rho=1 -> 45° circa
+      const thetaMax=45*Math.PI/180;
+      const theta=rho*thetaMax;
+
+      let intensity=0;
+      let col=[0,0,0];
+
+      if(isUniaxial){
+        // UNIASSICO: figura centrata se cutAngle=0
+        // Offset del centro per sezioni oblique
+        const offX=Math.sin(cutRad)*R*0.8;
+        const cx2=dx-offX, cy2=dy;
+        const rho2=Math.sqrt(cx2*cx2+cy2*cy2)/R;
+        const phi2=Math.atan2(cy2,cx2);
+        const theta2=rho2*thetaMax;
+
+        // Isocromi: cerchi concentrici
+        // Ritardo locale ~ gamma * sin²(theta2)
+        let gammaLocal=gamma*Math.sin(theta2)*Math.sin(theta2)*4;
+
+        // Lamina λ (550nm): asse lento a 45°
+        // Addizione se asse lento minerale || asse lento lamina (NE-SW)
+        // Sottrazione se perpendicolare
+        if(laminaOn && crossed){
+          const phiLamina=phi2-angRad; // angolo rispetto asse lento minerale
+          // cos(2*(phiLamina-PI/4)): +1 dove asse lento || lamina, -1 dove perp.
+          const sign=Math.cos(2*(phiLamina-Math.PI/4));
+          gammaLocal=Math.max(0, gammaLocal+sign*550);
+        }
+
+        // Isogiure: sin²(2*phi2) -> croce lungo 0° e 90°
+        // Rotata con lo stage
+        const phiRot=phi2-angRad;
+        const iso=Math.pow(Math.sin(2*phiRot),2);
+
+        if(crossed){
+          col=gammaToRGB(gammaLocal);
+          intensity=iso*(1-Math.exp(-gammaLocal/50));
+          // Isogiure scure
+          if(iso<0.05) intensity=0;
+        } else {
+          col=[245,240,220];
+          intensity=0.8;
+        }
+      } else {
+        // BIASSICO: due melatopi a ±angolo v2
+        const v2rad=v2deg*Math.PI/180;
+        // Posizione dei due assi ottici nel campo
+        // Posizione melatopi: dipende da v2 e dall'inclinazione della sezione (cutBiAngle)
+        // cutBiAngle=0: figura centrata su Bxa, melatopi a distanza proporzionale a v2
+        // cutBiAngle>0: i melatopi si allontanano (figura sempre più decentrata)
+        const decentr = Math.sin(cutBiAngle * Math.PI / 180);
+        const basePos = Math.sin(v2rad/2) * R * 0.6;
+        const ax1x = basePos + decentr * R * 0.8;
+        const ax1y = 0;
+        const ax2x = -basePos + decentr * R * 0.8;
+        const ax2y = 0;
+
+        // Rotazione con lo stage
+        const cosA=Math.cos(angRad), sinA=Math.sin(angRad);
+        const m1x=ax1x*cosA-ax1y*sinA, m1y=ax1x*sinA+ax1y*cosA;
+        const m2x=ax2x*cosA-ax2y*sinA, m2y=ax2x*sinA+ax2y*cosA;
+
+        // Offset per taglio obliquo
+        const offX=Math.sin(cutRad)*R*0.5;
+
+        const d1x=dx-(m1x+offX), d1y=dy-m1y;
+        const d2x=dx-(m2x+offX), d2y=dy-m2y;
+        const r1=Math.sqrt(d1x*d1x+d1y*d1y)/R;
+        const r2b=Math.sqrt(d2x*d2x+d2y*d2y)/R;
+
+        // Isocromi: funzione della distanza dai due assi
+        const rMin=Math.min(r1,r2b);
+        let gammaLocal=gamma*rMin*rMin*3;
+
+        // Lamina λ per biassico
+        if(laminaOn && crossed){
+          const phiBx=Math.atan2(dy,dx)-angRad;
+          const signBx=Math.cos(2*(phiBx-Math.PI/4));
+          gammaLocal=Math.max(0, gammaLocal+signBx*550);
+        }
+
+        // Isogiure biassiche: iperboliche
+        // Angolo bisettrice dei due assi
+        const phi1=Math.atan2(d1y,d1x);
+        const phi2b=Math.atan2(d2y,d2x);
+        const isoA=Math.pow(Math.sin(phi1+phi2b),2);
+
+        if(crossed){
+          col=gammaToRGB(gammaLocal);
+          intensity=isoA*(1-Math.exp(-gammaLocal/30));
+          if(isoA<0.05) intensity=0;
+        } else {
+          col=[245,240,220];
+          intensity=0.8;
+        }
+      }
+
+      // Oscuramento al bordo del campo
+      const edge=1-Math.pow(rho,3);
+      intensity*=edge;
+
+      const idx=(py*W+px)*4;
+      data[idx]  =Math.round(col[0]*intensity);
+      data[idx+1]=Math.round(col[1]*intensity);
+      data[idx+2]=Math.round(col[2]*intensity);
+      data[idx+3]=255;
+    }
+  }
+  ctxF.putImageData(imgData,0,0);
+
+  // Indicatore lamina: linea tratteggiata a 45°
+  if(laminaOn && mode==='cono' && crossed){
+    const hHi=R*0.85;
+    ctxF.save();
+    ctxF.beginPath();ctxF.arc(R,R,R-2,0,2*Math.PI);ctxF.clip();
+    ctxF.strokeStyle='rgba(255,255,100,0.6)';
+    ctxF.lineWidth=1.5;ctxF.setLineDash([5,4]);
+    ctxF.beginPath();
+    ctxF.moveTo(R-hHi*Math.cos(Math.PI/4),R-hHi*Math.sin(Math.PI/4));
+    ctxF.lineTo(R+hHi*Math.cos(Math.PI/4),R+hHi*Math.sin(Math.PI/4));
+    ctxF.stroke();
+    ctxF.setLineDash([]);
+    ctxF.font='9px Space Mono';ctxF.fillStyle='rgba(255,255,100,0.8)';
+    ctxF.textAlign='left';
+    ctxF.fillText('λ',R+hHi*0.6+6,R-hHi*0.6-4);
+    ctxF.restore();
+  }
+
+  // Indicatori assi (melatopi)
+  if(crossed){
+    const isUni=MINERALS[currentMin]&&MINERALS[currentMin].tipo.includes('uniassico');
+    const v2rad=isUni?0:(MINERALS[currentMin]?.v2||70)*Math.PI/180;
+    if(isUni){
+      const offX=Math.sin(cutAngle*Math.PI/180)*R*0.8;
+      ctxF.beginPath();ctxF.arc(R+offX,R,5,0,2*Math.PI);
+      ctxF.fillStyle='rgba(168,255,120,0.8)';ctxF.fill();
+    } else {
+      const ax=Math.sin(v2rad/2)*R*0.6;
+      const cosA=Math.cos(angRad),sinA=Math.sin(angRad);
+      const offX=Math.sin(cutAngle*Math.PI/180)*R*0.5;
+      const offXm=Math.sin(cutBiAngle*Math.PI/180)*R*0.8;
+      [[basePos,0],[-basePos,0]].forEach(([x,y])=>{
+        const rx=(x+offXm)*cosA-y*sinA, ry=(x+offXm)*sinA+y*cosA;
+        ctxF.beginPath();ctxF.arc(R+rx,R+ry,4,0,2*Math.PI);
+        ctxF.fillStyle='rgba(168,255,120,0.7)';ctxF.fill();
+      });
+    }
+  }
+
+  ctxF.restore();
+  ctxF.beginPath();
+  ctxF.arc(R,R,R-2,0,2*Math.PI);
+  ctxF.strokeStyle='#1e2230';ctxF.lineWidth=3;ctxF.stroke();
+}
+
+// =====================================================================
+// TAVOLA MICHEL-LÉVY
+// =====================================================================
+function drawLevy(){
+  const W=cL.width, H=cL.height;
+  if(!W||!H)return;
+  ctxL.clearRect(0,0,W,H);
+  ctxL.fillStyle='#070910';
+  ctxL.fillRect(0,0,W,H);
+
+  const padL=36, padR=8, padT=20, padB=40;
+  const gW=W-padL-padR, gH=H-padT-padB;
+
+  // Range: 0-1800nm (oltre III ordine)
+  const maxG=1800;
+
+  // Disegna gradiente colori Michel-Lévy
+  for(let px=0;px<gW;px++){
+    const g=px/gW*maxG;
+    const [r,b2,bl]=gammaToRGB(g);
+    ctxL.fillStyle=`rgb(${r},${b2},${bl})`;
+    ctxL.fillRect(padL+px,padT,1,gH);
+  }
+
+  // Bordo
+  ctxL.strokeStyle='#1e2230';ctxL.lineWidth=1;
+  ctxL.strokeRect(padL,padT,gW,gH);
+
+  // Etichette ordini
+  ctxL.font='9px Space Mono';ctxL.fillStyle='#c8ccd8';ctxL.textAlign='center';
+  [[275,'I'],[825,'II'],[1375,'III']].forEach(([g,lbl])=>{
+    const x=padL+g/maxG*gW;
+    ctxL.fillText(lbl,x,padT-6);
+    ctxL.strokeStyle='rgba(200,204,216,0.2)';ctxL.lineWidth=0.5;
+    ctxL.beginPath();ctxL.moveTo(x,padT);ctxL.lineTo(x,padT+gH);ctxL.stroke();
+  });
+
+  // Etichette nm (asse x)
+  ctxL.fillStyle='#8a8e9a';ctxL.font='8px Space Mono';
+  [0,300,600,900,1200,1500,1800].forEach(g=>{
+    const x=padL+g/maxG*gW;
+    ctxL.textAlign='center';
+    ctxL.fillText(g,x,padT+gH+12);
+  });
+  ctxL.fillStyle='#c8ccd8';ctxL.font='8px Space Mono';
+  ctxL.textAlign='center';
+  ctxL.fillText('Ritardo (nm)',padL+gW/2,padT+gH+24);
+
+  // Linea indicatore posizione corrente
+  const gamma=dn*thick*1000;
+  const gx=padL+Math.min(gamma,maxG)/maxG*gW;
+  ctxL.strokeStyle='#ffffff';ctxL.lineWidth=2;
+  ctxL.beginPath();ctxL.moveTo(gx,padT-2);ctxL.lineTo(gx,padT+gH+2);ctxL.stroke();
+
+  // Triangolino indicatore
+  ctxL.fillStyle='#ffffff';
+  ctxL.beginPath();
+  ctxL.moveTo(gx-5,padT-2);ctxL.lineTo(gx+5,padT-2);ctxL.lineTo(gx,padT+6);
+  ctxL.fill();
+
+  // Linee Dn costante (diagonali che indicano spessori diversi)
+  // Per ogni minerale selezionato, disegna la linea Dn=cost
+  ctxL.strokeStyle='rgba(168,255,120,0.5)';ctxL.lineWidth=1;ctxL.setLineDash([3,3]);
+  // gamma = dn * t * 1000 -> t = gamma / (dn*1000)
+  // Disegna alcune linee di spessore (10, 20, 30, 40µm)
+  const maxT=60;
+  [10,20,30,40,50,60].forEach(t=>{
+    const g_at_maxDn=0.18*t*1000;
+    if(g_at_maxDn>maxG) return;
+    const x2=padL+Math.min(g_at_maxDn,maxG)/maxG*gW;
+    ctxL.strokeStyle=`rgba(200,204,216,0.15)`;
+    ctxL.beginPath();ctxL.moveTo(padL,padT+gH);ctxL.lineTo(x2,padT);ctxL.stroke();
+    ctxL.fillStyle='rgba(200,204,216,0.4)';ctxL.font='7px Space Mono';
+    ctxL.textAlign='left';
+    if(x2<W-padR-10) ctxL.fillText(t+'µm',x2+2,padT+3);
+  });
+  ctxL.setLineDash([]);
+
+  // Punto corrente sulla tavola
+  ctxL.beginPath();ctxL.arc(gx,padT+gH/2,5,0,2*Math.PI);
+  ctxL.fillStyle='white';ctxL.fill();
+  ctxL.strokeStyle='#000';ctxL.lineWidth=1;ctxL.stroke();
+}
+
+// =====================================================================
+// UPDATE UI
+// =====================================================================
+function updateInfo(){
+  const gamma=dn*thick*1000;
+  const [r,g,b]=gammaToRGB(gamma);
+  const ord=gammaOrder(gamma);
+  const dnApp2 = dn * Math.sin(cutOrtho * Math.PI / 180);
+  document.getElementById('vGamma').textContent=gamma.toFixed(0)+' nm';
+  document.getElementById('vOrd').textContent=ord+' ordine';
+  // Aggiorna Δn apparente nel pannello info
+  const dnAppEl = document.getElementById('vDnApp');
+  if(dnAppEl) dnAppEl.textContent = dnApp2.toFixed(3);
+  document.getElementById('ibDn').textContent=dn.toFixed(3);
+  document.getElementById('ibT').textContent=thick+' µm';
+  document.getElementById('ibG').textContent=gamma.toFixed(0);
+  document.getElementById('ibOrd').textContent=ord;
+  document.getElementById('ibAng').textContent=ang+'°';
+
+  const isUni2=currentMin!=='custom'&&MINERALS[currentMin]&&MINERALS[currentMin].tipo.includes('uniassico');
+  const isBi2=currentMin!=='custom'&&MINERALS[currentMin]&&MINERALS[currentMin].tipo.includes('biassico');
+  let lbl;
+  if(mode==='ortho'){
+    if(isBi2) lbl=`CAMPO ORTOCOPICO — SEZIONE A ${cutOrtho}° DA Bxa — NICOL ${crossed?'INCROCIATI':'PARALLELI'}`;
+    else lbl=`CAMPO ORTOCOPICO — SEZIONE A ${cutOrtho}° DA ASSE OTTICO — NICOL ${crossed?'INCROCIATI':'PARALLELI'}`;
+  } else {
+    if(isBi2) lbl=`CAMPO CONOSCOPICO — SEZIONE A ${cutBiAngle}° DA Bxa — NICOL ${crossed?'INCROCIATI':'PARALLELI'}`;
+    else if(isUni2) lbl=`CAMPO CONOSCOPICO — SEZIONE ⊥ ASSE OTTICO (${cutAngle}°) — NICOL ${crossed?'INCROCIATI':'PARALLELI'}`;
+    else lbl=`CAMPO CONOSCOPICO — NICOL ${crossed?'INCROCIATI':'PARALLELI'}`;
+  }
+  document.getElementById('modeLabel').textContent=lbl;
+}
+
+function drawAll(){
+  if(mode==='ortho') drawOrtho(); else drawCono();
+  drawLevy();
+  updateInfo();
+}
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+document.getElementById('selMin').addEventListener('change',e=>{
+  currentMin=e.target.value;
+  if(currentMin!=='custom'&&MINERALS[currentMin]){
+    const m=MINERALS[currentMin];
+    dn=m.dn;
+    document.getElementById('sDn').value=dn;
+    document.getElementById('vDn').textContent=dn.toFixed(3);
+    // Mostra/nascondi slider taglio in base al tipo ottico
+    const isBi=m.tipo.includes('biassico');
+    const cutUniEl=document.getElementById('cutUni');
+    const cutBiEl=document.getElementById('cutBi');
+    if(cutUniEl) cutUniEl.style.display=isBi?'none':'block';
+    if(cutBiEl)  cutBiEl.style.display=isBi?'block':'none';
+    // Per biassici: reset cutAngle a 0 (sezione perp. Bxa, centrata)
+    if(isBi){ 
+      cutAngle=0; document.getElementById('sCut').value=0; document.getElementById('vCut').textContent='0°';
+      cutBiAngle=0;
+      const sCutBiEl=document.getElementById('sCutBi');
+      if(sCutBiEl){sCutBiEl.value=0; document.getElementById('vCutBi').textContent='0°';}
+    }
+    // Ortocopica: mostra label corretta
+    const orthoUniEl=document.getElementById('orthoUni');
+    const orthoBiEl=document.getElementById('orthoBi');
+    if(orthoUniEl) orthoUniEl.style.display=isBi?'none':'block';
+    if(orthoBiEl)  orthoBiEl.style.display=isBi?'block':'none';
+    // Sincronizza valore slider e label per entrambi i tipi
+    const sCutOEl=document.getElementById('sCutO');
+    if(sCutOEl) sCutOEl.value=cutOrtho;
+    const vCutOEl=document.getElementById('vCutO');
+    if(vCutOEl) vCutOEl.textContent=cutOrtho+'°';
+    const vCutO2El=document.getElementById('vCutO2');
+    if(vCutO2El) vCutO2El.textContent=cutOrtho+'°';
+    const v2=m.v2?m.v2+'°':'—';
+    document.getElementById('infoMin').innerHTML=
+      `<b>${currentMin}</b><br>Tipo: <span class="val">${m.tipo}</span><br>`+
+      `&Delta;n: <span class="val">${m.dn.toFixed(3)}</span><br>`+
+      (m.v2?`2V: <span class="val">~${m.v2}°</span><br>`:'') +
+      `<br><span style="font-size:.9em">${m.info}</span>`;
+  }
+  drawAll();
+});
+
+document.getElementById('sDn').addEventListener('input',e=>{
+  dn=parseFloat(e.target.value);
+  document.getElementById('vDn').textContent=dn.toFixed(3);
+  document.getElementById('selMin').value='custom';
+  currentMin='custom';
+  document.getElementById('infoMin').innerHTML='<b>Personalizzato</b><br>&Delta;n: <span class="val">'+dn.toFixed(3)+'</span>';
+  drawAll();
+});
+
+document.getElementById('sT').addEventListener('input',e=>{
+  thick=parseInt(e.target.value);
+  document.getElementById('vT').textContent=thick+' µm';
+  drawAll();
+});
+
+document.getElementById('sAng').addEventListener('input',e=>{
+  ang=parseInt(e.target.value);
+  document.getElementById('vAng').textContent=ang+'°';
+  drawAll();
+});
+
+document.getElementById('sCut').addEventListener('input',e=>{
+  cutAngle=parseInt(e.target.value);
+  document.getElementById('vCut').textContent=cutAngle+'°';
+  drawAll();
+});
+
+document.getElementById('btnLamina').addEventListener('click',()=>{
+  laminaOn=!laminaOn;
+  const btn=document.getElementById('btnLamina');
+  btn.textContent=laminaOn?'λ inserita (550 nm)':'λ non inserita';
+  btn.classList.toggle('on',laminaOn);
+  drawAll();
+});
+
+document.getElementById('sCutBi').addEventListener('input',e=>{
+  cutBiAngle=parseInt(e.target.value);
+  document.getElementById('vCutBi').textContent=cutBiAngle+'°';
+  drawAll();
+});
+
+document.getElementById('sCutO').addEventListener('input',e=>{
+  cutOrtho=parseInt(e.target.value);
+  document.getElementById('vCutO').textContent=cutOrtho+'°';
+  const vCutO2=document.getElementById('vCutO2');
+  if(vCutO2) vCutO2.textContent=cutOrtho+'°';
+  drawAll();
+});
+
+document.getElementById('btnNX').addEventListener('click',()=>{
+  crossed=true;
+  document.getElementById('btnNX').classList.add('on');
+  document.getElementById('btnNP').classList.remove('on');
+  drawAll();
+});
+document.getElementById('btnNP').addEventListener('click',()=>{
+  crossed=false;
+  document.getElementById('btnNP').classList.add('on');
+  document.getElementById('btnNX').classList.remove('on');
+  drawAll();
+});
+
+document.getElementById('btnOrtho').addEventListener('click',()=>{
+  mode='ortho';
+  document.getElementById('btnOrtho').classList.add('on');
+  document.getElementById('btnCono').classList.remove('on');
+  document.getElementById('conoExtra').style.display='none';
+  document.getElementById('orthoExtra').style.display='block';
+  drawAll();
+});
+document.getElementById('btnCono').addEventListener('click',()=>{
+  mode='cono';
+  document.getElementById('btnCono').classList.add('on');
+  document.getElementById('btnOrtho').classList.remove('on');
+  document.getElementById('conoExtra').style.display='block';
+  document.getElementById('orthoExtra').style.display='none';
+  drawAll();
+});
+
+document.getElementById('btnRot').addEventListener('click',()=>{
+  rotating=!rotating;
+  document.getElementById('btnRot').textContent=rotating?'⏸ &#9646;&#9646; Ferma piatto':'▶ &#9654; Ruota piatto';
+  document.getElementById('btnRot').classList.toggle('on',rotating);
+  if(rotating){
+    rotTimer=setInterval(()=>{
+      ang=(ang+1)%360;
+      document.getElementById('sAng').value=ang;
+      document.getElementById('vAng').textContent=ang+'°';
+      drawAll();
+    },30);
+  } else {
+    clearInterval(rotTimer);
+  }
+});
+
+// Init con olivina
+document.getElementById('selMin').value='Olivina';
+document.getElementById('selMin').dispatchEvent(new Event('change'));
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>

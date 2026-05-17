@@ -6,14 +6,16 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 
 | Simulazione | Link diretto |
 |-------------|-------------|
-| 🌀 Moto Armonico Periodico | [Apri](https://montinigeo.github.io/Simulazioni/moto_armonico.html) |
-| ⚛️ Diffrattometro XRD | [Apri](https://montinigeo.github.io/Simulazioni/diffrattometro_xrd_v5.html) |
-| 📡 DInSAR — Interferometria Radar Differenziale | [Apri](https://montinigeo.github.io/Simulazioni/dinsar.html) |
-| 🛰️ Visibilità SAR Frane | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
-| 🔥 Diagrammi di Fase — Fusi Silicatici | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
+| [🌀 Moto Armonico Periodico](#moto-armonico) | [Apri](https://montinigeo.github.io/Simulazioni/moto_armonico.html) |
+| [⚛️ Diffrattometro XRD](#xrd) | [Apri](https://montinigeo.github.io/Simulazioni/diffrattometro_xrd_v5.html) |
+| [📡 DInSAR — Interferometria Radar Differenziale](#dinsar) | [Apri](https://montinigeo.github.io/Simulazioni/dinsar.html) |
+| [🛰️ Visibilità SAR Frane](#sar-frane) | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
+| [🔥 Diagrammi di Fase — Fusi Silicatici](#diagrammi-fase) | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
+| [🔬 Microscopio Polarizzato](#microscopio) | [Apri](https://montinigeo.github.io/Simulazioni/microscopio_polarizzato.html) |
 
 ---
 
+<a name="moto-armonico"></a>
 ## 🌀 Moto Armonico Periodico
 
 **File:** `moto_armonico.html`
@@ -49,6 +51,7 @@ La simulazione mostra la connessione tra il **moto circolare uniforme** (piano f
 
 ---
 
+<a name="xrd"></a>
 ## ⚛️ Diffrattometro XRD
 
 **File:** `diffrattometro_xrd_v5.html`
@@ -96,6 +99,7 @@ La diffrazione a raggi X è una tecnica fondamentale per la determinazione della
 
 ---
 
+<a name="dinsar"></a>
 ## 📡 DInSAR — Interferometria Radar Differenziale da Satellite
 
 **File:** `dinsar.html`
@@ -141,6 +145,7 @@ Il range è limitato a **±λ/4** perché questo è il massimo spostamento misur
 
 ---
 
+<a name="sar-frane"></a>
 ## 🛰️ Visibilità SAR Frane
 
 **File:** `visibilita_sar_frane.html`
@@ -169,6 +174,7 @@ La visibilità di una frana da satellite dipende dall'orientamento della direzio
 
 ---
 
+<a name="diagrammi-fase"></a>
 ## 🔥 Diagrammi di Fase — Fusi Silicatici Binari
 
 **File:** `diagrammi_fase.html`
@@ -215,6 +221,24 @@ Ab (NaAlSi₃O₈) e Or/Sanidino (KAlSi₃O₈) mostrano due campi di soluzione 
 - Velocità di raffreddamento uniforme in tutte le zone del diagramma
 - Interfaccia dark theme coerente con le altre simulazioni della raccolta
 
+---
+
+<a name="microscopio"></a>
+## 🔬 Microscopio Polarizzato — Ottica Cristallografica
+
+**File:** `microscopio_polarizzato.html`
+
+Simulazione interattiva del microscopio ottico a luce polarizzata per lo studio delle proprietà ottiche dei minerali in sezione sottile. Include 12 minerali preimpostati (quarzo, calcite, olivina, pirosseni, feldspati, miche, silicati alluminosi) con i rispettivi parametri ottici, e permette di impostare birifrangenza e spessore personalizzati.
+
+### Funzionalità
+
+- **Modalità ortocopica**: visualizzazione del colore di interferenza in funzione di birifrangenza (Δn), spessore (µm) e orientazione del cristallo rispetto all'asse ottico (uniassici) o alla bisettrice acuta Bxa (biassici); intensità modulata secondo la formula I = sin²(2θ)·sin²(πΓ/λ)
+- **Modalità conoscopica**: figura di interferenza calcolata pixel per pixel — croce nera e isocromi circolari per uniassici (Biot-Fouquet), isogiure iperboliche e due melatopi per biassici; angolo di inclinazione della sezione regolabile con deformazione realistica della figura
+- **Rotazione piatto**: manuale tramite slider o automatica continua
+- **Nicol incrociati / paralleli**: toggle istantaneo
+- **Lamina compensatrice λ (550 nm)**: inseribile in modalità conoscopica per la determinazione del segno ottico; asse lento a 45° NE-SW con visualizzazione dell'effetto di addizione/sottrazione sulle isocromi
+- **Tavola di Michel-Lévy**: visualizzata in tempo reale nel pannello destro con indicatore mobile della posizione corrente e linee diagonali degli spessori (10–60 µm)
+- Pannello informativo con Δn apparente, ritardo Γ (nm) e ordine di interferenza aggiornati in tempo reale
 ---
 
 ## Autore
