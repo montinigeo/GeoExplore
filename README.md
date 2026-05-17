@@ -13,6 +13,7 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | [🔥 Diagrammi di Fase — Fusi Silicatici](#diagrammi-fase) | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
 | [🔬 Microscopio Polarizzato](#microscopio) | [Apri](https://montinigeo.github.io/Simulazioni/microscopio_polarizzato.html) |
 | [🌋 Serie di Bowen](#serie-bowen) | [Apri](https://montinigeo.github.io/Simulazioni/serie_bowen.html) |
+| [🌍 Onde Sismiche](#onde-sismiche) | [Apri](https://montinigeo.github.io/Simulazioni/onde_sismiche.html) |
 
 ---
 
@@ -257,6 +258,31 @@ Simulazione interattiva della cristallizzazione frazionata dei magmi secondo la 
 - Scheda informativa per ogni minerale: formula, sistema cristallino, clivaggio, note petrologiche e rocce tipiche
 - Al termine della cristallizzazione: composizione percentuale approssimativa della roccia risultante (normalizzata a 100%)
 - La serie continua dei plagioclasi è rappresentata come unica barra a gradiente con indicatore mobile della composizione An corrente
+
+
+---
+
+<a name="onde-sismiche"></a>
+## 🌍 Onde Sismiche — Struttura Interna della Terra
+
+**File:** `onde_sismiche.html`
+
+Simulazione interattiva della propagazione delle onde sismiche attraverso la Terra e della struttura interna del pianeta. Le traiettorie dei raggi sono calcolate con integrazione numerica della legge di Snell in forma sferica, tenendo conto del gradiente di velocità che produce le caratteristiche traiettorie curve.
+
+### Struttura
+
+La simulazione è organizzata in tre schede:
+
+- **Onde P** — selezione del singolo raggio con slider dell'angolo di partenza (0° = verticale/profondo, 90° = orizzontale/superficiale). Mostra sia le P nel mantello (ciano) che le PKP che attraversano il nucleo (giallo), con spiegazione della rifrazione al confine di Gutenberg e della zona d'ombra (103°–143°)
+- **Onde S** — stessa struttura. I raggi con angolo piccolo si fermano al confine di Gutenberg perché il nucleo esterno è liquido e non trasmette onde di taglio; i raggi più ripidi rimangono nel mantello
+- **Struttura** — tutti i raggi P, PKP e S animati simultaneamente dall'epicentro, con i fronti d'onda in movimento; permette di apprezzare il pattern globale di propagazione e le zone d'ombra
+
+### Elementi visualizzati
+
+- Cinque strati interni colorati: crosta, mantello superiore, mantello inferiore, nucleo esterno (liquido), nucleo interno (solido)
+- Discontinuità etichettate: Moho, 660 km, Gutenberg (CMB), Lehmann (ICB)
+- Per ogni raggio: angolo di partenza, profondità massima raggiunta, distanza epicentrale di arrivo
+- Pannello informativo con spiegazione fisica del percorso
 
 
 ---
