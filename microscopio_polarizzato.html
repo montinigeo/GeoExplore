@@ -661,17 +661,61 @@ function drawLevy(){
   ctxL.textAlign='center';
   ctxL.fillText('Ritardo (nm)',padL+gW/2,padT+gH+24);
 
-  // Linea indicatore posizione corrente
+  // Ritardo di riferimento: Gamma/2 (zona a 45° dalle isogiure, metà campo)
   const gamma=dn*thick*1000;
-  const gx=padL+Math.min(gamma,maxG)/maxG*gW;
-  ctxL.strokeStyle='#ffffff';ctxL.lineWidth=2;
-  ctxL.beginPath();ctxL.moveTo(gx,padT-2);ctxL.lineTo(gx,padT+gH+2);ctxL.stroke();
+  const gammaRef = gamma * 0.5;  // ritardo rappresentativo zona 45°
 
-  // Triangolino indicatore
-  ctxL.fillStyle='#ffffff';
-  ctxL.beginPath();
-  ctxL.moveTo(gx-5,padT-2);ctxL.lineTo(gx+5,padT-2);ctxL.lineTo(gx,padT+6);
-  ctxL.fill();
+  function drawIndicator(gammaVal, col, label, yOff){
+    const gVal=Math.max(0,Math.min(gammaVal,maxG));
+    const gx2=padL+gVal/maxG*gW;
+    // Linea verticale
+    ctxL.strokeStyle=col; ctxL.lineWidth=1.5;
+    ctxL.beginPath();ctxL.moveTo(gx2,padT-2);ctxL.lineTo(gx2,padT+gH+2);ctxL.stroke();
+    // Triangolino
+    ctxL.fillStyle=col;
+    ctxL.beginPath();
+    ctxL.moveTo(gx2-5,padT-2);ctxL.lineTo(gx2+5,padT-2);ctxL.lineTo(gx2,padT+6);
+    ctxL.fill();
+    // Punto
+    ctxL.beginPath();ctxL.arc(gx2,padT+gH/2,4,0,2*Math.PI);
+    ctxL.fillStyle=col;ctxL.fill();
+    // Label
+    ctxL.font='7px Space Mono';ctxL.fillStyle=col;
+    ctxL.textAlign='center';
+    ctxL.fillText(label,gx2,padT+gH+yOff);
+  }
+
+  // Indicatore principale (senza lamina)
+  const gx=padL+Math.min(gammaRef,maxG)/maxG*gW;
+  drawIndicator(gammaRef,'#ffffff','Γ/2',14);
+
+  // Indicatori con lamina (solo in modalità conoscopica)
+  if(laminaOn && mode==='cono' && crossed){
+    const LAMINA=550; // nm
+    // Il segno ottico determina quale quadrante (NE-SW) ha addizione
+    // Per minerali +: asse lento NE-SW -> NE-SW = addizione -> sale
+    // Per minerali -: asse lento NW-SE -> NE-SW = sottrazione -> scende
+    const isPositive = currentMin!=='custom' && MINERALS[currentMin] &&
+                       MINERALS[currentMin].tipo.includes('+');
+    const isNegative = currentMin!=='custom' && MINERALS[currentMin] &&
+                       MINERALS[currentMin].tipo.includes('-');
+
+    if(isPositive){
+      // NE-SW: addizione -> sposta a destra (Γ+lamina)
+      drawIndicator(gammaRef+LAMINA,'#4488ff','+ add.',28);
+      // NW-SE: sottrazione -> sposta a sinistra
+      drawIndicator(Math.abs(gammaRef-LAMINA),'#ffaa00','- sott.',42);
+    } else if(isNegative){
+      // NE-SW: sottrazione -> sposta a sinistra
+      drawIndicator(Math.abs(gammaRef-LAMINA),'#ffaa00','- sott.',28);
+      // NW-SE: addizione -> sposta a destra
+      drawIndicator(gammaRef+LAMINA,'#4488ff','+ add.',42);
+    } else {
+      // Personalizzato: mostra entrambi senza segno
+      drawIndicator(gammaRef+LAMINA,'#4488ff','+550',28);
+      drawIndicator(Math.abs(gammaRef-LAMINA),'#ffaa00','-550',42);
+    }
+  }
 
   // Linee Dn costante (diagonali che indicano spessori diversi)
   // Per ogni minerale selezionato, disegna la linea Dn=cost

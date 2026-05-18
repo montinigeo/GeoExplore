@@ -273,33 +273,39 @@ function rayToCanvas(pts, cx, cy, R_px){
 // =====================================================================
 // DISEGNO RAGGIO ANIMATO
 // =====================================================================
-function drawRay(ray, prog, cx, cy, R_px, color){
+function drawRay(ray, prog, cx, cy, R_px, color, symmetric=false){
   const pts=ray.pts;
   if(!pts||pts.length<2) return;
   const cpts=rayToCanvas(pts,cx,cy,R_px);
+  // Raggio simmetrico: riflette x rispetto all'asse verticale
+  const cptsM=symmetric ? cpts.map(([x,y])=>[2*cx-x,y]) : null;
+
   const total=cpts.length-1;
   const idx=Math.floor(prog*total);
   const frac=prog*total-idx;
 
-  ctx.strokeStyle=color; ctx.lineWidth=2;
-  ctx.globalAlpha=0.85;
-  ctx.beginPath();
-  ctx.moveTo(cpts[0][0],cpts[0][1]);
-  for(let i=1;i<=idx;i++) ctx.lineTo(cpts[i][0],cpts[i][1]);
-  if(idx<total){
-    const [x0,y0]=cpts[idx],[x1,y1]=cpts[idx+1];
-    ctx.lineTo(x0+(x1-x0)*frac, y0+(y1-y0)*frac);
+  function drawPath(pts2){
+    ctx.beginPath();
+    ctx.moveTo(pts2[0][0],pts2[0][1]);
+    for(let i=1;i<=idx;i++) ctx.lineTo(pts2[i][0],pts2[i][1]);
+    if(idx<total){
+      const [x0,y0]=pts2[idx],[x1,y1]=pts2[idx+1];
+      ctx.lineTo(x0+(x1-x0)*frac, y0+(y1-y0)*frac);
+    }
+    ctx.stroke();
+    // Punto fronte onda
+    if(idx<total){
+      const [x0,y0]=pts2[idx],[x1,y1]=pts2[idx+1];
+      const px=x0+(x1-x0)*frac, py=y0+(y1-y0)*frac;
+      ctx.beginPath();ctx.arc(px,py,4,0,2*Math.PI);
+      ctx.fillStyle=color; ctx.fill();
+    }
   }
-  ctx.stroke();
-  ctx.globalAlpha=1;
 
-  // Punto di fronte dell'onda
-  if(idx<total){
-    const [x0,y0]=cpts[idx],[x1,y1]=cpts[idx+1];
-    const px=x0+(x1-x0)*frac, py=y0+(y1-y0)*frac;
-    ctx.beginPath();ctx.arc(px,py,4,0,2*Math.PI);
-    ctx.fillStyle=color; ctx.fill();
-  }
+  ctx.strokeStyle=color; ctx.lineWidth=2; ctx.globalAlpha=0.85;
+  drawPath(cpts);
+  if(cptsM){ drawPath(cptsM); }
+  ctx.globalAlpha=1;
 }
 
 // =====================================================================
@@ -324,27 +330,30 @@ function draw(){
     // Tutti i raggi animati simultaneamente con progress globale
     function drawAllRays(rays, color, colorStop){
       rays.forEach(r=>{
-        const pts=rayToCanvas(r.pts,cx,cy,R_px);
-        if(pts.length<2) return;
-        const total=pts.length-1;
-        const idx=Math.floor(progress*total);
-        const frac=progress*total-idx;
-        ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
-        for(let i=1;i<=idx;i++) ctx.lineTo(pts[i][0],pts[i][1]);
-        if(idx<total){
-          const [x0,y0]=pts[idx],[x1,y1]=pts[idx+1];
-          ctx.lineTo(x0+(x1-x0)*frac, y0+(y1-y0)*frac);
-        }
-        ctx.strokeStyle=color; ctx.lineWidth=1.2;
-        ctx.globalAlpha=0.5; ctx.stroke(); ctx.globalAlpha=1;
-        // Punto di fronte onda
-        if(idx<total&&progress>0&&progress<1){
-          const [x0,y0]=pts[idx],[x1,y1]=pts[idx+1];
-          const px=x0+(x1-x0)*frac, py=y0+(y1-y0)*frac;
-          ctx.beginPath();ctx.arc(px,py,2.5,0,2*Math.PI);
-          ctx.fillStyle=colorStop||color; ctx.globalAlpha=0.8;
-          ctx.fill(); ctx.globalAlpha=1;
-        }
+        // Disegna il raggio originale e il suo simmetrico
+        [false, true].forEach(mirror=>{
+          const pts=rayToCanvas(r.pts,cx,cy,R_px);
+          const pts2=mirror ? pts.map(([x,y])=>[2*cx-x,y]) : pts;
+          if(pts2.length<2) return;
+          const total=pts2.length-1;
+          const idx=Math.floor(progress*total);
+          const frac=progress*total-idx;
+          ctx.beginPath();ctx.moveTo(pts2[0][0],pts2[0][1]);
+          for(let i=1;i<=idx;i++) ctx.lineTo(pts2[i][0],pts2[i][1]);
+          if(idx<total){
+            const [x0,y0]=pts2[idx],[x1,y1]=pts2[idx+1];
+            ctx.lineTo(x0+(x1-x0)*frac, y0+(y1-y0)*frac);
+          }
+          ctx.strokeStyle=color; ctx.lineWidth=1.2;
+          ctx.globalAlpha=0.5; ctx.stroke(); ctx.globalAlpha=1;
+          if(idx<total&&progress>0&&progress<1){
+            const [x0,y0]=pts2[idx],[x1,y1]=pts2[idx+1];
+            const px=x0+(x1-x0)*frac, py=y0+(y1-y0)*frac;
+            ctx.beginPath();ctx.arc(px,py,2.5,0,2*Math.PI);
+            ctx.fillStyle=colorStop||color; ctx.globalAlpha=0.8;
+            ctx.fill(); ctx.globalAlpha=1;
+          }
+        });
       });
     }
     drawAllRays(RAYS.P,   '#00d4ff', '#00d4ff');
@@ -364,7 +373,7 @@ function draw(){
   const col=isPKP?'#ffcc44':'#00d4ff';
   const colS='#ff6b35';
 
-  drawRay(ray, progress, cx, cy, R_px, isP?col:colS);
+  drawRay(ray, progress, cx, cy, R_px, isP?col:colS, true);
 
   // Aggiorna info
   const depth=ray.depth||0;
