@@ -661,28 +661,46 @@ function drawLevy(){
   ctxL.textAlign='center';
   ctxL.fillText('Ritardo (nm)',padL+gW/2,padT+gH+24);
 
-  // Ritardo di riferimento: Gamma/2 (zona a 45° dalle isogiure, metà campo)
+  // Ritardo di riferimento nella zona a 45° dalle isogiure
   const gamma=dn*thick*1000;
-  const gammaRef = gamma * 0.5;  // ritardo rappresentativo zona 45°
+  const isBiaxLevy = currentMin!=='custom' && MINERALS[currentMin] &&
+                     MINERALS[currentMin].tipo.includes('biassico');
+  // Per biassici: zona 45° ha ritardo maggiore (0.6-0.8 del max)
+  // modulato dall'inclinazione della sezione (cutBiAngle)
+  // Per uniassici: zona 45° ha ritardo ~0.5 del max
+  const biaxFactor = isBiaxLevy ? (0.6 + cutBiAngle/90*0.2) : 0.5;
+  const gammaRef = gamma * biaxFactor;
 
   function drawIndicator(gammaVal, col, label, yOff){
     const gVal=Math.max(0,Math.min(gammaVal,maxG));
     const gx2=padL+gVal/maxG*gW;
-    // Linea verticale
-    ctxL.strokeStyle=col; ctxL.lineWidth=1.5;
-    ctxL.beginPath();ctxL.moveTo(gx2,padT-2);ctxL.lineTo(gx2,padT+gH+2);ctxL.stroke();
-    // Triangolino
+    // Banda colorata semitrasparente
+    ctxL.fillStyle=col; ctxL.globalAlpha=0.15;
+    ctxL.fillRect(gx2-3,padT,6,gH);
+    ctxL.globalAlpha=1;
+    // Linea verticale spessa
+    ctxL.strokeStyle=col; ctxL.lineWidth=2.5;
+    ctxL.beginPath();ctxL.moveTo(gx2,padT);ctxL.lineTo(gx2,padT+gH);ctxL.stroke();
+    // Triangolino in basso
     ctxL.fillStyle=col;
     ctxL.beginPath();
-    ctxL.moveTo(gx2-5,padT-2);ctxL.lineTo(gx2+5,padT-2);ctxL.lineTo(gx2,padT+6);
+    ctxL.moveTo(gx2-6,padT+gH+2);ctxL.lineTo(gx2+6,padT+gH+2);ctxL.lineTo(gx2,padT+gH-6);
     ctxL.fill();
-    // Punto
-    ctxL.beginPath();ctxL.arc(gx2,padT+gH/2,4,0,2*Math.PI);
-    ctxL.fillStyle=col;ctxL.fill();
-    // Label
-    ctxL.font='7px Space Mono';ctxL.fillStyle=col;
+    // Etichetta dentro il grafico
+    ctxL.font='bold 8px Space Mono';ctxL.fillStyle=col;
     ctxL.textAlign='center';
-    ctxL.fillText(label,gx2,padT+gH+yOff);
+    // Sfondo etichetta
+    const lw=ctxL.measureText(label).width+4;
+    ctxL.fillStyle='rgba(7,9,14,0.8)';
+    ctxL.fillRect(gx2-lw/2,padT+gH*0.3-9,lw,12);
+    ctxL.fillStyle=col;
+    ctxL.fillText(label,gx2,padT+gH*0.3);
+    // Valore nm
+    ctxL.font='7px Space Mono';
+    ctxL.fillStyle='rgba(7,9,14,0.8)';
+    ctxL.fillRect(gx2-18,padT+gH*0.3+3,36,11);
+    ctxL.fillStyle=col;
+    ctxL.fillText(Math.round(gammaVal)+'nm',gx2,padT+gH*0.3+12);
   }
 
   // Indicatore principale (senza lamina)
@@ -739,6 +757,8 @@ function drawLevy(){
   ctxL.beginPath();ctxL.arc(gx,padT+gH/2,5,0,2*Math.PI);
   ctxL.fillStyle='white';ctxL.fill();
   ctxL.strokeStyle='#000';ctxL.lineWidth=1;ctxL.stroke();
+
+
 }
 
 // =====================================================================
@@ -775,9 +795,15 @@ function updateInfo(){
 }
 
 function drawAll(){
-  if(mode==='ortho') drawOrtho(); else drawCono();
-  drawLevy();
-  updateInfo();
+  try{
+    if(mode==='ortho') drawOrtho(); else drawCono();
+  } catch(e){ console.error('drawCono error:',e); }
+  try{
+    drawLevy();
+  } catch(e){ console.error('drawLevy error:',e); }
+  try{
+    updateInfo();
+  } catch(e){ console.error('updateInfo error:',e); }
 }
 
 // =====================================================================
