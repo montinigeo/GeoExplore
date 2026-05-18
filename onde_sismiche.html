@@ -10,7 +10,7 @@
   --bg:#0a0c10;--panel:#111318;--border:#1e2230;
   --accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;
   --text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a;
-  --cP:#00d4ff;--cS:#ff6b35;--cPKP:#ffcc44;
+  --cP:#00d4ff;--cS:#ff6b35;--cPKP:#a8ff78;
   --cCrust:#a0785a;--cMantle:#4a3a6a;--cOuter:#1a4060;--cInner:#0a2040;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
@@ -85,7 +85,7 @@ canvas{width:100%;height:100%;display:block}
     <div class="sl">Legenda onde</div>
     <div id="legendWaves">
       <div class="legend-row"><div class="legend-line" style="background:var(--cP)"></div>Onda P (compressionale)</div>
-      <div class="legend-row"><div class="legend-line" style="background:var(--cPKP)"></div>PKP (P attraverso nucleo)</div>
+      <div class="legend-row"><div class="legend-line" style="background:#a8ff78"></div>PKP (P attraverso nucleo)</div>
     </div>
   </div>
   <div class="info" id="infoRay">
@@ -357,7 +357,7 @@ function draw(){
       });
     }
     drawAllRays(RAYS.P,   '#00d4ff', '#00d4ff');
-    drawAllRays(RAYS.PKP, '#ffcc44', '#ffcc44');
+    drawAllRays(RAYS.PKP, '#a8ff78', '#a8ff78');
     drawAllRays(RAYS.S,   '#ff6b35', '#ff4400');
     return;
   }
@@ -370,7 +370,7 @@ function draw(){
 
   const isP=currentTab==='P';
   const isPKP=ray.depth && ray.depth > (R.RT-R.CMB);
-  const col=isPKP?'#ffcc44':'#00d4ff';
+  const col=isPKP?'#a8ff78':'#00d4ff';
   const colS='#ff6b35';
 
   drawRay(ray, progress, cx, cy, R_px, isP?col:colS, true);
@@ -462,13 +462,13 @@ document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
   const lw=document.getElementById('legendWaves');
   if(currentTab==='P'){
     lw.innerHTML='<div class="legend-row"><div class="legend-line" style="background:var(--cP)"></div>Onda P (mantello)</div>'+
-    '<div class="legend-row"><div class="legend-line" style="background:var(--cPKP)"></div>PKP (nucleo)</div>';
+    '<div class="legend-row"><div class="legend-line" style="background:#a8ff78"></div>PKP (nucleo)</div>';
   } else if(currentTab==='S'){
     lw.innerHTML='<div class="legend-row"><div class="legend-line" style="background:var(--cS)"></div>Onda S (si ferma al CMB)</div>'+
     '<div class="legend-row"><div class="legend-line" style="background:var(--cS);opacity:0.4"></div>S (mantello profondo)</div>';
   } else {
     lw.innerHTML='<div class="legend-row"><div class="legend-line" style="background:var(--cP)"></div>P</div>'+
-    '<div class="legend-row"><div class="legend-line" style="background:var(--cPKP)"></div>PKP</div>'+
+    '<div class="legend-row"><div class="legend-line" style="background:#a8ff78"></div>PKP</div>'+
     '<div class="legend-row"><div class="legend-line" style="background:var(--cS)"></div>S</div>';
   }
   const ctrlAngle=document.getElementById('ctrlAngle');
