@@ -144,6 +144,35 @@ const PERCORSI = {
   none: { nome:'Nessuno', col:'transparent', pts:[] },
 };
 
+// SOTTOFACIES HORNFELS per temperatura (usate in updateInfoAt)
+const HORNFELS_T = {
+  pelite: {
+    low:  { min:['Clorite','Biotite','Andalusite','Albite','Quarzo'],          roccia:'Hornfels ad Albite-Epidoto', strut:'Grana fine, foliazione residua, T < 500°C' },
+    mid:  { min:['Biotite','Andalusite','Cordierite','Muscovite','Quarzo'],    roccia:'Hornfels a Hornblenda',      strut:'Granoblastica, andalusite in cristalli, T 500–650°C' },
+    high: { min:['Cordierite','Sillimanite','Feldspato K','Quarzo','Spinello'],'roccia':'Hornfels a Pirosseno',    strut:'Granoblastica dura, prossima al contatto, T > 650°C' },
+  },
+  basalto: {
+    low:  { min:['Clorite','Epidoto','Albite','Attinolite'],                   roccia:'Hornfels ad Albite-Epidoto', strut:'Struttura originale parzialmente conservata' },
+    mid:  { min:['Hornblenda','Plagioclasio','Epidoto','Biotite'],             roccia:'Hornfels a Hornblenda',      strut:'Granoblastica, hornblenda abbondante' },
+    high: { min:['Pirosseno','Plagioclasio','Olivina','Granato'],              roccia:'Hornfels a Pirosseno',       strut:'Granoblastica densa, senza anfibolo' },
+  },
+  granito: {
+    low:  { min:['Feldspato K','Quarzo','Muscovite','Albite'],                 roccia:'Hornfels Granitico (basso grado)', strut:'Struttura magmatica quasi conservata' },
+    mid:  { min:['Biotite','Feldspato K','Quarzo','Sillimanite'],              roccia:'Hornfels a Hornblenda',      strut:'Ricristallizzazione avanzata' },
+    high: { min:['Feldspato K','Quarzo','Sillimanite','Cordierite'],           roccia:'Hornfels a Pirosseno',       strut:'Granoblastica saccaroide, fusione incipiente' },
+  },
+  arenaria: {
+    low:  { min:['Quarzo','Muscovite','Feldspato','Clorite'],                  roccia:'Metarenaria',                strut:'Granuli ancora parzialmente visibili' },
+    mid:  { min:['Quarzo','Feldspato K','Biotite','Cordierite'],               roccia:'Quarzite Termica',           strut:'Saccaroide, grana media' },
+    high: { min:['Quarzo','Feldspato K','Sillimanite','Cordierite'],           roccia:'Hornfels Siliceo',           strut:'Granoblastica durissima, grana grossa' },
+  },
+  calcare: {
+    low:  { min:['Calcite','Dolomite','Talco','Tremolite'],                    roccia:'Marmo a Talco-Tremolite',    strut:'Grana fine, talco in vene' },
+    mid:  { min:['Calcite','Diopside','Grossularia','Wollastonite'],           roccia:'Skarnoide a Diopside',       strut:'Silicati calcici abbondanti, grana media' },
+    high: { min:['Wollastonite','Diopside','Grossularia','Vesuvianite','Scapolite'], roccia:'Hornfels Calcareo / Skarn', strut:'Granoblastica grossolana, decarbonazione quasi completa' },
+  },
+};
+
 // TABELLA MINERALI/ROCCE per protolite × facies
 const TABELLA = {
   pelite: {
@@ -483,9 +512,15 @@ function updateInfoAt(T,P){
     const tabProto=TABELLA[proto]||{};
     let entry=tabProto[fNome];
     if(!entry){
-      // Prova matching parziale (confronto nome completo)
       const key=Object.keys(tabProto).find(k=>fNome===k||fNome.includes(k)||k.includes(fNome));
       if(key) entry=tabProto[key];
+    }
+    // Sottofacies Hornfels: mineralizzazione diversa per temperatura
+    if(fNome==='Hornfels' && HORNFELS_T[proto]){
+      const hf=HORNFELS_T[proto];
+      if(T<500)      entry={...hf.low,  min:[...hf.low.min]};
+      else if(T<650) entry={...hf.mid,  min:[...hf.mid.min]};
+      else           entry={...hf.high, min:[...hf.high.min]};
     }
     if(entry){
       const mins=entry.min.map(n=>`<span class="min">• ${n}</span>`).join('<br>');
