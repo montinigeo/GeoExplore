@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Metamorfismo — Facies e Percorsi P-T</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--panel:#111318;--border:#1e2230;
+  --accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;
+  --text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:220px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.5rem;overflow-y:auto}
+.sl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.12rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.25rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.75rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.5rem}
+.btn:hover,.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.06)}
+.btn-p{width:100%;padding:.22rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.56rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.5rem;margin-bottom:.15rem}
+.btn-p:hover,.btn-p.on{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.info{background:#070910;border:1px solid var(--border);border-radius:3px;padding:.4rem;font-size:.6rem;line-height:1.7;color:var(--muted);font-family:'Crimson Pro',serif;font-style:italic}
+.info b{color:var(--text);font-style:normal;font-size:.63rem}
+.info .val{color:var(--accent);font-family:'Space Mono',monospace;font-style:normal;font-size:.6rem}
+.info .min{color:var(--accent3);font-style:normal}
+.cw{flex:1;min-width:0}
+canvas#cMain{width:100%;height:100%;display:block}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.58rem;color:var(--muted)}
+.ibar span{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Metamorfismo &mdash; Facies e Percorsi P-T</h1>
+</header>
+<div class="main">
+<aside class="sb">
+  <div id="sbProto">
+    <div class="sl">Protolite</div>
+    <button class="btn on" id="bGra">⚪ Granito/Gneiss</button>
+    <button class="btn" id="bBas" style="margin-top:.15rem">⚫ Basalto/Gabbro</button>
+    <button class="btn" id="bAre" style="margin-top:.15rem">🟡 Arenaria</button>
+    <button class="btn" id="bPel" style="margin-top:.15rem">🟤 Pelite (argilla/scisto)</button>
+    <button class="btn" id="bCal" style="margin-top:.15rem">⬜ Calcare/Marna</button>
+    <div id="barrowCtrl" style="display:none;margin-top:.4rem">
+      <div class="sl">Visualizza (pelite)</div>
+      <div style="display:flex;gap:.25rem">
+        <button class="btn-p on" id="btnShowFacies" style="flex:1;font-size:.55rem">Facies</button>
+        <button class="btn-p on" id="btnShowBarrow" style="flex:1;font-size:.55rem">Barrow</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="sl">Percorso P-T</div>
+    <button class="btn-p on" id="bSub">🔵 Subduzione oceanica</button>
+    <button class="btn-p" id="bCol">🔴 Collisione continentale</button>
+    <button class="btn-p" id="bCon">🟠 Contatto (intrusione)</button>
+    <button class="btn-p" id="bUHP">🟣 Ultra-Alta Pressione</button>
+    <button class="btn-p" id="bNone">⬜ Nessun percorso</button>
+  </div>
+  <div>
+    <div class="sl">Animazione</div>
+    <div style="display:flex;gap:.25rem;margin-bottom:.25rem">
+      <button class="btn-p on" id="btnPlay" style="flex:1">▶ Anima</button>
+      <button class="btn-p" id="btnReset" style="width:auto;padding:.22rem .4rem">↺</button>
+    </div>
+  </div>
+  <div>
+    <div class="sl">Facies corrente</div>
+    <div class="info" id="infoFacies"><b>—</b><br>Muovere il cursore sul diagramma</div>
+  </div>
+
+</aside>
+<div class="cw" style="position:relative">
+  <canvas id="cMain"></canvas>
+  <div id="infoOverlay" style="
+    position:absolute;top:12px;right:12px;
+    width:220px;
+    background:rgba(7,9,14,0.88);
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:.55rem .7rem;
+    font-family:'Crimson Pro',serif;
+    font-size:.62rem;
+    line-height:1.65;
+    color:var(--muted);
+    pointer-events:none;
+    backdrop-filter:blur(4px);
+  ">
+    <div id="infoMin"><b style="color:var(--text)">—</b><br>Muovere il cursore sul diagramma</div>
+  </div>
+</div>
+</div>
+<div class="ibar">
+  <div>T: <span id="iT">—</span></div>
+  <div>P: <span id="iP">—</span></div>
+  <div>Facies: <span id="iFac">—</span></div>
+  <div>Roccia: <span id="iRoc">—</span></div>
+</div>
+
+<script>
+// =====================================================================
+// DATI FISICI
+// =====================================================================
+
+// Confini T e P del diagramma
+const T_MIN=150, T_MAX=900, P_MIN=0, P_MAX=30;
+
+// FACIES: poligoni nel diagramma P-T
+// Vertici in coordinate (T°C, P kbar) in senso antiorario
+const FACIES = [
+  { nome:'Zeoliti',              col:'rgba(120,200,120,0.55)',  bordo:'#78c878',
+    verts:[[150,0],[350,0],[350,3],[250,4],[150,3]] },
+  { nome:'Prehnite-Pumpellyite', col:'rgba(60,160,60,0.5)',    bordo:'#3ca03c',
+    verts:[[200,2],[400,2],[420,5],[350,7],[200,6]] },
+  { nome:'Scisti Verdi',         col:'rgba(30,130,30,0.55)',   bordo:'#1e821e',
+    verts:[[300,2],[500,2],[520,5],[480,10],[350,10],[280,7]] },
+  { nome:'Anfibolitica',         col:'rgba(20,100,20,0.55)',   bordo:'#147814',
+    verts:[[450,4],[700,4],[720,8],[680,14],[560,14],[480,10],[450,7]] },
+  { nome:'Granuliti',            col:'rgba(139,69,19,0.55)',   bordo:'#8b4513',
+    verts:[[650,5],[900,5],[900,15],[800,15],[700,12],[650,8]] },
+  { nome:'Scisti Blu',           col:'rgba(65,105,225,0.55)',  bordo:'#4169e1',
+    verts:[[150,6],[400,6],[450,10],[420,16],[350,20],[200,20],[150,14]] },
+  { nome:'Eclogiti',             col:'rgba(0,0,139,0.6)',      bordo:'#00008b',
+    verts:[[400,18],[700,18],[720,25],[650,30],[450,30],[380,24]] },
+  { nome:'UHP',                  col:'rgba(100,0,139,0.6)',    bordo:'#64008b',
+    verts:[[450,25],[700,25],[720,30],[500,30]] },
+  { nome:'Hornfels',             col:'rgba(255,140,0,0.5)',    bordo:'#ff8c00',
+    verts:[[350,0],[900,0],[900,5],[750,4],[600,3],[450,2],[350,2]] },
+];
+
+// PERCORSI P-T (punti [T, P])
+const PERCORSI = {
+  sub:  { nome:'Subduzione oceanica',       col:'#4169e1',
+          pts:[[200,1],[250,6],[300,12],[350,18],[400,24],[430,28]] },
+  col:  { nome:'Collisione continentale',   col:'#dc143c',
+          pts:[[250,2],[350,5],[480,8],[600,11],[700,10],[740,8],[700,6],[620,6]] },
+  con:  { nome:'Metamorfismo di contatto',  col:'#ff8c00',
+          pts:[[350,0.5],[500,1],[650,1.5],[780,2],[870,2.5]] },
+  UHP:  { nome:'Ultra-Alta Pressione',      col:'#9400d3',
+          pts:[[350,15],[430,22],[520,28],[600,30],[650,27],[600,18],[500,10]] },
+  none: { nome:'Nessuno', col:'transparent', pts:[] },
+};
+
+// TABELLA MINERALI/ROCCE per protolite × facies
+const TABELLA = {
+  pelite: {
+    'Zeoliti':              { min:['Clorite','Illite','Albite','Quarzo'],                      roccia:'Argilloscisto / Fillite',       strut:'Foliazione incipiente, scistosità sottile' },
+    'Prehnite-Pumpellyite': { min:['Clorite','Prehnite','Pumpellyite','Quarzo','Albite'],      roccia:'Fillade',                       strut:'Foliazione sericítica, lucentezza sericea' },
+    'Scisti Verdi':         { min:['Clorite','Muscovite','Albite','Quarzo','Biotite'],         roccia:'Fillade / Micascisto a Clorite',strut:'Foliazione ben sviluppata, cristalli visibili' },
+    'Anfibolitica':         { min:['Biotite','Muscovite','Granato','Staurolite','Cianite','Plagioclasio'], roccia:'Micascisto / Paragneiss', strut:'Scistosità, porfiroblasti di granato e staurolite' },
+    'Granuliti':            { min:['Sillimanite','Feldspato K','Granato','Quarzo','Cordierite'], roccia:'Granulite / Migmatite',       strut:'Granoblastica, fusione parziale (leucosoma+melanosoma)' },
+    'Scisti Blu':           { min:['Glaucofane','Lawsonite','Fengite','Clorite','Granato'],    roccia:'Scisto Blu',                    strut:'Scistosità, caratteristico colore blu-violetto' },
+    'Eclogiti':             { min:['Onfacite','Granato Py-Al','Fengite','Rutilo'],             roccia:'Eclogite Pelitica',             strut:'Granoblastica densa, priv. di plagioclasio' },
+    'UHP':                  { min:['Coesite','Diamante','Granato','Onfacite','Fengite'],       roccia:'Eclogite UHP',                  strut:'Inclusioni di coesite/diamante in granato' },
+    'Hornfels':             { min:['Cordierite','Andalusite','Biotite','Sillimanite','Quarzo'], roccia:'Hornfels Pelitico',            strut:'Granoblastica, non foliata, grana fine' },
+  },
+  basalto: {
+    'Zeoliti':              { min:['Analcime','Laumontite','Clorite','Epidoto','Albite'],      roccia:'Spilite / Basalto Zeolitizzato',strut:'Struttura originale parzialmente conservata' },
+    'Prehnite-Pumpellyite': { min:['Prehnite','Pumpellyite','Clorite','Albite','Quarzo'],     roccia:'Metabasalto',                   strut:'Tessitura relittica, vene di prehnite' },
+    'Scisti Verdi':         { min:['Clorite','Epidoto','Albite','Attinolite','Quarzo'],       roccia:'Scisto Verde',                  strut:'Foliazione, colore verde per clorite+epidoto' },
+    'Anfibolitica':         { min:['Hornblenda','Plagioclasio An30-50','Granato','Epidoto'],  roccia:'Anfibolite',                    strut:'Foliazione, grana media, hornblenda tabulare' },
+    'Granuliti':            { min:['Pirosseno','Plagioclasio An50+','Granato','Rutilo'],       roccia:'Granulite Mafica',              strut:'Granoblastica, densa, priv. di anfibolo' },
+    'Scisti Blu':           { min:['Glaucofane','Lawsonite','Epidoto','Granato','Clorite'],   roccia:'Scisto Blu',                    strut:'Scistosità, glaucofane fibroso, colore blu' },
+    'Eclogiti':             { min:['Onfacite','Granato Py-Al','Rutilo','Coesite','Zoisite'],  roccia:'Eclogite',                      strut:'Granoblastica, densa, bimineralica (omp+grt)' },
+    'UHP':                  { min:['Coesite','Diamante','Granato','Onfacite'],                roccia:'Eclogite UHP',                  strut:'Inclusioni di coesite, densità > 3.5 g/cm³' },
+    'Hornfels':             { min:['Pirosseno','Plagioclasio','Olivina','Hornblenda'],         roccia:'Hornfels Mafico',               strut:'Granoblastica, non foliata' },
+  },
+  granito: {
+    'Zeoliti':              { min:['Feldspato K','Quarzo','Muscovite','Albite'],              roccia:'Granito inalterato / Ortogneiss incipienti', strut:'Struttura magmatica conservata' },
+    'Prehnite-Pumpellyite': { min:['Muscovite','Albite','Quarzo','Epidoto','Clorite'],        roccia:'Ortogneiss incipienti',         strut:'Foliazione debole, milonitica' },
+    'Scisti Verdi':         { min:['Muscovite','Albite','Quarzo','Clorite','Epidoto'],        roccia:'Ortogneiss',                    strut:'Foliazione milonitica, ribbon di quarzo' },
+    'Anfibolitica':         { min:['Biotite','Feldspato K','Plagioclasio','Quarzo','Granato'],'roccia':'Ortogneiss',                  strut:'Foliazione, "occhi" di feldspato, banding' },
+    'Granuliti':            { min:['Feldspato K','Quarzo','Granato','Sillimanite','Rutilo'],  roccia:'Granulite / Migmatite',         strut:'Fusione parziale, leucosoma granítico' },
+    'Scisti Blu':           { min:['Fengite','Quarzo','Glaucofane','Granato','Talco'],        roccia:'Ortoscisto Blu',                strut:'Scistosità, deformazione intensa' },
+    'Eclogiti':             { min:['Onfacite','Granato','Fengite','Coesite','Rutilo'],        roccia:'Eclogite Felsica',              strut:'Granoblastica, priv. di feldspato' },
+    'UHP':                  { min:['Coesite','Diamante','Granato','Onfacite','Fengite'],      roccia:'Eclogite UHP Felsica',          strut:'Inclusioni diagnostiche di coesite' },
+    'Hornfels':             { min:['Feldspato K','Quarzo','Sillimanite','Cordierite'],        roccia:'Hornfels Granitico',            strut:'Granoblastica, saccaroide' },
+  },
+  arenaria: {
+    'Zeoliti':              { min:['Quarzo','Muscovite','Feldspato','Clorite','Calcite'],     roccia:'Arenite Metamorfica',           strut:'Granuli detritici ancora visibili' },
+    'Prehnite-Pumpellyite': { min:['Quarzo','Muscovite','Albite','Clorite'],                  roccia:'Metarenaria',                   strut:'Inizio ricristallizzazione del quarzo' },
+    'Scisti Verdi':         { min:['Quarzo','Muscovite','Albite','Clorite'],                  roccia:'Quarzite',                      strut:'Saccaroide, grana fine, lucida in frattura' },
+    'Anfibolitica':         { min:['Quarzo','Feldspato','Muscovite','Biotite'],               roccia:'Quarzite',                      strut:'Saccaroide, grana media, compatta' },
+    'Granuliti':            { min:['Quarzo','Feldspato K','Sillimanite'],                     roccia:'Quarzite / Paragneiss',         strut:'Granoblastica, può fondere parzialmente' },
+    'Scisti Blu':           { min:['Quarzo','Fengite','Glaucofane','Paragonite'],             roccia:'Quarzite HP',                   strut:'Compatta, fengite ad alto Si' },
+    'Eclogiti':             { min:['Coesite','Fengite','Granato','Rutilo'],                   roccia:'Quarzite UHP (a Coesite)',      strut:'Molto densa, coesite pseudomorfa su quarzo' },
+    'UHP':                  { min:['Coesite','Diamante','Fengite','Granato'],                 roccia:'Quarzite UHP',                  strut:'Diamante detritico + coesite' },
+    'Hornfels':             { min:['Quarzo','Feldspato K','Cordierite','Sillimanite'],        roccia:'Hornfels Siliceo',              strut:'Granoblastica, durissima' },
+  },
+  calcare: {
+    'Zeoliti':              { min:['Calcite','Dolomite','Quarzo','Clorite'],                  roccia:'Marmo Dolomitico',              strut:'Granoblastica calcarea, grana fine' },
+    'Prehnite-Pumpellyite': { min:['Calcite','Dolomite','Talco','Clorite','Quarzo'],          roccia:'Marmo a Talco',                 strut:'Grana fine, talco in vene' },
+    'Scisti Verdi':         { min:['Calcite','Tremolite','Talco','Dolomite','Epidoto'],       roccia:'Marmo a Tremolite',             strut:'Granoblastica, fibre bianche di tremolite' },
+    'Anfibolitica':         { min:['Calcite','Diopside','Grossularia','Wollastonite','Zoisite'],'roccia':'Marmo a Silicati Calcici', strut:'Granoblastica, porfiroblasti di diopside e granato' },
+    'Granuliti':            { min:['Wollastonite','Diopside','Grossularia','Scapolite','Forsterite'], roccia:'Roccia a Silicati Calcici', strut:'Granoblastica grossolana, decarbonazione quasi completa' },
+    'Scisti Blu':           { min:['Calcite','Aragonite','Glaucofane','Lawsonite','Omfacite'], roccia:'Marmo ad Aragonite',          strut:'Compatta, aragonite stabile (calcite metastabile)' },
+    'Eclogiti':             { min:['Aragonite','Diopside','Grossularia','Coesite'],           roccia:'Marmo UHP',                    strut:'Molto denso, aragonite + coesite' },
+    'UHP':                  { min:['Coesite','Aragonite','Diopside','Grossularia'],           roccia:'Marmo UHP',                    strut:'Condizioni estreme, stabilità dell\'aragonite' },
+    'Hornfels':             { min:['Wollastonite','Diopside','Grossularia','Calcite','Vesuvianite'], roccia:'Skarnoide / Hornfels Calcareo', strut:'Reazione con intrusione, silicati calcici abbondanti' },
+  },
+};
+
+// Variazioni composizione in funzione della facies (delta rispetto al protolite)
+// Valori negativi = perdita, positivi = concentrazione relativa
+// Principalmente perdita di H2O e CO2 per deidratazione/decarbonazione
+// Colori delle componenti
+// Colori minerali indice (pelite - sequenza di Barrow)
+// Colori minerali indice (pelite - sequenza di Barrow)
+const BARROW = [
+  { nome:'Clorite',     col:'#90ee90', T:[200,480], P:[0,12] },
+  { nome:'Biotite',     col:'#c4875a', T:[350,750], P:[1,14] },
+  { nome:'Granato',     col:'#dc143c', T:[450,800], P:[3,20] },
+  { nome:'Staurolite',  col:'#daa520', T:[500,660], P:[4,12] },
+  { nome:'Cianite',     col:'#6495ed', T:[500,780], P:[6,20] },
+  { nome:'Sillimanite', col:'#ff69b4', T:[580,900], P:[1,10] },
+  { nome:'Cordierite',  col:'#da70d6', T:[550,900], P:[0,5]  },
+];
+
+// =====================================================================
+// STATO
+// =====================================================================
+let proto='granito', percorso='sub', anim=false, animT=0, lastTs=null;
+let showFacies=true, showBarrow=true;
+let mouseT=null, mouseP=null;
+
+const C=document.getElementById('cMain');
+const ctx=C.getContext('2d');
+
+// =====================================================================
+// COORDINATE
+// =====================================================================
+function mg(){ return {L:62,R:20,T:20,B:50,W:C.width,H:C.height}; }
+
+function TtoX(T,m){ return m.L+(T-T_MIN)/(T_MAX-T_MIN)*(m.W-m.L-m.R); }
+function PtoY(P,m){ return m.T+(1-(P-P_MIN)/(P_MAX-P_MIN))*(m.H-m.T-m.B); }
+function XtoT(x,m){ return T_MIN+(x-m.L)/(m.W-m.L-m.R)*(T_MAX-T_MIN); }
+function YtoP(y,m){ return P_MIN+(1-(y-m.T)/(m.H-m.T-m.B))*(P_MAX-P_MIN); }
+
+// =====================================================================
+// PUNTO IN POLIGONO
+// =====================================================================
+function pointInPoly(T,P,verts){
+  let inside=false;
+  for(let i=0,j=verts.length-1;i<verts.length;j=i++){
+    const [xi,yi]=verts[i],[xj,yj]=verts[j];
+    if((yi>P)!==(yj>P)&&T<(xj-xi)*(P-yi)/(yj-yi)+xi) inside=!inside;
+  }
+  return inside;
+}
+
+function getFacies(T,P){
+  // Ordine di priorità: le facies più specifiche prima
+  const order=[
+    'UHP','Eclogiti','Scisti Blu','Granuliti',
+    'Anfibolitica','Hornfels','Prehnite-Pumpellyite','Scisti Verdi',
+    'Zeoliti'
+  ];
+  for(const nome of order){
+    // Match esatto sul nome della facies
+    const f=FACIES.find(x=>x.nome===nome);
+    if(f&&pointInPoly(T,P,f.verts)) return f.nome;
+  }
+  return null;
+}
+
+// =====================================================================
+// DISEGNO
+// =====================================================================
+function draw(){
+  const W=C.width,H=C.height;
+  if(!W||!H) return;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#07090e'; ctx.fillRect(0,0,W,H);
+  const m=mg();
+  const gW=m.W-m.L-m.R, gH=m.H-m.T-m.B;
+
+  // Clip al rettangolo del grafico
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(m.L,m.T,gW,gH);
+  ctx.clip();
+
+  // ---- Campi facies ----
+  const showF = !(proto==='pelite' && !showFacies);
+  if(showF){
+    FACIES.forEach(f=>{
+      ctx.beginPath();
+      f.verts.forEach(([T,P],i)=>{
+        const x=TtoX(T,m),y=PtoY(P,m);
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      });
+      ctx.closePath();
+      ctx.fillStyle=f.col; ctx.fill();
+      ctx.strokeStyle=f.bordo; ctx.lineWidth=1.5; ctx.stroke();
+    });
+  }
+  // ---- Minerali indice Barrow (solo per pelite) ----
+  // Minerali indice Barrow (solo pelite, solo se showBarrow)
+  if(proto==='pelite' && showBarrow){
+    const faciesAlpha = showFacies ? 1.0 : 0.2;
+    BARROW.forEach(b=>{
+      const x1=TtoX(b.T[0],m),x2=TtoX(b.T[1],m);
+      const y1=PtoY(b.P[0],m),y2=PtoY(b.P[1],m);
+      const cx2=(x1+x2)/2, cy2=(y1+y2)/2;
+      const rx=Math.max(12,(x2-x1)/2), ry=Math.max(12,Math.abs(y2-y1)/2);
+      ctx.beginPath();
+      ctx.ellipse(cx2,cy2,rx,ry,0,0,2*Math.PI);
+      ctx.fillStyle=b.col; ctx.globalAlpha=0.15; ctx.fill();
+      ctx.strokeStyle=b.col; ctx.lineWidth=2; ctx.globalAlpha=0.85;
+      ctx.setLineDash([5,3]); ctx.stroke();
+      ctx.setLineDash([]); ctx.globalAlpha=1;
+      const gW2=m.W-m.L-m.R;
+      if(cx2>=m.L&&cx2<=m.L+gW2&&cy2>=m.T&&cy2<=m.T+(m.H-m.T-m.B)){
+        ctx.font='bold 11px Crimson Pro'; ctx.textAlign='center';
+        const tw=ctx.measureText(b.nome).width;
+        ctx.fillStyle='rgba(7,9,14,0.8)';
+        ctx.fillRect(cx2-tw/2-4,cy2-10,tw+8,14);
+        ctx.fillStyle=b.col; ctx.globalAlpha=1;
+        ctx.fillText(b.nome,cx2,cy2);
+        ctx.font='8px Space Mono';
+        const ptLabel=b.T[0]+'–'+b.T[1]+'°C';
+        const tw2=ctx.measureText(ptLabel).width;
+        ctx.fillStyle='rgba(7,9,14,0.7)';
+        ctx.fillRect(cx2-tw2/2-2,cy2+2,tw2+4,11);
+        ctx.fillStyle=b.col; ctx.globalAlpha=0.7;
+        ctx.fillText(ptLabel,cx2,cy2+11);
+        ctx.globalAlpha=1;
+      }
+    });
+  }
+
+  // ---- Percorso P-T ----
+  const perc=PERCORSI[percorso];
+  if(perc&&perc.pts.length>1){
+    ctx.beginPath();
+    perc.pts.forEach(([T,P],i)=>{
+      const x=TtoX(T,m),y=PtoY(P,m);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.strokeStyle=perc.col; ctx.lineWidth=2.5;
+    ctx.globalAlpha=0.85; ctx.stroke(); ctx.globalAlpha=1;
+    // Frecce lungo il percorso
+    for(let i=1;i<perc.pts.length;i++){
+      const [T0,P0]=perc.pts[i-1],[T1,P1]=perc.pts[i];
+      const x0=TtoX(T0,m),y0=PtoY(P0,m);
+      const x1=TtoX(T1,m),y1=PtoY(P1,m);
+      const mx2=(x0+x1)/2,my2=(y0+y1)/2;
+      const ang=Math.atan2(y1-y0,x1-x0);
+      ctx.save();ctx.translate(mx2,my2);ctx.rotate(ang);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-5);ctx.lineTo(-10,5);ctx.closePath();
+      ctx.fillStyle=perc.col;ctx.globalAlpha=0.7;ctx.fill();ctx.globalAlpha=1;
+      ctx.restore();
+    }
+
+    // Punto animato sul percorso
+    if(animT>0&&perc.pts.length>1){
+      const total=perc.pts.length-1;
+      const idx=Math.min(Math.floor(animT*total),total-1);
+      const frac=animT*total-idx;
+      const [T0,P0]=perc.pts[idx];
+      const [T1,P1]=perc.pts[Math.min(idx+1,total)];
+      const Tc=T0+(T1-T0)*frac;
+      const Pc=P0+(P1-P0)*frac;
+      const xc=TtoX(Tc,m),yc=PtoY(Pc,m);
+      ctx.beginPath();ctx.arc(xc,yc,9,0,2*Math.PI);
+      ctx.fillStyle=perc.col;ctx.globalAlpha=0.3;ctx.fill();ctx.globalAlpha=1;
+      ctx.beginPath();ctx.arc(xc,yc,5,0,2*Math.PI);
+      ctx.fillStyle='#fff';ctx.fill();
+      ctx.strokeStyle=perc.col;ctx.lineWidth=2;ctx.stroke();
+      // Aggiorna info per il punto animato
+      updateInfoAt(Tc,Pc);
+    }
+  }
+
+  // ---- Cursore mouse ----
+  if(mouseT!==null&&mouseP!==null&&!anim){
+    const xm=TtoX(mouseT,m),ym=PtoY(mouseP,m);
+    if(xm>=m.L&&xm<=m.L+gW&&ym>=m.T&&ym<=m.T+gH){
+      ctx.beginPath();ctx.arc(xm,ym,6,0,2*Math.PI);
+      ctx.fillStyle='rgba(255,255,255,0.3)';ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(255,255,255,0.15)';ctx.lineWidth=0.7;
+      ctx.beginPath();ctx.moveTo(m.L,ym);ctx.lineTo(m.L+gW,ym);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(xm,m.T);ctx.lineTo(xm,m.T+gH);ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // ---- Label facies (dentro il clip per coordinate corrette) ----
+  ctx.font='bold italic 11px Crimson Pro';
+  const labPos=[
+    ['Prehnite-Pump.',250, 4.5],
+    ['Zeoliti',       270, 1.2],
+    ['Scisti Verdi',  400, 6.5],
+    ['Anfibolitica',  580, 9.5],
+    ['Granuliti',     780, 9],
+    ['Scisti Blu',    275, 14],
+    ['Eclogiti',      560, 23],
+    ['UHP',           580, 27.5],
+    ['Hornfels',      650, 1.5],
+  ];
+  if(showF) labPos.forEach(([nome,T,P])=>{
+    const f=FACIES.find(x=>x.nome===nome)||
+            FACIES.find(x=>nome.startsWith(x.nome.substring(0,8))||x.nome.startsWith(nome.substring(0,8)));
+    if(!f)return;
+    const x=TtoX(T,m),y=PtoY(P,m);
+    if(x<m.L||x>m.L+gW||y<m.T||y>m.T+gH)return;
+    ctx.textAlign='center';
+    const tw=ctx.measureText(nome).width;
+    ctx.fillStyle='rgba(7,9,14,0.65)';
+    ctx.fillRect(x-tw/2-3,y-10,tw+6,13);
+    ctx.fillStyle=f.bordo;
+    ctx.fillText(nome,x,y);
+  });
+
+  ctx.restore(); // fine clip
+
+  // ---- Griglia e assi ----
+  ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';
+
+  // Griglia T
+  for(let T=200;T<=900;T+=100){
+    const x=TtoX(T,m);
+    ctx.strokeStyle='rgba(30,34,48,0.8)';ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(x,m.T);ctx.lineTo(x,m.T+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(T+'°',x,m.T+gH+14);
+  }
+  // Griglia P
+  for(let P=0;P<=30;P+=5){
+    const y=PtoY(P,m);
+    ctx.strokeStyle='rgba(30,34,48,0.8)';ctx.lineWidth=0.5;
+    ctx.beginPath();ctx.moveTo(m.L,y);ctx.lineTo(m.L+gW,y);ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(P+' kb',m.L-4,y+3);
+  }
+  // Assi
+  ctx.strokeStyle='#c8ccd8';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(m.L,m.T);ctx.lineTo(m.L,m.T+gH);
+  ctx.lineTo(m.L+gW,m.T+gH);ctx.stroke();
+  // Label assi
+  ctx.fillStyle='#c8ccd8';ctx.font='italic 10px Crimson Pro';
+  ctx.textAlign='center';ctx.fillText('Temperatura (°C)',m.L+gW/2,m.T+gH+30);
+  ctx.save();ctx.translate(14,m.T+gH/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('Pressione (kbar)',0,0);ctx.restore();
+
+  // ---- Label facies ----
+  ctx.font='bold italic 11px Crimson Pro';
+  
+
+  // ---- Gradiente profondità a destra ----
+  const depX=m.L+gW+4;
+  ctx.font='7px Space Mono';ctx.fillStyle='#8a8e9a';ctx.textAlign='left';
+  [0,100,200,300,400,500].forEach(d=>{
+    const P2=d/33.3; // ~33.3 kbar per 1000km
+    if(P2>P_MAX)return;
+    const y=PtoY(P2,m);
+    if(y<m.T||y>m.T+gH)return;
+    ctx.fillText(d+'km',depX,y+3);
+  });
+  ctx.save();ctx.translate(m.L+gW+42,m.T+gH/2);ctx.rotate(Math.PI/2);
+  ctx.fillStyle='#8a8e9a';ctx.font='7px Space Mono';ctx.textAlign='center';
+  ctx.fillText('Profondità approx.',0,0);ctx.restore();
+}
+
+// =====================================================================
+// AGGIORNA INFO
+// =====================================================================
+function updateInfoAt(T,P){
+  const fNome=getFacies(T,P);
+  const fac=FACIES.find(f=>f.nome===fNome)||null;
+  document.getElementById('iT').textContent=Math.round(T)+'°C';
+  document.getElementById('iP').textContent=P.toFixed(1)+' kbar';
+  document.getElementById('iFac').textContent=fNome||'—';
+
+  if(fNome){
+    document.getElementById('infoFacies').innerHTML=
+      `<b style="color:${fac?fac.bordo:'#fff'}">${fNome}</b><br>`+
+      `T: <span class="val">${Math.round(T)}°C</span> &nbsp; P: <span class="val">${P.toFixed(1)} kbar</span>`;
+
+    // Trova la chiave nella tabella (matching flessibile)
+    const tabProto=TABELLA[proto]||{};
+    let entry=tabProto[fNome];
+    if(!entry){
+      // Prova matching parziale (confronto nome completo)
+      const key=Object.keys(tabProto).find(k=>fNome===k||fNome.includes(k)||k.includes(fNome));
+      if(key) entry=tabProto[key];
+    }
+    if(entry){
+      const mins=entry.min.map(n=>`<span class="min">• ${n}</span>`).join('<br>');
+      document.getElementById('infoMin').innerHTML=
+        `<b>${entry.roccia}</b><br><br>`+
+        `<span style="font-size:.57rem;color:var(--dim)">${entry.strut}</span><br><br>`+
+        `<b>Minerali:</b><br>${mins}`;
+      document.getElementById('iRoc').textContent=entry.roccia;
+    } else {
+      document.getElementById('infoMin').innerHTML='<b>—</b><br>Dati non disponibili per questo protolite in questa facies.';
+      document.getElementById('iRoc').textContent='—';
+    }
+  } else {
+    document.getElementById('infoFacies').innerHTML='<b>Fuori dalle facies definite</b><br>Area non classificata nel diagramma.';
+    document.getElementById('infoMin').innerHTML='<b>—</b>';
+    document.getElementById('iRoc').textContent='—';
+  }
+}
+
+
+
+
+// =====================================================================
+// ANIMAZIONE PERCORSO
+// =====================================================================
+function animLoop(ts){
+  if(!anim)return;
+  if(lastTs!==null){
+    const dt=(ts-lastTs)/1000;
+    animT+=dt*0.15;
+    if(animT>=1){animT=1;anim=false;document.getElementById('btnPlay').textContent='▶ Anima';}
+  }
+  lastTs=ts;draw();
+  if(anim)requestAnimationFrame(animLoop);
+}
+
+// =====================================================================
+// INTERAZIONE MOUSE
+// =====================================================================
+C.addEventListener('mousemove',e=>{
+  if(anim)return;
+  const rect=C.getBoundingClientRect();
+  const x=e.clientX-rect.left, y=e.clientY-rect.top;
+  const m=mg();
+  const T=XtoT(x,m), P=YtoP(y,m);
+  if(T>=T_MIN&&T<=T_MAX&&P>=P_MIN&&P<=P_MAX){
+    mouseT=T; mouseP=P;
+    updateInfoAt(T,P);
+    draw();
+  } else {
+    mouseT=null;mouseP=null;draw();
+  }
+});
+C.addEventListener('mouseleave',()=>{mouseT=null;mouseP=null;draw();});
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+// Protoliti
+const protoMap={bGra:'granito',bBas:'basalto',bAre:'arenaria',bPel:'pelite',bCal:'calcare'};
+Object.entries(protoMap).forEach(([id,p])=>{
+  document.getElementById(id).addEventListener('click',()=>{
+    proto=p;
+    Object.keys(protoMap).forEach(i=>document.getElementById(i).classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+    // Mostra/nascondi i bottoni Barrow/Facies solo per pelite
+    document.getElementById('barrowCtrl').style.display=p==='pelite'?'block':'none';
+    draw();
+  });
+});
+
+// Bottoni Facies e Barrow (solo pelite)
+document.getElementById('btnShowFacies').addEventListener('click',()=>{
+  showFacies=!showFacies;
+  document.getElementById('btnShowFacies').classList.toggle('on',showFacies);
+  draw();
+});
+document.getElementById('btnShowBarrow').addEventListener('click',()=>{
+  showBarrow=!showBarrow;
+  document.getElementById('btnShowBarrow').classList.toggle('on',showBarrow);
+  draw();
+});
+
+// Percorsi
+const percMap={bSub:'sub',bCol:'col',bCon:'con',bUHP:'UHP',bNone:'none'};
+Object.entries(percMap).forEach(([id,p])=>{
+  document.getElementById(id).addEventListener('click',()=>{
+    percorso=p; animT=0; anim=false; lastTs=null;
+    Object.keys(percMap).forEach(i=>document.getElementById(i).classList.remove('on'));
+    document.getElementById(id).classList.add('on');
+    document.getElementById('btnPlay').textContent='▶ Anima';
+    draw();
+  });
+});
+
+document.getElementById('btnPlay').addEventListener('click',()=>{
+  if(anim){anim=false;lastTs=null;document.getElementById('btnPlay').textContent='▶ Anima';}
+  else{
+    if(animT>=1)animT=0;
+    anim=true;lastTs=null;
+    document.getElementById('btnPlay').textContent='⏸ Pausa';
+    requestAnimationFrame(animLoop);
+  }
+});
+document.getElementById('btnReset').addEventListener('click',()=>{
+  anim=false;lastTs=null;animT=0;draw();
+  document.getElementById('btnPlay').textContent='▶ Anima';
+});
+
+// =====================================================================
+// RESIZE
+// =====================================================================
+function resize(){
+  C.width=C.parentElement.clientWidth;
+  C.height=C.parentElement.clientHeight;
+  draw();
+}
+window.addEventListener('resize',resize);
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>

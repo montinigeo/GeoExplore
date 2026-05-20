@@ -14,6 +14,7 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | [🔬 Microscopio Polarizzato](#microscopio) | [Apri](https://montinigeo.github.io/Simulazioni/microscopio_polarizzato.html) |
 | [🌋 Serie di Bowen](#serie-bowen) | [Apri](https://montinigeo.github.io/Simulazioni/serie_bowen.html) |
 | [🌍 Onde Sismiche](#onde-sismiche) | [Apri](https://montinigeo.github.io/Simulazioni/onde_sismiche.html) |
+| [🪨 Metamorfismo](#metamorfismo) | [Apri](https://montinigeo.github.io/Simulazioni/metamorfismo.html) |
 
 ---
 
@@ -283,6 +284,23 @@ La simulazione è organizzata in tre schede:
 - Discontinuità etichettate: Moho, 660 km, Gutenberg (CMB), Lehmann (ICB)
 - Per ogni raggio: angolo di partenza, profondità massima raggiunta, distanza epicentrale di arrivo
 - Pannello informativo con spiegazione fisica del percorso
+
+
+---
+
+<a name="metamorfismo"></a>
+## 🪨 Metamorfismo — Facies e Percorsi P-T
+
+**File:** `metamorfismo.html`
+
+Simulazione interattiva del metamorfismo in un diagramma pressione-temperatura (P-T). Mostra le principali facies metamorfiche come campi colorati, i percorsi P-T dei diversi contesti geodinamici e le trasformazioni mineralogiche in funzione del protolite selezionato.
+
+### Funzionalità
+
+- **Diagramma P-T interattivo** (150–900°C, 0–30 kbar) con nove facies colorate: Zeoliti, Prehnite-Pumpellyite, Scisti Verdi, Anfibolitica, Granuliti, Scisti Blu, Eclogiti, UHP, Hornfels
+- **Cinque protoliti selezionabili** (Granito/Gneiss, Basalto/Gabbro, Arenaria, Pelite, Calcare/Marna) con mineralizzazione e roccia risultante per ogni facies, mostrati in un pannello sovrapposto in alto a destra del diagramma
+- **Quattro percorsi P-T** animati con punto mobile: Subduzione oceanica, Collisione continentale, Metamorfismo di contatto, Ultra-Alta Pressione (UHP)
+- **Sequenza di Barrow** (solo pelite): due bottoni permettono di accendere/spegnere indipendentemente i campi delle facies e le ellissi dei minerali indice (clorite, biotite, granato, staurolite, cianite, sillimanite, cordierite)
 
 
 ---
