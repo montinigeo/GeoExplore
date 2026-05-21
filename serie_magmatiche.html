@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Serie Magmatiche — Classificazione Geochimica</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--panel:#111318;--border:#1e2230;--accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;--text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.tabs{display:flex;gap:.2rem;margin-left:auto}
+.tab{padding:.22rem .8rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.tab.on,.tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.4rem;overflow-y:auto}
+.sl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.2rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.75rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.5rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.07)}
+.tog{display:flex;gap:.2rem}
+.tog .btn{font-size:.62rem;text-align:center;padding:.18rem 0}
+.info{background:#070910;border:1px solid var(--border);border-radius:3px;padding:.4rem;font-size:.62rem;line-height:1.75;color:var(--muted);font-family:'Crimson Pro',serif;font-style:italic}
+.info b{color:var(--text);font-style:normal;font-size:.65rem}
+.val{color:var(--accent);font-family:'Space Mono',monospace;font-size:.6rem}
+.acc{color:var(--accent3)}
+.cw{flex:1;min-width:0;position:relative}
+canvas{width:100%;height:100%;display:block}
+#infoBox{position:absolute;bottom:10px;right:10px;width:240px;background:rgba(7,9,14,.93);border:1px solid var(--border);border-radius:5px;padding:.55rem .75rem;font-family:'Crimson Pro',serif;font-size:.62rem;line-height:1.75;color:var(--muted);pointer-events:none;display:none}
+#infoBox b{color:var(--text);font-style:normal;font-size:.66rem}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);font-size:.58rem;color:var(--muted)}
+.ibar span{color:var(--accent)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Serie Magmatiche &mdash; Classificazione Geochimica</h1>
+  <div class="tabs">
+    <button class="tab on" data-tab="tas">TAS</button>
+    <button class="tab" data-tab="afm">AFM</button>
+    <button class="tab" data-tab="k2o">K₂O-SiO₂</button>
+    <button class="tab" data-tab="nk">Na₂O-K₂O</button>
+  </div>
+</header>
+<div class="main">
+
+<!-- SIDEBAR TAS -->
+<aside class="sb" id="sbTas">
+  <div>
+    <div class="sl">Campioni (non ambigui)</div>
+    <button class="btn" data-ts="MORB">Basalto MORB</button>
+    <button class="btn" data-ts="AlcBas">Basalto alcalino</button>
+    <button class="btn" data-ts="Fonolite">Fonolite</button>
+    <button class="btn" data-ts="Leucitite">Leucitite</button>
+    <button class="btn" data-ts="Vesuvio">Tefrite (Vesuvio)</button>
+  </div>
+  <div class="info" id="infoTas"><b>Diagramma TAS</b><br>Total Alkali vs Silica.<br>La linea M-K separa le serie alcaline (sopra) dalle subalcaline (sotto).<br><br>Muovere il mouse o selezionare un campione.</div>
+</aside>
+
+<!-- SIDEBAR AFM -->
+<aside class="sb" id="sbAfm" style="display:none">
+  <div>
+    <div class="sl">Serie (toggle)</div>
+    <button class="btn on" data-as="tholei" style="border-color:#00d4ff;color:#00d4ff">● Tholeiitica</button>
+    <button class="btn on" data-as="calcalc" style="border-color:#a8ff78;color:#a8ff78">● Calcalcalina</button>
+    <button class="btn on" data-as="shosho" style="border-color:#ffcc44;color:#ffcc44">● Shoshonitica</button>
+    <button class="btn" data-as="ib" style="border-color:#ffcc88;color:#ffcc88">— Irvine &amp; Baragar</button>
+  </div>
+  <div>
+    <div class="sl">Campioni (non ambigui)</div>
+    <button class="btn" data-as-s="MORB">Basalto MORB</button>
+    <button class="btn" data-as-s="Andesite">Andesite (Ande)</button>
+    <button class="btn" data-as-s="Dacite">Dacite</button>
+    <button class="btn" data-as-s="AlcBas">Basalto alcalino</button>
+    <button class="btn" data-as-s="Shoshonite">Shoshonite</button>
+  </div>
+  <div class="info" id="infoAfm"><b>Diagramma AFM</b><br>A = Na₂O+K₂O &nbsp; F = FeOtot &nbsp; M = MgO<br><br>Distingue la serie tholeiitica (arricchimento in Fe) dalla calcalcalina (trend verso M).<br>Confine di Irvine &amp; Baragar (1971).</div>
+</aside>
+
+<!-- SIDEBAR K2O -->
+<aside class="sb" id="sbK2o" style="display:none">
+  <div>
+    <div class="sl">Percorsi geodinamici</div>
+    <button class="btn" data-perc="arco"    style="border-color:#a8ff78;color:#a8ff78">● Arco subduzione</button>
+    <button class="btn" data-perc="hotspot" style="border-color:#ff4444;color:#ff4444">● Hotspot/Isola</button>
+    <button class="btn" data-perc="rift"    style="border-color:#ff6b35;color:#ff6b35">● Rift continentale</button>
+    <button class="btn" data-perc="morb"    style="border-color:#00d4ff;color:#00d4ff">● Dorsale oceanica</button>
+    <div style="display:flex;gap:.2rem;margin-top:.3rem">
+      <button class="btn" id="btnAnim" style="flex:1;font-size:.62rem">▶ Anima</button>
+      <button class="btn" id="btnReset" style="font-size:.62rem;padding:.2rem .4rem">↺</button>
+    </div>
+  </div>
+  <div>
+    <div class="sl">Campioni</div>
+    <button class="btn" data-ks="MORB">Basalto MORB</button>
+    <button class="btn" data-ks="Andesite">Andesite (Ande)</button>
+    <button class="btn" data-ks="Dacite">Dacite</button>
+    <button class="btn" data-ks="Riolite">Riolite</button>
+    <button class="btn" data-ks="Shoshonite">Shoshonite</button>
+    <button class="btn" data-ks="Leucitite">Leucitite</button>
+    <button class="btn" data-ks="Vesuvio">Tefrite (Vesuvio)</button>
+  </div>
+  <div class="info" id="infoK2o"><b>K₂O vs SiO₂</b><br>Bande di Peccerillo &amp; Taylor (1976).<br>Distingue tutte le serie per il contenuto in K₂O a parità di SiO₂.<br><br>I percorsi mostrano l'evoluzione geodinamica nel tempo.</div>
+</aside>
+
+<!-- SIDEBAR NK -->
+<aside class="sb" id="sbNk" style="display:none">
+  <div>
+    <div class="sl">Campioni</div>
+    <button class="btn" data-nk="MORB">Basalto MORB</button>
+    <button class="btn" data-nk="AlcBas">Basalto alcalino</button>
+    <button class="btn" data-nk="Fonolite">Fonolite</button>
+    <button class="btn" data-nk="Shoshonite">Shoshonite</button>
+    <button class="btn" data-nk="Trachite">Trachite</button>
+    <button class="btn" data-nk="Leucitite">Leucitite</button>
+    <button class="btn" data-nk="Vesuvio">Tefrite (Vesuvio)</button>
+  </div>
+  <div class="info" id="infoNk"><b>Na₂O vs K₂O</b><br>Separa le serie alcaline sodiche (Na₂O &gt; K₂O, tipiche di rift e hotspot) dalle potassiche (K₂O &gt; Na₂O, tipiche di post-collisione e shoshonitica).</div>
+</aside>
+
+<div class="cw"><canvas id="C"></canvas><div id="infoBox"></div></div>
+</div>
+<div class="ibar" id="ibar">—</div>
+
+<script>
+// =====================================================================
+// DATI
+// =====================================================================
+// Campi TAS (Le Bas et al. 1986) - vertici [SiO2, Na2O+K2O]
+const TAS_FIELDS=[
+  {n:'Picrite/Kom.',  col:'#1a3a5a',v:[[41,0],[41,3],[45,3],[45,0]]},
+  {n:'Basalto',       col:'#1a4a6a',v:[[45,0],[45,2],[52,2],[52,0]]},
+  {n:'Bas. and.',     col:'#1a5a7a',v:[[52,0],[52,2],[57,2],[57,0]]},
+  {n:'Andesite',      col:'#1a6a8a',v:[[57,0],[57,2.5],[63,2.5],[63,0]]},
+  {n:'Dacite',        col:'#1a7a9a',v:[[63,0],[63,2.5],[69,2.5],[69,0]]},
+  {n:'Riolite',       col:'#1a8aaa',v:[[69,0],[69,3],[77,5],[77,0]]},
+  {n:'Trachib.',      col:'#2a5a3a',v:[[45,2],[45,5],[52,5],[52,2]]},
+  {n:'Trachian.b.',   col:'#2a6a3a',v:[[52,2],[52,5],[57,5.9],[57,2]]},
+  {n:'Trachian.',     col:'#2a7a4a',v:[[57,2.5],[57,5.9],[63,7],[63,2.5]]},
+  {n:'Trachidacite',  col:'#2a8a5a',v:[[63,2.5],[63,7],[69,8],[69,2.5]]},
+  {n:'Trachite',      col:'#3a8a3a',v:[[63,7],[63,12],[69,12],[69,8]]},
+  {n:'Fonolite',      col:'#5a2a7a',v:[[45,9],[45,14],[53,14],[57,11],[57,9]]},
+  {n:'Tefrifonolite', col:'#4a2a6a',v:[[45,5],[45,9],[57,9],[57,11],[53,11],[53,9],[52,9],[52,5]]},
+  {n:'Tefrite/Bas.',  col:'#3a1a5a',v:[[41,3],[41,7],[45,7],[45,5],[45,3]]},
+  {n:'Fonoteprite',   col:'#4a1a6a',v:[[45,5],[52,5],[52,9],[45,9]]},
+];
+
+// Campioni TAS e K2O
+const SAMP={
+  MORB:    {n:'Basalto MORB',    s:50.5,a:2.8, k:0.15,na:2.65,ser:'tholei',col:'#00d4ff',
+    info:'Basalto della dorsale medio-oceanica. N-MORB: impoverito in elementi incompatibili. SiO₂≈50%, MgO>8%, K₂O<0.15%. Temperatura eruzione >1200°C.'},
+  Hawaii:  {n:'Tholeiite Hawaii',s:49.5,a:3.8, k:0.38,na:3.42,ser:'tholei',col:'#00aacc',
+    info:'Tholeiite di hotspot (fase scudo). Più ricca di elementi incompatibili rispetto al MORB. Alto FeO/MgO. Kilauea, Mauna Loa.'},
+  Andesite:{n:'Andesite (Ande)', s:58.5,a:4.5, k:1.50,na:3.0, ser:'calcalc',col:'#a8ff78',
+    info:'Roccia tipica degli archi vulcanici. Alta Al₂O₃ (>17%). Hornblenda abbondante. Ande, Giappone, Cascades.'},
+  Dacite:  {n:'Dacite',          s:65.0,a:5.0, k:1.80,na:3.2, ser:'calcalc',col:'#80cc60',
+    info:'Differenziata di arco. Hornblenda abbondante. Mount St. Helens, Santorini.'},
+  Riolite: {n:'Riolite',         s:74.0,a:6.5, k:2.80,na:3.7, ser:'calcalc',col:'#60aa40',
+    info:'Magmi molto acidi, spesso esplosivi. SiO₂>69%. Yellowstone, Campi Flegrei.'},
+  AlcBas:  {n:'Basalto alcalino',s:46.5,a:5.5, k:1.50,na:4.0, ser:'alcal', col:'#ff6b35',
+    info:'Sottosaturo in SiO₂. Tipico di rift e hotspot. Etna (fase attuale), Rift Est-Africano.'},
+  Fonolite:{n:'Fonolite',        s:55.0,a:12.5,k:4.50,na:8.2, ser:'alcal', col:'#ff8855',
+    info:'Nefelina + sanidino. Differenziata di basalto alcalino. Tenerife, Colonia (Germania).'},
+  Shoshonite:{n:'Shoshonite',    s:52.0,a:6.5, k:3.20,na:3.4, ser:'shosho',col:'#ffcc44',
+    info:'Alta K₂O e Ba. K₂O/Na₂O ≈ 1. Archi maturi, Eolie, Absaroka (Wyoming).'},
+  Leucitite:{n:'Leucitite',      s:47.0,a:9.5, k:8.50,na:1.2, ser:'alkK',  col:'#da70d6',
+    info:'Ricchissima in K (leucite KAlSi₂O₆). Colli Albani, Vesuvio, Roccamonfina.'},
+  Vesuvio: {n:'Tefrite (Vesuvio)',s:46.0,a:8.5, k:7.00,na:2.8, ser:'alkK',  col:'#c050c0',
+    info:'Tefrite leucitica K-ricca. 79 d.C. SiO₂≈46%, K₂O≈7%. Mantello metasomatizzato post-collisionale.'},
+  Trachite:{n:'Trachite',        s:63.0,a:10.0,k:4.80,na:5.2, ser:'alcal', col:'#ff9944',
+    info:'Differenziata alcalina. Fsp K dominante. Campi Flegrei, Isole Canarie.'},
+};
+
+// AFM campioni (Na2O+K2O, FeOtot, MgO) - poi normalizzati
+const AFM_SAMP={
+  MORB:    {n:'Basalto MORB',    A:2.8, F:10.5,M:7.8, ser:'tholei', col:'#00d4ff'},
+  Hawaii:  {n:'Tholeiite Hawaii',A:3.8, F:11.2,M:7.2, ser:'tholei', col:'#00aacc'},
+  Andesite:{n:'Andesite (Ande)', A:4.5, F:6.8, M:4.2, ser:'calcalc',col:'#a8ff78'},
+  Dacite:  {n:'Dacite',          A:5.0, F:4.5, M:2.8, ser:'calcalc',col:'#80cc60'},
+  AlcBas:  {n:'Basalto alcalino',A:5.5, F:9.8, M:6.5, ser:'alcal',  col:'#ff6b35'},
+  Shoshonite:{n:'Shoshonite',    A:6.5, F:5.2, M:3.8, ser:'shosho', col:'#ffcc44'},
+};
+
+// Trend AFM (serie di punti normalizzati A+F+M=1)
+const AFM_TRENDS={
+  tholei: {col:'#00d4ff',pts:[
+    [0.18,0.62,0.20],[0.20,0.65,0.15],[0.22,0.68,0.10],[0.26,0.68,0.06],[0.32,0.64,0.04],[0.42,0.54,0.04]
+  ]},
+  calcalc:{col:'#a8ff78',pts:[
+    [0.18,0.62,0.20],[0.22,0.55,0.23],[0.28,0.45,0.27],[0.34,0.38,0.28],[0.42,0.30,0.28],[0.52,0.24,0.24]
+  ]},
+  shosho: {col:'#ffcc44',pts:[
+    [0.30,0.38,0.32],[0.36,0.34,0.30],[0.44,0.30,0.26],[0.52,0.26,0.22]
+  ]},
+};
+
+// Percorsi K2O-SiO2
+const PERCORSI={
+  arco:{n:'Arco di subduzione',col:'#a8ff78',show:false,
+    desc:'K₂O aumenta con la maturità dell\'arco (relazione K-h, Dickinson & Hatherton 1967). Da calcalcalina bassa-K → media-K → shoshonitica → alcalina K-ricca post-collisionale.',
+    fasi:['Arco giovane (calc-alc. bassa-K)','Arco maturo (calc-alc.)','Arco evoluto (shoshonitica)','Post-collisione (alc. K-ricca)'],
+    pts:[[50,0.3],[55,1.5],[58,2.8],[62,4.8]]},
+  hotspot:{n:'Hotspot / Isola oceanica',col:'#ff4444',show:false,
+    desc:'Dalla fase scudo (tholeiitica, alto grado fusione) alla fase post-erosionale (alcalina, basso grado). K₂O aumenta progressivamente.',
+    fasi:['Fase scudo (tholeiitica)','Transizione','Fase post-erosionale (alcalina)'],
+    pts:[[49,0.38],[48,1.2],[46,2.8]]},
+  rift:{n:'Rift continentale',col:'#ff6b35',show:false,
+    desc:'Dal rift iniziale (tholeiitica) al rift maturo (alcalina). K₂O aumenta per metasomatismo del mantello litosferico.',
+    fasi:['Rift iniziale (tholeiitica)','Rift maturo (alcalina)','Stadio avanzato'],
+    pts:[[50,0.8],[49,2.0],[52,4.0]]},
+  morb:{n:'Dorsale oceanica',col:'#00d4ff',show:false,
+    desc:'N-MORB primitivo (K₂O<0.15%) → E-MORB (K₂O 0.3-0.5%, influenza plume) → differenziazione tholeiitica.',
+    fasi:['N-MORB','E-MORB (plume)','Differenziazione'],
+    pts:[[50,0.12],[52,0.38],[58,0.85]]},
+};
+
+// Animazione
+let animT=0,animOn=false,lastTs=null,animRaf=null;
+let selSamp=null, tab='tas';
+
+// =====================================================================
+// CANVAS
+// =====================================================================
+const C=document.getElementById('C');
+const ctx=C.getContext('2d');
+const box=document.getElementById('infoBox');
+function showInfo(h){box.innerHTML=h;box.style.display='block';}
+function hideInfo(){box.style.display='none';}
+
+// =====================================================================
+// UTILITÀ GRAFICHE
+// =====================================================================
+function labelShadow(text,x,y,fill,font,align='center'){
+  ctx.font=font;ctx.textAlign=align;
+  ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+  ctx.strokeText(text,x,y);
+  ctx.fillStyle=fill;ctx.fillText(text,x,y);
+}
+
+function drawSample(x,y,col,sel,nome,labDir='right'){
+  const r=sel?9:6;
+  ctx.beginPath();ctx.arc(x,y,r+3,0,2*Math.PI);
+  ctx.fillStyle=col;ctx.globalAlpha=0.2;ctx.fill();ctx.globalAlpha=1;
+  ctx.beginPath();ctx.arc(x,y,r,0,2*Math.PI);
+  ctx.fillStyle=col;ctx.globalAlpha=0.9;ctx.fill();ctx.globalAlpha=1;
+  ctx.strokeStyle=sel?'#fff':col;ctx.lineWidth=sel?2:1;ctx.stroke();
+  if(nome){
+    const ox=labDir==='right'?r+5:labDir==='left'?-r-5:0;
+    const align=labDir==='right'?'left':labDir==='left'?'right':'center';
+    labelShadow(nome,x+ox,y+4,col,'bold 10px Crimson Pro',align);
+  }
+}
+
+// =====================================================================
+// TAS
+// =====================================================================
+function tasLine(s){return 13.5-0.19*s;} // M-K lineare (Le Bas 1986), valida per SiO2=45-55%
+
+function drawTAS(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=62,pR=15,pT=28,pB=52;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  const Sm=35,SM=80,Am=0,AM=16;
+  const tx=s=>pL+(s-Sm)/(SM-Sm)*gW;
+  const ty=a=>pT+gH-(a-Am)/(AM-Am)*gH;
+
+  // Campi rocce
+  TAS_FIELDS.forEach(f=>{
+    ctx.beginPath();
+    f.v.forEach(([s,a],i)=>{i?ctx.lineTo(tx(s),ty(a)):ctx.moveTo(tx(s),ty(a));});
+    ctx.closePath();
+    ctx.fillStyle=f.col;ctx.globalAlpha=0.5;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(200,204,216,0.15)';ctx.lineWidth=0.8;ctx.stroke();
+    // Label campo
+    const cx2=f.v.reduce((a,[x])=>a+x,0)/f.v.length;
+    const cy2=f.v.reduce((a,[,y])=>a+y,0)/f.v.length;
+    labelShadow(f.n,tx(cx2),ty(cy2)+4,'rgba(220,224,240,0.85)','bold 9px Crimson Pro');
+  });
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.6)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  for(let s=40;s<=80;s+=5){
+    ctx.beginPath();ctx.moveTo(tx(s),pT);ctx.lineTo(tx(s),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(s,tx(s),pT+gH+18);
+  }
+  for(let a=0;a<=16;a+=2){
+    ctx.beginPath();ctx.moveTo(pL,ty(a));ctx.lineTo(pL+gW,ty(a));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(a,pL-6,ty(a)+4);
+  }
+  // Assi
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('SiO₂ (%)',pL+gW/2,pT+gH+42);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Na₂O + K₂O (%)',0,0);ctx.restore();
+
+  // Linea M-K
+  ctx.beginPath();ctx.setLineDash([7,5]);ctx.strokeStyle='rgba(255,200,100,0.7)';ctx.lineWidth=2;
+  let first=true;
+  for(let s=Sm;s<=SM;s+=0.5){
+    const a=tasLine(s);if(a<Am||a>AM){first=true;continue;}
+    if(first){ctx.moveTo(tx(s),ty(a));first=false;}else ctx.lineTo(tx(s),ty(a));
+  }
+  ctx.stroke();ctx.setLineDash([]);
+  labelShadow('Linea MacDonald-Katsura',tx(54),ty(tasLine(54))-9,'rgba(255,200,100,0.8)','italic 10px Crimson Pro');
+  // Label zone - posizionate a sinistra nell'area vuota accanto all'asse
+  ctx.save();
+  ctx.translate(pL-28, ty(11));ctx.rotate(-Math.PI/2);
+  labelShadow('ALCALINO',0,0,'rgba(255,200,100,0.55)','bold 12px Crimson Pro');
+  ctx.restore();
+  ctx.save();
+  ctx.translate(pL-28, ty(2.5));ctx.rotate(-Math.PI/2);
+  labelShadow('SUB-ALCALINO',0,0,'rgba(160,200,255,0.45)','bold 12px Crimson Pro');
+  ctx.restore();
+  // Frecce indicatrici
+  ctx.strokeStyle='rgba(255,200,100,0.35)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(pL-14,ty(11));ctx.lineTo(pL,ty(11));ctx.stroke();
+  ctx.strokeStyle='rgba(160,200,255,0.3)';
+  ctx.beginPath();ctx.moveTo(pL-14,ty(2.5));ctx.lineTo(pL,ty(2.5));ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Campioni - solo se selezionato
+  if(selSamp&&SAMP[selSamp]){
+    const s=SAMP[selSamp];
+    if(s.s&&s.a) drawSample(tx(s.s),ty(s.a),s.col,true,s.n);
+  }
+}
+
+// =====================================================================
+// AFM
+// =====================================================================
+function drawAFM(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pad=65;
+  const TW=Math.min(W-pad*2,H-pad*2);
+  const TX=Math.floor((W-TW)/2),TY=Math.floor((H-TW*0.866)/2);
+  const TH=Math.floor(TW*0.866);
+  // Vertici: A=top, F=bottom-left, M=bottom-right
+  const Ax=TX+TW/2,Ay=TY;
+  const Fx=TX,Fy=TY+TH;
+  const Mx=TX+TW,My=TY+TH;
+
+  function afmXY(a,f,m){
+    const tot=a+f+m;
+    const an=a/tot,fn=f/tot,mn=m/tot;
+    return [an*Ax+fn*Fx+mn*Mx, an*Ay+fn*Fy+mn*My];
+  }
+
+  // Triangolo
+  ctx.beginPath();ctx.moveTo(Ax,Ay);ctx.lineTo(Fx,Fy);ctx.lineTo(Mx,My);ctx.closePath();
+  ctx.fillStyle='#0a0e14';ctx.fill();
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=2;ctx.stroke();
+
+  // Griglia interna (linee a 20%, 40%, 60%, 80%)
+  ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.6;
+  [0.2,0.4,0.6,0.8].forEach(t=>{
+    // Linee parallele a ciascun lato
+    function lerp([x1,y1],[x2,y2],tt){return [x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
+    // Parallele ad AF (costante M)
+    ctx.beginPath();ctx.moveTo(...lerp([Ax,Ay],[Mx,My],t));ctx.lineTo(...lerp([Fx,Fy],[Mx,My],t));ctx.stroke();
+    // Parallele ad AM (costante F)
+    ctx.beginPath();ctx.moveTo(...lerp([Ax,Ay],[Fx,Fy],t));ctx.lineTo(...lerp([Mx,My],[Fx,Fy],t));ctx.stroke();
+    // Parallele ad FM (costante A)
+    ctx.beginPath();ctx.moveTo(...lerp([Ax,Ay],[Fx,Fy],t));ctx.lineTo(...lerp([Ax,Ay],[Mx,My],t));ctx.stroke();
+  });
+
+  // Confine Irvine & Baragar - solo se attivo
+  const ib=[[0.08,0.75,0.17],[0.10,0.72,0.18],[0.14,0.68,0.18],[0.18,0.63,0.19],
+            [0.22,0.57,0.21],[0.26,0.50,0.24],[0.30,0.43,0.27],[0.35,0.35,0.30],
+            [0.40,0.28,0.32],[0.46,0.22,0.32],[0.52,0.16,0.32]];
+  if(document.querySelector('[data-as="ib"]')?.classList.contains('on')){
+    ctx.beginPath();ctx.setLineDash([6,4]);ctx.strokeStyle='rgba(255,200,100,0.8)';ctx.lineWidth=1.8;
+    ib.forEach(([a,f,m],i)=>{const [x,y]=afmXY(a,f,m);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.stroke();ctx.setLineDash([]);
+  }
+
+
+
+  // Trend frecce
+  Object.entries(AFM_TRENDS).forEach(([k,t])=>{
+    if(!document.querySelector(`[data-as="${k}"]`)?.classList.contains('on'))return;
+    ctx.beginPath();ctx.strokeStyle=t.col;ctx.lineWidth=2;ctx.globalAlpha=0.7;
+    t.pts.forEach(([a,f,m],i)=>{
+      const [x,y]=afmXY(a,f,m);i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    ctx.stroke();ctx.globalAlpha=1;
+    // Frecce
+    for(let i=1;i<t.pts.length;i++){
+      const [x0,y0]=afmXY(...t.pts[i-1]);
+      const [x1,y1]=afmXY(...t.pts[i]);
+      const ang=Math.atan2(y1-y0,x1-x0);
+      ctx.save();ctx.translate((x0+x1)/2,(y0+y1)/2);ctx.rotate(ang);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-5);ctx.lineTo(-10,5);ctx.closePath();
+      ctx.fillStyle=t.col;ctx.globalAlpha=0.7;ctx.fill();ctx.globalAlpha=1;
+      ctx.restore();
+    }
+  });
+
+  // Campioni AFM - solo se selezionato
+  if(selSamp&&AFM_SAMP[selSamp]){
+    const s=AFM_SAMP[selSamp];
+    const [x,y]=afmXY(s.A,s.F,s.M);
+    drawSample(x,y,s.col,true,s.n);
+  }
+
+  // Vertici etichette
+  labelShadow('A',Ax,Ay-16,'#c8ccd8','bold 14px Space Mono');
+  labelShadow('(Na₂O+K₂O)',Ax,Ay-30,'#8a8e9a','italic 10px Crimson Pro');
+  labelShadow('F',Fx-18,Fy+6,'#c8ccd8','bold 14px Space Mono','right');
+  labelShadow('(FeO tot)',Fx-18,Fy+20,'#8a8e9a','italic 10px Crimson Pro','right');
+  labelShadow('M',Mx+18,My+6,'#c8ccd8','bold 14px Space Mono','left');
+  labelShadow('(MgO)',Mx+18,My+20,'#8a8e9a','italic 10px Crimson Pro','left');
+  // % sui lati
+  ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';
+  [20,40,60,80].forEach(p=>{
+    const t=p/100;
+    function lerp([x1,y1],[x2,y2],tt){return [x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
+    const [x,y]=lerp([Ax,Ay],[Fx,Fy],t);
+    ctx.textAlign='right';ctx.fillText(p+'%',x-4,y+3);
+  });
+}
+
+// =====================================================================
+// K2O-SIO2
+// =====================================================================
+function kLine(s,k){return 0.067*(s-45)+k;} // P&T 1976: rette con pendenza 0.067, k=intercetta a SiO2=45
+
+function drawK2O(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=62,pR=15,pT=28,pB=52;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  const Sm=44,SM=78,Km=0,KM=8;
+  const tx=s=>pL+(s-Sm)/(SM-Sm)*gW;
+  const ty=k=>pT+gH-(k-Km)/(KM-Km)*gH;
+
+  // Bande colorate
+  const bande=[
+    {label:'Bassa-K\n(tholeiitica)',col:'#00d4ff',k0:Km,k1:s=>kLine(s,0.3)},
+    {label:'Media-K\n(calcalcalina)',col:'#a8ff78',k0:s=>kLine(s,0.3),k1:s=>kLine(s,1.5)},
+    {label:'Alta-K\n(shoshonitica)',col:'#ffcc44',k0:s=>kLine(s,1.5),k1:s=>kLine(s,3.0)},
+    {label:'Molto alta-K\n(alc. K-ricca)',col:'#da70d6',k0:s=>kLine(s,3.0),k1:KM},
+  ];
+  bande.forEach(b=>{
+    ctx.beginPath();
+    const pts=[];
+    for(let s=Sm;s<=SM;s+=0.5){
+      const k0=typeof b.k0==='function'?b.k0(s):b.k0;
+      pts.push([tx(s),ty(Math.max(Km,Math.min(KM,k0)))]);
+    }
+    for(let s=SM;s>=Sm;s-=0.5){
+      const k1=typeof b.k1==='function'?b.k1(s):b.k1;
+      pts.push([tx(s),ty(Math.max(Km,Math.min(KM,k1)))]);
+    }
+    pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));
+    ctx.closePath();ctx.fillStyle=b.col;ctx.globalAlpha=0.08;ctx.fill();ctx.globalAlpha=1;
+    // Label banda al centro
+    const ms=(Sm+SM)/2;
+    const k0m=typeof b.k0==='function'?b.k0(ms):b.k0;
+    const k1m=typeof b.k1==='function'?b.k1(ms):b.k1;
+    const km=(Math.min(k0m,KM)+Math.min(k1m,KM))/2;
+    if(km>Km+0.2&&km<KM-0.2){
+      const lines=b.label.split('\n');
+      lines.forEach((l,i)=>labelShadow(l,tx(ms),ty(km)+(i-(lines.length-1)/2)*14,b.col,'bold 10px Crimson Pro'));
+    }
+  });
+
+  // Linee separatrici bande
+  [[0.3,'rgba(0,212,255,0.4)'],[1.5,'rgba(255,204,68,0.4)'],[3.0,'rgba(218,112,214,0.4)']].forEach(([k,col])=>{
+    ctx.beginPath();ctx.setLineDash([5,4]);ctx.strokeStyle=col;ctx.lineWidth=1.2;
+    let first=true;
+    for(let s=Sm;s<=SM;s+=0.5){
+      const kv=kLine(s,k);if(kv<Km||kv>KM){first=true;continue;}
+      if(first){ctx.moveTo(tx(s),ty(kv));first=false;}else ctx.lineTo(tx(s),ty(kv));
+    }
+    ctx.stroke();ctx.setLineDash([]);
+  });
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.6)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  for(let s=45;s<=72;s+=5){
+    ctx.beginPath();ctx.moveTo(tx(s),pT);ctx.lineTo(tx(s),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(s,tx(s),pT+gH+18);
+  }
+  for(let k=0;k<=8;k++){
+    ctx.beginPath();ctx.moveTo(pL,ty(k));ctx.lineTo(pL+gW,ty(k));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(k,pL-6,ty(k)+4);
+  }
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('SiO₂ (%)',pL+gW/2,pT+gH+42);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('K₂O (%)',0,0);ctx.restore();
+
+  // Percorsi
+  Object.entries(PERCORSI).forEach(([key,perc])=>{
+    if(!perc.show)return;
+    const pts=perc.pts.filter(([s,])=>s>=Sm&&s<=SM);
+    if(pts.length<2)return;
+    const total=pts.length-1;
+    const pi=animT*total,idx=Math.min(Math.floor(pi),total-1),frac=pi-idx;
+    ctx.beginPath();pts.forEach(([s,k],i)=>i?ctx.lineTo(tx(s),ty(k)):ctx.moveTo(tx(s),ty(k)));
+    ctx.strokeStyle=perc.col;ctx.lineWidth=2;ctx.globalAlpha=0.25;ctx.stroke();ctx.globalAlpha=1;
+    ctx.beginPath();pts.slice(0,idx+1).forEach(([s,k],i)=>i?ctx.lineTo(tx(s),ty(k)):ctx.moveTo(tx(s),ty(k)));
+    if(idx<total){const[s0,k0]=pts[idx],[s1,k1]=pts[idx+1];ctx.lineTo(tx(s0+(s1-s0)*frac),ty(k0+(k1-k0)*frac));}
+    ctx.strokeStyle=perc.col;ctx.lineWidth=3;ctx.globalAlpha=0.9;ctx.stroke();ctx.globalAlpha=1;
+    for(let i=1;i<pts.length;i++){
+      const[s0,k0]=pts[i-1],[s1,k1]=pts[i];
+      const ang=Math.atan2(ty(k1)-ty(k0),tx(s1)-tx(s0));
+      ctx.save();ctx.translate((tx(s0)+tx(s1))/2,(ty(k0)+ty(k1))/2);ctx.rotate(ang);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-5);ctx.lineTo(-10,5);ctx.closePath();
+      ctx.fillStyle=perc.col;ctx.globalAlpha=0.7;ctx.fill();ctx.globalAlpha=1;ctx.restore();
+    }
+    if(animT>0&&animT<1){
+      const[s0,k0]=pts[idx],[s1,k1]=pts[Math.min(idx+1,total)];
+      const px=tx(s0+(s1-s0)*frac),py=ty(k0+(k1-k0)*frac);
+      ctx.beginPath();ctx.arc(px,py,10,0,2*Math.PI);ctx.fillStyle=perc.col;ctx.globalAlpha=0.2;ctx.fill();ctx.globalAlpha=1;
+      ctx.beginPath();ctx.arc(px,py,5,0,2*Math.PI);ctx.fillStyle='#fff';ctx.fill();ctx.strokeStyle=perc.col;ctx.lineWidth=2;ctx.stroke();
+      const fase=perc.fasi[Math.min(idx,perc.fasi.length-1)];
+      showInfo(`<b>${perc.n}</b><br><b>Fase:</b> <span class="acc">${fase}</span><br>
+        <b>SiO₂:</b> <span class="val">${(s0+(s1-s0)*frac).toFixed(1)}%</span>&nbsp;
+        <b>K₂O:</b> <span class="val">${(k0+(k1-k0)*frac).toFixed(2)}%</span><br><br>
+        <span style="font-style:italic;font-size:.57rem">${perc.desc}</span>`);
+    }
+    const[sl,kl]=pts[pts.length-1];
+    labelShadow(perc.n,tx(sl)+8,ty(kl),perc.col,'bold 10px Crimson Pro','left');
+  });
+
+  // Campioni K2O - solo se selezionato
+  const ksMap={MORB:[50.5,0.15],Andesite:[58.5,1.5],Dacite:[65.0,1.8],Riolite:[74.0,2.8],Shoshonite:[52.0,3.2],Leucitite:[47.0,8.5],Vesuvio:[46.0,7.0]};
+  if(selSamp&&ksMap[selSamp]){
+    const s=SAMP[selSamp],v=ksMap[selSamp];
+    if(s&&v) drawSample(tx(v[0]),ty(v[1]),s.col,true,s.n);
+  }
+}
+
+// =====================================================================
+// Na2O vs K2O
+// =====================================================================
+function drawNK(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=62,pR=15,pT=28,pB=52;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  const Km=0,KM=10,Nm=0,NM=12;
+  const tx=k=>pL+(k-Km)/(KM-Km)*gW;
+  const ty=n=>pT+gH-(n-Nm)/(NM-Nm)*gH;
+
+  // Zona sodica (Na>K) e potassica (K>Na)
+  ctx.fillStyle='rgba(0,150,255,0.06)';ctx.fillRect(pL,pT,gW/2,gH/2);
+  ctx.fillStyle='rgba(200,100,255,0.06)';
+  ctx.beginPath();ctx.moveTo(pL,pT+gH);ctx.lineTo(pL+gW,pT);ctx.lineTo(pL+gW,pT+gH);ctx.closePath();ctx.fill();
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.6)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  for(let k=0;k<=10;k+=2){
+    ctx.beginPath();ctx.moveTo(tx(k),pT);ctx.lineTo(tx(k),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(k,tx(k),pT+gH+18);
+  }
+  for(let n=0;n<=12;n+=2){
+    ctx.beginPath();ctx.moveTo(pL,ty(n));ctx.lineTo(pL+gW,ty(n));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(n,pL-6,ty(n)+4);
+  }
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('K₂O (%)',pL+gW/2,pT+gH+42);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Na₂O (%)',0,0);ctx.restore();
+
+  // Linea Na=K (diagonale)
+  ctx.beginPath();ctx.setLineDash([7,5]);ctx.strokeStyle='rgba(255,220,100,0.7)';ctx.lineWidth=2;
+  ctx.moveTo(tx(0),ty(0));ctx.lineTo(tx(Math.min(KM,NM)),ty(Math.min(KM,NM)));
+  ctx.stroke();ctx.setLineDash([]);
+  labelShadow('Na₂O = K₂O',tx(4)+10,ty(4)-12,'rgba(255,220,100,0.8)','italic 11px Crimson Pro');
+
+  // Label zone
+  labelShadow('SODICA (Na>K)',tx(1),ty(9),'rgba(100,180,255,0.6)','bold 12px Crimson Pro');
+  labelShadow('POTASSICA (K>Na)',tx(7),ty(2),'rgba(200,100,255,0.6)','bold 12px Crimson Pro');
+  labelShadow('Rift / Hotspot',tx(1.5),ty(7.5),'rgba(100,180,255,0.4)','italic 10px Crimson Pro');
+  labelShadow('Post-collisione / Arco',tx(6),ty(1),'rgba(200,100,255,0.4)','italic 10px Crimson Pro');
+
+  // Campi serie
+  const zones=[
+    {n:'Tholeiitica',col:'#00d4ff', pts:[[0,0],[0,3],[2,3],[2,0]]},       // K basso, Na basso
+    {n:'Calcalcalina',col:'#a8ff78',pts:[[0.5,1.5],[1.5,4],[3,5],[3,2],[1,1]]},
+    {n:'Alcalina\nsodica',col:'#ff6b35',pts:[[0.5,3],[1.5,6],[3,8],[5,8],[3,4],[1,3]]},
+    {n:'Shoshonitica',col:'#ffcc44', pts:[[2,2],[4,5],[6,5],[5,2.5],[3,1.5]]},
+    {n:'Alc. K-ricca',col:'#da70d6',pts:[[3,1.5],[5,2.5],[7,3],[8,2],[6,0.5],[4,0.5]]},
+  ];
+  zones.forEach(z=>{
+    ctx.beginPath();z.pts.forEach(([k,n],i)=>i?ctx.lineTo(tx(k),ty(n)):ctx.moveTo(tx(k),ty(n)));
+    ctx.closePath();ctx.fillStyle=z.col;ctx.globalAlpha=0.08;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=z.col;ctx.lineWidth=1.2;ctx.globalAlpha=0.4;ctx.stroke();ctx.globalAlpha=1;
+    const ck=z.pts.reduce((a,[x])=>a+x,0)/z.pts.length;
+    const cn=z.pts.reduce((a,[,y])=>a+y,0)/z.pts.length;
+    const lines=z.n.split('\n');
+    lines.forEach((l,i)=>labelShadow(l,tx(ck),ty(cn)+(i-(lines.length-1)/2)*14,z.col,'bold 10px Crimson Pro'));
+  });
+
+  // Campioni NK - solo se selezionato
+  const nkSamp={
+    MORB:    {k:0.15,na:2.65,col:'#00d4ff',n:'Basalto MORB'},
+    AlcBas:  {k:1.50,na:4.00,col:'#ff6b35',n:'Basalto alc.'},
+    Fonolite:{k:4.50,na:8.20,col:'#ff8855',n:'Fonolite'},
+    Shoshonite:{k:3.20,na:3.40,col:'#ffcc44',n:'Shoshonite'},
+    Trachite:{k:4.80,na:5.20,col:'#ff9944',n:'Trachite'},
+    Leucitite:{k:8.50,na:1.20,col:'#da70d6',n:'Leucitite'},
+    Vesuvio: {k:7.00,na:2.80,col:'#c050c0',n:'Tefrite (Vesuvio)'},
+  };
+  if(selSamp&&nkSamp[selSamp]){
+    const s=nkSamp[selSamp];
+    drawSample(tx(s.k),ty(s.na),s.col,true,s.n);
+  }
+}
+
+// =====================================================================
+// DRAW
+// =====================================================================
+function draw(){
+  if(tab==='tas')drawTAS();
+  else if(tab==='afm')drawAFM();
+  else if(tab==='k2o')drawK2O();
+  else drawNK();
+}
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+// Tab
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
+  tab=b.dataset.tab;
+  ['tas','afm','k2o','nk'].forEach(t=>document.getElementById('sb'+t.charAt(0).toUpperCase()+t.slice(1)).style.display='none');
+  const sbId='sb'+({tas:'Tas',afm:'Afm',k2o:'K2o',nk:'Nk'}[tab]);
+  document.getElementById(sbId).style.display='flex';
+  document.getElementById(sbId).style.flexDirection='column';
+  selSamp=null;hideInfo();draw();
+  document.getElementById('ibar').textContent=
+    {tas:'TAS: Total Alkali vs Silica — La linea M-K separa alcalino da subalcalino',
+     afm:'AFM: Triangolo ternario — Distingue la serie tholeiitica (trend verso Fe) dalla calcalcalina',
+     k2o:'K₂O vs SiO₂ — Bande di Peccerillo & Taylor (1976) — Distingue tutte le serie',
+     nk:'Na₂O vs K₂O — Separa le alcaline sodiche (Na>K) dalle potassiche (K>Na)'}[tab];
+}));
+
+// Campioni TAS
+document.querySelectorAll('[data-ts]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.ts;
+  document.querySelectorAll('[data-ts]').forEach(x=>x.classList.remove('on'));
+  if(selSamp===k){selSamp=null;hideInfo();}
+  else{
+    selSamp=k;b.classList.add('on');
+    const s=SAMP[k];
+    showInfo(`<b>${s.n}</b><br><b>SiO₂:</b><span class="val"> ${s.s}%</span> &nbsp; <b>Na₂O+K₂O:</b><span class="val"> ${s.a}%</span><br><b>Serie:</b> <span class="acc">${s.ser}</span><br><br><span style="font-style:italic">${s.info}</span>`);
+  }
+  draw();
+}));
+
+// Toggle AFM serie
+document.querySelectorAll('[data-as]').forEach(b=>b.addEventListener('click',()=>{
+  b.classList.toggle('on');draw();
+}));
+// Campioni AFM
+document.querySelectorAll('[data-as-s]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.asS;
+  document.querySelectorAll('[data-as-s]').forEach(x=>x.classList.remove('on'));
+  if(selSamp===k){selSamp=null;hideInfo();}
+  else{
+    selSamp=k;b.classList.add('on');
+    const s=AFM_SAMP[k];
+    const tot=s.A+s.F+s.M;
+    showInfo(`<b>${s.n}</b><br><b>A:</b><span class="val"> ${s.A}%</span> <b>F:</b><span class="val"> ${s.F}%</span> <b>M:</b><span class="val"> ${s.M}%</span><br><b>A/(A+F+M):</b><span class="val"> ${(s.A/tot*100).toFixed(0)}%</span><br><b>Serie:</b> <span class="acc">${s.ser}</span>`);
+  }
+  draw();
+}));
+
+// Percorsi K2O
+document.querySelectorAll('[data-perc]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.perc;PERCORSI[k].show=!PERCORSI[k].show;
+  b.classList.toggle('on',PERCORSI[k].show);draw();
+}));
+// Campioni K2O
+document.querySelectorAll('[data-ks]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.ks;
+  document.querySelectorAll('[data-ks]').forEach(x=>x.classList.remove('on'));
+  if(selSamp===k){selSamp=null;hideInfo();}
+  else{
+    selSamp=k;b.classList.add('on');
+    const s=SAMP[k];if(!s)return;
+    showInfo(`<b>${s.n}</b><br><b>SiO₂:</b><span class="val"> ${s.s}%</span> &nbsp; <b>K₂O:</b><span class="val"> ${s.k}%</span><br><b>Serie:</b> <span class="acc">${s.ser}</span><br><br><span style="font-style:italic">${s.info}</span>`);
+  }
+  draw();
+}));
+// Campioni NK
+document.querySelectorAll('[data-nk]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.nk;
+  document.querySelectorAll('[data-nk]').forEach(x=>x.classList.remove('on'));
+  if(selSamp===k){selSamp=null;hideInfo();}
+  else{selSamp=k;b.classList.add('on');}
+  draw();
+}));
+
+// Animazione percorsi
+document.getElementById('btnAnim').addEventListener('click',()=>{
+  if(animOn){animOn=false;if(animRaf){cancelAnimationFrame(animRaf);animRaf=null;}document.getElementById('btnAnim').textContent='▶ Anima';}
+  else{
+    if(animT>=1)animT=0;
+    animOn=true;document.getElementById('btnAnim').textContent='⏸ Pausa';
+    function anim(ts){
+      if(!animOn)return;
+      if(lastTs!==null)animT=Math.min(1,animT+(ts-lastTs)/1000*0.18);
+      lastTs=ts;draw();
+      if(animT<1&&animOn){animRaf=requestAnimationFrame(anim);}
+      else{animOn=false;document.getElementById('btnAnim').textContent='▶ Anima';}
+    }
+    animRaf=requestAnimationFrame(anim);
+  }
+});
+document.getElementById('btnReset').addEventListener('click',()=>{
+  animOn=false;animT=0;lastTs=null;if(animRaf){cancelAnimationFrame(animRaf);animRaf=null;}
+  document.getElementById('btnAnim').textContent='▶ Anima';draw();
+});
+
+// Resize
+function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;draw();}
+window.addEventListener('resize',resize);
+document.getElementById('ibar').textContent='TAS: Total Alkali vs Silica — La linea M-K separa alcalino da subalcalino';
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>

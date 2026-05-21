@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Rocce Mafiche e Ultramafiche</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--panel:#111318;--border:#1e2230;--accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;--text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.tabs{display:flex;gap:.2rem;margin-left:auto}
+.tab{padding:.22rem .8rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.tab.on,.tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.4rem;overflow-y:auto}
+.sl{font-size:.5rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.2rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.75rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.5rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.07)}
+.info{background:#070910;border:1px solid var(--border);border-radius:3px;padding:.4rem .5rem;font-size:.62rem;line-height:1.8;color:var(--muted);font-family:'Crimson Pro',serif}
+.info b{color:var(--text);font-style:normal}
+.cw{flex:1;min-width:0;position:relative}
+canvas{width:100%;height:100%;display:block}
+#infoBox{position:absolute;bottom:10px;right:10px;width:245px;background:rgba(7,9,14,.93);border:1px solid var(--border);border-radius:5px;padding:.55rem .75rem;font-family:'Crimson Pro',serif;font-size:.62rem;line-height:1.8;color:var(--muted);pointer-events:none;display:none}
+#infoBox b{color:var(--text);font-style:normal;font-size:.66rem}
+.val{color:var(--accent);font-family:'Space Mono',monospace;font-size:.6rem}
+.acc{color:var(--accent3)}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);font-size:.58rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Rocce Mafiche &amp; Ultramafiche &mdash; Classificazione IUGS</h1>
+  <div class="tabs">
+    <button class="tab on"  data-tab="olpxcpx">Ol-Opx-Cpx</button>
+    <button class="tab"     data-tab="gabbri">Ol-Px-Plag</button>
+    <button class="tab"     data-tab="geodin">Geodinamica</button>
+    <button class="tab"     data-tab="facies">Facies Mantello</button>
+  </div>
+</header>
+<div class="main">
+
+<!-- SB OL-OPX-CPX -->
+<aside class="sb" id="sbOlpxcpx">
+  <div>
+    <div class="sl">Rocce</div>
+    <button class="btn" data-u="Dunite">Dunite</button>
+    <button class="btn" data-u="Harzburgite">Harzburgite</button>
+    <button class="btn" data-u="Lherzolite">Lherzolite</button>
+    <button class="btn" data-u="Wehrlite">Wehrlite</button>
+    <button class="btn" data-u="Ortopirossenite">Ortopirossenite</button>
+    <button class="btn" data-u="Websterite">Websterite</button>
+    <button class="btn" data-u="Clinopirossenite">Clinopirossenite</button>
+  </div>
+  <div class="info"><b>Ol-Opx-Cpx (IUGS 1989)</b><br>Classificazione delle rocce ultramafiche basata sui minerali femici principali.<br><br>Ol = Olivina<br>Opx = Ortopirosseno<br>Cpx = Clinopirosseno<br><br>Muovere il mouse o selezionare una roccia.</div>
+</aside>
+
+<!-- SB GABBRI -->
+<aside class="sb" id="sbGabbri" style="display:none">
+  <div>
+    <div class="sl">Rocce</div>
+    <button class="btn" data-g="Dunite">Dunite</button>
+    <button class="btn" data-g="Wehrlite">Wehrlite</button>
+    <button class="btn" data-g="Olivin-Pirossenite">Olivin-Pirossenite</button>
+    <button class="btn" data-g="Pirossenite">Pirossenite</button>
+    <button class="btn" data-g="Troctolite">Troctolite</button>
+    <button class="btn" data-g="Gabbro-Olivinico">Gabbro Olivinico</button>
+    <button class="btn" data-g="Gabbro">Gabbro / Norite</button>
+    <button class="btn" data-g="Anortosite">Anortosite</button>
+  </div>
+  <div class="info"><b>Ol-Px-Plag (IUGS 1989)</b><br>Classificazione delle rocce basiche e ultramafiche con plagioclasio.<br><br>Ol = Olivina<br>Px = Pirosseni (Opx+Cpx)<br>Plag = Plagioclasio<br><br>Copre la serie dal peridotite al gabbro.</div>
+</aside>
+
+<!-- SB GEODINAMICA -->
+<aside class="sb" id="sbGeodin" style="display:none">
+  <div>
+    <div class="sl">Contesto</div>
+    <button class="btn on" data-geo="ofiolitico">🔵 Sequenza ofiolitica</button>
+    <button class="btn"    data-geo="arco">🟢 Mantello d'arco</button>
+    <button class="btn"    data-geo="cratonico">🟠 Mantello cratonico</button>
+    <button class="btn"    data-geo="rift">🔴 Rift / Hotspot</button>
+  </div>
+  <div class="info"><b>Geodinamica</b><br>Distribuzione delle rocce mafiche e ultramafiche nei diversi contesti tettonici.<br><br>Le rocce ultramafiche affiorano principalmente nelle ofioliti, nei complessi cratonici e nelle zone di rift.</div>
+</aside>
+
+<!-- SB FACIES -->
+<aside class="sb" id="sbFacies" style="display:none">
+  <div>
+    <div class="sl">Facies</div>
+    <button class="btn on" data-f="plag">Facies Plagioclasio</button>
+    <button class="btn on" data-f="spin">Facies Spinello</button>
+    <button class="btn on" data-f="gran">Facies Granato</button>
+    <button class="btn"    data-f="diam">Facies Diamante (UHP)</button>
+  </div>
+  <div>
+    <div class="sl">Percorsi geodinamici</div>
+    <button class="btn" data-fp="subduzione">● Subduzione oceano</button>
+    <button class="btn" data-fp="risalita">● Risalita astenosfera</button>
+    <button class="btn" data-fp="craton">● Radice cratonico</button>
+  </div>
+  <div class="info"><b>Facies del Mantello</b><br>Campi P-T di stabilità dei minerali principali nelle peridotiti.<br>Basato su Green &amp; Ringwood (1970), O'Neill (1981).</div>
+</aside>
+
+<div class="cw"><canvas id="C"></canvas><div id="infoBox"></div></div>
+</div>
+<div class="ibar" id="ibar">Ol-Opx-Cpx: classificazione IUGS delle rocce ultramafiche</div>
+
+<script>
+// =====================================================================
+// DATI
+// =====================================================================
+// Coordinate baricentriche (Ol, Opx, Cpx) normalizzate 0-100
+// Per il triangolo Ol-Opx-Cpx:
+//   Ol = vertice TOP
+//   Opx = vertice BOTTOM-LEFT
+//   Cpx = vertice BOTTOM-RIGHT
+
+const ULTRA = [
+  {n:'Dunite',col:'#2d6e1f',v:[[100, 0, 0], [90, 10, 0], [90, 0, 10]],
+   min:'Olivina >90%, Cr-spinello accessorio',SiO2:'38–42%',dens:'3.27–3.35',
+   giac:'Podiformi in ofioliti, mantello litosferico',
+   note:"Roccia più abbondante del mantello superiore. Fonte primaria di Ni e Cr."},
+  {n:'Harzburgite',col:'#3a7a28',v:[[90, 10, 0], [40, 60, 0], [40, 54, 6], [90, 0, 10]],
+   min:'Olivina 40–90% + Opx >5%, Cpx/(Cpx+Opx) <10%, Cr-spinello',SiO2:'42–46%',dens:'3.28–3.32',
+   giac:'Mantello depleto sotto dorsali oceaniche, ofioliti',
+   note:"Peridotite depleta: ha perso il componente basaltico per fusione parziale."},
+  {n:'Lherzolite',col:'#4a8a35',v:[[90, 10, 0], [40, 54, 6], [40, 6, 54], [90, 0, 10]],
+   min:'Olivina 40–90% + Opx 5–40% + Cpx 5–40%, Cpx/(Cpx+Opx) 10–90%, spinello o granato',SiO2:'43–46%',dens:'3.28–3.35',
+   giac:'Mantello litosferico fertile, xenoliti nei basalti alcalini',
+   note:"Peridotite fertile: composizione più simile al mantello primitivo. Sorgente dei basalti."},
+  {n:'Wehrlite',col:'#5a9a40',v:[[90, 0, 10], [40, 6, 54], [40, 0, 60]],
+   min:'Olivina 40–90% + Cpx >5%, Cpx/(Cpx+Opx) >90%, Opx <5%',SiO2:'41–45%',dens:'3.25–3.32',
+   giac:'Cumulati in intrusioni mafiche, mantello metasomatizzato',
+   note:"Forma per metasomatismo del mantello o come cumulato in camere magmatiche."},
+  {n:'Ortopirossenite',col:'#8a6030',v:[[0, 100, 0], [0, 90, 10], [40, 54, 6], [40, 60, 0]],
+   min:'Opx >90% (enstatite-iperstene), accessori Ol, Cpx, spinello',SiO2:'52–56%',dens:'3.26–3.30',
+   giac:'Cumulati nelle intrusioni layered (Bushveld, Stillwater)',
+   note:"Rara in affioramento. Forma come cumulato ortopirossenico."},
+  {n:'Websterite',col:'#6a5040',v:[[0, 90, 10], [0, 10, 90], [40, 6, 54], [40, 54, 6]],
+   min:'Opx 10–90% + Cpx 10–90%, Ol <40%',SiO2:'50–55%',dens:'3.24–3.30',
+   giac:'Cumulati in ofioliti, intrusioni stratificate, xenoliti',
+   note:"Pirossenite mista. Comune nei livelli cumulatici delle sequenze ofiolitiche."},
+  {n:'Clinopirossenite',col:'#4a4080',v:[[0, 10, 90], [0, 0, 100], [40, 0, 60], [40, 6, 54]],
+   min:'Cpx >90% (diopside-augite), accessori Ol, Opx, spinello',SiO2:'50–54%',dens:'3.22–3.28',
+   giac:'Cumulati in intrusioni basiche alcaline, xenoliti',
+   note:"Rara. Indica cristallizzazione da magma basaltico ricco in Ca e Mg."},
+];
+
+// Gabbri: triangolo Ol-Px-Plag
+// Ol=top, Px=bottom-left, Plag=bottom-right
+const GABBRI=[
+  {n:'Dunite',             col:'#2d6e1f',
+   v:[[100,0,0],[90,10,0],[90,0,10]],
+   min:'Olivina >90%',SiO2:'38–42%',
+   giacit:'Zona basale ofioliti, plutoni basici',
+   note:'Come nel triangolo Ol-Opx-Cpx.'},
+  {n:'Wehrlite',           col:'#5a9a40',
+   v:[[90,10,0],[40,60,0],[40,0,60],[90,0,10]],
+   min:'Olivina 40–90% + Pirosseni, Plag <10%',SiO2:'41–46%',
+   giacit:'Cumulati basali intrusioni mafiche',
+   note:'Olivina dominante con pirosseni, praticamente privo di plagioclasio.'},
+  {n:'Olivin-Pirossenite', col:'#7a5530',
+   v:[[40,60,0],[0,100,0],[0,60,40],[40,0,60]],
+   min:'Pirosseni >60%, Olivina 40–10%, Plag <10%',SiO2:'46–52%',
+   giacit:'Zone cumulate nelle intrusioni layered',
+   note:'Zona di transizione tra peridotite e pirossenite.'},
+  {n:'Pirossenite',        col:'#8a6035',
+   v:[[0,100,0],[0,60,40],[10,60,30],[10,90,0]],
+   min:'Pirosseni >60%, Ol <10%, Plag 10–40%',SiO2:'48–54%',
+   giacit:'Intrusioni stratificate (Bushveld, Stillwater, Skaergaard)',
+   note:'Cumulati da magma basaltico. Importante sorgente di Cr, Ni, PGE.'},
+  {n:'Troctolite',         col:'#3a4a80',
+   v:[[40,0,60],[0,0,100],[0,40,60]],
+   min:'Olivina 10–40% + Plagioclasio >60%, Pirosseni <10%',SiO2:'44–50%',
+   giacit:'Crosta ocenica inferiore, zona di transizione ofioliti',
+   note:'Associazione olivina+plagioclasio tipica della cristallizzazione di magmi MORB.'},
+  {n:'Gabbro Olivinico',   col:'#2a4a7a',
+   v:[[40,0,60],[0,40,60],[0,10,90],[40,0,60]],
+   min:'Plagioclasio (An50+) 40–90%, Olivina 10–40%, Cpx (augite)',SiO2:'46–52%',
+   giacit:'Crosta ocenica inferiore, ofioliti (zona gabbrica)',
+   note:'Tipico della cristallizzazione di magmi MORB a bassa pressione.'},
+  {n:'Gabbro / Norite',    col:'#1a3a6a',
+   v:[[10,60,30],[0,60,40],[0,10,90],[0,40,60],[10,0,90]],
+   min:'Gabbro: Plag(An50+)+Cpx(augite). Norite: Plag+Opx(iperstene)',SiO2:'45–55%',
+   giacit:'Crosta ocenica inferiore, plutoni basici continentali, LMI',
+   note:'Il gabbro è l\'equivalente plutonicodella basalto. La norite è più ricca in Opx.'},
+  {n:'Anortosite',         col:'#5a5a9a',
+   v:[[0,10,90],[0,0,100],[10,0,90]],
+   min:'Plagioclasio >90% (An60-An80), accessori: Cpx, Ol, ilmenite',SiO2:'48–56%',
+   giacit:'Complessi anortositici Proterozoici, crosta lunare, ofioliti',
+   note:'Forma per accumulo di plagioclasio. I grandi complessi (Adirondacks, Labrador) sono Proterozoici.'},
+];
+
+// Geodinamica - schemi
+const GEODIN_DATA={
+  ofiolitico:{n:'Sequenza Ofiolitica',col:'#00d4ff',
+    strati:[
+      {n:'Sedimenti pelagici',     col:'#2a3a5a',h:0.08,rocce:'Radiolariti, calcilutiti pelagiche'},
+      {n:'Basalti a cuscino (MORB)',col:'#1a4a7a',h:0.12,rocce:'Basalto tholeiitico N-MORB, struttura a pillows'},
+      {n:'Complesso filoniano',     col:'#1a5a6a',h:0.10,rocce:'Dicchi basaltici paralleli (sheeted dykes)'},
+      {n:'Gabbri isotropi',         col:'#1a4a5a',h:0.10,rocce:'Gabbro, gabbro-norite, troctolite'},
+      {n:'Gabbri laminati',         col:'#2a5a4a',h:0.12,rocce:'Gabbro laminato, websterite, clinopirossenite (cumulati)'},
+      {n:'Zona di transizione',     col:'#3a5a3a',h:0.08,rocce:'Dunite, wehrlite, harzburgite (con cromite podiforme)'},
+      {n:'Mantello peridotitico',   col:'#2a4a2a',h:0.30,rocce:'Harzburgite (depleta), lherzolite, dunite'},
+    ],
+    desc:'La sequenza ofiolitica completa (tipo Penrose 1972) rappresenta un frammento di crosta oceanica e mantello litosferico obdotto su crosta continentale. La sezione tipo è spessa ~10 km ed è strutturata con una precisa zonazione litologica.'},
+  arco:{n:'Mantello d\'Arco',col:'#a8ff78',
+    strati:[
+      {n:'Arco vulcanico',          col:'#5a3a1a',h:0.12,rocce:'Andesite, dacite (calcalcalina)'},
+      {n:'Crosta continentale',     col:'#4a3a2a',h:0.14,rocce:'Granodiorite, tonalite, gneiss'},
+      {n:'Crosta inferiore',        col:'#3a3a3a',h:0.10,rocce:'Granuliti, eclogiti, gabbri'},
+      {n:'Cuneo del mantello',      col:'#3a5a3a',h:0.20,rocce:'Lherzolite a spinello (metasomatizzata da fluidi)'},
+      {n:'Lastra subducente',       col:'#1a2a4a',h:0.14,rocce:'Basalto+sedimenti→eclogite. Rilascio di H₂O'},
+      {n:'Mantello sub-slab',       col:'#2a3a2a',h:0.20,rocce:'Harzburgite depleta (già fusa alla dorsale)'},
+    ],
+    desc:'Il cuneo del mantello sopra la lastra subducente viene metasomatizzato dai fluidi acquosi rilasciati dalle fasi idrate della lastra. Questo abbassa il solidus del peridotite di ~100°C, inducendo fusione parziale e producendo magmi calcalcalini ricchi in Al e impoveriti in Nb e Ta.'},
+  cratonico:{n:'Mantello Cratonico',col:'#ff6b35',
+    strati:[
+      {n:'Crosta cratonico superiore',col:'#5a4a2a',h:0.10,rocce:'Graniti, gneiss (Archeani, >2.5 Ga)'},
+      {n:'Crosta cratonico inferiore',col:'#4a3a2a',h:0.10,rocce:'Granuliti mafiche, anortositi'},
+      {n:'Radice litosfericasup.',   col:'#3a5a3a',h:0.15,rocce:'Lherzolite a spinello'},
+      {n:'Radice litosfericainf.',   col:'#2a4a2a',h:0.25,rocce:'Lherzolite a granato (depleta, fredda)'},
+      {n:'Zona diamante',            col:'#2a2a3a',h:0.15,rocce:'Lherzolite a granato+diamante, kimberliti'},
+      {n:'Astenosfera',              col:'#1a1a2a',h:0.15,rocce:'Lherzolite fertile (zona di bassa velocità)'},
+    ],
+    desc:'I cratons Archeani hanno una radice litosferia spessa fino a 250-300 km, molto depleta e fredda. Questa stabilità è dovuta alla bassa densità della radice depleta che compensa la sua spessore. Le kimberliti erutrano attraverso questa radice portando in superficie xenoliti di lherzolite a granato e diamanti.'},
+  rift:{n:'Rift / Hotspot',col:'#ff4444',
+    strati:[
+      {n:'Rift valley / Isola',     col:'#5a3a1a',h:0.08,rocce:'Basalto alcalino, tefrite, fonolite'},
+      {n:'Crosta assottigliata',    col:'#4a3a2a',h:0.10,rocce:'Gabbro, basalto (crosta in estensione)'},
+      {n:'Mantello litosferico',    col:'#3a5a3a',h:0.18,rocce:'Lherzolite a spinello (metasomatizzata)'},
+      {n:'Zona fusione parziale',   col:'#6a3a1a',h:0.14,rocce:'Lherzolite parzialmente fusa → basalto alcalino'},
+      {n:'Plume / Astenosfera',     col:'#4a1a1a',h:0.30,rocce:'Lherzolite fertile calda (T+150°C rispetto mantello normale)'},
+      {n:'Mantello profondo',       col:'#1a1a1a',h:0.10,rocce:'Perovskite, wadsleyite (zona transizione 410 km)'},
+    ],
+    desc:'Nel rift continentale e negli hotspot, il mantello astenosferico risale per decompressione adiabatica. La fusione parziale inizia a ~100 km di profondità nella lherzolite a granato, producendo basalti alcalini ricchi in elementi incompatibili (Nb, Ta, Ti, REE).'},
+};
+
+// Facies del mantello - P-T
+const FACIES_DATA=[
+  {n:'Facies Plagioclasio',col:'#6a4a8a',
+   Tmin:600,Tmax:1400,Pmin:0,Pmax:0.9,
+   min:'Ol+Opx+Cpx+Plagioclasio (An-rich)',
+   prof:'0–30 km',
+   note:'Stabile solo a bassa pressione. Plagioclasio instabile >~30 km per reazione: Plag+Ol→Spinello+Opx+Cpx. Tipica della crosta oceanica inferiore.'},
+  {n:'Facies Spinello',    col:'#3a6a4a',
+   Tmin:600,Tmax:1500,Pmin:0.9,Pmax:2.5,
+   min:'Ol+Opx+Cpx+Cr-Al-spinello',
+   prof:'30–80 km',
+   note:'La facies più comune nelle xenoliti del mantello litosferico. Confine con facies granato dipende dalla composizione (Cr#). Transizione spinello→granato a ~2.0-2.5 GPa.'},
+  {n:'Facies Granato',     col:'#5a2a6a',
+   Tmin:700,Tmax:1600,Pmin:2.5,Pmax:6.0,
+   min:'Ol+Opx+Cpx+Granato piropico (Py-Alm)',
+   prof:'80–200 km',
+   note:'Mantello litosferico profondo e astenosfera. Il granato incorpora elementi pesanti (Y, HREE). La transizione granato→spinello inversa (pressione decrescente) libera REE.'},
+  {n:'Facies Diamante (UHP)',col:'#2a2a4a',
+   Tmin:900,Tmax:1700,Pmin:4.5,Pmax:10.0,
+   min:'Ol+Opx+Cpx+Granato+Diamante (C)',
+   prof:'>150 km',
+   note:'Graphite→Diamond a ~4.5 GPa (~150 km). I diamanti nelle kimberliti sono xenocristalli da questa profondità. Inclusioni di olivina e pirosseni nel diamante confermano l\'ambiente del mantello.'},
+];
+
+// Percorsi P-T facies
+const FACIES_PATHS={
+  subduzione:{n:'Subduzione oceanica',col:'#00d4ff',show:false,
+    pts:[[200,0.5],[400,2.0],[600,4.5],[800,7.0],[900,9.5]],
+    desc:'La lastra subducente segue un percorso freddo. La transizione spinello→granato avviene a basse T. La disidratazione della lastra (serpentino→antigorite→olivina) rilascia fluidi che innescano la fusione nel cuneo.'},
+  risalita:{n:'Risalita astenosferica',col:'#ff6b35',show:false,
+    pts:[[1400,4.0],[1350,3.0],[1300,2.0],[1250,1.2],[1200,0.5]],
+    desc:'La risalita adiabatica interseca il solidus del peridotite (~1 GPa) iniziando la fusione parziale. Il percorso attraversa granato→spinello→plagioclasio. Tipico di dorsali oceaniche e hotspot.'},
+  craton:{n:'Radice cratonico',col:'#ffcc44',show:false,
+    pts:[[400,1.5],[600,2.5],[800,3.5],[900,4.5],[950,5.5]],
+    desc:'Il geoterma cratonico è molto freddo per la spessa litosfera stabile. La radice rimane nella facies granato anche a profondità moderate. Il diamante è stabile in questa regione (>4.5 GPa).'},
+};
+
+// =====================================================================
+// STATO
+// =====================================================================
+const C=document.getElementById('C');
+const ctx=C.getContext('2d');
+const box=document.getElementById('infoBox');
+let tab='olpxcpx', selU=null, selG=null, geodinCtx='ofiolitico';
+let faciesShow={plag:true,spin:true,gran:true,diam:false};
+let pathShow={subduzione:false,risalita:false,craton:false};
+
+function showInfo(h){box.innerHTML=h;box.style.display='block';}
+function hideInfo(){box.style.display='none';}
+function lbl(t,x,y,fill,font,align='center'){
+  ctx.font=font;ctx.textAlign=align;
+  ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+  ctx.strokeText(t,x,y);ctx.fillStyle=fill;ctx.fillText(t,x,y);
+}
+
+// =====================================================================
+// TRIANGOLO GENERICO
+// =====================================================================
+function drawTriangle(fields, vA, vB, vC, labels, labSub, selName){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pad=65;
+  const tw=Math.min(W-pad*2-40, H-pad*2);
+  const th=Math.floor(tw*0.866);
+  const tx0=Math.floor((W-tw)/2)+20, ty0=Math.floor((H-th)/2);
+
+  // Vertici canvas: A=top, B=bottom-left, C=bottom-right
+  const Ax=tx0+tw/2, Ay=ty0;
+  const Bx=tx0,      By=ty0+th;
+  const Cx=tx0+tw,   Cy=ty0+th;
+
+  function toXY(a,b,c){
+    const tot=a+b+c||1;
+    const an=a/tot,bn=b/tot,cn=c/tot;
+    return [an*Ax+bn*Bx+cn*Cx, an*Ay+bn*By+cn*Cy];
+  }
+  function invXY(px,py){
+    const D=(By-Cy)*(Cx-Ax)+(Cx-Bx)*(Ay-Cy);
+    if(!D)return null;
+    const a=((By-Cy)*(px-Cx)+(Cx-Bx)*(py-Cy))/D;
+    const b=((Cy-Ay)*(px-Cx)+(Ax-Cx)*(py-Cy))/D;
+    const c=1-a-b;
+    if(a<-0.01||b<-0.01||c<-0.01)return null;
+    return {a:a*100,b:b*100,c:c*100};
+  }
+
+  // Sfondo triangolo
+  ctx.beginPath();ctx.moveTo(Ax,Ay);ctx.lineTo(Bx,By);ctx.lineTo(Cx,Cy);ctx.closePath();
+  ctx.fillStyle='#0d1018';ctx.fill();
+
+  // Griglia interna
+  ctx.strokeStyle='rgba(30,34,48,0.8)';ctx.lineWidth=0.6;
+  [20,40,60,80].forEach(p=>{
+    const t=p/100;
+    function lerp2(x1,y1,x2,y2,tt){return [x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
+    const[x1,y1]=lerp2(Ax,Ay,Bx,By,t);const[x2,y2]=lerp2(Cx,Cy,Bx,By,t);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    const[x3,y3]=lerp2(Ax,Ay,Cx,Cy,t);const[x4,y4]=lerp2(Bx,By,Cx,Cy,t);
+    ctx.beginPath();ctx.moveTo(x3,y3);ctx.lineTo(x4,y4);ctx.stroke();
+    const[x5,y5]=lerp2(Bx,By,Ax,Ay,t);const[x6,y6]=lerp2(Cx,Cy,Ax,Ay,t);
+    ctx.beginPath();ctx.moveTo(x5,y5);ctx.lineTo(x6,y6);ctx.stroke();
+  });
+
+  // Settori
+  fields.forEach(f=>{
+    const hi=selName===f.n;
+    ctx.beginPath();
+    f.v.forEach(([a,b,c],i)=>{
+      const[x,y]=toXY(a,b,c);i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle=f.col;ctx.globalAlpha=hi?0.85:0.55;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.7)':'rgba(200,204,216,0.2)';
+    ctx.lineWidth=hi?1.8:0.8;ctx.stroke();
+    // Label
+    const cx2=f.v.reduce((s,[a])=>s+a,0)/f.v.length;
+    const cy2=f.v.reduce((s,[,b])=>s+b,0)/f.v.length;
+    const cz2=f.v.reduce((s,[,,c])=>s+c,0)/f.v.length;
+    const[lx,ly]=toXY(cx2,cy2,cz2);
+    // Spezza il nome su più righe se lungo
+    const words=f.n.split('-');
+    const lines=words.length>1?[words[0],words.slice(1).join('-')]:[f.n];
+    lines.forEach((ln,i)=>lbl(ln,lx,ly+(i-(lines.length-1)/2)*14,
+      hi?'#fff':'rgba(230,234,248,0.9)','bold 10px Crimson Pro'));
+  });
+
+  // Bordo
+  ctx.beginPath();ctx.moveTo(Ax,Ay);ctx.lineTo(Bx,By);ctx.lineTo(Cx,Cy);ctx.closePath();
+  ctx.strokeStyle='rgba(200,204,216,0.7)';ctx.lineWidth=2;ctx.stroke();
+
+  // % sui lati
+  ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';
+  [20,40,60,80].forEach(p=>{
+    const t=p/100;
+    const[x,y]=[Ax+(Bx-Ax)*t+(-12),Ay+(By-Ay)*t];
+    ctx.textAlign='right';ctx.fillText(p+'%',x,y+3);
+  });
+
+  // Vertici
+  lbl(labels[0],Ax,Ay-16,'#c8ccd8','bold 14px Space Mono');
+  if(labSub[0])lbl(labSub[0],Ax,Ay-30,'#8a8e9a','italic 10px Crimson Pro');
+  lbl(labels[1],Bx-14,By+8,'#c8ccd8','bold 14px Space Mono','right');
+  if(labSub[1])lbl(labSub[1],Bx-14,By+22,'#8a8e9a','italic 10px Crimson Pro','right');
+  lbl(labels[2],Cx+14,Cy+8,'#c8ccd8','bold 14px Space Mono','left');
+  if(labSub[2])lbl(labSub[2],Cx+14,Cy+22,'#8a8e9a','italic 10px Crimson Pro','left');
+
+  return {toXY,invXY,Ax,Ay,Bx,By,Cx,Cy};
+}
+
+// =====================================================================
+// OL-OPX-CPX
+// =====================================================================
+let _triU=null;
+function drawOlOpxCpx(){
+  _triU=drawTriangle(ULTRA,
+    'Ol','Opx','Cpx',
+    ['Ol','Opx','Cpx'],
+    ['Olivina','Ortopirosseno','Clinopirosseno'],
+    selU);
+  if(selU){
+    const f=ULTRA.find(f=>f.n===selU);
+    if(f)showInfo(`<b>${f.n}</b><br>
+      <b>Minerali:</b> <span class="acc">${f.min}</span><br>
+      <b>SiO₂:</b> <span class="val">${f.SiO2}</span> &nbsp; <b>Densità:</b> <span class="val">${f.dens} g/cm³</span><br>
+      <b>Giacitura:</b> ${f.giacit}<br><br>
+      <span style="font-style:italic;font-size:.6rem">${f.note}</span>`);
+  }
+}
+
+// =====================================================================
+// OL-PX-PLAG
+// =====================================================================
+let _triG=null;
+function drawGabbri(){
+  _triG=drawTriangle(GABBRI,
+    'Ol','Px','Plag',
+    ['Ol','Px','Plag'],
+    ['Olivina','Pirosseni','Plagioclasio'],
+    selG);
+  if(selG){
+    const f=GABBRI.find(f=>f.n===selG);
+    if(f)showInfo(`<b>${f.n}</b><br>
+      <b>Minerali:</b> <span class="acc">${f.min}</span><br>
+      <b>SiO₂:</b> <span class="val">${f.SiO2}</span><br>
+      <b>Giacitura:</b> ${f.giacit}<br><br>
+      <span style="font-style:italic;font-size:.6rem">${f.note}</span>`);
+  }
+}
+
+// =====================================================================
+// GEODINAMICA
+// =====================================================================
+function drawGeodin(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const g=GEODIN_DATA[geodinCtx];
+  const pL=180,pR=30,pT=30,pB=30;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  let y=pT;
+  g.strati.forEach((s,i)=>{
+    const sh=Math.floor(s.h*gH);
+    ctx.fillStyle=s.col;ctx.globalAlpha=0.7;
+    ctx.fillRect(pL,y,gW,sh);ctx.globalAlpha=1;
+    ctx.strokeStyle='rgba(200,204,216,0.15)';ctx.lineWidth=0.8;
+    ctx.strokeRect(pL,y,gW,sh);
+    // Nome strato
+    lbl(s.n,pL+gW/2,y+sh/2+4,'rgba(220,224,240,0.9)','bold 11px Crimson Pro');
+    // Rocce (a destra)
+    lbl(s.rocce,pL+gW-8,y+sh/2+4,'rgba(180,200,220,0.7)','italic 9px Crimson Pro','right');
+    // Profondità approssimativa (a sinistra)
+    const depths=[0,2,8,20,35,60,100,180];
+    ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';ctx.textAlign='right';
+    ctx.fillText(`~${depths[i]||'?'} km`,pL-8,y+10);
+    y+=sh;
+  });
+  // Asse profondità
+  ctx.font='italic 10px Crimson Pro';ctx.fillStyle='#8a8e9a';ctx.textAlign='center';
+  ctx.save();ctx.translate(pL-55,pT+gH/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('Profondità approssimativa (km)',0,0);ctx.restore();
+  // Titolo
+  lbl(g.n,pL+gW/2,pT-12,g.col,'bold 12px Crimson Pro');
+  // Info
+  showInfo(`<b>${g.n}</b><br><br><span style="font-style:italic;font-size:.6rem">${g.desc}</span>`);
+}
+
+// =====================================================================
+// FACIES MANTELLO
+// =====================================================================
+function drawFacies(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=65,pR=20,pT=30,pB=50;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  const Tmin=400,Tmax=1800,Pmin=0,Pmax=10;
+  const tx=t=>pL+(t-Tmin)/(Tmax-Tmin)*gW;
+  const ty=p=>pT+gH-(p-Pmin)/(Pmax-Pmin)*gH;
+  // Profondità approssimativa (destra)
+  const depth=p=>Math.round(p/0.033); // ~1 GPa ogni 33 km
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  for(let t=400;t<=1800;t+=200){
+    ctx.beginPath();ctx.moveTo(tx(t),pT);ctx.lineTo(tx(t),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(t+'°C',tx(t),pT+gH+18);
+  }
+  for(let p=0;p<=10;p+=1){
+    ctx.beginPath();ctx.moveTo(pL,ty(p));ctx.lineTo(pL+gW,ty(p));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(p.toFixed(0),pL-6,ty(p)+4);
+    // Profondità
+    ctx.textAlign='left';ctx.fillStyle='rgba(138,142,154,0.5)';
+    ctx.fillText(`~${depth(p)} km`,pL+gW+4,ty(p)+4);
+    ctx.fillStyle='#8a8e9a';
+  }
+  // Assi
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('Temperatura (°C)',pL+gW/2,pT+gH+40);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Pressione (GPa)',0,0);ctx.restore();
+
+  // Confini tra facies (linee empiriche da Green & Ringwood 1970, O'Neill 1981)
+  // Plag→Spinello: ~0.9 GPa (quasi verticale, lieve dipendenza da T)
+  ctx.beginPath();ctx.setLineDash([6,4]);ctx.strokeStyle='rgba(150,100,200,0.6)';ctx.lineWidth=1.5;
+  ctx.moveTo(tx(700),ty(0.7));ctx.lineTo(tx(1400),ty(1.0));ctx.stroke();
+  lbl('Plag→Sp',tx(1000),ty(0.82),'rgba(150,100,200,0.6)','italic 9px Crimson Pro');
+
+  // Spinello→Granato: ~2.0-2.5 GPa, dipende da Cr#
+  ctx.beginPath();ctx.strokeStyle='rgba(100,150,100,0.6)';
+  ctx.moveTo(tx(700),ty(2.0));ctx.lineTo(tx(1500),ty(2.8));ctx.stroke();
+  lbl('Sp→Gt',tx(1100),ty(2.3),'rgba(100,180,100,0.6)','italic 9px Crimson Pro');
+
+  // Grafite→Diamante: ~4.5 GPa
+  ctx.beginPath();ctx.strokeStyle='rgba(100,100,180,0.5)';
+  ctx.moveTo(tx(700),ty(4.2));ctx.lineTo(tx(1700),ty(5.0));ctx.stroke();
+  lbl('Grafite→Diamante',tx(1200),ty(4.5),'rgba(130,130,200,0.5)','italic 9px Crimson Pro');
+  ctx.setLineDash([]);
+
+  // Solidus del peridotite secco (McKenzie & Bickle 1988)
+  ctx.beginPath();ctx.strokeStyle='rgba(255,100,30,0.7)';ctx.lineWidth=2;
+  let first=true;
+  for(let p=0;p<=10;p+=0.1){
+    const t=1100+135*p-5*p*p; // approssimazione
+    if(t<Tmin||t>Tmax){first=true;continue;}
+    if(first){ctx.moveTo(tx(t),ty(p));first=false;}else ctx.lineTo(tx(t),ty(p));
+  }
+  ctx.stroke();
+  lbl('Solidus peridotite',tx(1380),ty(3.5),'rgba(255,100,30,0.7)','italic 10px Crimson Pro','right');
+
+  // Facies colorate
+  FACIES_DATA.forEach(f=>{
+    const key=f.n.toLowerCase().includes('plag')?'plag':f.n.toLowerCase().includes('spin')?'spin':f.n.toLowerCase().includes('gran')?'gran':'diam';
+    if(!faciesShow[key])return;
+    ctx.fillStyle=f.col;ctx.globalAlpha=0.12;
+    ctx.fillRect(pL,ty(f.Pmax),gW,ty(f.Pmin)-ty(f.Pmax));
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=f.col;ctx.lineWidth=0.8;ctx.globalAlpha=0.3;
+    ctx.strokeRect(pL,ty(f.Pmax),gW,ty(f.Pmin)-ty(f.Pmax));ctx.globalAlpha=1;
+    const lpy=(ty(f.Pmin)+ty(f.Pmax))/2;
+    lbl(f.n,pL+60,lpy,f.col,'bold 11px Crimson Pro','left');
+    lbl(f.prof,pL+60,lpy+15,'rgba(180,184,200,0.5)','italic 9px Crimson Pro','left');
+  });
+
+  // Percorsi geodinamici
+  Object.entries(FACIES_PATHS).forEach(([k,p])=>{
+    if(!p.show)return;
+    ctx.beginPath();
+    p.pts.forEach(([t,pr],i)=>i?ctx.lineTo(tx(t),ty(pr)):ctx.moveTo(tx(t),ty(pr)));
+    ctx.strokeStyle=p.col;ctx.lineWidth=2.5;ctx.globalAlpha=0.85;ctx.stroke();ctx.globalAlpha=1;
+    // Frecce
+    for(let i=1;i<p.pts.length;i++){
+      const[t0,p0]=p.pts[i-1],[t1,p1]=p.pts[i];
+      const ang=Math.atan2(ty(p1)-ty(p0),tx(t1)-tx(t0));
+      ctx.save();ctx.translate((tx(t0)+tx(t1))/2,(ty(p0)+ty(p1))/2);ctx.rotate(ang);
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(-10,-5);ctx.lineTo(-10,5);ctx.closePath();
+      ctx.fillStyle=p.col;ctx.globalAlpha=0.7;ctx.fill();ctx.globalAlpha=1;ctx.restore();
+    }
+    const[tl,pl]=p.pts[p.pts.length-1];
+    lbl(p.n,tx(tl)+8,ty(pl),p.col,'bold 10px Crimson Pro','left');
+  });
+}
+
+// =====================================================================
+// DRAW
+// =====================================================================
+function draw(){
+  if(tab==='olpxcpx')drawOlOpxCpx();
+  else if(tab==='gabbri')drawGabbri();
+  else if(tab==='geodin')drawGeodin();
+  else drawFacies();
+}
+
+// =====================================================================
+// MOUSE
+// =====================================================================
+C.addEventListener('mousemove',e=>{
+  if(tab!=='olpxcpx'&&tab!=='gabbri')return;
+  const r=C.getBoundingClientRect();
+  const mx=(e.clientX-r.left)*(C.width/r.width);
+  const my=(e.clientY-r.top)*(C.height/r.height);
+  const tri=tab==='olpxcpx'?_triU:_triG;
+  if(!tri)return;
+  const coords=tri.invXY(mx,my);
+  if(!coords)return;
+  const {a,b,c}=coords;
+  const fields=tab==='olpxcpx'?ULTRA:GABBRI;
+  const f=fields.find(f=>{
+    // test se (a,b,c) è dentro il poligono f.v
+    function inPoly(pts,pa,pb,pc){
+      const n=pts.length; let inside=false; let j=n-1;
+      for(let i=0;i<n;i++){
+        const[ai,bi]=pts[i],[aj,bj]=pts[j];
+        if((bi>pb)!==(bj>pb)&&pa<(aj-ai)*(pb-bi)/(bj-bi)+ai)inside=!inside;
+        j=i;
+      }
+      return inside;
+    }
+    return inPoly(f.v,a,b,c);
+  });
+  if(f){
+    const key=tab==='olpxcpx'?selU:selG;
+    if(key!==f.n){
+      showInfo(`<b>${f.n}</b><br>
+        <b>Minerali:</b> <span class="acc">${f.min}</span><br>
+        <b>SiO₂:</b> <span class="val">${f.SiO2}</span><br>
+        <b>Giacitura:</b> ${f.giacit}`);
+    }
+  } else hideInfo();
+});
+C.addEventListener('mouseleave',()=>{
+  if(tab==='olpxcpx'&&!selU)hideInfo();
+  if(tab==='gabbri'&&!selG)hideInfo();
+});
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
+  tab=b.dataset.tab;
+  ['sbOlpxcpx','sbGabbri','sbGeodin','sbFacies'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={olpxcpx:'sbOlpxcpx',gabbri:'sbGabbri',geodin:'sbGeodin',facies:'sbFacies'};
+  const sb=document.getElementById(map[tab]);
+  sb.style.display='flex';sb.style.flexDirection='column';
+  selU=null;selG=null;hideInfo();
+  document.getElementById('ibar').textContent=
+    {olpxcpx:'Ol-Opx-Cpx: classificazione IUGS delle rocce ultramafiche (Le Maitre 2002)',
+     gabbri:'Ol-Px-Plag: classificazione IUGS delle rocce basiche e ultramafiche con plagioclasio',
+     geodin:'Geodinamica: distribuzione delle rocce mafiche e ultramafiche nei contesti tettonici',
+     facies:'Facies del mantello: stabilità P-T di plagioclasio, spinello e granato nel peridotite'}[tab];
+  if(tab==='geodin')showInfo(`<b>${GEODIN_DATA[geodinCtx].n}</b><br><span style="font-style:italic;font-size:.6rem">${GEODIN_DATA[geodinCtx].desc}</span>`);
+  draw();
+}));
+
+// Ul rocce
+document.querySelectorAll('[data-u]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.u;
+  document.querySelectorAll('[data-u]').forEach(x=>x.classList.remove('on'));
+  if(selU===k){selU=null;hideInfo();}else{selU=k;b.classList.add('on');}
+  draw();
+}));
+// Gabbri
+document.querySelectorAll('[data-g]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.g;
+  document.querySelectorAll('[data-g]').forEach(x=>x.classList.remove('on'));
+  if(selG===k){selG=null;hideInfo();}else{selG=k;b.classList.add('on');}
+  draw();
+}));
+// Geodin
+document.querySelectorAll('[data-geo]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-geo]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');geodinCtx=b.dataset.geo;draw();
+}));
+// Facies toggle
+document.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.f;faciesShow[k]=!faciesShow[k];b.classList.toggle('on',faciesShow[k]);draw();
+}));
+// Percorsi facies
+document.querySelectorAll('[data-fp]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.fp;FACIES_PATHS[k].show=!FACIES_PATHS[k].show;
+  b.classList.toggle('on',FACIES_PATHS[k].show);draw();
+}));
+
+// Resize
+function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;draw();}
+window.addEventListener('resize',resize);
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>
