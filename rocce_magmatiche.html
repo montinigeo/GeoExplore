@@ -63,7 +63,8 @@ canvas{width:100%;height:100%;display:block}
   </div>
   <div>
     <div class="sl">Rocce sottosaturate</div>
-    <button class="btn" data-fap='{"F":30,"AP":0.80}' data-plut="Foid Sienite"             data-volc="Fonolite">Foid Sienite</button>
+    <button class="btn" data-fap='{"F":30,"AP":0.95}' data-plut="Fsp. alc. foid-sienite"  data-volc="Fonolite alcalina">Fsp. alc. foid-sienite</button>
+    <button class="btn" data-fap='{"F":30,"AP":0.77}' data-plut="Foid Sienite"             data-volc="Fonolite">Foid Sienite</button>
     <button class="btn" data-fap='{"F":35,"AP":0.50}' data-plut="Foid Monzosienite"        data-volc="Fonolite tefritica">Foid Monzosienite</button>
     <button class="btn" data-fap='{"F":35,"AP":0.22}' data-plut="Foid Monzodiorite"        data-volc="Tefrifonolite">Foid Monzodiorite</button>
     <button class="btn" data-fap='{"F":35,"AP":0.05}' data-plut="Foid Diorite/Gabbro"      data-volc="Tefrite/Basanite">Foid Diorite/Gabbro</button>
@@ -163,25 +164,29 @@ const QAPF=[
 ];
 
 const FAP=[
-  {plut:'Foid sienite',              volc:'Fonolite',              col:'#6a1a6a',F:[10,60],AP:[0.65,1.0], sig:'fs', sigV:'Fo',
-   min:'Feldspatoidi>60%+Fsp alc.+Anfibolo alcalino',SiO2:'45–55%',strut:'Faneritica/Afanitica',giac:'Complessi alcalini, rift'},
-  {plut:'Foid monzosienite',         volc:'Fonolite tefritica',    col:'#5a2a7a',F:[10,60],AP:[0.35,0.65],sig:'fm', sigV:'FoTe',
+  // F = 10–60%: rocce propriamente sottosaturate (viola)
+  {plut:'Fsp. alc. foid-sienite',    volc:'Fonolite alcalina',     col:'#8a1a9a',F:[10,60],AP:[0.9,1.0],  sig:'fAs',sigV:'FoAlc',
+   min:'Feldspatoidi 10–60%+Fsp alcalino >90% dei fsp+Aegirina/Arfvedsonite',SiO2:'47–57%',strut:'Faneritica/Afanitica',giac:'Complessi alcalini sodici, rift maturo'},
+  {plut:'Foid sienite',              volc:'Fonolite',              col:'#6a1a8a',F:[10,60],AP:[0.65,0.9], sig:'fs', sigV:'Fo',
+   min:'Feldspatoidi 10–60%+Fsp alc.+Plagioclasio subordinato+Anfibolo alcalino',SiO2:'45–55%',strut:'Faneritica/Afanitica',giac:'Complessi alcalini, rift'},
+  {plut:'Foid monzosienite',         volc:'Fonolite tefritica',    col:'#5a2a9a',F:[10,60],AP:[0.35,0.65],sig:'fm', sigV:'FoTe',
    min:'Feldspatoidi+Fsp alc.≈Plagioclasio+Cpx',SiO2:'43–52%',strut:'Faneritica',giac:'Rift, zone alcaline'},
-  {plut:'Foid monzodiorite/gabbro',  volc:'Tefrifonolite/Basanite',col:'#3a3a7a',F:[10,60],AP:[0.1,0.35], sig:'fmd',sigV:'TeFo',
+  {plut:'Foid monzodiorite/gabbro',  volc:'Tefrifonolite/Basanite',col:'#3a3a9a',F:[10,60],AP:[0.1,0.35], sig:'fmd',sigV:'TeFo',
    min:'Feldspatoidi+Plagioclasio>Fsp alc.+Cpx+Ol',SiO2:'40–50%',strut:'Faneritica',giac:'Rift continentale'},
-  {plut:'Foid diorite/gabbro',       volc:'Tefrite/Basanite',      col:'#1a4a8a',F:[10,60],AP:[0.0,0.1],  sig:'fd', sigV:'Te/Bs',
+  {plut:'Foid diorite/gabbro',       volc:'Tefrite/Basanite',      col:'#1a4a9a',F:[10,60],AP:[0.0,0.1],  sig:'fd', sigV:'Te/Bs',
    min:'Feldspatoidi(10–60%)+Plagioclasio+Pirosseno+Olivina',SiO2:'40–48%',strut:'Faneritica/Afanitica',giac:'Hotspot, rift'},
-  {plut:'Foidolite',                 volc:'Foidite',               col:'#0a3a7a',F:[60,100],AP:[0.0,1.0],  sig:'fo', sigV:'Fdi',
+  {plut:'Foidolite',                 volc:'Foidite',               col:'#0a2a7a',F:[60,100],AP:[0.0,1.0],  sig:'fo', sigV:'Fdi',
    min:'Feldspatoidi>60% (nefelina, leucite, cancrinite)',SiO2:'35–45%',strut:'Faneritica',giac:'Complessi carbonatitici'},
-  {plut:'Fsp. alc. sienite a foid.',  volc:'Trachite a foid.',      col:'#5a1a4a',F:[0,10],AP:[0.65,1.0],  sig:'fAs*',sigV:'Tr-f',
+  // F = 0–10%: rocce a feldspatoidi accessori (verde-teal) — banda stretta sotto il lato P-A
+  {plut:'Fsp. alc. sienite a foid.',  volc:'Trachite a foid.',      col:'#1a6a5a',F:[0,10],AP:[0.9,1.0],  sig:'fAs*',sigV:'Tr-f',
    min:'Fsp K>90%+Feldspatoidi <10%+Anfibolo alcalino',SiO2:'55–63%',strut:'Faneritica/Porfirica',giac:'Complessi alcalini'},
-  {plut:'Sienite a feldspatoidi',    volc:'Trachite a feldspatoidi',col:'#5a2a3a',F:[0,10],AP:[0.65,0.9],  sig:'si*', sigV:'Tr-f',
+  {plut:'Sienite a feldspatoidi',    volc:'Trachite a feldspatoidi',col:'#1a7a4a',F:[0,10],AP:[0.65,0.9],  sig:'si*', sigV:'Tr-f',
    min:'Fsp K>65%+Feldspatoidi <10%+Hornblenda',SiO2:'55–65%',strut:'Faneritica/Porfirica',giac:'Rift, Oslo graben'},
-  {plut:'Monzonite a feldspatoidi',  volc:'Latite a feldspatoidi', col:'#3a3a1a',F:[0,10],AP:[0.35,0.65],  sig:'mo*', sigV:'La-f',
+  {plut:'Monzonite a feldspatoidi',  volc:'Latite a feldspatoidi', col:'#1a7a3a',F:[0,10],AP:[0.35,0.65],  sig:'mo*', sigV:'La-f',
    min:'Fsp K≈Plagioclasio+Feldspatoidi <10%',SiO2:'52–62%',strut:'Faneritica/Porfirica',giac:'Zone post-collisionali'},
-  {plut:'Monzodiorite a foid.',       volc:'Trachiand./Bas. a foid.',col:'#1a4a2a',F:[0,10],AP:[0.1,0.35],  sig:'md*', sigV:'TAn-f',
+  {plut:'Monzodiorite a foid.',       volc:'Trachiand./Bas. a foid.',col:'#1a6a3a',F:[0,10],AP:[0.1,0.35],  sig:'md*', sigV:'TAn-f',
    min:'Plagioclasio≈Fsp K+Feldspatoidi <10%+Cpx',SiO2:'48–58%',strut:'Faneritica/Afanitica',giac:'Rift, hotspot'},
-  {plut:'Diorite/gabbro a foid.',    volc:'Andesite/bas. a foid.', col:'#0a5a3a',F:[0,10],AP:[0.0,0.1],    sig:'di*', sigV:'An-f',
+  {plut:'Diorite/gabbro a foid.',    volc:'Andesite/bas. a foid.', col:'#1a5a2a',F:[0,10],AP:[0.0,0.1],    sig:'di*', sigV:'An-f',
    min:'Plagioclasio dom.+Feldspatoidi <10%+Pirosseno+Olivina',SiO2:'44–52%',strut:'Faneritica/Afanitica',giac:'Hotspot, rift'},
 ];
 
@@ -199,31 +204,31 @@ const QAPF_INFO={
 // DATI MAFICHE
 // =====================================================================
 const MAFICHE=[
-  {n:'Dunite',col:'#2d6e1f',v:[[100, 0, 0], [90, 10, 0], [90, 0, 10]],
+  {n:'Dunite',           col:'#2d6e1f',v:[[100,0,0],[90,10,0],[90,0,10]],
    min:'Olivina >90%, Cr-spinello accessorio',SiO2:'38–42%',dens:'3.27–3.35',
    giac:'Podiformi in ofioliti, mantello litosferico',
    note:"Roccia più abbondante del mantello superiore. Fonte primaria di Ni e Cr."},
-  {n:'Harzburgite',col:'#3a7a28',v:[[90, 10, 0], [40, 60, 0], [40, 54, 6], [90, 0, 10]],
-   min:'Olivina 40–90% + Opx >5%, Cpx/(Cpx+Opx) <10%, Cr-spinello',SiO2:'42–46%',dens:'3.28–3.32',
+  {n:'Harzburgite',      col:'#3a7a28',v:[[90,10,0],[40,60,0],[40,54,6],[90,9,1]],
+   min:'Olivina 40–90% + Opx >5%, Cpx/(Cpx+Opx)<10%, Cr-spinello',SiO2:'42–46%',dens:'3.28–3.32',
    giac:'Mantello depleto sotto dorsali oceaniche, ofioliti',
    note:"Peridotite depleta: ha perso il componente basaltico per fusione parziale."},
-  {n:'Lherzolite',col:'#4a8a35',v:[[90, 10, 0], [40, 54, 6], [40, 6, 54], [90, 0, 10]],
+  {n:'Lherzolite',       col:'#4a8a35',v:[[90,9,1],[40,54,6],[40,6,54],[90,1,9]],
    min:'Olivina 40–90% + Opx 5–40% + Cpx 5–40%, Cpx/(Cpx+Opx) 10–90%, spinello o granato',SiO2:'43–46%',dens:'3.28–3.35',
    giac:'Mantello litosferico fertile, xenoliti nei basalti alcalini',
    note:"Peridotite fertile: composizione più simile al mantello primitivo. Sorgente dei basalti."},
-  {n:'Wehrlite',col:'#5a9a40',v:[[90, 0, 10], [40, 6, 54], [40, 0, 60]],
-   min:'Olivina 40–90% + Cpx >5%, Cpx/(Cpx+Opx) >90%, Opx <5%',SiO2:'41–45%',dens:'3.25–3.32',
+  {n:'Wehrlite',         col:'#5a9a40',v:[[90,1,9],[40,6,54],[40,0,60],[90,0,10]],
+   min:'Olivina 40–90% + Cpx >5%, Cpx/(Cpx+Opx)>90%, Opx <5%',SiO2:'41–45%',dens:'3.25–3.32',
    giac:'Cumulati in intrusioni mafiche, mantello metasomatizzato',
    note:"Forma per metasomatismo del mantello o come cumulato in camere magmatiche."},
-  {n:'Ortopirossenite',col:'#8a6030',v:[[0, 100, 0], [0, 90, 10], [40, 54, 6], [40, 60, 0]],
+  {n:'Ortopirossenite',  col:'#8a6030',v:[[0,100,0],[0,90,10],[40,54,6],[40,60,0]],
    min:'Opx >90% (enstatite-iperstene), accessori Ol, Cpx, spinello',SiO2:'52–56%',dens:'3.26–3.30',
    giac:'Cumulati nelle intrusioni layered (Bushveld, Stillwater)',
-   note:"Rara in affioramento. Forma come cumulato ortopirossenico in grandi intrusioni."},
-  {n:'Websterite',col:'#6a5040',v:[[0, 90, 10], [0, 10, 90], [40, 6, 54], [40, 54, 6]],
-   min:'Opx 10–90% + Cpx 10–90%, Cpx/(Cpx+Opx) 10–90%, Olivina <40%',SiO2:'50–55%',dens:'3.24–3.30',
+   note:"Rara in affioramento. Forma come cumulato ortopirossenico."},
+  {n:'Websterite',       col:'#6a5040',v:[[0,90,10],[0,10,90],[40,6,54],[40,54,6]],
+   min:'Opx 10–90% + Cpx 10–90%, Ol <40%',SiO2:'50–55%',dens:'3.24–3.30',
    giac:'Cumulati in ofioliti, intrusioni stratificate, xenoliti',
    note:"Pirossenite mista. Comune nei livelli cumulatici delle sequenze ofiolitiche."},
-  {n:'Clinopirossenite',col:'#4a4080',v:[[0, 10, 90], [0, 0, 100], [40, 0, 60], [40, 6, 54]],
+  {n:'Clinopirossenite', col:'#4a4080',v:[[0,10,90],[0,0,100],[40,0,60],[40,6,54]],
    min:'Cpx >90% (diopside-augite), accessori Ol, Opx, spinello',SiO2:'50–54%',dens:'3.22–3.28',
    giac:'Cumulati in intrusioni basiche alcaline, xenoliti',
    note:"Rara. Indica cristallizzazione da magma basaltico ricco in Ca e Mg."},
@@ -236,7 +241,7 @@ const C=document.getElementById('C');
 const ctx=C.getContext('2d');
 const box=document.getElementById('infoBox');
 let tab='qapf', mode='plut';
-let hovQ=null,hovF=null,selQ=null,selF=null,selM=null;
+let hovQ=null,hovF=null,selQ=null,selF=null,selM=null,hovM=null;
 let mx=null,my=null;
 let _triM=null;
 
@@ -282,8 +287,10 @@ function fapInv(px,py,L){
 }
 function findQAP(Q,AP){return QAPF.find(f=>Q>=f.Q[0]&&Q<f.Q[1]&&AP>=f.AP[0]&&AP<f.AP[1]);}
 function findFAP(F,AP){
-  const Fe=Math.max(F,10.01);
-  return FAP.find(f=>{if(f.F[1]===100)return Fe>=60;return Fe>=f.F[0]&&Fe<f.F[1]&&AP>=f.AP[0]&&AP<f.AP[1];});
+  return FAP.find(f=>{
+    if(f.F[1]===100) return F>=60;
+    return F>=f.F[0]&&F<f.F[1]&&AP>=f.AP[0]&&AP<f.AP[1];
+  });
 }
 
 function lbl(t,x,y,fill,font,align){
@@ -337,21 +344,30 @@ function drawQAPF(){
     sector(pts,f.col,f,hi);
   });
 
-  // FAP settori
+  // FAP settori — usa f.F[0] come limite sinistro corretto
   FAP.forEach(f=>{
     const hi=(hovF&&hovF.sig===f.sig)||(selF&&selF.sig===f.sig);
     let pts;
-    if(f.F[1]===100){pts=[fapXY(60,0,L),fapXY(60,1,L),fapXY(100,0.5,L)];}
-    else{pts=[fapXY(0,f.AP[0],L),fapXY(0,f.AP[1],L),fapXY(f.F[1],f.AP[1],L),fapXY(f.F[1],f.AP[0],L)];}
+    if(f.F[1]===100){
+      // Foidolite: triangolo apicale F=60-100
+      pts=[fapXY(60,0,L),fapXY(60,1,L),fapXY(100,0.5,L)];
+    } else {
+      // Tutti gli altri: rettangolo da F[0] a F[1]
+      const F0=f.F[0], F1=f.F[1];
+      pts=[fapXY(F0,f.AP[0],L),fapXY(F0,f.AP[1],L),fapXY(F1,f.AP[1],L),fapXY(F1,f.AP[0],L)];
+    }
     sector(pts,f.col,f,hi);
   });
 
-  // Linea F=10% tratteggiata
-  ctx.strokeStyle='rgba(200,204,216,0.18)';ctx.lineWidth=0.7;
-  ctx.setLineDash([4,3]);
+  // Linea F=10%: confine tra rocce a feldspatoidi accessori e rocce sottosaturate
+  ctx.strokeStyle='rgba(200,204,216,0.45)';ctx.lineWidth=1.2;
+  ctx.setLineDash([5,3]);
   ctx.beginPath();ctx.moveTo(...fapXY(10,0,L));ctx.lineTo(...fapXY(10,1,L));ctx.stroke();
   ctx.setLineDash([]);
-  {const[lx,ly]=fapXY(10,0.5,L);lbl('F=10%',lx+4,ly-2,'rgba(180,184,200,0.4)','7px Space Mono','left');}
+  {const[lx,ly]=fapXY(10,0.5,L);
+   lbl('F=10%',lx+4,ly-2,'rgba(200,204,216,0.6)','bold 8px Space Mono','left');
+   lbl('↑ a feldspatoidi acc.',lx+4,ly+10,'rgba(160,200,180,0.5)','italic 8px Crimson Pro','left');
+   lbl('↓ felspatoidi dom.',lx+4,ly+22,'rgba(160,140,200,0.5)','italic 8px Crimson Pro','left');}
 
   // Bordi e linee interne
   function tri(pts){
@@ -401,71 +417,88 @@ function drawQAPF(){
 function drawMafiche(){
   const W=C.width,H=C.height;
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
-  const pad=65;
-  const tw=Math.min(W-pad*2-40,H-pad*2);
+  box.style.left='auto';box.style.right='10px';
+  const pad=60;
+  const tw=Math.min(W-pad*2-30,H-pad*1.5);
   const th=Math.floor(tw*0.866);
-  const tx0=Math.floor((W-tw)/2)+20,ty0=Math.floor((H-th)/2);
+  if(tw<=0||th<=0)return;
+  const tx0=Math.floor((W-tw)/2)+15, ty0=Math.floor((H-th)/2);
   const Ax=tx0+tw/2,Ay=ty0,Bx=tx0,By=ty0+th,Cx=tx0+tw,Cy=ty0+th;
 
-  function toXY(a,b,c){const t=a+b+c||1;return [(a/t)*Ax+(b/t)*Bx+(c/t)*Cx,(a/t)*Ay+(b/t)*By+(c/t)*Cy];}
+  function toXY(a,b,c2){const t=a+b+c2||1;return[(a/t)*Ax+(b/t)*Bx+(c2/t)*Cx,(a/t)*Ay+(b/t)*By+(c2/t)*Cy];}
   function invXY(px,py){
     const D=(By-Cy)*(Cx-Ax)+(Cx-Bx)*(Ay-Cy);if(!D)return null;
     const a=((By-Cy)*(px-Cx)+(Cx-Bx)*(py-Cy))/D;
     const b=((Cy-Ay)*(px-Cx)+(Ax-Cx)*(py-Cy))/D;const c2=1-a-b;
     if(a<-0.01||b<-0.01||c2<-0.01)return null;
-    return {a:a*100,b:b*100,c:c2*100};
+    return{a:a*100,b:b*100,c:c2*100};
   }
   _triM={toXY,invXY};
 
-  // Sfondo triangolo
+  // Sfondo + griglia
   ctx.beginPath();ctx.moveTo(Ax,Ay);ctx.lineTo(Bx,By);ctx.lineTo(Cx,Cy);ctx.closePath();
   ctx.fillStyle='#0d1018';ctx.fill();
-
-  // Griglia
   ctx.strokeStyle='rgba(30,34,48,0.8)';ctx.lineWidth=0.6;
   [20,40,60,80].forEach(p=>{
     const t=p/100;
-    function l(x1,y1,x2,y2,tt){return [x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
-    let[x1,y1]=l(Ax,Ay,Bx,By,t),[x2,y2]=l(Cx,Cy,Bx,By,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
-    [x1,y1]=l(Ax,Ay,Cx,Cy,t);[x2,y2]=l(Bx,By,Cx,Cy,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
-    [x1,y1]=l(Bx,By,Ax,Ay,t);[x2,y2]=l(Cx,Cy,Ax,Ay,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    function l2(x1,y1,x2,y2,tt){return[x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
+    let[x1,y1]=l2(Ax,Ay,Bx,By,t),[x2,y2]=l2(Cx,Cy,Bx,By,t);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    [x1,y1]=l2(Ax,Ay,Cx,Cy,t);[x2,y2]=l2(Bx,By,Cx,Cy,t);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    [x1,y1]=l2(Bx,By,Ax,Ay,t);[x2,y2]=l2(Cx,Cy,Ax,Ay,t);
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
   });
 
   // Settori
   MAFICHE.forEach(f=>{
-    const hi=selM===f.n;
-    ctx.beginPath();f.v.forEach(([a,b,c2],i)=>{const[x,y]=toXY(a,b,c2);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    const hi=selM===f.n||hovM===f.n;
+    ctx.beginPath();
+    f.v.forEach(([a,b,c2],j)=>{const[x,y]=toXY(a,b,c2);j?ctx.lineTo(x,y):ctx.moveTo(x,y);});
     ctx.closePath();
-    ctx.fillStyle=f.col;ctx.globalAlpha=hi?0.85:0.55;ctx.fill();ctx.globalAlpha=1;
-    ctx.strokeStyle=hi?'rgba(255,255,255,0.7)':'rgba(200,204,216,0.2)';ctx.lineWidth=hi?1.8:0.8;ctx.stroke();
+    ctx.fillStyle=f.col;ctx.globalAlpha=hi?0.85:0.5;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.7)':'rgba(200,204,216,0.2)';
+    ctx.lineWidth=hi?2:0.8;ctx.stroke();
+    // Label centrato nel settore
     const ca=f.v.reduce((s,[a])=>s+a,0)/f.v.length;
     const cb=f.v.reduce((s,[,b])=>s+b,0)/f.v.length;
     const cc=f.v.reduce((s,[,,c2])=>s+c2,0)/f.v.length;
     const[lx,ly]=toXY(ca,cb,cc);
-    const words=f.n.split(/[ /]/);
-    const lines=words.length>2?[words.slice(0,Math.ceil(words.length/2)).join(' '),words.slice(Math.ceil(words.length/2)).join(' ')]:[f.n];
-    lines.forEach((ln,i)=>lbl(ln,lx,ly+(i-(lines.length-1)/2)*13,hi?'#fff':'rgba(230,234,248,0.9)','bold 10px Crimson Pro'));
+    // Spezza nomi lunghi su due righe
+    const parts=f.n.split(/[\s-]/);
+    const lines=parts.length>1?[parts.slice(0,Math.ceil(parts.length/2)).join(' '),parts.slice(Math.ceil(parts.length/2)).join(' ')]:[f.n];
+    lines.forEach((ln,j)=>{
+      ctx.font='bold 11px Crimson Pro';ctx.textAlign='center';
+      ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+      ctx.strokeText(ln,lx,ly+(j-(lines.length-1)/2)*14);
+      ctx.fillStyle=hi?'#fff':'rgba(230,234,248,0.92)';
+      ctx.fillText(ln,lx,ly+(j-(lines.length-1)/2)*14);
+    });
   });
 
   // Bordo
   ctx.beginPath();ctx.moveTo(Ax,Ay);ctx.lineTo(Bx,By);ctx.lineTo(Cx,Cy);ctx.closePath();
   ctx.strokeStyle='rgba(200,204,216,0.7)';ctx.lineWidth=2;ctx.stroke();
 
-  // % asse sin
-  ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';ctx.textAlign='right';
-  [20,40,60,80].forEach(p=>{const t=p/100;const x=Ax+(Bx-Ax)*t-12,y=Ay+(By-Ay)*t;ctx.fillText(p+'%',x,y+3);});
+  // Percentuali asse Ol-Opx (sinistra)
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';ctx.textAlign='right';
+  [20,40,60,80].forEach(p=>{
+    const t=p/100;const x=Ax+(Bx-Ax)*t-12,y=Ay+(By-Ay)*t;ctx.fillText(p+'%',x,y+3);
+  });
 
   // Vertici
-  lbl('Ol','Olivina',Ax,Ay-28,Ay-14,'#c8ccd8','#8a8e9a');
   function vtxM(x,y,s1,s2,dx,align){
-    lbl(s1,x+dx,y,'#c8ccd8','bold 13px Space Mono',align);
-    lbl(s2,x+dx,y+14,'#8a8e9a','italic 10px Crimson Pro',align);
+    ctx.font='bold 14px Space Mono';ctx.textAlign=align;
+    ctx.strokeStyle='rgba(5,7,12,0.9)';ctx.lineWidth=3;ctx.lineJoin='round';
+    ctx.strokeText(s1,x+dx,y);ctx.fillStyle='#c8ccd8';ctx.fillText(s1,x+dx,y);
+    ctx.font='italic 11px Crimson Pro';ctx.fillStyle='#8a8e9a';
+    ctx.strokeText(s2,x+dx,y+15);ctx.fillText(s2,x+dx,y+15);
   }
-  vtxM(Ax,Ay-14,'Ol','Olivina',0,'center');
+  vtxM(Ax,Ay-16,'Ol','Olivina',0,'center');
   vtxM(Bx,By+8,'Opx','Ortopirosseno',-14,'right');
   vtxM(Cx,Cy+8,'Cpx','Clinopirosseno',14,'left');
 
-  // Info campione selezionato
+  // Info pannello se selezionato
   if(selM){
     const f=MAFICHE.find(f=>f.n===selM);
     if(f)showInfo(`<b>${f.n}</b><br>
@@ -480,6 +513,260 @@ function drawMafiche(){
 // =====================================================================
 // DRAW
 // =====================================================================
+
+// =====================================================================
+// DATI PIROCLASTICHE
+// =====================================================================
+const GRANULO={
+  blocchi:{n:'Blocchi / Bombe',d:'>64 mm',col:'#8a3a1a',
+    desc:"Blocchi: frammenti angolosi già solidificati. Bombe: magma plastico lanciato in volo che acquista forma aerodinamica (a fuso, a crosta di pane).",
+    esempi:'Bombe a fuso (Stromboli), bombe a crosta di pane (Vulcano)'},
+  lapilli:{n:'Lapilli',d:'2–64 mm',col:'#7a5a2a',
+    desc:'Frammenti di lava solidificata, pomice o scorie. I lapilli accrezionari si formano per aggregazione di cenere umida in colonna eruttiva.',
+    esempi:'Lapilli pomicei (Campi Flegrei), scorie basaltiche (Etna)'},
+  cenere_g:{n:'Cenere grossolana',d:'0.0625–2 mm',col:'#6a6a3a',
+    desc:'Frammenti vetrosi, cristalli e litici. Trasportata per decine-centinaia di km. Si deposita in strati gradati.',
+    esempi:'Cenere del Vesuvio (79 d.C.), ceneri Eyjafjallajökull (2010)'},
+  cenere_f:{n:'Cenere fine',d:'<0.0625 mm',col:'#5a7a4a',
+    desc:'Particelle submillimetriche. Rimane in sospensione per anni. Effetti climatici globali.',
+    esempi:'Cenere Pinatubo (1991, ~20 Mt in stratosfera), Tambora (1815)'},
+};
+const ROCCE_PIRO={
+  'Agglomerato':          {n:'Agglomerato',col:'#6a3a1a',clasti:'>75% blocchi/bombe',
+    forma:'Accumulo caotico, non stratificato',orig:'Esplosioni stromboliane e vulcaniane prossimali',
+    esempi:'Coni di scorie (Etna, Stromboli)',
+    note:'Spessore limitato. Non si estende lontano dal centro eruttivo.'},
+  'Breccia piroclastica':  {n:'Breccia piroclastica',col:'#7a4a2a',clasti:'>75% blocchi angolosi',
+    forma:'Clastica angolosa, matrice cineritica',orig:'Esplosioni freatiche, crolli di duomo',
+    esempi:'Phreatic breccia (Campi Flegrei), maar (Laacher See)',
+    note:'Le esplosioni freatiche producono brecce ricche in litici idrotermali.'},
+  'Tufo lapillistico':     {n:'Tufo lapillistico',col:'#5a5a2a',clasti:'>75% lapilli',
+    forma:'Stratificata, bimodale (lapilli + matrice cineritica)',orig:'Eruzioni sub-Pliniane, surge freatomagmatici',
+    esempi:'Tufo di Agnano (Napoli), depositi di surge di Vulcano',
+    note:'La stratificazione incrociata è diagnostica dei surge freatomagmatici.'},
+  'Tufo':                  {n:'Tufo (cenere)',col:'#4a6a3a',clasti:'>75% cenere',
+    forma:'Finemente granulare, laminata, stratificata',orig:'Eruzioni Pliniane distali, caduta da colonna',
+    esempi:'Tufo Verde (Ischia), Tufo Giallo Napoletano',
+    note:'Il Tufo Giallo Napoletano (~14 ka) copre ~1000 km² con spessori fino a 60 m.'},
+  'Ignimbrite':            {n:'Ignimbrite',col:'#6a4a4a',clasti:'Pomice+cenere+fiamme saldati',
+    forma:'Massiva o debolmente stratificata. Fiamme appiattite.',orig:'Collasso di colonna Pliniana → flusso piroclastico. Eruzioni caldericole.',
+    esempi:'Ignimbrite Campana (39 ka, ~200 km³), Toba (74 ka, ~2800 km³)',
+    note:"L'Ignimbrite Campana è la più grande eruzione degli ultimi 200 ka in Europa."},
+  'Surge':                 {n:'Deposito di surge',col:'#3a5a4a',clasti:'Cenere+lapilli in flusso turbolento',
+    forma:'Stratificazione incrociata planare, strutture a antidune',orig:'Surge basale freatomagmatico, flusso diluito turbolento',
+    esempi:'Colli Albani (depositi di maar), Santorini',
+    note:'I surge freatomagmatici si formano quando il magma interagisce con acqua di falda.'},
+  'Lahar':                 {n:'Lahar',col:'#5a4a3a',clasti:'Misto (piroclastiti+acqua)',
+    forma:'Non stratificata, mal classata',orig:'Scioglimento di neve su vulcano, piogge su depositi piroclastici',
+    esempi:'Nevado del Ruiz 1985 (23.000 vittime), Pinatubo 1991',
+    note:'I lahar possono percorrere centinaia di km e colpire pianure vallive molto tempo dopo l\'eruzione.'},
+};
+const COMPOS_PIRO={
+  'Basaltica':          {n:'Basaltica',col:'#00aacc',SiO2:'<52%',
+    tipo:'Hawaiiana → Stromboliana → Vulcaniana',
+    prodotti:'Scorie, lapilli, bombe a fuso',viscosita:'Bassa (10²–10⁴ Pa·s)',
+    note:'Meno esplosive per bassa viscosità. Eccezione: interazione con acqua.'},
+  'Andesitica':         {n:'Andesitica',col:'#a8ff78',SiO2:'52–63%',
+    tipo:'Vulcaniana → Sub-Pliniana',
+    prodotti:'Lapilli, blocchi, cenere, duomi di lava',viscosita:'Media (10⁵–10⁸ Pa·s)',
+    note:'Tipiche degli archi vulcanici. I duomi possono collassare generando flussi piroclastici.'},
+  'Dacitica/Riolitica': {n:'Dacitica/Riolitica',col:'#c080ff',SiO2:'>63%',
+    tipo:'Pliniana → Ultra-Pliniana → collasso caldera',
+    prodotti:'Pomice, cenere, ignimbriti',viscosita:'Alta (10⁸–10¹² Pa·s)',
+    note:'Eruzioni più catastrofiche: Toba 74 ka, Yellowstone 640 ka, Campi Flegrei 39 ka.'},
+};
+
+// =====================================================================
+// DATI ROCCE SPECIALI
+// =====================================================================
+const SPECIALI={
+  'Kimberlite':  {n:'Kimberlite',col:'#4a2a6a',
+    min:'Olivina serpentinizzata + Flogopite + Ilmenite + Granato piropico ± Diamante',
+    SiO2:'25–35%',MgO:'>20%',K2O:'1–3%',
+    giac:'Pipe kimberlitiche (diatremi), dicchi e solls',prof:'>150 km (mantello sub-cratonico)',
+    esempi:'Kimberley (Sudafrica), Mirny (Siberia), Ekati (Canada)',
+    note:'Unica roccia che porta diamanti in superficie. Risalita rapidissima (ore-giorni) da >150 km.',
+    pos:{s:30,k:1.8,ew:8,eh:2.5}},
+  'Lamproite':   {n:'Lamproite',col:'#6a2a5a',
+    min:'Flogopite + Anfibolo K-ricco (richterite) + Diopside + Olivina ± Leucite',
+    SiO2:'45–55%',MgO:'>8%',K2O:'>4%',
+    giac:'Pipe e laccoliti in zone cratoniche',prof:'100–200 km (mantello K-ricco)',
+    esempi:'Argyle (Australia, diamanti), Leucite Hills (Wyoming)',
+    note:'Simile alla kimberlite ma più ricca in K e SiO₂. Argyle produce >95% dei diamanti rosa.',
+    pos:{s:50,k:7.0,ew:6,eh:3.5}},
+  'Carbonatite': {n:'Carbonatite',col:'#2a5a4a',
+    min:'Calcite/Dolomite/Ankerite >50% + Apatite + Pirocloro (Nb) + Bastnäsite (REE)',
+    SiO2:'<10%',CaO:'>30%',CO2:'>20%',
+    giac:'Complessi anulari alcalini, associata a nefelinite/ijolite',prof:'Astenosfera, bassa fusione',
+    esempi:'Oldoinyo Lengai (Tanzania, attivo), Jacupiranga (Brasile)',
+    note:"L'Oldoinyo Lengai erutta natrocarbonatite a ~500°C. Fonte mondiale di Nb, REE, P.",
+    pos:{s:8,k:0.5,ew:5,eh:1.5}},
+  'Komatiite':   {n:'Komatiite',col:'#3a6a3a',
+    min:'Olivina (texture spinifex) + Clinopirosseno cromifero + Cromite',
+    SiO2:'38–45%',MgO:'>18%',Ni:'~1000 ppm',
+    giac:'Flussi lavici ultramafia Archeani (>2.5 Ga)',prof:'Astenosfera calda T>1600°C',
+    esempi:'Barberton (Sudafrica, 3.5 Ga), Munro Township (Ontario, 2.7 Ga)',
+    note:'Quasi esclusivamente Archeana — mantello ~200–300°C più caldo. Texture spinifex diagnostica.',
+    pos:{s:41,k:0.15,ew:5,eh:0.8}},
+  'Fonolite':    {n:'Fonolite',col:'#5a2a7a',
+    min:'Nefelina + Sanidino + Aegirina + Anfibolo sodico (riebeckite)',
+    SiO2:'52–58%','Na2O+K2O':'>10%',Al2O3:'>18%',
+    giac:'Complessi alcalini, rift continentali maturi, hotspot tardivi',prof:'Mantello alcalino, fusione parziale bassa',
+    esempi:'Tenerife (Canarie), Kenya, Laacher See (Germania, 12.9 ka)',
+    note:'"Fonolite" = suona come una campana. Differenziata finale delle serie alcaline sodiche.',
+    pos:{s:55,k:5.0,ew:5,eh:3.0}},
+  'Leucitite':   {n:'Leucitite',col:'#7a3a6a',
+    min:'Leucite (KAlSi₂O₆) >40% + Augite + Olivina ± Flogopite',
+    SiO2:'45–52%',K2O:'>5%',Al2O3:'12–16%',
+    giac:'Zone post-collisionali, mantello litosferico K-ricco',prof:'80–150 km (leucite instabile >1.5 GPa)',
+    esempi:'Colli Albani (Lazio, 560 km²), Vesuvio, Roccamonfina',
+    note:'I Colli Albani costituiscono il più grande distretto leucitifico del mondo.',
+    pos:{s:48,k:9.0,ew:5,eh:3.5}},
+};
+
+let selPG=null,selPR=null,selPC=null,selSP=null;
+
+// =====================================================================
+// DRAW PIROCLASTICHE
+// =====================================================================
+function drawPiro(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+  const pL=18,pR=18,pT=36,pB=22,gW=W-pL-pR,gH=H-pT-pB;
+  const colW=gW*0.27, matX=pL+colW+20, matW=gW-colW-24;
+
+  // Scala granulometrica (sinistra)
+  const granuArr=[
+    {id:'blocchi',  n:'Blocchi/Bombe',d:'>64 mm',    col:'#8a3a1a',y:0.10},
+    {id:'lapilli',  n:'Lapilli',      d:'2–64 mm',   col:'#7a5a2a',y:0.30},
+    {id:'cenere_g', n:'Cenere gross.',d:'0.06–2 mm', col:'#6a6a3a',y:0.55},
+    {id:'cenere_f', n:'Cenere fine',  d:'<0.06 mm',  col:'#5a7a4a',y:0.75},
+  ];
+  const barX=pL+4,barW=20,barTop=pT+gH*0.05,barBot=pT+gH*0.92;
+  const grad=ctx.createLinearGradient(0,barTop,0,barBot);
+  grad.addColorStop(0,'#8a3a1a');grad.addColorStop(0.4,'#7a5a2a');
+  grad.addColorStop(0.65,'#6a6a3a');grad.addColorStop(1,'#5a7a4a');
+  ctx.fillStyle=grad;ctx.fillRect(barX,barTop,barW,barBot-barTop);
+  ctx.strokeStyle='rgba(200,204,216,0.3)';ctx.lineWidth=0.8;ctx.strokeRect(barX,barTop,barW,barBot-barTop);
+  lbl('Granul.',barX+barW/2,barTop-6,'rgba(180,184,200,0.6)','italic 10px Crimson Pro');
+
+  granuArr.forEach(g=>{
+    const y=barTop+(barBot-barTop)*g.y;
+    const hi=selPG===g.id;
+    ctx.beginPath();ctx.moveTo(barX,y);ctx.lineTo(barX-6,y);
+    ctx.strokeStyle=g.col;ctx.lineWidth=1.5;ctx.stroke();
+    if(hi){ctx.beginPath();ctx.arc(barX-10,y,5,0,2*Math.PI);ctx.fillStyle=g.col;ctx.fill();}
+    lbl(g.n,barX+barW+6,y-5,hi?g.col:'rgba(220,224,240,0.85)','bold 10px Crimson Pro','left');
+    lbl(g.d,barX+barW+6,y+8,'rgba(138,142,154,0.65)','8px Space Mono','left');
+  });
+
+  // Matrice rocce × composizione
+  const rocceArr=['Agglomerato','Breccia piroclastica','Tufo lapillistico','Tufo','Ignimbrite','Surge','Lahar'];
+  const compArr=['Basaltica','Andesitica','Dacitica/Riolitica'];
+  const compCols=['#00aacc','#a8ff78','#c080ff'];
+  const compati={'Agglomerato':['Basaltica','Andesitica'],'Breccia piroclastica':['Basaltica','Andesitica','Dacitica/Riolitica'],'Tufo lapillistico':['Basaltica','Andesitica','Dacitica/Riolitica'],'Tufo':['Andesitica','Dacitica/Riolitica'],'Ignimbrite':['Dacitica/Riolitica'],'Surge':['Basaltica','Andesitica','Dacitica/Riolitica'],'Lahar':['Basaltica','Andesitica','Dacitica/Riolitica']};
+  const rocceCols={'Agglomerato':'#6a3a1a','Breccia piroclastica':'#7a4a2a','Tufo lapillistico':'#5a5a2a','Tufo':'#4a6a3a','Ignimbrite':'#6a4a4a','Surge':'#3a5a4a','Lahar':'#5a4a3a'};
+  const cellH=(gH*0.88)/(rocceArr.length+1);
+  const cellW=matW/compArr.length;
+
+  // Header composizione
+  compArr.forEach((comp,ci)=>{
+    const x=matX+ci*cellW+cellW/2;
+    const hi=selPC===comp;
+    ctx.fillStyle=compCols[ci];ctx.globalAlpha=hi?0.2:0.07;
+    ctx.fillRect(matX+ci*cellW,pT,cellW,gH);ctx.globalAlpha=1;
+    lbl(comp,x,pT+cellH*0.5,hi?compCols[ci]:'rgba(200,204,216,0.75)','bold 11px Crimson Pro');
+  });
+
+  // Righe rocce
+  rocceArr.forEach((roccia,ri)=>{
+    const y=pT+cellH*(ri+1.5);
+    const hi=selPR===roccia;
+    lbl(roccia,matX-8,y+4,hi?rocceCols[roccia]:'rgba(220,224,240,0.8)','bold 10px Crimson Pro','right');
+    compArr.forEach((comp,ci)=>{
+      const x=matX+ci*cellW+cellW/2;
+      const compat=compati[roccia]?.includes(comp);
+      if(compat){
+        const hilite=hi||(selPC===comp);
+        ctx.beginPath();ctx.roundRect(matX+ci*cellW+4,y-cellH*0.38,cellW-8,cellH*0.76,4);
+        ctx.fillStyle=rocceCols[roccia];ctx.globalAlpha=hilite?0.7:0.28;ctx.fill();ctx.globalAlpha=1;
+        ctx.strokeStyle=hilite?compCols[ci]:'rgba(200,204,216,0.18)';ctx.lineWidth=hilite?1.5:0.5;ctx.stroke();
+        lbl('✓',x,y+5,hilite?'#fff':'rgba(200,204,216,0.5)','bold 11px Space Mono');
+      }
+    });
+  });
+
+  // Info box
+  if(selPR&&ROCCE_PIRO[selPR]){const r=ROCCE_PIRO[selPR];
+    showInfo(`<b>${r.n}</b><br><b>Clasti:</b> ${r.clasti}<br><b>Forma:</b> <span class="acc">${r.forma}</span><br><b>Origine:</b> ${r.orig}<br><b>Esempi:</b> <span class="val">${r.esempi}</span><br><br><span style="font-style:italic;font-size:.6rem">${r.note}</span>`);
+  } else if(selPC&&COMPOS_PIRO[selPC]){const r=COMPOS_PIRO[selPC];
+    showInfo(`<b>${r.n}</b><br><b>SiO₂:</b> <span class="val">${r.SiO2}</span><br><b>Tipo eruttivo:</b> <span class="acc">${r.tipo}</span><br><b>Prodotti:</b> ${r.prodotti}<br><b>Viscosità:</b> <span class="val">${r.viscosita}</span><br><br><span style="font-style:italic;font-size:.6rem">${r.note}</span>`);
+  } else if(selPG&&GRANULO[selPG]){const g=GRANULO[selPG];
+    showInfo(`<b>${g.n}</b> — <span class="val">${g.d}</span><br><br>${g.desc}<br><br><b>Esempi:</b> <span class="acc">${g.esempi}</span>`);
+  }
+}
+
+// =====================================================================
+// DRAW ROCCE SPECIALI
+// =====================================================================
+function drawSpeciali(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+  const pL=62,pR=20,pT=30,pB=52,gW=W-pL-pR,gH=H-pT-pB;
+  const Sm=0,SM=65,Km=0,KM=16;
+  const tx=s=>pL+(s-Sm)/(SM-Sm)*gW;
+  const ty=k=>pT+gH-(k-Km)/(KM-Km)*gH;
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  for(let s=0;s<=65;s+=5){
+    ctx.beginPath();ctx.moveTo(tx(s),pT);ctx.lineTo(tx(s),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(s,tx(s),pT+gH+18);
+  }
+  for(let k=0;k<=16;k+=2){
+    ctx.beginPath();ctx.moveTo(pL,ty(k));ctx.lineTo(pL+gW,ty(k));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(k,pL-6,ty(k)+4);
+  }
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('SiO₂ (%)',pL+gW/2,pT+gH+40);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('K₂O (%)',0,0);ctx.restore();
+
+  // Campo serie subalcaline (riferimento)
+  ctx.fillStyle='rgba(0,212,255,0.04)';
+  ctx.fillRect(tx(44),ty(2.5),tx(58)-tx(44),ty(0)-ty(2.5));
+  lbl('Serie sub-alcaline (riferimento)',tx(51),ty(1.0),'rgba(0,212,255,0.2)','italic 10px Crimson Pro');
+
+  // Ellissi rocce speciali
+  Object.entries(SPECIALI).forEach(([k,r])=>{
+    const p=r.pos;if(!p)return;
+    const ex=Math.max((tx(p.s+p.ew/2)-tx(p.s-p.ew/2)),24);
+    const ey=Math.max((ty(p.k-p.eh/2)-ty(p.k+p.eh/2)),14);
+    const hi=selSP===k;
+    ctx.beginPath();ctx.ellipse(tx(p.s),ty(p.k),ex/2,ey/2,0,0,2*Math.PI);
+    ctx.fillStyle=r.col;ctx.globalAlpha=hi?0.55:0.22;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=r.col;ctx.lineWidth=hi?2:1;ctx.stroke();
+    lbl(r.n,tx(p.s),ty(p.k)-ey/2-6,hi?'#fff':r.col,'bold 11px Crimson Pro');
+  });
+
+  // Info
+  if(selSP&&SPECIALI[selSP]){
+    const r=SPECIALI[selSP];
+    const extra=r.MgO?`<b>MgO:</b> <span class="val">${r.MgO}</span> &nbsp;`:'';
+    const extra2=r.Ni?`<b>Ni:</b> <span class="val">${r.Ni}</span><br>`:'';
+    showInfo(`<b>${r.n}</b><br>
+      <b>SiO₂:</b> <span class="val">${r.SiO2}</span> &nbsp; ${extra}<br>${extra2}
+      <b>Minerali:</b> <span class="acc">${r.min.substring(0,70)}…</span><br>
+      <b>Prof.:</b> <span class="val">${r.prof}</span><br>
+      <b>Esempi:</b> ${r.esempi}<br><br>
+      <span style="font-style:italic;font-size:.6rem">${r.note}</span>`);
+  }
+}
+
 function draw(){
   if(tab==='qapf')drawQAPF();
   else if(tab==='mafiche')drawMafiche();
@@ -491,9 +778,9 @@ function draw(){
 // MOUSE
 // =====================================================================
 C.addEventListener('mousemove',e=>{
-  const r=C.getBoundingClientRect();
-  mx=(e.clientX-r.left)*(C.width/r.width);
-  my=(e.clientY-r.top)*(C.height/r.height);
+  const r2=C.getBoundingClientRect();
+  mx=(e.clientX-r2.left)*(C.width/r2.width);
+  my=(e.clientY-r2.top)*(C.height/r2.height);
 
   if(tab==='qapf'){
     const L=layout();
@@ -505,377 +792,45 @@ C.addEventListener('mousemove',e=>{
   } else if(tab==='mafiche'&&_triM){
     const coords=_triM.invXY(mx,my);
     if(coords){
-      function inP(pts,pa,pb,pc){const n=pts.length;let ins=false,j=n-1;
-        for(let i=0;i<n;i++){const[ai,bi]=pts[i],[aj,bj]=pts[j];
-          if((bi>pb)!==(bj>pb)&&pa<(aj-ai)*(pb-bi)/(bj-bi)+ai)ins=!ins;j=i;}return ins;}
-      const f=MAFICHE.find(f=>inP(f.v,coords.a,coords.b,coords.c));
-      if(f&&!selM)showInfo(`<b>${f.n}</b><br><b>Minerali:</b> <span class="acc">${f.min}</span><br><b>SiO₂:</b> <span class="val">${f.SiO2}</span><br><b>Giacitura:</b> ${f.giac}`);
+      function inP2(v,a,b){const n=v.length;let ins=false,j=n-1;
+        for(let i=0;i<n;i++){const[ai,bi]=v[i],[aj,bj]=v[j];
+          if((bi>b)!==(bj>b)&&a<(aj-ai)*(b-bi)/(bj-bi)+ai)ins=!ins;j=i;}return ins;}
+      const f=MAFICHE.find(f=>inP2(f.v,coords.a,coords.b));
+      const newHov=f?f.n:null;
+      if(hovM!==newHov){hovM=newHov;draw();}
+      if(f&&!selM)showInfo(`<b>${f.n}</b><br><b>Minerali:</b> <span class="acc">${f.min}</span><br><b>SiO₂:</b> <span class="val">${f.SiO2}</span> &nbsp;<b>Dens.:</b> <span class="val">${f.dens} g/cm³</span><br><b>Giacitura:</b> ${f.giac}`);
       else if(!f&&!selM)hideInfo();
-    } else if(!selM)hideInfo();
+    } else {if(hovM){hovM=null;draw();}if(!selM)hideInfo();}
   }
-});
+},{passive:true});
 C.addEventListener('mouseleave',()=>{
-  mx=null;my=null;hovQ=null;hovF=null;
+  mx=null;my=null;hovQ=null;hovF=null;hovM=null;
   if(!selQ&&!selF&&!selM)hideInfo();
+  if(hovM){hovM=null;draw();}
   draw();
 });
 
 // =====================================================================
 // CONTROLLI
 // =====================================================================
-
-// =====================================================================
-// DATI PIROCLASTICHE
-// =====================================================================
-const GRANULO={
-  blocchi:{n:'Blocchi / Bombe',d:'>64 mm',col:'#8a3a1a',
-    desc:'Blocchi: frammenti angolosi già solidificati prima dell\'eruzione. Bombe: magma plastico lanciato in volo che acquista forma aerodinamica (a fuso, a crosta di pane) durante la traiettoria.',
-    esempi:'Bombe a fuso (basaltiche, Stromboli), bombe a crosta di pane (andesitico-dacitico, Vulcano)'},
-  lapilli:{n:'Lapilli',d:'2–64 mm',col:'#7a5a2a',
-    desc:'Frammenti di lava solidificata, pomice o scorie. I lapilli accrezionari si formano quando i frammenti finissimi si aggregano per umidità durante il trasporto in colonna eruttiva.',
-    esempi:'Lapilli pomicei (Campi Flegrei), scorie basaltiche (Etna), lapilli accrezionari (eruzioni subacquee)'},
-  cenere_g:{n:'Cenere grossolana',d:'0.0625–2 mm',col:'#6a6a3a',
-    desc:'Frammenti vetrosi, cristalli e litici. Trasportata dal vento per decine-centinaia di km. Si deposita in strati gradati (più grossolana alla base). Origine: frammentazione esplosiva del magma.',
-    esempi:'Cenere del Vesuvio (eruz. 79 d.C.), ceneri dell\'Eyjafjallajökull (2010)'},
-  cenere_f:{n:'Cenere fine',d:'<0.0625 mm',col:'#5a7a4a',
-    desc:'Particelle submillimetriche di vetro vulcanico. Può rimanere in sospensione in atmosfera per anni. Pericolo per la navigazione aerea e l\'apparato respiratorio. Effetti climatici globali.',
-    esempi:'Cenere del Pinatubo (1991, ~20 Mt in stratosfera), Tambora (1815, "anno senza estate")'},
-};
-
-const ROCCE_PIRO={
-  Agglomerato:{n:'Agglomerato',col:'#6a3a1a',clasti:'>75% blocchi e bombe',
-    forma:'Accumulo caotico, non stratificato, mal classato',
-    orig:'Esplosioni stromboliane e vulcaniane. Accumulo prossimale al cratere.',
-    esempi:'Coni di scorie (Etna, Stromboli), duomi vulcanici in erosione',
-    note:'Spessore limitato (metri-decine di metri). Non si estende lontano dal centro eruttivo.'},
-  'Breccia piroclastica':{n:'Breccia piroclastica',col:'#7a4a2a',clasti:'>75% blocchi angolosi',
-    forma:'Clastica angolosa, matrice cineritica',
-    orig:'Esplosioni freatiche e freatomagmatiche. Crolli di duomo.',
-    esempi:'Phreatic breccia (Campi Flegrei), maar (Laacher See)',
-    note:'Le esplosioni freatiche producono brecce ricche in litici idrotermali.'},
-  'Tufo lapillistico':{n:'Tufo lapillistico',col:'#5a5a2a',clasti:'>75% lapilli',
-    forma:'Stratificata, bimodale (lapilli + matrice cineritica)',
-    orig:'Eruzioni sub-Pliniane. Surge basali freatomagmatici.',
-    esempi:'Tufo di Agnano (Napoli), depositi di surge di Vulcano',
-    note:'La stratificazione incrociata è diagnostica dei surge freatomagmatici.'},
-  Tufo:{n:'Tufo (cenere)',col:'#4a6a3a',clasti:'>75% cenere',
-    forma:'Finemente granulare, laminata, stratificata',
-    orig:'Eruzioni Pliniane distali. Caduta di cenere da colonna eruttiva.',
-    esempi:'Tufo Verde (Ischia), Tufo Giallo Napoletano, Tufo di Sacrofano',
-    note:'Il Tufo Giallo Napoletano (~14 ka) copre ~1000 km² con spessori fino a 60 m.'},
-  Ignimbrite:{n:'Ignimbrite',col:'#6a4a4a',clasti:'Pomice + cenere + fiamme saldati',
-    forma:'Massiva o debolmente stratificata. Fiamme appiattite (pomici saldi). Altamente porose.',
-    orig:'Collasso di colonna Pliniana → flusso piroclastico denso (PDC). Eruzioni caldericole.',
-    esempi:'Ignimbrite Campana (39 ka, ~200 km³), Campanian Ignimbrite, Toba (74 ka, ~2800 km³)',
-    note:'L\'Ignimbrite Campana è la più grande eruzione degli ultimi 200 ka in Europa. Ha probabilmente influenzato l\'estinzione dei Neanderthal.'},
-  Surge:{n:'Deposito di surge',col:'#3a5a4a',clasti:'Cenere + lapilli in flusso turbolento',
-    forma:'Stratificazione incrociata planare e a duomo. Strutture a antidune.',
-    orig:'Surge basale (freatomagmatico) o laterale. Flusso diluito turbolento.',
-    esempi:'Colli Albani (depositi di maar), Santorini (base eruzioni minoiche)',
-    note:'I surge freatomagmatici si formano quando il magma interagisce con acqua di falda o marina. Temperatura 100–300°C.'},
-  Lahar:{n:'Lahar (vulcanoclastico)',col:'#5a4a3a',clasti:'Misto (piroclastiti + acqua)',
-    forma:'Non stratificata, mal classata, imbrica dei clasti',
-    orig:'Scioglimento di neve/ghiaccio su vulcano. Piogge intense su depositi piroclastici.',
-    esempi:'Nevado del Ruiz 1985 (23.000 vittime), Pinatubo 1991, Merapi (Indonesia)',
-    note:'I lahar possono percorrere centinaia di km e inondare pianure vallive molto tempo dopo l\'eruzione.'},
-};
-
-const COMPOS_PIRO={
-  Basaltica:{n:'Composizione Basaltica',col:'#00aacc',SiO2:'<52%',
-    tipo:'Hawaiiana → Stromboliana → (Vulcaniana)',
-    prodotti:'Scorie basaltiche, lapilli, bombe a fuso, coni di scorie',
-    viscosita:'Bassa (10²–10⁴ Pa·s) — magma fluido',
-    gas:'CO₂ (profondo), H₂O+SO₂ (superficiale)',
-    note:'Le eruzioni basaltiche sono generalmente meno esplosive (bassa viscosità → i gas sfuggono facilmente). Eccezione: eruzioni freatomagmatiche o con alto contenuto di H₂O.'},
-  Andesitica:{n:'Composizione Andesitica',col:'#a8ff78',SiO2:'52–63%',
-    tipo:'Vulcaniana → Sub-Pliniana',
-    prodotti:'Lapilli, blocchi, cenere, duomi di lava',
-    viscosita:'Media (10⁵–10⁸ Pa·s)',
-    gas:'H₂O dominante + SO₂ + HCl',
-    note:'Eruzioni tipiche degli archi vulcanici (Pinatubo 1991, Mt St Helens 1980). I duomi andesitico-dacitici possono collassare generando flussi piroclastici mortali.'},
-  'Dacitica/Riolitica':{n:'Composizione Dacitica/Riolitica',col:'#c080ff',SiO2:'>63%',
-    tipo:'Pliniana → Ultra-Pliniana → collasso caldera',
-    prodotti:'Pomice (altamente vescicolata), cenere, ignimbriti',
-    viscosita:'Alta (10⁸–10¹² Pa·s) — magma quasi solido',
-    gas:'H₂O+HCl+HF+SO₂ — magma saturo in volatili',
-    note:'Le eruzioni più catastrofiche della storia: Toba 74 ka, Yellowstone 640 ka, Campi Flegrei 39 ka. La colonna Pliniana può raggiungere 40 km di altezza.'},
-};
-
-// =====================================================================
-// DATI ROCCE SPECIALI
-// =====================================================================
-const SPECIALI={
-  Kimberlite:{n:'Kimberlite',col:'#4a2a6a',
-    min:'Olivina serpentinizzata + Flogopite + Ilmenite + Granato piropico (Cr-piropo) + Enstatite ± Diamante',
-    SiO2:'25–35%',MgO:'>20%',K2O:'1–3%',
-    giac:'Pipe kimberlitiche (diatremi), dicchi e solls — strutture esplosive verticali',
-    prof:'>150 km (mantello sub-cratonico litosferico)',
-    esempi:'Kimberley (Sudafrica, 1871), Mirny (Siberia), Ekati e Diavik (Canada), Argyle (Australia)',
-    note:'Unica roccia che porta diamanti in superficie. Risalita rapidissima (ore-giorni) da >150 km, altrimenti i diamanti si convertirebbero in grafite. Età prevalentemente Cretacica-Giurassica. Il "blue ground" è kimberlite fresca; il "yellow ground" è kimberlite alterata.'},
-  Lamproite:{n:'Lamproite',col:'#6a2a5a',
-    min:'Leucite ± Flogopite ± Anfibolo K-ricco (richterite titanifera) + Diopside + Olivina — SiO₂ più alta della kimberlite',
-    SiO2:'45–55%',MgO:'>8%',K2O:'>4%',
-    giac:'Pipe, laccoliti e dicchi in zone cratoniche stabili',
-    prof:'100–200 km (mantello litosferico K-ricco e metasomatizzato)',
-    esempi:'Argyle (Australia, principale fonte diamanti al mondo), Leucite Hills (Wyoming), Prairie Creek (Arkansas)',
-    note:'Simile alla kimberlite ma più ricca in K e SiO₂. Il mantello sorgente è stato metasomatizzato da fluidi K-ricchi (flogopite + richterite nel sorgente). Argyle produce >95% dei diamanti rosa del mondo.'},
-  Carbonatite:{n:'Carbonatite',col:'#2a5a4a',
-    min:'Calcite (söviite) o Dolomite (rauhaugite) o Ankerite >50% + Apatite + Pirocloro (Nb) + Bastnäsite (REE) + Magnetite',
-    SiO2:'<10%',CaO:'>30%',CO2:'>20%',
-    giac:'Complessi anulari alcalini, associata a nefelinite/ijolite/fenitizzazione',
-    prof:'Astenosfera, basso grado di fusione parziale carbonato-peridotitica',
-    esempi:'Oldoinyo Lengai (Tanzania, unico vulcano carbonatitico attivo), Jacupiranga (Brasile), Oka (Canada), Mountain Pass (California, REE)',
-    note:'L\'Oldoinyo Lengai erutta natrocarbonatite a ~500°C (la lava più fredda). Fonte mondiale di Nb (Pyrochlore), REE (Bastnasite), P (Apatite-fertilizzanti). Sempre associata a rocce alcaline sodiche.'},
-  Komatiite:{n:'Komatiite',col:'#3a6a3a',
-    min:'Olivina (texture spinifex a ventaglio) + Clinopirosseno cromifero + Cromite — MgO >18%',
-    SiO2:'38–45%',MgO:'>18%',Ni:'~1000 ppm',
-    giac:'Flussi lavici ultramafia Archeani (>2.5 Ga), raramente Proterozoici',
-    prof:'Astenosfera molto calda (plume Archeano T>1600°C)',
-    esempi:'Barberton (Sudafrica, 3.5 Ga), Munro Township (Ontario, 2.7 Ga), Yilgarn (Australia, 2.7 Ga)',
-    note:'Quasi esclusivamente Archeana — indica mantello ~200–300°C più caldo dell\'attuale. La texture spinifex (cristalli di olivina a ventaglio aciculare) è diagnostica e indica raffreddamento molto rapido. Ospita mineralizzazioni di Ni-Cu-PGE (Kambalda, Australia).'},
-  Fonolite:{n:'Fonolite',col:'#5a2a7a',
-    min:'Nefelina (NaAlSiO₄) + Sanidino (KAlSi₃O₈) + Aegirina/Egirina (NaFeSi₂O₆) + Anfibolo sodico (riebeckite, arfvedsonite)',
-    SiO2:'52–58%','Na2O+K2O':'>10%',Al2O3:'>18%',
-    giac:'Complessi alcalini, rift continentali maturi, hotspot tardivi',
-    prof:'Basso grado fusione mantello alcalino, differenziazione di basalti alcalini',
-    esempi:'Tenerife (Teide, Canarie), Kenya (Mt Kenya), Laacher See (Germania, 12.9 ka), Pico (Azzorre)',
-    note:'"Fonolite" = suona come una campana per il tenore in nefelina e sanidino. Differenziata finale delle serie alcaline sodiche. L\'eruzione del Laacher See (~12.900 anni fa) ha influenzato il clima dell\'emisfero nord per 1-2 anni.'},
-  Leucitite:{n:'Leucitite',col:'#7a3a6a',
-    min:'Leucite (KAlSi₂O₆) >40% + Augite (Cpx) + Olivina ± Flogopite ± Sanidino',
-    SiO2:'45–52%',K2O:'>5%',Al2O3:'12–16%',
-    giac:'Zone post-collisionali, mantello litosferico K-ricco (flogopite nel sorgente)',
-    prof:'80–150 km — instabile a P>1.5 GPa, quindi solo in superficie',
-    esempi:'Colli Albani (Lazio, 560 km²), Vesuvio, Roccamonfina, Leucite Hills (Wyoming)',
-    note:'La leucite è instabile a >~1.5 GPa → esiste solo in rocce eruttate (non nel mantello). I Colli Albani (Roma) costituiscono il più grande distretto leucitifico del mondo. L\'ultimo ciclo eruttivo è ~36 ka; alcuni autori lo considerano quiescente.'},
-};
-
-// =====================================================================
-// DRAW PIROCLASTICHE
-// =====================================================================
-let selPG=null,selPR=null,selPC=null;
-
-function drawPiro(){
-  const W=C.width,H=C.height;
-  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
-  const pL=20,pT=30,pR=20,pB=20;
-  const gW=W-pL-pR,gH=H-pT-pB;
-
-  // Layout: asse granulometria verticale (sinistra) + zona composizione (destra)
-  // Schema a matrice: righe=rocce, colonne=composizione
-  const colW=gW*0.28,matX=pL+colW+20;
-  const matW=gW-colW-40;
-
-  // --- Asse granulometria (verticale, sinistra) ---
-  const granuArr=[
-    {id:'blocchi',  n:'Blocchi / Bombe', d:'>64 mm',   col:'#8a3a1a',y:0.10},
-    {id:'lapilli',  n:'Lapilli',          d:'2–64 mm',  col:'#7a5a2a',y:0.30},
-    {id:'cenere_g', n:'Cenere grossolana',d:'0.06–2 mm',col:'#6a6a3a',y:0.55},
-    {id:'cenere_f', n:'Cenere fine',       d:'<0.06 mm', col:'#5a7a4a',y:0.75},
-  ];
-  // Disegna scala granulometrica come barra verticale
-  const barX=pL+8,barW=18,barTop=pT+gH*0.05,barBot=pT+gH*0.95;
-  // Gradiente
-  const grad=ctx.createLinearGradient(0,barTop,0,barBot);
-  grad.addColorStop(0,'#8a3a1a');grad.addColorStop(0.4,'#7a5a2a');
-  grad.addColorStop(0.65,'#6a6a3a');grad.addColorStop(1,'#5a7a4a');
-  ctx.fillStyle=grad;ctx.fillRect(barX,barTop,barW,barBot-barTop);
-  ctx.strokeStyle='rgba(200,204,216,0.3)';ctx.lineWidth=1;ctx.strokeRect(barX,barTop,barW,barBot-barTop);
-  lbl('Φ (mm)',barX+barW/2,barTop-16,'#c8ccd8','bold 10px Space Mono');
-  lbl('granulometria',barX+barW/2,barTop-4,'#8a8e9a','italic 9px Crimson Pro');
-
-  // lblG non usata
-
-  granuArr.forEach(g=>{
-    const y=barTop+(barBot-barTop)*g.y;
-    // Tacca
-    ctx.beginPath();ctx.moveTo(barX,y);ctx.lineTo(barX-6,y);
-    ctx.strokeStyle=g.col;ctx.lineWidth=1.5;ctx.stroke();
-    const hi=selPG===g.id;
-    if(hi){ctx.beginPath();ctx.arc(barX-10,y,5,0,2*Math.PI);ctx.fillStyle=g.col;ctx.fill();}
-    lbl(g.n,barX+barW+8,y-1,hi?g.col:'rgba(220,224,240,0.8)','bold 10px Crimson Pro','left');
-    lbl(g.d,barX+barW+8,y+12,'rgba(138,142,154,0.7)','9px Space Mono','left');
-  });
-
-  // --- Matrice rocce/composizione ---
-  const rocceArr=['Agglomerato','Breccia piroclastica','Tufo lapillistico','Tufo','Ignimbrite','Surge','Lahar'];
-  const compArr=['Basaltica','Andesitica','Dacitica/Riolitica'];
-  const compCols=['#00aacc','#a8ff78','#c080ff'];
-
-  // Header composizione
-  const cellH=(gH*0.85)/(rocceArr.length+1);
-  const cellW=matW/compArr.length;
-  compArr.forEach((comp,ci)=>{
-    const x=matX+ci*cellW+cellW/2;
-    const y=pT+cellH*0.5;
-    const hi=selPC===comp;
-    ctx.fillStyle=compCols[ci];ctx.globalAlpha=hi?0.25:0.08;
-    ctx.fillRect(matX+ci*cellW,pT,cellW,gH);ctx.globalAlpha=1;
-    lbl(comp,x,y,hi?compCols[ci]:'rgba(200,204,216,0.7)','bold 10px Crimson Pro');
-  });
-
-  // Righe rocce
-  const granulo_row={
-    'Agglomerato':0,'Breccia piroclastica':0.5,
-    'Tufo lapillistico':1,'Tufo':2.5,'Ignimbrite':2,'Surge':2,'Lahar':1.5
-  };
-  const compati={
-    'Agglomerato':['Basaltica','Andesitica'],
-    'Breccia piroclastica':['Basaltica','Andesitica','Dacitica/Riolitica'],
-    'Tufo lapillistico':['Basaltica','Andesitica','Dacitica/Riolitica'],
-    'Tufo':['Andesitica','Dacitica/Riolitica'],
-    'Ignimbrite':['Dacitica/Riolitica'],
-    'Surge':['Basaltica','Andesitica','Dacitica/Riolitica'],
-    'Lahar':['Basaltica','Andesitica','Dacitica/Riolitica'],
-  };
-  const rocceCols={
-    'Agglomerato':'#6a3a1a','Breccia piroclastica':'#7a4a2a',
-    'Tufo lapillistico':'#5a5a2a','Tufo':'#4a6a3a',
-    'Ignimbrite':'#6a4a4a','Surge':'#3a5a4a','Lahar':'#5a4a3a'
-  };
-
-  rocceArr.forEach((roccia,ri)=>{
-    const y=pT+cellH*(ri+1.5);
-    const hi=selPR===roccia;
-    // Nome roccia (a sinistra della matrice)
-    lbl(roccia,matX-8,y+4,hi?rocceCols[roccia]:'rgba(220,224,240,0.8)','bold 10px Crimson Pro','right');
-    // Celle compatibili
-    compArr.forEach((comp,ci)=>{
-      const x=matX+ci*cellW+cellW/2;
-      const compat=compati[roccia]?.includes(comp);
-      if(compat){
-        const hilite=hi||(selPC===comp);
-        ctx.beginPath();ctx.roundRect(matX+ci*cellW+4,y-cellH*0.35,cellW-8,cellH*0.7,4);
-        ctx.fillStyle=rocceCols[roccia];ctx.globalAlpha=hilite?0.7:0.3;ctx.fill();ctx.globalAlpha=1;
-        ctx.strokeStyle=hilite?compCols[ci]:'rgba(200,204,216,0.2)';ctx.lineWidth=hilite?1.5:0.5;ctx.stroke();
-        lbl('✓',x,y+5,hilite?'#fff':'rgba(200,204,216,0.5)','bold 11px Space Mono');
-      }
-    });
-  });
-
-  // Info box se selezione attiva
-  const piro_data=ROCCE_PIRO;
-  const comp_data=COMPOS_PIRO;
-  const gran_data=GRANULO;
-  if(selPR&&piro_data[selPR]){
-    const r=piro_data[selPR];
-    showInfo(`<b>${r.n}</b><br>
-      <b>Clasti:</b> ${r.clasti}<br>
-      <b>Forma:</b> <span class="acc">${r.forma}</span><br>
-      <b>Origine:</b> ${r.orig}<br>
-      <b>Esempi:</b> <span class="val">${r.esempi}</span><br><br>
-      <span style="font-style:italic;font-size:.6rem">${r.note}</span>`);
-  } else if(selPC&&comp_data[selPC]){
-    const r=comp_data[selPC];
-    showInfo(`<b>${r.n}</b><br>
-      <b>SiO₂:</b> <span class="val">${r.SiO2}</span><br>
-      <b>Tipo eruttivo:</b> <span class="acc">${r.tipo}</span><br>
-      <b>Prodotti:</b> ${r.prodotti}<br>
-      <b>Viscosità:</b> <span class="val">${r.viscosita}</span><br>
-      <b>Gas:</b> ${r.gas}<br><br>
-      <span style="font-style:italic;font-size:.6rem">${r.note}</span>`);
-  } else if(selPG&&gran_data[selPG]){
-    const g=gran_data[selPG];
-    showInfo(`<b>${g.n}</b> &nbsp; <span class="val">${g.d}</span><br><br>
-      ${g.desc}<br><br>
-      <b>Esempi:</b> <span class="acc">${g.esempi}</span>`);
-  }
-}
-
-// =====================================================================
-// DRAW ROCCE SPECIALI
-// =====================================================================
-let selSP=null;
-
-function drawSpeciali(){
-  const W=C.width,H=C.height;
-  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
-
-  // Diagramma K2O vs SiO2 per posizionare le rocce speciali
-  const pL=62,pR=20,pT=30,pB=52;
-  const gW=W-pL-pR,gH=H-pT-pB;
-  const Sm=20,SM=65,Km=0,KM=16;
-  const tx=s=>pL+(s-Sm)/(SM-Sm)*gW;
-  const ty=k=>pT+gH-(k-Km)/(KM-Km)*gH;
-
-  // Griglia
-  ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
-  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
-  for(let s=20;s<=65;s+=5){
-    ctx.beginPath();ctx.moveTo(tx(s),pT);ctx.lineTo(tx(s),pT+gH);ctx.stroke();
-    ctx.textAlign='center';ctx.fillText(s,tx(s),pT+gH+18);
-  }
-  for(let k=0;k<=16;k+=2){
-    ctx.beginPath();ctx.moveTo(pL,ty(k));ctx.lineTo(pL+gW,ty(k));ctx.stroke();
-    ctx.textAlign='right';ctx.fillText(k,pL-6,ty(k)+4);
-  }
-  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
-  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
-  ctx.fillText('SiO₂ (%)',pL+gW/2,pT+gH+42);
-  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('K₂O (%)',0,0);ctx.restore();
-
-  // Posizioni nel diagramma K2O-SiO2
-  const pos={
-    Kimberlite:  {s:30,k:1.8,  ellW:8, ellH:2.5},
-    Lamproite:   {s:50,k:7.0,  ellW:6, ellH:3.5},
-    Carbonatite: {s:5, k:0.5,  ellW:4, ellH:1.5},  // fuori range, mostriamo a bordo
-    Komatiite:   {s:41,k:0.15, ellW:5, ellH:0.8},
-    Fonolite:    {s:55,k:5.0,  ellW:5, ellH:3.0},
-    Leucitite:   {s:48,k:9.0,  ellW:5, ellH:3.5},
-  };
-  // Campi normali (MORB/calcalcalina) come riferimento sbiadito
-  ctx.fillStyle='rgba(0,212,255,0.04)';
-  ctx.fillRect(tx(44),ty(2),tx(58)-tx(44),ty(0)-ty(2));
-  lbl('Serie sub-alcaline\n(riferimento)',pL+gW*0.3,ty(0.8),'rgba(0,212,255,0.25)','italic 9px Crimson Pro');
-
-  // Disegna ellissi per le rocce speciali
-  Object.entries(SPECIALI).forEach(([k,r])=>{
-    const p=pos[k];if(!p)return;
-    const x=tx(p.s),y=ty(p.s>SM?p.k:p.k);
-    const ex=Math.max(tx(p.s+p.ellW/2)-tx(p.s-p.ellW/2),20);
-    const ey=Math.max(ty(p.k-p.ellH/2)-ty(p.k+p.ellH/2),12);
-    const hi=selSP===k;
-    ctx.beginPath();ctx.ellipse(tx(p.s),ty(p.k),ex/2,ey/2,0,0,2*Math.PI);
-    ctx.fillStyle=r.col;ctx.globalAlpha=hi?0.5:0.2;ctx.fill();ctx.globalAlpha=1;
-    ctx.strokeStyle=r.col;ctx.lineWidth=hi?2:1;ctx.stroke();
-    lbl(r.n,tx(p.s),ty(p.k)-ey/2-6,hi?'#fff':r.col,'bold 10px Crimson Pro');
-  });
-
-  // Info
-  if(selSP&&SPECIALI[selSP]){
-    const r=SPECIALI[selSP];
-    const extra=r.MgO?`<b>MgO:</b> <span class="val">${r.MgO}</span> &nbsp; `:'';
-    const extra2=r.Ni?`<b>Ni:</b> <span class="val">${r.Ni}</span><br>`:'';
-    const extra3=r['Na2O+K2O']?`<b>Na₂O+K₂O:</b> <span class="val">${r['Na2O+K2O']}</span><br>`:'';
-    showInfo(`<b>${r.n}</b><br>
-      <b>SiO₂:</b> <span class="val">${r.SiO2}</span> &nbsp; ${extra}<br>
-      ${extra2}${extra3}
-      <b>Minerali:</b> <span class="acc">${r.min.substring(0,80)}…</span><br>
-      <b>Profondità:</b> <span class="val">${r.prof}</span><br>
-      <b>Esempi:</b> ${r.esempi.substring(0,60)}<br><br>
-      <span style="font-style:italic;font-size:.6rem">${r.note.substring(0,200)}…</span>`);
-  }
-}
-
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
   tab=b.dataset.tab;
   ['sbQapf','sbMafiche','sbPiro','sbSpeciali'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.style.display='none';}
+    const el=document.getElementById(id);if(el)el.style.display='none';
   });
   const sbMap={qapf:'sbQapf',mafiche:'sbMafiche',piro:'sbPiro',speciali:'sbSpeciali'};
   const sb=document.getElementById(sbMap[tab]);
   if(sb){sb.style.display='flex';sb.style.flexDirection='column';}
   selQ=null;selF=null;selM=null;selPG=null;selPR=null;selPC=null;selSP=null;
-  hovQ=null;hovF=null;hideInfo();
-  const ibarText={
+  hovQ=null;hovF=null;hovM=null;hideInfo();
+  document.querySelectorAll('.btn').forEach(x=>x.classList.remove('on'));
+  document.getElementById('ibar').textContent={
     qapf:'Streckeisen QAPF — classificazione IUGS delle rocce magmatiche (Le Maitre 2002)',
     mafiche:'Ol-Opx-Cpx — classificazione IUGS delle rocce mafiche e ultramafiche',
     piro:'Rocce Piroclastiche — granulometria, composizione e tipo eruttivo',
     speciali:'Rocce Speciali — kimberlite, lamproite, carbonatite, komatiite, fonolite, leucitite',
-  };
-  document.getElementById('ibar').textContent=ibarText[tab]||'';
+  }[tab]||'';
   draw();
 }));
 
@@ -903,45 +858,35 @@ document.querySelectorAll('[data-fap]').forEach(b=>b.addEventListener('click',()
   if(selF&&selF.sig===f.sig){selF=null;hideInfo();}else{selF=f;selQ=null;b.classList.add('on');showQapfInfo(f);}
   draw();
 }));
-// Piroclastiche - granulometria
-document.querySelectorAll('[data-pg]').forEach(b=>b.addEventListener('click',()=>{
-  const k=b.dataset.pg;
-  document.querySelectorAll('[data-pg]').forEach(x=>x.classList.remove('on'));
-  if(selPG===k){selPG=null;hideInfo();}else{selPG=k;selPR=null;selPC=null;b.classList.add('on');}
-  draw();
-}));
-// Piroclastiche - rocce
-document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{
-  const k=b.dataset.pr;
-  document.querySelectorAll('[data-pr]').forEach(x=>x.classList.remove('on'));
-  if(selPR===k){selPR=null;hideInfo();}else{selPR=k;selPG=null;selPC=null;b.classList.add('on');}
-  draw();
-}));
-// Piroclastiche - composizione
-document.querySelectorAll('[data-pc]').forEach(b=>b.addEventListener('click',()=>{
-  const k=b.dataset.pc;
-  document.querySelectorAll('[data-pc]').forEach(x=>x.classList.remove('on'));
-  if(selPC===k){selPC=null;hideInfo();}else{selPC=k;selPG=null;selPR=null;b.classList.add('on');}
-  draw();
-}));
-// Rocce speciali
-document.querySelectorAll('[data-sp]').forEach(b=>b.addEventListener('click',()=>{
-  const k=b.dataset.sp;
-  document.querySelectorAll('[data-sp]').forEach(x=>x.classList.remove('on'));
-  if(selSP===k){selSP=null;hideInfo();}else{selSP=k;b.classList.add('on');}
-  draw();
-}));
-
 // Mafiche
 document.querySelectorAll('[data-m]').forEach(b=>b.addEventListener('click',()=>{
   const k=b.dataset.m;
   document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on'));
-  if(selM===k){selM=null;hideInfo();}else{selM=k;b.classList.add('on');}
+  if(selM===k){selM=null;hideInfo();}else{selM=k;b.classList.add('on');
+    const f=MAFICHE.find(f=>f.n===k);
+    if(f)showInfo(`<b>${f.n}</b><br><b>Minerali:</b> <span class="acc">${f.min}</span><br><b>SiO₂:</b> <span class="val">${f.SiO2}</span> &nbsp;<b>Dens.:</b> <span class="val">${f.dens} g/cm³</span><br><b>Giacitura:</b> ${f.giac}<br><br><span style="font-style:italic;font-size:.6rem">${f.note}</span>`);
+  }
   draw();
 }));
 
-// Resize
-function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;draw();}
+// Piroclastiche - granulometria
+document.querySelectorAll('[data-pg]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.pg;document.querySelectorAll('[data-pg]').forEach(x=>x.classList.remove('on'));
+  if(selPG===k){selPG=null;hideInfo();}else{selPG=k;selPR=null;selPC=null;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-pr]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.pr;document.querySelectorAll('[data-pr]').forEach(x=>x.classList.remove('on'));
+  if(selPR===k){selPR=null;hideInfo();}else{selPR=k;selPG=null;selPC=null;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-pc]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.pc;document.querySelectorAll('[data-pc]').forEach(x=>x.classList.remove('on'));
+  if(selPC===k){selPC=null;hideInfo();}else{selPC=k;selPG=null;selPR=null;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-sp]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.sp;document.querySelectorAll('[data-sp]').forEach(x=>x.classList.remove('on'));
+  if(selSP===k){selSP=null;hideInfo();}else{selSP=k;b.classList.add('on');}draw();
+}));
+function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;if(C.width>0&&C.height>0)draw();}
 window.addEventListener('resize',resize);
 setTimeout(()=>resize(),80);
 </script>
