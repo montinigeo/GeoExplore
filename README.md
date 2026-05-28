@@ -6,7 +6,6 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ---
 
-## 🚀 Lancia le simulazioni
 
 ### 🌋 Magmatismo e Metamorfismo
 
