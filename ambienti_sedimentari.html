@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Ambienti di Sedimentazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--panel:#111318;--border:#1e2230;--accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;--text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:.8rem}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.tabs{display:flex;gap:.2rem;margin-left:auto}
+.tab{padding:.22rem .8rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.tab.on,.tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.3rem;overflow-y:auto}
+.sl{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.2rem .45rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.75rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.07)}
+.cw{flex:1;min-width:0;position:relative;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+#infoBox{position:absolute;bottom:10px;right:10px;width:260px;background:rgba(7,9,14,.94);border:1px solid var(--border);border-radius:5px;padding:.6rem .75rem;font-family:'Crimson Pro',serif;font-size:.62rem;line-height:1.8;color:var(--muted);pointer-events:none;display:none;max-height:70%;overflow:hidden}
+#infoBox b{color:var(--text);font-style:normal;font-size:.66rem}
+.val{color:var(--accent);font-family:'Space Mono',monospace;font-size:.58rem}
+.acc{color:var(--accent3)}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);font-size:.58rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ambienti di Sedimentazione</h1>
+  <div class="tabs">
+    <button class="tab on" data-tab="panorama">Schema Generale</button>
+    <button class="tab"    data-tab="cont">Continentali</button>
+    <button class="tab"    data-tab="trans">Transizionali</button>
+    <button class="tab"    data-tab="mar">Marini</button>
+  </div>
+</header>
+<div class="main">
+
+<aside class="sb" id="sbPanorama">
+  <div class="sl">Zona</div>
+  <button class="btn" data-z="cont">🏔️ Continentale</button>
+  <button class="btn" data-z="trans">🌊 Transizionale</button>
+  <button class="btn" data-z="mar">🌊 Marino</button>
+  <div class="sl" style="margin-top:.4rem">Continentali</div>
+  <button class="btn" data-pan="Glaciale">❄️ Glaciale</button>
+  <button class="btn" data-pan="Eolico">💨 Eolico</button>
+  <button class="btn" data-pan="Fluviale">🌊 Fluviale</button>
+  <button class="btn" data-pan="Lacustre">🏔️ Lacustre</button>
+  <div class="sl" style="margin-top:.4rem">Transizionali</div>
+  <button class="btn" data-pan="Delta">🔺 Delta</button>
+  <button class="btn" data-pan="Estuario">🌊 Estuario</button>
+  <button class="btn" data-pan="Laguna / Piattaforma carbonatica">🪸 Laguna / Piatt. carb.</button>
+  <button class="btn" data-pan="Spiaggia / Barriera litorale">🏖️ Spiaggia / Barriera</button>
+  <div class="sl" style="margin-top:.4rem">Marini</div>
+  <button class="btn" data-pan="Piattaforma continentale">📐 Piattaforma</button>
+  <button class="btn" data-pan="Rampa / Piattaforma carbonatica">🪸 Rampa carbonatica</button>
+  <button class="btn" data-pan="Scarpata e Bacino">🌊 Scarpata e Bacino</button>
+  <button class="btn" data-pan="Bacino profondo">🌊 Bacino profondo</button>
+</aside>
+
+<aside class="sb" id="sbCont" style="display:none">
+  <div class="sl">Ambienti</div>
+  <button class="btn" data-a="Fluviale">🌊 Fluviale</button>
+  <button class="btn" data-a="Eolico">💨 Eolico</button>
+  <button class="btn" data-a="Lacustre">🏔️ Lacustre</button>
+  <button class="btn" data-a="Glaciale">❄️ Glaciale</button>
+  <div class="sl" style="margin-top:.4rem">Sotto-ambienti fluviali</div>
+  <button class="btn" data-sa="Canale braided">Canale braided</button>
+  <button class="btn" data-sa="Canale meandriforme">Canale meandriforme</button>
+  <button class="btn" data-sa="Pianura alluvionale">Pianura alluvionale</button>
+  <button class="btn" data-sa="Conoide alluvionale">Conoide alluvionale</button>
+</aside>
+
+<aside class="sb" id="sbTrans" style="display:none">
+  <div class="sl">Ambienti</div>
+  <button class="btn" data-a="Delta">🔺 Delta</button>
+  <button class="btn" data-a="Estuario">🌊 Estuario</button>
+  <button class="btn" data-a="Laguna / Piattaforma carbonatica">🪸 Laguna / Piatt. carbon.</button>
+  <button class="btn" data-a="Spiaggia / Barriera litorale">🏖️ Spiaggia / Barriera</button>
+  <div class="sl" style="margin-top:.4rem">Tipo di delta</div>
+  <button class="btn" data-sa="Delta fluvio-dominato">Fluvio-dominato</button>
+  <button class="btn" data-sa="Delta onda-dominato">Onda-dominato</button>
+  <button class="btn" data-sa="Delta marea-dominato">Marea-dominato</button>
+</aside>
+
+<aside class="sb" id="sbMar" style="display:none">
+  <div class="sl">Ambienti</div>
+  <button class="btn" data-a="Piattaforma continentale">📐 Piattaforma</button>
+  <button class="btn" data-a="Rampa / Piattaforma carbonatica">🪸 Rampa carbonatica</button>
+  <button class="btn" data-a="Scarpata e Bacino">🌊 Scarpata e Bacino</button>
+  <button class="btn" data-a="Bacino profondo">🌊 Bacino profondo</button>
+  <div class="sl" style="margin-top:.4rem">Sequenza di Bouma (torbiditi)</div>
+  <button class="btn" data-sa="Ta - Sabbioso massiccio">Ta — Sabbioso massiccio</button>
+  <button class="btn" data-sa="Tb - Laminazione planare">Tb — Laminaz. planare</button>
+  <button class="btn" data-sa="Tc - Ripple e convolute">Tc — Ripple e convolute</button>
+  <button class="btn" data-sa="Td - Laminazione fine">Td — Laminaz. fine</button>
+  <button class="btn" data-sa="Te - Pelite pelagica">Te — Pelite pelagica</button>
+</aside>
+
+<div class="cw"><canvas id="C"></canvas><div id="infoBox"></div></div>
+</div>
+<div class="ibar" id="ibar">Schema generale degli ambienti deposizionali — dal continentale al marino profondo</div>
+
+<script>
+'use strict';
+// =====================================================================
+// DATI
+// =====================================================================
+const AMBIENTI={
+  cont:[
+    {n:'Fluviale',col:'#6a4a2a',energia:'Alta→Bassa',granulo:'Ghiaia-Sabbia→Limo-Argilla',
+     sotto:['Canale braided','Canale meandriforme','Pianura alluvionale','Conoide alluvionale'],
+     strutture:'Embricatura clasti, stratif. incrociata grandi scale, ripple da corrente, desiccation cracks',
+     rocce:'Conglomerati, arenarie, peliti; sequenza fining-upward',
+     fossili:'Vertebrati continentali, legno fossile, paleosuoli',
+     note:'Le sequenze fluviali mostrano fining-upward (canale→piana). Il rapporto W/D del canale distingue braided (elevato, alta energia) da meandriforme (basso, singolo canale sinuoso).'},
+    {n:'Eolico',col:'#8a7a3a',energia:'Alta (duna)→Bassa (interduna)',granulo:'Sabbia ben classata e arrotondata',
+     sotto:['Duna barcana','Duna lineare','Interduna','Erg (mare di sabbia)'],
+     strutture:'Stratificazione incrociata ad alto angolo (20–34°), laminazione planare (windripple), superficie di deflazione',
+     rocce:'Arenarie eoliche quarzo-supermature, rosse per ossidazione',
+     fossili:'Rari: tracce, vertebrati deserticoli',
+     note:'Grani opachi (frost) per collisioni intergranulari. Colore rosso per ossidazione Fe³⁺. Classazione eccellente: unico agente a selezionare per densità+granulometria.'},
+    {n:'Lacustre',col:'#2a4a6a',energia:'Molto bassa (profondo)→Media (litorale)',granulo:'Argilla-Limo (profondo), Sabbia (litorale)',
+     sotto:['Lago profondo (profundal)','Litorale lacustre','Delta lacustre','Lago salato/alcalino'],
+     strutture:'Varve stagionali (limo chiaro+argilla scura), bioturbazione (litorale), oncòliti',
+     rocce:'Argilliti laminati, diatomiti, calcari lacustri, evaporiti (lago alcalino)',
+     fossili:'Pesci, insetti, piante, ostracodi, gasteropodi d\'acqua dolce',
+     note:'Le varve permettono datazioni annuali. I laghi alcalini producono trona, gaylussite e altri carbonati sodici. Le diatomiti formano da bloom di alghe silicee.'},
+    {n:'Glaciale',col:'#4a6a8a',energia:'Variabile — ghiaccio non seleziona',granulo:'Diamicton (argilla→massi, mal classato)',
+     sotto:['Till subglaciale','Outwash (sandur)','Lago proglaciale','Ambiente glaciomarine'],
+     strutture:'Striature su clasti, dropstone in argilliti varvati, fabric preferenziale clasti',
+     rocce:'Tillite (diamicton consolidato), argilliti varvati, conglomerati outwash',
+     fossili:'Rari; pollini nei laghi proglaciali',
+     note:'Il diamicton glaciale è diagnostico ma non esclusivo: anche debris flow subacquei lo producono. Necessari criteri multipli: striature, fabric, dropstone, associazioni isotopiche.'},
+  ],
+  trans:[
+    {n:'Delta',col:'#4a7a3a',energia:'Alta (distributari)→Bassa (prodelta)',granulo:'Sabbia (fronte delta)→Limo-Argilla (prodelta)',
+     sotto:['Delta fluvio-dominato','Delta onda-dominato','Delta marea-dominato'],
+     strutture:'Stratificazione incrociata (bocca barra), HCS (fronte delta), bioturbazione intensa (prodelta)',
+     rocce:'Sequenza coarsening-upward: argille prodelta→siltiti→sabbie di fronte delta',
+     fossili:'Mix continentale/marino; carbon fossile (delta fluvio-dominati)',
+     note:'Sequenza coarsening-upward (opposto al fluviale). Il tipo dipende dal bilancio fiume/onde/maree. I delta sono trappole di sedimento e importanti reservoir (Niger, Mississippi, Mackenzie).'},
+    {n:'Estuario',col:'#3a6a4a',energia:'Media-alta (imboccatura)→Bassa (interno)',granulo:'Sabbia (barre tidali)→Fango (mudflat)',
+     sotto:['Estuario marea-dominato','Estuario onda-dominato','Laguna retrostante'],
+     strutture:'Eteroliti (sabbia+fango alternati), herringbone cross-bedding, laminazione flaser/wavy/lenticolare',
+     rocce:'Arenarie, eteroliti, argilliti bioturbate',
+     fossili:'Fauna mista marina-salmastra; oyster, foraminiferi agglutinanti',
+     note:'Strutture eteolitiche = alternanza correnti di marea e quiete. L\'herringbone cross-bedding (spine di pesce) è diagnostico di maree bidirezionali. Salinità variabile (oligo→polialinico).'},
+    {n:'Laguna / Piattaforma carbonatica',col:'#2a5a5a',energia:'Molto bassa→Bassa',granulo:'Fango carbonatico, sabbia carbonatica fina',
+     sotto:['Laguna riparata (backreef)','Mudflat intertidale','Sabkha','Reef (boundstone)'],
+     strutture:'Stromatoliti, strutture fenestrale (birds-eye), noduli di gesso (sabkha), bioturbazione intensa',
+     rocce:'Mudstone-wackestone-grainstone (Dunham), dolomia, evaporiti, boundstone',
+     fossili:'Coralli, molluschi, foraminiferi bentonici, alghe calcaree',
+     note:'Principale ambiente di produzione dei carbonati tropicali. La sequenza di shallowing-upward (ciclo di Lofer): laguna→intertidale→supratidale. Il reef è l\'ambiente ad alta produttività biologica.'},
+    {n:'Spiaggia / Barriera litorale',col:'#8a8a3a',energia:'Alta (foreshore)→Bassa (shoreface inf.)',granulo:'Sabbia media-grossolana (foreshore)→Sabbia fine (offshore)',
+     sotto:['Foreshore (battigia)','Shoreface superiore','Shoreface inferiore','Barriera (barrier island)'],
+     strutture:'Laminazione planare (swash), HCS (tempestiti shoreface), SCS, ichnofacies Skolithos',
+     rocce:'Sequenza coarsening-upward (progradazione): argille→sabbie; arenarie ben classate',
+     fossili:'Bivalvi, gasteropodi, echinodermi; tracce Skolithos (tubi verticali)',
+     note:'HCS (Hummocky Cross-Stratification) = struttura diagnostica delle tempestiti di shoreface. L\'ichnofacies Skolithos indica alta energia e substrato instabile. FWWB e SWB controllano la distribuzione delle facies.'},
+  ],
+  mar:[
+    {n:'Piattaforma continentale',col:'#1a4a6a',energia:'Alta (interna)→Bassa (esterna)',granulo:'Sabbia (interna)→Limo-Argilla (esterna)',
+     sotto:['Piattaforma interna (<30 m)','Piattaforma mediana (30–100 m)','Piattaforma esterna (100–200 m)'],
+     strutture:'HCS e SCS (tempestiti), bioturbazione Cruziana ichnofacies, hardground, glauconite',
+     rocce:'Arenarie, siltiti, argilliti, calcari bioclastici',
+     fossili:'Fauna bentonica diversificata; brachiopodi, echinodermi, ammoniti, foraminiferi',
+     note:'Fair-weather wave base (~10–20 m) e storm wave base (~50–150 m) controllano le facies. Sopra SWB: tempestiti con HCS. Tra FWWB e SWB: strutture di bel tempo. Sotto SWB: laminazione fine.'},
+    {n:'Rampa / Piattaforma carbonatica',col:'#1a5a5a',energia:'Alta (shoal)→Molto bassa (rampa dist.)',granulo:'Grainstone ooliti (shoal)→Mudstone (rampa dist.)',
+     sotto:['Zona di shoal (ooliti)','Laguna carbonatica','Reef (barriera)','Rampa distale'],
+     strutture:'Framework reef, laminazione microbiale, grainstone cross-bedded, slump e debris flow (scarpata)',
+     rocce:'Tutta la sequenza Dunham: mudstone→wackestone→packstone→grainstone→boundstone',
+     fossili:'Coralli, rudiste (Cretaceo), stromatoporoidi (Giura), alghe, foraminiferi',
+     note:'Modello di Wilson (1975): 9 Standard Microfacies (SMF) nelle piattaforme carbonatiche. Produzione: 1–3 kg CaCO₃/m²/anno. La rampa non ha scarpata netta (contrariamente alla piattaforma).'},
+    {n:'Scarpata e Bacino',col:'#1a2a5a',energia:'Media (scarpata)→Molto bassa (bacino)',granulo:'Limo-Argilla, chalk, ooze pelagico',
+     sotto:['Scarpata superiore','Scarpata inferiore','Bacino pelagico','Rise (piede scarpata)'],
+     strutture:'Slump e slide, debris flow, laminazione fine pelagica, Nereites ichnofacies',
+     rocce:'Argilliti, calcilutiti, marne, radiolariti (sotto CCD), chalk',
+     fossili:'Foraminiferi planctonici, nannofossili, radiolari, ammoniti',
+     note:'CCD (Carbonato Compensation Depth, 4000–5000 m): sopra = calcarei, sotto = argille rosse o radiolariti. La lisocline separa la zona di dissoluzione parziale. Varia con latitudine e produttività.'},
+    {n:'Bacino profondo',col:'#2a2a5a',energia:'Molto bassa (pelagica) → Alta episodica (torbiditi)',granulo:'Argilla-Limo (pelagico) → Sabbia-Ghiaia episodica (torbiditi)',
+     sotto:['Sedimentazione pelagica','Correnti di torbida (torbiditi)','Debris flow e slump','Piana abissale'],
+     strutture:'Laminazione pelagica fine (Te), sequenza di Bouma (Ta→Te), flute cast e groove cast, slump e slide',
+     rocce:'Argilliti pelagiche, radiolariti (sotto CCD), chalk, marne — intercalate a torbiditi (flysch)',
+     fossili:'Foraminiferi planctonici, nannofossili, radiolari (autoctoni) + fauna rimaneggiata (alloctona nelle torbiditi)',
+     note:'Il bacino profondo alterna lunghi periodi di sedimentazione pelagica lenta (argille, radiolariti) a eventi torbiditici episodici (ore-giorni). La sequenza di Bouma (1962) descrive la struttura interna di un singolo evento torbiditico. Il CCD (4000–5000 m) controlla la preservazione dei carbonati.'},
+  ]
+};
+
+const BOUMA=[
+  {id:'Ta',col:'#8a6a3a',h:0.30,n:'Ta — Sabbioso massiccio',
+   desc:'Intervallo basale, normalmente gradato (grading normale). Deposizione rapida da sospensione densa — flusso a densità elevata. Assenza di strutture trazione.'},
+  {id:'Tb',col:'#7a7a3a',h:0.20,n:'Tb — Laminazione planare',
+   desc:'Laminazione planare in sabbia media-fine. Deposizione da flusso turbolento con tractive current. Può mostrare parting lineation (allineamento muscovite).'},
+  {id:'Tc',col:'#5a7a4a',h:0.20,n:'Tc — Ripple e convolute',
+   desc:'Ripple da trazione (climbing ripple), laminazione convoluta da fluidizzazione. Transizione da flusso turbolento a decelerazione. Spesso visibili rip-up clasts.'},
+  {id:'Td',col:'#3a6a5a',h:0.15,n:'Td — Laminazione pelosa fine',
+   desc:'Laminazione fine in siltite e argillite. Deposizione lenta da sospensione diluita. Spesso bioturbata nei livelli superiori.'},
+  {id:'Te',col:'#2a4a5a',h:0.15,n:'Te — Pelite pelagica',
+   desc:'Argillite pelagica/emipelagica che sedimenta tra gli eventi torbiditici. Contiene fauna autoctona (foraminiferi planctonici). Indica tempo di quiete tra le torbiditi.'},
+];
+
+const DELTA_TIPI={
+  'Delta fluvio-dominato':{n:'Delta fluvio-dominato (es. Mississippi)',col:'#3a7a2a',
+    forma:'Lobato o "a piede d\'uccello" — progradazione rapida in acque calme',
+    proc:'Energia fluviale >> energia onde+maree. Bocche barra progradanti.',
+    strutture:'Bocca barra (coarsening-up), mouth bar sands, marsh e lagune (plain)',
+    esempi:'Mississippi (USA), Po (Italia), Niger',
+    note:'Il Mississippi prograda a ~50 m/anno. Alta suscettibilità alla subsidenza e ai cambi di locus (avulsione).'},
+  'Delta onda-dominato':{n:'Delta onda-dominato (es. Nilo)',col:'#8a8a2a',
+    forma:'Arcuato, spiagge continue — ridistribuzione laterale dei sedimenti da onde',
+    proc:'Energia onde ≈ energia fluviale. Spiagge barriera e dune costiere.',
+    strutture:'Beach ridge (creste di spiaggia), shoreface sands, lagune retrostanti',
+    esempi:'Nilo (Egitto), São Francisco (Brasile), Senegal',
+    note:'Le onde ridistribuiscono il sedimento lungo la costa creando beach ridges paralleli. Architettura più stabile del Mississippi.'},
+  'Delta marea-dominato':{n:'Delta marea-dominato (es. Gange-Brahmaputra)',col:'#4a7a5a',
+    forma:'Lobato con creste tidali radiali — estesi tidal flat e cheniers',
+    proc:'Energia maree >> onde+fiume. Canali tidali dominanti.',
+    strutture:'Tidal sand bars, eteroliti (sabbia+fango), herringbone cross-bedding',
+    esempi:'Gange-Brahmaputra (Bangladesh), Colorado (USA, golfo California)',
+    note:'Le maree creano canali bidirezionali (herringbone). Le barre tidali migrano con le maree creando eteroliti diagnostiche.'},
+};
+
+const SOTTO_AMBIENTI={
+  'Canale braided':{n:'Canale braided (anastomizzato)',
+    desc:'Canale a bassa sinuosità con barre emergenti. Alta energia, alta carica solida.',
+    strutt:'Stratificazione incrociata a grande scala, barre longitudinali e trasversali, embricatura clasti',
+    granulo:'Ghiaia e sabbia grossolana, mal classata localmente',
+    esempi:'Brahmaputra, Platte River (Colorado); in Italia: Tagliamento'},
+  'Canale meandriforme':{n:'Canale meandriforme',
+    desc:'Singolo canale ad alta sinuosità. Media energia, carica prevalentemente sabbiosa.',
+    strutt:'Point bar con stratif. incrociata epsilon, fining-upward, oxbow lake',
+    granulo:'Sabbia (canale) → Limo-argilla (piana alluvionale)',
+    esempi:'Mississippi, Nilo, Po (tratto inferiore)'},
+  'Pianura alluvionale':{n:'Pianura alluvionale (floodplain)',
+    desc:'Area periodicamente inondata durante piene. Bassa energia, deposizione fine.',
+    strutt:'Laminazione orizzontale, desiccation cracks, crevasse splay, paleosuoli',
+    granulo:'Limo e argilla con sabbia nelle crevasse splay',
+    esempi:'Valle del Mississippi, Po Valley'},
+  'Conoide alluvionale':{n:'Conoide alluvionale',
+    desc:'Forma a ventaglio alla base di rilievi. Alta energia, classazione scarsa.',
+    strutt:'Debris flow (no struttura), sheet flood (laminazione), canali effimeri',
+    granulo:'Ghiaia e ciottoli (apice) → Sabbia (piede), mal classato',
+    esempi:'Conoidi delle Alpi meridionali, Death Valley (California)'},
+  'Ta - Sabbioso massiccio':{n:'Ta — Sabbioso massiccio',col:'#8a6a3a',
+    desc:'Deposizione rapida da corrente di torbida densa. Grading normale spesso presente. No strutture di trazione.',
+    proc:'Flusso iperconcentrato (densità >1.5 kg/L). Deposizione in secondi-minuti.',
+    granulo:'Sabbia grossa→media; ghiaia alla base'},
+  'Tb - Laminazione planare':{n:'Tb — Laminazione planare',col:'#7a7a3a',
+    desc:'Trazione da corrente turbolenta decelerante. Laminazione planare parallela. Parting lineation visibile.',
+    proc:'Upper flow regime (Fr>1) in fase di decelerazione del flusso.',
+    granulo:'Sabbia media-fine'},
+  'Tc - Ripple e convolute':{n:'Tc — Ripple e convolute',col:'#5a7a4a',
+    desc:'Ripple climbing da trazione + convolute lamination da fluidizzazione. Rip-up clasts da erosione dello strato Te sottostante.',
+    proc:'Lower flow regime, corrente che decelera ulteriormente.',
+    granulo:'Sabbia fine'},
+  'Td - Laminazione fine':{n:'Td — Laminazione fine',col:'#3a6a5a',
+    desc:'Siltiti e argilliti laminate, deposizione lenta da sospensione. Bioturbazione nelle parti superiori.',
+    proc:'Sospensione diluita, molto bassa energia.',
+    granulo:'Siltite e argillite'},
+  'Te - Pelite pelagica':{n:'Te — Pelite pelagica',col:'#2a4a5a',
+    desc:'Argillite pelagica/emipelagica che precipita tra gli eventi torbiditici. Indica periodi di quiete (anni-secoli).',
+    proc:'Sedimentazione pelagica normale tra eventi torbiditici.',
+    granulo:'Argillite con microfossili'},
+};
+
+// =====================================================================
+// STATO
+// =====================================================================
+const C=document.getElementById('C');
+const ctx=C.getContext('2d');
+const box=document.getElementById('infoBox');
+let tab='panorama',selZ=null,selA=null,selSA=null,hovZ=null,hovA=null,selPanAmb=null;
+
+function showInfo(h){box.innerHTML=h;box.style.display='block';}
+function hideInfo(){box.style.display='none';}
+function lbl(t,x,y,fill,font,align){
+  ctx.font=font||'bold 11px Crimson Pro';ctx.textAlign=align||'center';
+  ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+  ctx.strokeText(t,x,y);ctx.fillStyle=fill||'#e8eaf0';ctx.fillText(t,x,y);
+}
+
+// =====================================================================
+// DRAW PANORAMA
+// =====================================================================
+function drawPanorama(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=20,pR=20,pT=50,pB=115,gW=W-pL-pR,gH=H-pT-pB;
+  const profH=gH*0.55,seaLevel=pT+profH;
+
+  // Zone e ambienti
+  const zoneMap={cont:[0,0.32],trans:[0.32,0.44],mar:[0.44,1.0]};
+  const annot=[
+    {n:'Glaciale',   x:0.05,y:0.28,col:'#5090c8',zona:'cont'},
+    {n:'Eolico',     x:0.13,y:0.52,col:'#c8a83a',zona:'cont'},
+    {n:'Fluviale',   x:0.20,y:0.70,col:'#c87040',zona:'cont'},
+    {n:'Lacustre',   x:0.27,y:0.60,col:'#4080b8',zona:'cont'},
+    {n:'Delta',      x:0.34,y:0.92,col:'#50b050',zona:'trans'},
+    {n:'Estuario',   x:0.38,y:0.78,col:'#50b080',zona:'trans'},
+    {n:'Laguna',     x:0.40,y:0.88,col:'#30a8a8',zona:'trans'},
+    {n:'Spiaggia',   x:0.42,y:0.74,col:'#c8c050',zona:'trans'},
+    {n:'Piattaforma',x:0.53,y:0.72,col:'#3080c0',zona:'mar'},
+    {n:'Rampa',      x:0.65,y:0.58,col:'#30a0a0',zona:'mar'},
+    {n:'Scarpata',   x:0.77,y:0.40,col:'#3050a0',zona:'mar'},
+    {n:'Bacino profondo',x:0.90,y:0.26,col:'#5050b0',zona:'mar'},
+  ];
+
+  const zoneInfo={
+    cont:{n:'Ambienti Continentali',col:'#6a4a2a',
+      desc:'Formati sulla terraferma, sopra o a contatto con la crosta continentale. Includono ambienti glaciali (alte quote), eolici (deserti), fluviali (fiumi) e lacustri (laghi). Assenza o scarsità di fauna marina.'},
+    trans:{n:'Ambienti Transizionali',col:'#4a7a3a',
+      desc:'Al confine tra continente e mare. Fortemente influenzati dall\'interazione fiume/onde/maree. Delta, estuari, lagune e spiagge mostrano caratteristiche miste marine e continentali. Fauna salmastra.'},
+    mar:{n:'Ambienti Marini',col:'#1a4a6a',
+      desc:'Dalla piattaforma continentale (0–200 m) al bacino abissale (>4000 m). Energia decrescente verso il largo. Controllati da onde, maree, correnti di fondo e correnti di torbida. Fauna marina diversificata.'},
+    
+  };
+
+  // Sfondo profilo
+  ctx.beginPath();
+  ctx.moveTo(pL,pT+gH);
+  ctx.lineTo(pL,pT+profH*0.15);
+  ctx.lineTo(pL+gW*0.08,pT+profH*0.35);
+  ctx.lineTo(pL+gW*0.20,pT+profH*0.65);
+  ctx.lineTo(pL+gW*0.30,pT+profH*0.82);
+  ctx.lineTo(pL+gW*0.44,seaLevel);
+  ctx.lineTo(pL+gW*0.56,seaLevel-gH*0.03);
+  ctx.lineTo(pL+gW*0.68,seaLevel+gH*0.06);
+  ctx.lineTo(pL+gW*0.76,seaLevel+gH*0.28);
+  ctx.lineTo(pL+gW*0.87,seaLevel+gH*0.54);
+  ctx.lineTo(pL+gW,seaLevel+gH*0.60);
+  ctx.lineTo(pL+gW,pT+gH);ctx.closePath();
+  const grad=ctx.createLinearGradient(pL,pT,pL+gW,pT);
+  grad.addColorStop(0,'rgba(100,65,25,0.75)');
+  grad.addColorStop(0.32,'rgba(75,100,45,0.75)');
+  grad.addColorStop(0.32,'rgba(45,90,55,0.65)');
+  grad.addColorStop(0.44,'rgba(35,75,50,0.65)');
+  grad.addColorStop(0.44,'rgba(15,40,100,0.6)');
+  grad.addColorStop(1,'rgba(8,15,55,0.6)');
+  ctx.fillStyle=grad;ctx.fill();
+
+  // Evidenziazione zona selezionata
+  if(selZ&&zoneMap[selZ]){
+    const[x0,x1]=zoneMap[selZ];
+    ctx.fillStyle=zoneInfo[selZ]?zoneInfo[selZ].col:'#ffffff';
+    ctx.globalAlpha=0.07;
+    ctx.fillRect(pL+x0*gW,pT-20,gW*(x1-x0),gH+20);
+    ctx.globalAlpha=1;
+    ctx.strokeStyle=zoneInfo[selZ]?zoneInfo[selZ].col:'#ffffff';
+    ctx.lineWidth=1.5;ctx.globalAlpha=0.4;
+    ctx.strokeRect(pL+x0*gW,pT-20,gW*(x1-x0),gH+20);
+    ctx.globalAlpha=1;
+  }
+
+  // Livello del mare
+  ctx.beginPath();ctx.moveTo(pL+gW*0.44,seaLevel);ctx.lineTo(pL+gW,seaLevel);
+  ctx.strokeStyle='rgba(0,150,220,0.45)';ctx.lineWidth=1.5;ctx.setLineDash([8,4]);ctx.stroke();ctx.setLineDash([]);
+  lbl('Livello del mare',pL+gW*0.54,seaLevel-8,'rgba(0,180,255,0.65)','italic 10px Crimson Pro');
+
+  // Cerchi ambienti
+  annot.forEach(a=>{
+    const x=pL+a.x*gW,y=pT+a.y*gH;
+    const inZone=selZ&&zoneMap[selZ]&&a.zona===selZ;
+    const hiHov=hovZ===a.n;
+    // Cerca match anche per nome parziale (es. 'Piattaforma' matcha 'Piattaforma continentale')
+    const hiSel=selPanAmb&&(selPanAmb===a.n||selPanAmb.includes(a.n)||a.n.includes(selPanAmb.split(' ')[0]));
+    const hi=inZone||hiHov||hiSel;
+    ctx.beginPath();ctx.arc(x,y,hi?8:5,0,2*Math.PI);
+    ctx.fillStyle=a.col;ctx.globalAlpha=hi?0.95:0.65;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.8)':'rgba(200,204,216,0.3)';ctx.lineWidth=hi?2:0.8;ctx.stroke();
+    lbl(a.n,x,y-(hi?16:11),hi?'#fff':a.col,`bold ${hi?13:11}px Crimson Pro`);
+  });
+
+  // Separatori zone
+  [0.32,0.44].forEach(xr=>{
+    ctx.beginPath();ctx.moveTo(pL+xr*gW,pT-20);ctx.lineTo(pL+xr*gW,pT+gH);
+    ctx.strokeStyle='rgba(200,204,216,0.18)';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+  });
+  [['CONTINENTALE',0.16,'rgba(200,120,60,0.85)'],['TRANS.',0.38,'rgba(80,180,80,0.85)'],['MARINO',0.72,'rgba(50,130,200,0.85)']].forEach(([n,xr,col])=>{
+    lbl(n,pL+xr*gW,pT-8,col,'bold 11px Space Mono');
+  });
+
+  // Profondità
+  const depthAnnot=[[0,'0 m'],[0.15,'~30 m'],[0.35,'~200 m'],[0.65,'~2000 m'],[1.0,'~5000 m']];
+  depthAnnot.forEach(([fr,d])=>{
+    const y=seaLevel+fr*(pT+gH-seaLevel-10);
+    ctx.font='8px Space Mono';ctx.fillStyle='rgba(138,142,154,0.45)';ctx.textAlign='right';ctx.fillText(d,pL+gW-2,y+3);
+  });
+
+  // Pannello descrizione in basso sul canvas (font grandi, leggibili)
+  const descTgt=selPanAmb||hovZ;
+  const descZona=selZ&&!selPanAmb&&!hovZ?selZ:null;
+  let descAmb=null;
+  if(descTgt){
+    for(const grp of ['cont','trans','mar']){
+      const a=AMBIENTI[grp].find(a=>a.n===descTgt||a.n.includes(descTgt));
+      if(a){descAmb=a;break;}
+    }
+  }
+
+  // Area descrizione fissa in basso (100px)
+  const descY2=pT+gH+10;
+  const descH2=H-descY2-8;
+  if(descH2<40){return;}
+  ctx.fillStyle='rgba(10,12,18,0.88)';ctx.fillRect(pL,descY2,gW,descH2);
+  ctx.strokeStyle='rgba(40,50,70,0.6)';ctx.lineWidth=1;ctx.strokeRect(pL,descY2,gW,descH2);
+
+  if(descAmb){
+    ctx.strokeStyle=descAmb.col;ctx.lineWidth=1.5;ctx.globalAlpha=0.6;ctx.strokeRect(pL,descY2,gW,descH2);ctx.globalAlpha=1;
+    lbl(descAmb.n,pL+16,descY2+18,descAmb.col,'bold 14px Crimson Pro','left');
+    ctx.font='13px Crimson Pro';ctx.fillStyle='rgba(0,212,255,0.9)';ctx.textAlign='left';
+    ctx.fillText('Energia: '+descAmb.energia,pL+16,descY2+36);
+    ctx.fillStyle='rgba(168,255,120,0.9)';
+    ctx.fillText('Granulometria: '+descAmb.granulo,pL+16,descY2+52);
+    ctx.fillStyle='rgba(210,215,225,0.85)';
+    // Nota con word wrap
+    ctx.font='italic 12px Crimson Pro';
+    const words=descAmb.note.split(' ');let line='';let cy=descY2+68;
+    words.forEach(w=>{
+      const test=line+w+' ';
+      if(ctx.measureText(test).width>gW-32&&line){
+        if(cy<descY2+descH2-14){ctx.fillText(line.trim(),pL+16,cy);cy+=16;}
+        line=w+' ';
+      } else line=test;
+    });
+    if(cy<descY2+descH2-10)ctx.fillText(line.trim(),pL+16,cy);
+  } else if(descZona&&zoneInfo[descZona]){
+    const zi=zoneInfo[descZona];
+    ctx.strokeStyle=zi.col;ctx.lineWidth=1.5;ctx.globalAlpha=0.6;ctx.strokeRect(pL,descY2,gW,descH2);ctx.globalAlpha=1;
+    lbl(zi.n,pL+16,descY2+18,zi.col,'bold 14px Crimson Pro','left');
+    ctx.font='13px Crimson Pro';ctx.fillStyle='rgba(210,215,225,0.85)';ctx.textAlign='left';
+    const words=zi.desc.split(' ');let line='';let cy=descY2+36;
+    words.forEach(w=>{
+      const test=line+w+' ';
+      if(ctx.measureText(test).width>gW-32&&line){
+        if(cy<descY2+descH2-14){ctx.fillText(line.trim(),pL+16,cy);cy+=17;}
+        line=w+' ';
+      } else line=test;
+    });
+    if(cy<descY2+descH2-10)ctx.fillText(line.trim(),pL+16,cy);
+  } else {
+    ctx.font='italic 13px Crimson Pro';ctx.fillStyle='rgba(138,142,154,0.5)';ctx.textAlign='center';
+    ctx.fillText('Selezionare una zona o passare il mouse su un ambiente',pL+gW/2,descY2+descH2/2);
+  }
+  hideInfo();
+}
+
+// =====================================================================
+// DRAW AMBIENTI (generico per cont/trans/mar)
+// =====================================================================
+function drawAmbienti(gruppo){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+
+  const list=AMBIENTI[gruppo];
+  const n=list.length;
+  // Layout: grafico sopra (45% altezza), descrizione sotto (55%)
+  const pL=14,pR=14,pT=32,gapY=12;
+  const grafH=Math.floor((H-pT)*0.42);
+  const descY=pT+grafH+gapY;
+  const descH=H-descY-10;
+  const gW=W-pL-pR;
+  const blockW=Math.floor(gW/n);
+
+  // Titolo zona
+  const titoloZona={cont:'Ambienti Continentali',trans:'Ambienti Transizionali',mar:'Ambienti Marini'}[gruppo];
+  lbl(titoloZona,pL+gW/2,pT-8,'rgba(200,204,216,0.7)','italic 13px Crimson Pro');
+
+  list.forEach((amb,i)=>{
+    const x=pL+i*blockW+3,bw=blockW-6;
+    const hi=selA===amb.n||hovA===amb.n;
+    const sel=selA===amb.n;
+
+    // Blocco grafico
+    ctx.fillStyle=amb.col;ctx.globalAlpha=hi?0.75:0.38;
+    ctx.fillRect(x,pT,bw,grafH);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.7)':'rgba(200,204,216,0.18)';
+    ctx.lineWidth=hi?2.5:0.8;ctx.strokeRect(x,pT,bw,grafH);
+
+    // Schema visivo
+    drawAmbienteSchema(ctx,amb.n,amb.col,x,pT,bw,grafH,hi);
+
+    // Nome nel blocco
+    const cx=x+bw/2,cy=pT+grafH/2;
+    ctx.font=`bold ${Math.min(14,bw*0.09)}px Crimson Pro`;ctx.textAlign='center';
+    ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+    ctx.strokeText(amb.n,cx,cy);ctx.fillStyle=hi?'#fff':'rgba(230,234,248,0.92)';ctx.fillText(amb.n,cx,cy);
+  });
+
+  // ── Zona descrizione (sotto il grafico) ──────────────────────────
+  const amb=selA?list.find(a=>a.n===selA):hovA?list.find(a=>a.n===hovA):null;
+
+  if(amb){
+    // Sfondo pannello descrizione
+    ctx.fillStyle='rgba(10,12,18,0.85)';ctx.fillRect(pL,descY,gW,descH);
+    ctx.strokeStyle=amb.col;ctx.lineWidth=1.5;ctx.globalAlpha=0.6;
+    ctx.strokeRect(pL,descY,gW,descH);ctx.globalAlpha=1;
+
+    const tx=pL+14,tw=gW-28,lineH=17;
+    let curY=descY+18;
+
+    // Titolo
+    ctx.font=`bold 14px Crimson Pro`;ctx.fillStyle=amb.col;ctx.textAlign='left';
+    ctx.fillText(amb.n,tx,curY);curY+=lineH+4;
+
+    // Righe info
+    const rows=[
+      ['Energia',amb.energia,'rgba(0,212,255,0.95)'],
+      ['Granulometria',amb.granulo,'rgba(168,255,120,0.95)'],
+      ['Strutture sed.',amb.strutture,'rgba(210,215,225,0.9)'],
+      ['Rocce',amb.rocce,'rgba(210,215,225,0.9)'],
+      ['Fossili',amb.fossili,'rgba(210,215,225,0.9)'],
+    ];
+    rows.forEach(([label,val,col])=>{
+      if(curY>descY+descH-40)return;
+      ctx.font='bold 13px Crimson Pro';ctx.fillStyle='rgba(160,165,175,0.95)';ctx.textAlign='left';
+      ctx.fillText(label+':',tx,curY);
+      ctx.font='13px Crimson Pro';ctx.fillStyle=col;
+      const maxW=tw-115;
+      const words=val.split(' ');let line='',lx=tx+118;
+      words.forEach(w=>{
+        const test=line+w+' ';
+        if(ctx.measureText(test).width>maxW&&line){
+          ctx.fillText(line.trim(),lx,curY);curY+=14;lx=tx+105;line=w+' ';
+        } else line=test;
+      });
+      if(line)ctx.fillText(line.trim(),lx,curY);
+      curY+=19;
+    });
+
+    // Nota
+    if(curY<descY+descH-20){
+      curY+=4;
+      ctx.font='italic 12px Crimson Pro';ctx.fillStyle='rgba(185,188,205,0.8)';
+      const nota=amb.note;const words=nota.split(' ');let line='';
+      words.forEach(w=>{
+        const test=line+w+' ';
+        if(ctx.measureText(test).width>tw&&line){
+          if(curY<descY+descH-16){ctx.fillText(line.trim(),tx,curY);curY+=14;}
+          line=w+' ';
+        } else line=test;
+      });
+      if(curY<descY+descH-10)ctx.fillText(line.trim(),tx,curY);
+    }
+  } else {
+    // Nessuna selezione
+    ctx.font='italic 12px Crimson Pro';ctx.fillStyle='rgba(138,142,154,0.45)';ctx.textAlign='center';
+    ctx.fillText('Passare il mouse o selezionare un ambiente dal pannello',pL+gW/2,descY+descH/2);
+  }
+
+  // Bouma overlay quando Torbiditi selezionato
+  if(selA==='Bacino profondo'){
+    const bouchè=list.findIndex(a=>a.n==='Torbiditi');
+    if(bouchè>=0){
+      // Oscura tutti gli altri
+      list.forEach((a,i)=>{
+        if(i===bouchè)return;
+        const x=pL+i*blockW+3,bw2=blockW-6;
+        ctx.fillStyle='rgba(7,9,14,0.6)';ctx.fillRect(x,pT,bw2,grafH);
+      });
+      // Colonna Bouma a fianco del blocco torbiditi
+      const bx=pL+bouchè*blockW+3,bw2=blockW-6;
+      const bouW=Math.min(bw2-10,110);
+      const bouH=grafH-16;
+      const bouX=bx+(bw2-bouW)/2;
+      const bouY=pT+8;
+      BOUMA.forEach((b,i)=>{
+        const by=bouY+i*(bouH/5);
+        const bh=bouH/5-2;
+        const hiB=selSA&&selSA.charAt(1)===b.id.charAt(1)&&selSA.startsWith('T');
+        ctx.fillStyle=b.col;ctx.globalAlpha=hiB?0.9:0.5;ctx.fillRect(bouX,by,bouW,bh);ctx.globalAlpha=1;
+        ctx.strokeStyle=hiB?'rgba(255,255,255,0.7)':'rgba(200,204,216,0.2)';ctx.lineWidth=hiB?2:0.5;ctx.strokeRect(bouX,by,bouW,bh);
+        lbl(b.id,bouX+bouW/2,by+bh/2+5,hiB?'#fff':'rgba(230,234,248,0.85)','bold 13px Space Mono');
+      });
+    }
+  }
+  if(selSA)drawSottoAmbiente();
+}
+
+function drawAmbienteSchema(ctx,nome,col,x,y,w,h,hi){
+  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  ctx.globalAlpha=hi?0.5:0.25;
+  const cx=x+w/2,cy=y+h*0.35;
+
+  if(nome==='Fluviale'){
+    // Serpentina (meandro)
+    ctx.strokeStyle='rgba(80,150,220,0.8)';ctx.lineWidth=4;ctx.beginPath();
+    ctx.moveTo(x+10,y+h*0.2);ctx.bezierCurveTo(cx,y+h*0.05,cx,y+h*0.35,x+w-10,y+h*0.25);
+    ctx.stroke();
+    ctx.strokeStyle='rgba(80,150,220,0.4)';ctx.lineWidth=8;ctx.stroke();
+  } else if(nome==='Eolico'){
+    // Dune
+    for(let d=0;d<3;d++){
+      const dx=x+d*(w/3)+w/6;
+      ctx.beginPath();ctx.moveTo(dx-w/8,y+h*0.5);
+      ctx.quadraticCurveTo(dx,y+h*0.25,dx+w/8,y+h*0.5);
+      ctx.fillStyle='rgba(180,160,80,0.6)';ctx.fill();
+    }
+  } else if(nome==='Lacustre'){
+    ctx.beginPath();ctx.ellipse(cx,cy,w*0.35,h*0.18,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(30,80,150,0.5)';ctx.fill();
+    ctx.strokeStyle='rgba(80,150,220,0.4)';ctx.lineWidth=1;ctx.stroke();
+  } else if(nome==='Glaciale'){
+    ctx.fillStyle='rgba(200,220,240,0.4)';ctx.fillRect(x,y,w,h*0.4);
+    ctx.fillStyle='rgba(150,180,220,0.3)';
+    for(let b=0;b<4;b++) ctx.fillRect(x+b*(w/4),y+h*0.38,w/4-2,6);
+  } else if(nome==='Delta'){
+    ctx.beginPath();ctx.moveTo(cx,y+h*0.15);
+    ctx.lineTo(x+8,y+h*0.55);ctx.lineTo(x+w-8,y+h*0.55);ctx.closePath();
+    ctx.fillStyle='rgba(80,150,60,0.5)';ctx.fill();
+    ctx.strokeStyle='rgba(30,100,200,0.5)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(cx,y+h*0.2);ctx.lineTo(cx,y+h*0.55);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,y+h*0.35);ctx.lineTo(x+w*0.3,y+h*0.55);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,y+h*0.35);ctx.lineTo(x+w*0.7,y+h*0.55);ctx.stroke();
+  } else if(nome==='Estuario'){
+    ctx.beginPath();ctx.moveTo(cx-w*0.3,y+h*0.15);
+    ctx.quadraticCurveTo(cx,y+h*0.35,cx+w*0.3,y+h*0.15);
+    ctx.lineTo(cx+w*0.3,y+h*0.55);ctx.lineTo(cx-w*0.3,y+h*0.55);ctx.closePath();
+    ctx.fillStyle='rgba(30,100,200,0.4)';ctx.fill();
+  } else if(nome==='Laguna / Piattaforma carbonatica'){
+    ctx.fillStyle='rgba(30,130,130,0.4)';ctx.fillRect(x+10,y+h*0.25,w-20,h*0.3);
+    ctx.fillStyle='rgba(180,150,80,0.5)';ctx.fillRect(x+5,y+h*0.55,w-10,8);
+  } else if(nome==='Spiaggia / Barriera litorale'){
+    ctx.fillStyle='rgba(180,160,80,0.5)';
+    ctx.fillRect(x+5,y+h*0.3,w-10,h*0.2);
+    ctx.fillStyle='rgba(30,100,200,0.3)';
+    ctx.fillRect(x+5,y+h*0.5,w-10,h*0.2);
+    for(let wv=0;wv<3;wv++){
+      ctx.beginPath();ctx.moveTo(x+5+wv*(w/3),y+h*0.5);
+      ctx.quadraticCurveTo(x+5+(wv+0.5)*(w/3),y+h*0.44,x+5+(wv+1)*(w/3),y+h*0.5);
+      ctx.strokeStyle='rgba(100,180,255,0.5)';ctx.lineWidth=1.5;ctx.stroke();
+    }
+  } else if(nome==='Piattaforma continentale'){
+    ctx.fillStyle='rgba(30,80,150,0.35)';ctx.fillRect(x,y+h*0.3,w,h*0.4);
+    ctx.strokeStyle='rgba(80,150,220,0.3)';ctx.lineWidth=0.8;
+    for(let wv=0;wv<4;wv++){const wy=y+h*(0.32+wv*0.06);
+      ctx.beginPath();ctx.moveTo(x,wy);ctx.lineTo(x+w,wy);ctx.stroke();}
+  } else if(nome==='Rampa / Piattaforma carbonatica'){
+    ctx.fillStyle='rgba(30,130,130,0.35)';
+    ctx.beginPath();ctx.moveTo(x,y+h*0.25);ctx.lineTo(x+w,y+h*0.55);
+    ctx.lineTo(x+w,y+h*0.85);ctx.lineTo(x,y+h*0.55);ctx.closePath();ctx.fill();
+    ctx.fillStyle='rgba(180,120,40,0.4)';
+    for(let r=0;r<3;r++){ctx.beginPath();ctx.arc(x+w*0.2+r*w*0.25,y+h*0.4,6,0,2*Math.PI);ctx.fill();}
+  } else if(nome==='Scarpata e Bacino'){
+    ctx.beginPath();ctx.moveTo(x,y+h*0.2);ctx.lineTo(x+w*0.4,y+h*0.6);
+    ctx.lineTo(x+w,y+h*0.7);ctx.lineTo(x+w,y+h*0.9);ctx.lineTo(x,y+h*0.9);ctx.closePath();
+    ctx.fillStyle='rgba(10,20,60,0.5)';ctx.fill();
+  } else if(nome==='Torbiditi'){
+    // Lamine alternate
+    const cols2=['rgba(120,100,60,0.5)','rgba(60,80,100,0.5)'];
+    for(let l=0;l<8;l++){ctx.fillStyle=cols2[l%2];ctx.fillRect(x+5,y+h*0.2+l*h*0.07,w-10,h*0.065);}
+    // Freccia flusso
+    ctx.strokeStyle='rgba(255,180,60,0.6)';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(x+15,y+h*0.15);ctx.lineTo(x+w-15,y+h*0.15);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x+w-20,y+h*0.12);ctx.lineTo(x+w-15,y+h*0.15);ctx.lineTo(x+w-20,y+h*0.18);ctx.stroke();
+  }
+  ctx.restore();ctx.globalAlpha=1;
+}
+
+function drawSottoAmbiente(){
+  if(!selSA)return;
+  // Controlla DELTA_TIPI prima
+  if(DELTA_TIPI[selSA]){
+    const d=DELTA_TIPI[selSA];
+    showInfo(`<b>${d.n}</b><br><b>Forma:</b> <span class="acc">${d.forma}</span><br><b>Processi:</b> ${d.proc}<br><b>Strutture:</b> ${d.strutture}<br><b>Esempi:</b> <span class="val">${d.esempi}</span><br><br><span style="font-style:italic;font-size:.62rem">${d.note}</span>`);
+    return;
+  }
+  // Controlla BOUMA
+  if(selSA.startsWith('T')&&selSA.includes(' - ')){
+    const bid=selSA.charAt(1);
+    const b=BOUMA.find(b=>b.id.toLowerCase()===('t'+bid));
+    if(b){showInfo(`<b>${b.n}</b><br><br><span style="font-style:italic">${b.desc}</span>`);return;}
+  }
+  if(!SOTTO_AMBIENTI[selSA])return;
+  const sa=SOTTO_AMBIENTI[selSA];
+  showInfo(`<b>${sa.n}</b><br>${sa.desc}<br><b>Strutture:</b> <span class="acc">${sa.strutt||sa.proc||''}</span><br>${sa.granulo?`<b>Granulometria:</b> <span class="val">${sa.granulo}</span><br>`:''} ${sa.esempi?`<b>Esempi:</b> ${sa.esempi}`:''}`);
+}
+
+// DRAW BOUMA (dentro torbiditi)
+function drawBouma(){
+  const W=C.width,H=C.height;
+  const pL=40,pR=80,pT=40,pB=30;
+  const bW=Math.min(W*0.22,160);
+  const bH=H-pT-pB;
+  const bX=pL;
+
+  BOUMA.forEach((b,i)=>{
+    const y=pT+i*(bH/5);
+    const h=bH/5-3;
+    const hi=selSA===('T'+b.id.charAt(1)+' - '+['Sabbioso massiccio','Laminazione planare','Ripple e convolute','Laminazione fine','Pelite pelagica'][i]);
+    ctx.fillStyle=b.col;ctx.globalAlpha=hi?0.85:0.45;ctx.fillRect(bX,y,bW,h);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.2)';ctx.lineWidth=hi?2:0.7;ctx.strokeRect(bX,y,bW,h);
+    lbl(b.id,bX+bW/2,y+h/2+4,hi?'#fff':'rgba(230,234,248,0.9)','bold 13px Space Mono');
+    lbl(b.n.substring(5),bX+bW+10,y+h/2+4,hi?b.col:'rgba(200,204,216,0.75)','bold 11px Crimson Pro','left');
+    if(hi)showInfo(`<b>${b.n}</b><br>${b.desc}`);
+  });
+  lbl('Sequenza di Bouma',bX+bW/2,pT-16,'rgba(200,204,216,0.7)','italic 11px Crimson Pro');
+  lbl('↑ alto',bX+bW+10,pT+15,'rgba(200,204,216,0.4)','10px Space Mono','left');
+  lbl('↓ base',bX+bW+10,pT+bH-10,'rgba(200,204,216,0.4)','10px Space Mono','left');
+}
+
+// =====================================================================
+// DRAW
+// =====================================================================
+function draw(){
+  if(tab==='panorama')drawPanorama();
+  else if(tab==='cont')drawAmbienti('cont');
+  else if(tab==='trans')drawAmbienti('trans');
+  else{drawAmbienti('mar');}
+}
+
+// =====================================================================
+// MOUSE sul panorama
+// =====================================================================
+C.addEventListener('mousemove',e=>{
+  const r=C.getBoundingClientRect();
+  const mx=(e.clientX-r.left)*(C.width/r.width);
+  const my=(e.clientY-r.top)*(C.height/r.height);
+
+  if(tab==='panorama'){
+    const W=C.width,H=C.height;
+    const pL=20,pR=20,pT=50,pB=115,gW=W-pL-pR,gH=H-pT-pB;
+    const annot=[
+      {n:'Glaciale',x:0.05,y:0.28},{n:'Eolico',x:0.13,y:0.52},
+      {n:'Fluviale',x:0.20,y:0.70},{n:'Lacustre',x:0.27,y:0.60},
+      {n:'Delta',x:0.37,y:0.88},{n:'Spiaggia',x:0.46,y:0.74},
+      {n:'Laguna',x:0.53,y:0.82},{n:'Estuario',x:0.60,y:0.70},
+      {n:'Piattaforma',x:0.71,y:0.62},{n:'Rampa',x:0.78,y:0.50},
+      {n:'Scarpata',x:0.85,y:0.36},{n:'Torbiditi',x:0.93,y:0.26},
+    ];
+    const hit=annot.find(a=>{const ax=pL+a.x*gW,ay=pT+a.y*gH;return Math.hypot(mx-ax,my-ay)<16;});
+    const newH=hit?hit.n:null;
+    if(hovZ!==newH){hovZ=newH;
+      if(newH){
+        // mostra info immediata al hover
+        let found=null;
+        for(const grp of ['cont','trans','mar']){
+          const ambN=AMBIENTI[grp].find(a=>a.n===newH||a.n.includes(newH));
+          if(ambN){found=ambN;break;}
+        }
+      } // il canvas ridisegna con la descrizione
+      draw();
+    }
+  } else {
+    const gruppo={cont:'cont',trans:'trans',mar:'mar'}[tab];
+    if(!gruppo)return;
+    const list=AMBIENTI[gruppo];
+    const pL=14,pR=14,pT=32,gW=C.width-pL-pR,grafH=Math.floor((C.height-pT)*0.42);
+    const blockW=Math.floor(gW/list.length);
+    const idx=Math.floor((mx-pL)/blockW);
+    if(my>=pT&&my<=pT+grafH&&idx>=0&&idx<list.length){
+      const a=list[idx];
+      if(hovA!==a.n){hovA=a.n;draw();}
+    } else {
+      if(hovA){hovA=null;draw();}
+    }
+  }
+},{passive:true});
+
+C.addEventListener('click',e=>{
+  if(tab!=='panorama')return;
+  const r=C.getBoundingClientRect();
+  const mx=(e.clientX-r.left)*(C.width/r.width);
+  const my=(e.clientY-r.top)*(C.height/r.height);
+  const W=C.width,H=C.height;
+  const pL=20,pR=20,pT=50,pB=115,gW=W-pL-pR,gH=H-pT-pB;
+  const annot=[
+    {n:'Glaciale',x:0.05,y:0.28},{n:'Eolico',x:0.13,y:0.52},{n:'Fluviale',x:0.20,y:0.70},{n:'Lacustre',x:0.27,y:0.60},
+    {n:'Delta',x:0.34,y:0.92},{n:'Estuario',x:0.38,y:0.78},{n:'Laguna',x:0.40,y:0.88},{n:'Spiaggia',x:0.42,y:0.74},
+    {n:'Piattaforma',x:0.53,y:0.72},{n:'Rampa',x:0.65,y:0.58},{n:'Scarpata',x:0.77,y:0.40},{n:'Bacino profondo',x:0.90,y:0.26},
+  ];
+  const hit=annot.find(a=>Math.hypot(mx-pL-a.x*gW,my-pT-a.y*gH)<16);
+  if(hit){selPanAmb=selPanAmb===hit.n?null:hit.n;draw();}
+});
+
+C.addEventListener('mouseleave',()=>{
+  hovZ=null;hovA=null;draw();
+});
+
+// Tab listeners
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
+  tab=b.dataset.tab;
+  ['sbPanorama','sbCont','sbTrans','sbMar'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={panorama:'sbPanorama',cont:'sbCont',trans:'sbTrans',mar:'sbMar'};
+  const sb=document.getElementById(map[tab]);sb.style.display='flex';sb.style.flexDirection='column';
+  selZ=null;selA=null;selSA=null;hovZ=null;hovA=null;selPanAmb=null;hideInfo();
+  document.querySelectorAll('.btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('ibar').textContent={
+    panorama:'Schema generale degli ambienti deposizionali — dal continentale al marino profondo',
+    cont:'Ambienti continentali — fluviale, eolico, lacustre, glaciale',
+    trans:'Ambienti transizionali — delta, estuario, laguna, spiaggia',
+    mar:'Ambienti marini — piattaforma, rampa carbonatica, scarpata, torbiditi',
+  }[tab];
+  draw();
+}));
+
+document.querySelectorAll('[data-z]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.z;
+  document.querySelectorAll('[data-z],[data-pan]').forEach(x=>x.classList.remove('on'));
+  selPanAmb=null;
+  if(selZ===k){selZ=null;hideInfo();}else{selZ=k;b.classList.add('on');}draw();
+}));
+
+// Ambienti nel pannello panorama
+document.querySelectorAll('[data-pan]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.pan;
+  document.querySelectorAll('[data-z],[data-pan]').forEach(x=>x.classList.remove('on'));
+  selZ=null;
+  if(selPanAmb===k){selPanAmb=null;}else{selPanAmb=k;b.classList.add('on');}
+  draw();
+}));
+
+document.querySelectorAll('[data-a]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.a;
+  document.querySelectorAll('[data-a]').forEach(x=>x.classList.remove('on'));
+  // Reset sempre selSA quando si clicca un ambiente
+  selSA=null;document.querySelectorAll('[data-sa]').forEach(x=>x.classList.remove('on'));
+  if(selA===k){selA=null;hideInfo();}else{selA=k;b.classList.add('on');}
+  draw();
+}));
+
+document.querySelectorAll('[data-sa]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.sa;
+  document.querySelectorAll('[data-sa]').forEach(x=>x.classList.remove('on'));
+  if(selSA===k){selSA=null;}else{
+    selSA=k;b.classList.add('on');
+    // Auto-seleziona il padre se necessario
+    if(['Canale braided','Canale meandriforme','Pianura alluvionale','Conoide alluvionale'].includes(k)){
+      selA='Fluviale';document.querySelectorAll('[data-a]').forEach(x=>{x.classList.toggle('on',x.dataset.a==='Fluviale');});
+    }
+    if(['Delta fluvio-dominato','Delta onda-dominato','Delta marea-dominato'].includes(k)){
+      selA='Delta';document.querySelectorAll('[data-a]').forEach(x=>{x.classList.toggle('on',x.dataset.a==='Delta');});
+    }
+    if(['Ta - Sabbioso massiccio','Tb - Laminazione planare','Tc - Ripple e convolute','Td - Laminazione fine','Te - Pelite pelagica'].includes(k)){
+      selA='Bacino profondo';document.querySelectorAll('[data-a]').forEach(x=>{x.classList.toggle('on',x.dataset.a==='Bacino profondo');});
+    }
+  }
+  draw();
+}));
+
+function resize(){
+  C.width=C.parentElement.clientWidth;
+  C.height=C.parentElement.clientHeight;
+  if(C.width>0&&C.height>0)draw();
+}
+window.addEventListener('resize',resize);
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Rocce Sedimentarie — Classificazione</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--panel:#111318;--border:#1e2230;--accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;--text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:.8rem}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.tabs{display:flex;gap:.2rem;margin-left:auto}
+.tab{padding:.22rem .8rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.tab.on,.tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:200px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.55rem;display:flex;flex-direction:column;gap:.35rem;overflow-y:auto}
+.sl{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.18rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.72rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.45rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.07)}
+.tog{display:flex;gap:.2rem}
+.tog .btn{font-size:.6rem;text-align:center;padding:.16rem 0;flex:1}
+.cw{flex:1;min-width:0;position:relative}
+canvas{width:100%;height:100%;display:block}
+#infoBox{position:absolute;bottom:10px;right:10px;width:240px;background:rgba(7,9,14,.93);border:1px solid var(--border);border-radius:5px;padding:.5rem .7rem;font-family:'Crimson Pro',serif;font-size:.62rem;line-height:1.78;color:var(--muted);pointer-events:none;display:none}
+#infoBox b{color:var(--text);font-style:normal;font-size:.65rem}
+.val{color:var(--accent);font-family:'Space Mono',monospace;font-size:.58rem}
+.acc{color:var(--accent3)}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.2rem 1rem;background:var(--panel);font-size:.58rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Rocce Sedimentarie &mdash; Classificazione</h1>
+  <div class="tabs">
+    <button class="tab on" data-tab="clastiche">Clastiche</button>
+    <button class="tab"    data-tab="carbonatiche">Carbonatiche</button>
+    <button class="tab"    data-tab="evaporiti">Evaporiti</button>
+  </div>
+</header>
+<div class="main">
+
+<!-- ===== SIDEBAR CLASTICHE ===== -->
+<aside class="sb" id="sbClastiche">
+  <div class="sl">Scala di Wentworth</div>
+  <button class="btn" data-w="Masso">Masso (&gt;256 mm)</button>
+  <button class="btn" data-w="Ciottolo">Ciottolo (64–256 mm)</button>
+  <button class="btn" data-w="Ghiaia">Ghiaia (4–64 mm)</button>
+  <button class="btn" data-w="Granulo">Granulo (2–4 mm)</button>
+  <button class="btn" data-w="Sabbia molto grossolana">Sabbia m. grossolana</button>
+  <button class="btn" data-w="Sabbia grossolana">Sabbia grossolana</button>
+  <button class="btn" data-w="Sabbia media">Sabbia media</button>
+  <button class="btn" data-w="Sabbia fine">Sabbia fine</button>
+  <button class="btn" data-w="Sabbia molto fine">Sabbia m. fine</button>
+  <button class="btn" data-w="Silt grossolano">Silt grossolano</button>
+  <button class="btn" data-w="Silt fine">Silt fine</button>
+  <button class="btn" data-w="Argilla">Argilla (&lt;0.004 mm)</button>
+  <div class="sl" style="margin-top:.3rem">Arenarie — Folk (1974)</div>
+  <button class="btn" data-f="Quarzarenite">Quarzarenite</button>
+  <button class="btn" data-f="Subarcose">Subarcose</button>
+  <button class="btn" data-f="Sublitarenite">Sublitarenite</button>
+  <button class="btn" data-f="Arcose">Arcose</button>
+  <button class="btn" data-f="Litarenite feldspatica">Litarenite feldspatica</button>
+  <button class="btn" data-f="Litarenite">Litarenite</button>
+  <button class="btn" data-f="Arcosa (Q basso)">Arcosa (Q basso)</button>
+  <button class="btn" data-f="Greywacke feldspatico">Greywacke feldspatico</button>
+  <button class="btn" data-f="Litarenite / Greywacke litico">Greywacke litico</button>
+</aside>
+
+<!-- ===== SIDEBAR CARBONATICHE ===== -->
+<aside class="sb" id="sbCarbonatiche" style="display:none">
+  <div class="sl">Schema</div>
+  <div class="tog">
+    <button class="btn on" id="btnDunham">Dunham 1962</button>
+    <button class="btn"    id="btnFolk59">Folk 1959</button>
+  </div>
+  <!-- Dunham panel -->
+  <div id="pDunham">
+    <div class="sl" style="margin-top:.3rem">Tipo di roccia</div>
+    <button class="btn" data-d="Mudstone">Mudstone</button>
+    <button class="btn" data-d="Wackestone">Wackestone</button>
+    <button class="btn" data-d="Packstone">Packstone</button>
+    <button class="btn" data-d="Grainstone">Grainstone</button>
+    <button class="btn" data-d="Boundstone">Boundstone</button>
+    <button class="btn" data-d="Crystalline">Crystalline</button>
+    <div class="sl" style="margin-top:.3rem">Componenti</div>
+    <button class="btn" data-dc="micrite">Micrite (matrice)</button>
+    <button class="btn" data-dc="sparite">Sparite (cemento)</button>
+    <button class="btn" data-dc="bioclasti">Bioclasti</button>
+    <button class="btn" data-dc="oidi">Oidi</button>
+    <button class="btn" data-dc="pellet">Pellet / Intraclasti</button>
+  </div>
+  <!-- Folk59 panel -->
+  <div id="pFolk59" style="display:none">
+    <div class="sl" style="margin-top:.3rem">Tipo di allochem</div>
+    <button class="btn" data-fa="bioclasti">Bioclasti</button>
+    <button class="btn" data-fa="oidi">Oidi</button>
+    <button class="btn" data-fa="pellet">Pellet</button>
+    <button class="btn" data-fa="intraclasti">Intraclasti</button>
+    <div class="sl" style="margin-top:.3rem">Pasta di fondo</div>
+    <button class="btn" data-fp="sparite">Sparite (alta energia)</button>
+    <button class="btn" data-fp="micrite">Micrite (bassa energia)</button>
+    <div class="sl" style="margin-top:.3rem">Rocce speciali</div>
+    <button class="btn" data-fa="dismicrite">Dismicrite</button>
+    <button class="btn" data-fa="micrite_pura">Micrite pura</button>
+  </div>
+</aside>
+
+<!-- ===== SIDEBAR EVAPORITI ===== -->
+<aside class="sb" id="sbEvaporiti" style="display:none">
+  <div class="sl">Sequenza di precipitazione</div>
+  <button class="btn" data-e="Calcite / Aragonite">Calcite / Aragonite</button>
+  <button class="btn" data-e="Dolomite">Dolomite</button>
+  <button class="btn" data-e="Gesso">Gesso</button>
+  <button class="btn" data-e="Anidrite">Anidrite</button>
+  <button class="btn" data-e="Alite (salgemma)">Alite (salgemma)</button>
+  <button class="btn" data-e="Silvite">Silvite</button>
+  <button class="btn" data-e="Carnallite">Carnallite</button>
+  <div class="sl" style="margin-top:.3rem">Contesti</div>
+  <button class="btn" data-ec="sabkha">Sabkha costiero</button>
+  <button class="btn" data-ec="bacino">Bacino evaporitico</button>
+  <button class="btn" data-ec="messinian">Crisi Messiniana</button>
+</aside>
+
+<div class="cw"><canvas id="C"></canvas><div id="infoBox"></div></div>
+</div>
+<div class="ibar" id="ibar">Rocce clastiche — Scala di Wentworth (1922) e triangolo Folk (1974)</div>
+
+<script>
+'use strict';
+// =====================================================================
+// DATI WENTWORTH
+// =====================================================================
+const WENTWORTH=[
+  {n:'Masso',                d:'>256',    phi:'>8',   g:'Rudite', roccia:'Conglomerato / Breccia',col:'#6a3a1a',
+   desc:'Clasti >256 mm. Conglomerato (arrotondati) o Breccia (angolosi). Alta energia: conoidi alluvionali, ghiacciai, spiagge energetiche.',matur:'Immatura'},
+  {n:'Ciottolo',             d:'64–256',  phi:'6–8',  g:'Rudite', roccia:'Conglomerato',col:'#7a4a2a',
+   desc:'Arrotondamento indica distanza di trasporto. Forma (sfericità, arrotondamento) = proxy per energia e agente di trasporto.',matur:'Immatura-submatura'},
+  {n:'Ghiaia',               d:'4–64',    phi:'2–6',  g:'Rudite', roccia:'Conglomerato',col:'#8a5a3a',
+   desc:'Depositi fluviali (canali, barre), costieri, eolici (lag). Embricatura clasti indica direzione di flusso.',matur:'Submatura'},
+  {n:'Granulo',              d:'2–4',     phi:'1–2',  g:'Rudite', roccia:'Conglom. / Arenite gr.',col:'#9a6a4a',
+   desc:'Al confine rudite/arenite. Depositi fluviali alta energia, beachface.',matur:'Submatura'},
+  {n:'Sabbia molto grossolana',d:'1–2',   phi:'0–1',  g:'Arenite',roccia:'Arenaria m. grossolana',col:'#9a8a5a',
+   desc:'Alta energia: canali fluviali, dune eoliche grandi, foreshore. Stratificazione incrociata a grande scala.',matur:'Submatura-matura'},
+  {n:'Sabbia grossolana',    d:'0.5–1',   phi:'-1–0', g:'Arenite',roccia:'Arenaria grossolana',col:'#8a7a4a',
+   desc:'Ambienti fluviali (barre), eolici (dune), litorali. Buona porosità (25-35%) → reservoir idrocarburi.',matur:'Matura'},
+  {n:'Sabbia media',         d:'0.25–0.5',phi:'-2–-1',g:'Arenite',roccia:'Arenaria media',col:'#7a6a3a',
+   desc:'Granulometria più comune nelle arenarie. Ambienti variatissimi: fluviale, eolico, marino costiero, torbiditi distali.',matur:'Matura-supermatura'},
+  {n:'Sabbia fine',          d:'0.125–0.25',phi:'-3–-2',g:'Arenite',roccia:'Arenaria fine',col:'#6a5a2a',
+   desc:'Bassa energia: offshore, prodelta, pianure alluvionali distali. Strutture: ripple, bioturbazione.',matur:'Supermatura'},
+  {n:'Sabbia molto fine',    d:'0.063–0.125',phi:'-4–-3',g:'Arenite',roccia:'Arenaria m. fine',col:'#5a4a1a',
+   desc:'Al confine arenite/lutite. Spesso ricca in mica. Eolico distale, shelf distale.',matur:'Supermatura'},
+  {n:'Silt grossolano',      d:'0.031–0.063',phi:'-5–-4',g:'Lutite',roccia:'Siltite',col:'#4a5a3a',
+   desc:'Loess, pianure alluvionali, delta, shelf. Plasticità nulla. Al microscopio: granuli a malapena visibili.',matur:'Supermatura'},
+  {n:'Silt fine',            d:'0.004–0.031',phi:'-6–-5',g:'Lutite',roccia:'Siltite / Argillite',col:'#3a4a2a',
+   desc:'Loess, torbiditi (divisione Td-Te di Bouma), shelf. Associata ad argilla in peliti miste.',matur:'Supermatura'},
+  {n:'Argilla',              d:'<0.004',  phi:'<-8',  g:'Lutite', roccia:'Argillite / Pelite / Shale',col:'#2a3a2a',
+   desc:'Minerali argillosi (illite, smectite, caolinite). Shale: argillite fissile laminata. Cap rock per idrocarburi. Source rock se ricca in materia organica.',matur:'—'},
+];
+
+// =====================================================================
+// DATI FOLK 1974
+// =====================================================================
+const FOLK74=[
+  {n:'Quarzarenite',         col:'#a89a6a',v:[[100,0,0],[90,10,0],[90,0,10]],
+   min:'Quarzo >90%',matur:'Supermatura',amb:'Desertico eolico, piattaforme cratoniche, spiagge con lungo riciclaggio',
+   desc:'Arenaria matura per eccellenza. Lungo trasporto o riciclaggio multiplo. Ottima porosità se non cementata da quarzo autigenico.'},
+  {n:'Subarcose',            col:'#8a7264',v:[[90,10,0],[75,25,0],[75,12.5,12.5],[90,0,10]],
+   min:'Q 75–90%, F>L',matur:'Submatura',amb:'Fluviale prossimale, apron glaciale, rift incipiente',
+   desc:'Feldspato parzialmente alterato. Sorgente granitica con moderata maturità chimica.'},
+  {n:'Sublitarenite',        col:'#7a8262',v:[[90,0,10],[75,12.5,12.5],[75,0,25]],
+   min:'Q 75–90%, L>F',matur:'Submatura',amb:'Fluviale, delta, piattaforma con sorgente sedimentaria',
+   desc:'Frammenti litici moderati. Sorgente rocce sedimentarie o metamorfiche a basso grado.'},
+  {n:'Arcose',               col:'#7a5a72',v:[[75,25,0],[25,75,0],[25,56.25,18.75],[75,18.75,6.25]],
+   min:'Q 25–75%, F/(F+L)>75%',matur:'Immatura',amb:'Conoidi alluvionali, rift iniziale, pedemontano arido',
+   desc:'Ricca in feldspato K. Erosione rapida di graniti/gneiss con scarsa alterazione chimica.'},
+  {n:'Litarenite feldspatica',col:'#5a6a62',v:[[75,18.75,6.25],[25,56.25,18.75],[25,18.75,56.25],[75,6.25,18.75]],
+   min:'Q 25–75%, F/(F+L) 25–75%',matur:'Immatura',amb:'Arco vulcanico, bacini di avanfossa, flysch appenninico',
+   desc:'Composizione mista con feldspati e litici in proporzioni simili. Tipica dei flysch delle catene orogenetiche.'},
+  {n:'Litarenite',           col:'#4a7252',v:[[75,6.25,18.75],[25,18.75,56.25],[25,0,75],[75,0,25]],
+   min:'Q 25–75%, L/(F+L)>75%',matur:'Immatura',amb:'Torbiditi, flysch, delta prossimali di catene orogenetiche',
+   desc:'Frammenti litici dominanti (scisti, filliti, selce, vulcaniti). Catene orogenetiche in erosione.'},
+  {n:'Arcosa (Q basso)',     col:'#6a4a7a',v:[[25,75,0],[0,100,0],[0,75,25],[25,56.25,18.75]],
+   min:'Q<25%, F dominante',matur:'Molto immatura',amb:'Erosione rapidissima di graniti in clima arido',
+   desc:'Feldspato K dominante. Erosione molto rapida, breve trasporto, climi aridi.'},
+  {n:'Greywacke feldspatico',col:'#4a5a6a',v:[[25,56.25,18.75],[0,75,25],[0,25,75],[25,18.75,56.25]],
+   min:'Q<25%, F/(F+L) 25–75%, matrice >15%',matur:'Molto immatura',amb:'Torbiditi prossimali, prismi di accrezione',
+   desc:'Greywacke con componente feldspatica. Deposizione rapida in ambiente profondo. Matrice argillosa abbondante.'},
+  {n:'Litarenite / Greywacke litico',col:'#3a5a4a',v:[[25,18.75,56.25],[0,25,75],[0,0,100],[25,0,75]],
+   min:'Q<25%, L dominante',matur:'Molto immatura',amb:'Torbiditi, flysch, margini convergenti',
+   desc:'Massima immaturità composizionale. Litici vulcanici o metamorfici dominanti.'},
+];
+
+// =====================================================================
+// DATI DUNHAM 1962
+// =====================================================================
+const DUNHAM=[
+  {n:'Mudstone',  col:'#1a3a2a',
+   def:'<10% grani (>20 μm) in matrice micritica dominante',
+   grani:'<10%',energia:'Molto bassa — lagune, rampa distale',
+   por:'1–5%',esempi:'Calcilutite lagunare, Chalk (Cretaceo), carbonati lacustri',
+   note:'La micrite forma per precipitazione chimica, degradazione algale o bioturbazione.'},
+  {n:'Wackestone',col:'#2a4a3a',
+   def:'10–50% grani dispersi in matrice micritica (mud-supported)',
+   grani:'10–50%',energia:'Bassa — lagune, rampa interna',
+   por:'5–15%',esempi:'Calcare a foraminiferi, calcare nodulare',
+   note:'I grani galleggiano nella micrite. Ambiente subtidale calmo con produzione biologica.'},
+  {n:'Packstone', col:'#3a5a4a',
+   def:'>50% grani a contatto grano-grano, micrite presente negli interstizi',
+   grani:'>50% (grain-supported + micrite)',energia:'Media-alta — piattaforma aperta',
+   por:'10–20%',esempi:'Calcare a bioclasti, calcarenite grigia',
+   note:'Transizione wackestone/grainstone. Buona porosità per reservoir carbonatici.'},
+  {n:'Grainstone',col:'#4a6a5a',
+   def:'>50% grani senza matrice micritica, cementati da sparite',
+   grani:'>50% (grain-supported, no micrite)',energia:'Alta — shoal ooliti, reef crest',
+   por:'20–35%',esempi:'Oolite (Giura, Bahamas), lumachella',
+   note:'Migliore reservoir carbonatico. Le ooliti indicano acque calde agitate.'},
+  {n:'Boundstone',col:'#5a7a6a',
+   def:'Organismi costruttori in posizione di vita',
+   grani:'N/A — struttura reef',energia:'Variabile (reef)',
+   por:'Molto variabile',esempi:'Reef a coralli, stromatoporidi, rudiste',
+   note:'Include bafflestone, bindstone, framestone.'},
+  {n:'Crystalline',col:'#2a3a4a',
+   def:'Struttura originale obliterata dalla ricristallizzazione diagenetica',
+   grani:'Non distinguibili',energia:'N/A (diagenetica)',
+   por:'Variabile (dissoluzione)',esempi:'Dolomia, marmo, calcite idrotermale',
+   note:'La dolomitizzazione aumenta la porosità del 12%. Importante per reservoir.'},
+];
+
+const COMPON={
+  micrite:{n:'Micrite',def:'Fango carbonatico <4 μm: cristalli di calcite precipitati o derivati da alghe/batteri',orig:'Precipitazione chimica, degradazione algale, bioturbazione',ruolo:'Matrice nei calcari fangosi. Indicatore di acque calme.'},
+  sparite:{n:'Sparite',def:'Cristalli di calcite limpida >4 μm nei pori',orig:'Precipitazione diagenetica da fluidi CaCO₃-ricchi',ruolo:'Cemento nei grainstone. Riduce la porosità primaria.'},
+  bioclasti:{n:'Bioclasti',def:'Frammenti scheletrici (gusci, coralli, echinodermi, foraminiferi)',orig:'Produzione biologica in situ o trasportata',ruolo:'Componente principale di pack- e grainstone. Indicatori paleoambientali.'},
+  oidi:{n:'Oidi',def:'Grani sferici con nucleo e cortex concentrico (0.1–2 mm)',orig:'Precipitazione in acque agitate, calde, sovrassature in CaCO₃',ruolo:'Componente dei grainstone ooliti. Indicatori di alta energia.'},
+  pellet:{n:'Pellet / Intraclasti',def:'Pellet: aggregati fecali micritici. Intraclasti: frammenti di sedimento rimaneggiati.',orig:'Pellet: biota bentonico. Intraclasti: erosione intrabasinale.',ruolo:'Indicatori di bassa energia (pellet) o rielaborazione (intraclasti).'},
+};
+
+// =====================================================================
+// DATI FOLK 1959
+// =====================================================================
+const FOLK59={
+  bioclasti:{
+    sparite:{n:'Biosparite',col:'#3a6a5a',amb:'Alta energia — reef crest, shoal, spiaggia carbonatica',
+      esempi:'Calcareniti a bioclasti cementate, lumachelle giurassiche',dunham:'≈ Grainstone',
+      desc:'Bioclasti cementati da sparite (calcite limpida). Cementazione precoce in ambiente freatico marino.'},
+    micrite:{n:'Biomicrite',col:'#2a5a4a',amb:'Media-bassa energia — lagune, piattaforma protetta',
+      esempi:'Calcare a foraminiferi, calcare nodulare',dunham:'≈ Wackestone / Packstone',
+      desc:'Bioclasti in matrice micritica. Ambiente subtidale calmo con intensa produzione biologica.'},
+  },
+  oidi:{
+    sparite:{n:'Oosparite',col:'#7a7a3a',amb:'Alta energia — shoal ooliti, spiagge carbonatiche tropicali',
+      esempi:'Oolite giurassica (Malm), Portland Stone (UK), Bahamas recente',dunham:'≈ Grainstone ooliti',
+      desc:'Oidi cementati da sparite. Ottimo reservoir se la porosità è preservata.'},
+    micrite:{n:'Oomicrite',col:'#5a5a2a',amb:'Energia moderata — shoal in decelerazione, lagune parzialmente protette',
+      esempi:'Calcare oolitico-micritico, ooliti lagunari',dunham:'≈ Packstone / Wackestone con oidi',
+      desc:'Oidi in matrice micritica. Micrizzazione degli oidi frequente (endolitici).'},
+  },
+  pellet:{
+    sparite:{n:'Pelsparite',col:'#5a7a3a',amb:'Moderata energia — lagune subtidali con bioturbazione',
+      esempi:'Calcare a pellet cementato',dunham:'≈ Grainstone a pellet',
+      desc:'Pellet cementati da sparite. Il cemento precoce preserva i pellet dalla compattazione.'},
+    micrite:{n:'Pelmicrite',col:'#3a5a2a',amb:'Bassa energia — lagune calme, piattaforma protetta',
+      esempi:'Calcare lagunare a pellet, fanghi carbonatici bioturbati',dunham:'≈ Wackestone a pellet',
+      desc:'Pellet in matrice micritica. Ambiente lagunare calmo tipico.'},
+  },
+  intraclasti:{
+    sparite:{n:'Intrasparite',col:'#6a5a3a',amb:'Alta energia — intertidal, tempestiti, bassa marea',
+      esempi:'Calcare intraclastico, tempestite carbonatica, flat pebble conglomerate',dunham:'≈ Grainstone a intraclasti',
+      desc:'Intraclasti cementati da sparite. Indica rielaborazione locale di sedimento già consolidato.'},
+    micrite:{n:'Intramicrite',col:'#4a4a2a',amb:'Moderata energia — zona intertidale con episodi di rielaborazione',
+      esempi:'Calcare intraclastico-micritico',dunham:'≈ Packstone / Wackestone a intraclasti',
+      desc:'Intraclasti in matrice micritica. Rielaborazione parziale in acque poco profonde.'},
+  },
+  dismicrite:{n:'Dismicrite',col:'#2a3a4a',
+    amb:'Intertidale-supratidale — essiccamento periodico',
+    esempi:"Calcare fenestrale del Triassico (Dolomiti), loferite, calcare laminato",
+    dunham:'≈ Mudstone con struttura fenestrale',
+    desc:"Micrite con cavità fenestrale (birds-eye) riempite da sparite o vuote. Le cavità = porosità primaria da essiccamento o bolle di gas."},
+  micrite_pura:{n:'Micrite (calcilutite)',col:'#1a2a3a',
+    amb:'Ambiente molto calmo — lagune chiuse, deep subtidal',
+    esempi:'Calcilutite lagunare, chalk (Cretaceo a coccolitoforidi)',
+    dunham:'= Mudstone',
+    desc:'Roccia carbonatica con >95% micrite. Ricristallizzazione in microsparite frequente in sepoltura.'},
+};
+
+// =====================================================================
+// DATI EVAPORITI
+// =====================================================================
+const EVAP=[
+  {n:'Calcite / Aragonite',f:'CaCO₃',      sol:'0.013',evap:[0,55],  col:'#4a6a8a',dens:'2.71/2.93',
+   giacit:'Lamine basali, mudflat, stromatoliti',esempi:'Calcari evaporitici, travertino, onyx',
+   note:'Primi a precipitare. Aragonite metastabile → calcite nel tempo. Acque marine o lacustri concentrate.'},
+  {n:'Dolomite',           f:'CaMg(CO₃)₂', sol:'0.032',evap:[48,65], col:'#3a5a7a',dens:'2.85',
+   giacit:'Sabkha, lagune ipersaline, sepoltura',esempi:'Dolomiti (Trias), sabkha Golfo Persico',
+   note:'La dolomia primaria è rara. Quasi sempre forma per dolomitizzazione diagenetica. Importante reservoir.'},
+  {n:'Gesso',              f:'CaSO₄·2H₂O', sol:'2.4',  evap:[70,90], col:'#8a7a5a',dens:'2.32',
+   giacit:'Letti tabulari, noduli displacivi (sabkha), selenite',esempi:'Evaporiti Messiniane (Sicilia), Triassico (Dolomiti)',
+   note:'Si forma <42°C. La selenite (cristalli grandi) precipita in acque tranquille. Noduli displacivi nelle sabkha.'},
+  {n:'Anidrite',           f:'CaSO₄',       sol:'2.0',  evap:[75,100],col:'#9a8a6a',dens:'2.96',
+   giacit:'Cap rock diapiri salini, evaporiti di sepoltura',esempi:'Cap rock giacimenti petroliferi (Texas), Triassico alpino',
+   note:'Stabile >42°C o >600 m profondità. Idratazione inversa (→gesso) causa rigonfiamento del 38%: problema in gallerie.'},
+  {n:'Alite (salgemma)',   f:'NaCl',         sol:'360',  evap:[85,98], col:'#b0a890',dens:'2.16',
+   giacit:'Corpi massicci, letti tabulari, diapiri salini',esempi:'Wieliczka (Polonia), Sicilia, WIPP (New Mexico)',
+   note:'Ottimo isolante per scorie radioattive (impermeabile, plastica, autosigillante). Diapiri per differenza di densità.'},
+  {n:'Silvite',            f:'KCl',          sol:'340',  evap:[92,99], col:'#c0909a',dens:'1.99',
+   giacit:'Strati superiori sequenze evaporitiche, associata ad alite',esempi:'Stassfurt (Germania), Saskatchewan (Canada)',
+   note:'Principale minerale delle potasse (fertilizzanti). Sapore amaro-salato. Colore rosa per inclusioni di ematite.'},
+  {n:'Carnallite',         f:'KMgCl₃·6H₂O', sol:'640',  evap:[95,100],col:'#d0a0b0',dens:'1.60',
+   giacit:'Strato terminale sequenze evaporitiche',esempi:'Stassfurt (Germania), potasse del Permiano europeo',
+   note:'Ultimo a precipitare. Molto instabile: assorbe umidità dall\'aria (deliquesce). Difficile da estrarre.'},
+];
+
+const CONTESTI={
+  sabkha:{n:'Sabkha costiero',
+    desc:'Pianura costiera ipersalina in clima arido. Acqua marina capillare evapora risalendo verso la superficie. Precipitazione di gesso (noduli displacivi) e anidrite entro i sedimenti carbonatici intertidali-sopratidali.',
+    esempi:'Abu Dhabi (Golfo Persico) — modello recente per carbonati-evaporiti del Trias e Permiano.',
+    seq:'Carbonati intertidali → Gesso nodulare → Anidrite → Dolomia diagenetica'},
+  bacino:{n:'Bacino evaporitico (basinale)',
+    desc:'Bacino con ingresso d\'acqua marina limitato (sill) e alta evaporazione. Concentrazione aumenta progressivamente dal bordo verso il centro (zonazione a bull\'s eye). Depositi da centinaia a migliaia di metri.',
+    esempi:'Permiano del Bacino Zechstein (Mar del Nord), Miocene del Bacino di Sicilia.',
+    seq:'Bordo: carbonati e gesso → Centro: anidrite → alite → sali di K e Mg'},
+  messinian:{n:'Crisi di Salinità Messiniana (5.97–5.33 Ma)',
+    desc:'Isolamento del Mediterraneo dall\'Atlantico per chiusura degli Stretti Bético e Rifiano. Evaporazione quasi totale del Mediterraneo. Deposizione di >3 km di evaporiti. La riapertura catastrofica (~5.33 Ma, Flood Zanclean) riempì il bacino in migliaia di anni.',
+    esempi:'Gessi di Sicilia (Formazione Gessoso-Solfifera), Gessi di Sorbas (Spagna).',
+    seq:'Fase 1: gessi marginali → Fase 2: evaporiti profonde (alite) → Fase 3: gessi di lago-mare'},
+};
+
+// =====================================================================
+// STATO
+// =====================================================================
+const C=document.getElementById('C');
+const ctx=C.getContext('2d');
+const box=document.getElementById('infoBox');
+let tab='clastiche', carbSchema='dunham';
+let selW=null,selF74=null,selD=null,selDC=null,selFA=null,selFP=null,selE=null,selEC=null;
+let hovF74=null,hovW=null,hovD=null,hovE=null;
+let folkTri=null;
+
+function showInfo(h){box.innerHTML=h;box.style.display='block';}
+function hideInfo(){box.style.display='none';}
+function clearSel(){selW=null;selF74=null;selD=null;selDC=null;selFA=null;selFP=null;selE=null;selEC=null;hovF74=null;hovW=null;hovD=null;hovE=null;}
+
+function lbl(t,x,y,fill,font,align){
+  ctx.font=font||'bold 10px Crimson Pro';ctx.textAlign=align||'center';
+  ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+  ctx.strokeText(t,x,y);ctx.fillStyle=fill||'#e8eaf0';ctx.fillText(t,x,y);
+}
+
+// =====================================================================
+// DRAW CLASTICHE
+// =====================================================================
+function drawClastiche(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+
+  const wW=Math.min(Math.floor(W*0.36),220);
+  const fX=wW+25,fPad=50;
+  const pT=32,pB=22,gH=H-pT-pB;
+  const n=WENTWORTH.length,rowH=gH/n;
+  const barX=8,barW=20;
+
+  // Scala Wentworth
+  WENTWORTH.forEach((w,i)=>{
+    const y=pT+i*rowH;
+    const hi=selW===w.n||hovW===w.n;
+    ctx.fillStyle=w.col;ctx.globalAlpha=hi?0.9:0.6;
+    ctx.fillRect(barX,y,barW,rowH);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.12)';
+    ctx.lineWidth=hi?1.5:0.5;ctx.strokeRect(barX,y,barW,rowH);
+    const ty=y+rowH/2;
+    lbl(w.n,barX+barW+5,ty-5,hi?'#fff':'rgba(220,224,240,0.85)','bold 9px Crimson Pro','left');
+    lbl(w.d+' mm',barX+barW+5,ty+7,'rgba(138,142,154,0.65)','7px Space Mono','left');
+    // Gruppo
+    if(i===0||WENTWORTH[i-1].g!==w.g){
+      const cnt=WENTWORTH.filter(x=>x.g===w.g).length;
+      const ys=pT+WENTWORTH.findIndex(x=>x.g===w.g)*rowH;
+      ctx.save();ctx.translate(wW-6,ys+cnt*rowH/2);ctx.rotate(-Math.PI/2);
+      ctx.font='bold 8px Space Mono';ctx.fillStyle='rgba(200,204,216,0.4)';ctx.textAlign='center';
+      ctx.fillText(w.g,0,0);ctx.restore();
+    }
+  });
+  // Linee di gruppo
+  [4,9].forEach(i=>{
+    const y=pT+i*rowH;
+    ctx.beginPath();ctx.moveTo(barX,y);ctx.lineTo(wW-12,y);
+    ctx.strokeStyle='rgba(200,204,216,0.35)';ctx.lineWidth=1.2;ctx.setLineDash([4,3]);ctx.stroke();ctx.setLineDash([]);
+  });
+  lbl('Scala di Wentworth (1922)',barX+wW/2-5,pT-14,'rgba(200,204,216,0.6)','italic 9px Crimson Pro');
+
+  // Triangolo Folk Q-F-L
+  const tw=Math.min(W-fX-fPad*2-20,H-pT-pB-fPad*0.8);
+  const th=Math.floor(tw*0.866);
+  const tx0=fX+Math.floor((W-fX-tw)/2);
+  const ty0=Math.floor(pT+(gH-th)/2);
+  const Qx=tx0+tw/2,Qy=ty0,Fx=tx0,Fy=ty0+th,Lx=tx0+tw,Ly=ty0+th;
+
+  function folkXY(q,f,l){const t=q+f+l||1;return [(q/t)*Qx+(f/t)*Fx+(l/t)*Lx,(q/t)*Qy+(f/t)*Fy+(l/t)*Ly];}
+  function folkInv(px,py){
+    const D=(Fy-Ly)*(Lx-Qx)+(Lx-Fx)*(Qy-Ly);if(!D)return null;
+    const q=((Fy-Ly)*(px-Lx)+(Lx-Fx)*(py-Ly))/D;
+    const f=((Ly-Qy)*(px-Lx)+(Qx-Lx)*(py-Ly))/D;const l=1-q-f;
+    if(q<-0.01||f<-0.01||l<-0.01)return null;
+    return {Q:q*100,F:f*100,L:l*100};
+  }
+  folkTri={folkXY,folkInv};
+
+  ctx.beginPath();ctx.moveTo(Qx,Qy);ctx.lineTo(Fx,Fy);ctx.lineTo(Lx,Ly);ctx.closePath();
+  ctx.fillStyle='#0d1018';ctx.fill();
+  ctx.strokeStyle='rgba(30,34,48,0.8)';ctx.lineWidth=0.6;
+  [25,50,75].forEach(p=>{
+    const t=p/100;
+    function l2(x1,y1,x2,y2,tt){return [x1+(x2-x1)*tt,y1+(y2-y1)*tt];}
+    let[x1,y1]=l2(Qx,Qy,Fx,Fy,t),[x2,y2]=l2(Lx,Ly,Fx,Fy,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    [x1,y1]=l2(Qx,Qy,Lx,Ly,t);[x2,y2]=l2(Fx,Fy,Lx,Ly,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    [x1,y1]=l2(Fx,Fy,Qx,Qy,t);[x2,y2]=l2(Lx,Ly,Qx,Qy,t);ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  });
+
+  FOLK74.forEach(f=>{
+    const hi=selF74===f.n||hovF74===f.n;
+    ctx.beginPath();f.v.forEach(([q,ff,l],i)=>{const[x,y]=folkXY(q,ff,l);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});
+    ctx.closePath();
+    ctx.fillStyle=f.col;ctx.globalAlpha=hi?0.85:0.5;ctx.fill();ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.2)';ctx.lineWidth=hi?1.8:0.8;ctx.stroke();
+    const cq=f.v.reduce((s,[q])=>s+q,0)/f.v.length;
+    const cf=f.v.reduce((s,[,ff])=>s+ff,0)/f.v.length;
+    const cl=f.v.reduce((s,[,,l])=>s+l,0)/f.v.length;
+    const[lx,ly]=folkXY(cq,cf,cl);
+    const words=f.n.split(' ');
+    const half=Math.ceil(words.length/2);
+    const lines=words.length>2?[words.slice(0,half).join(' '),words.slice(half).join(' ')]:[f.n];
+    lines.forEach((ln,i)=>lbl(ln,lx,ly+(i-(lines.length-1)/2)*12,hi?'#fff':'rgba(230,234,248,0.9)','bold 9px Crimson Pro'));
+  });
+
+  ctx.beginPath();ctx.moveTo(Qx,Qy);ctx.lineTo(Fx,Fy);ctx.lineTo(Lx,Ly);ctx.closePath();
+  ctx.strokeStyle='rgba(200,204,216,0.7)';ctx.lineWidth=2;ctx.stroke();
+  lbl('Q',Qx,Qy-14,'#c8ccd8','bold 13px Space Mono');lbl('Quarzo',Qx,Qy-26,'#8a8e9a','italic 9px Crimson Pro');
+  lbl('F',Fx-14,Fy+6,'#c8ccd8','bold 13px Space Mono','right');lbl('Feldspato',Fx-14,Fy+18,'#8a8e9a','italic 9px Crimson Pro','right');
+  lbl('L',Lx+14,Ly+6,'#c8ccd8','bold 13px Space Mono','left');lbl('Litici',Lx+14,Ly+18,'#8a8e9a','italic 9px Crimson Pro','left');
+  lbl('Folk (1974) — Composizione Arenarie',fX+(W-fX)/2,pT-14,'rgba(200,204,216,0.6)','italic 9px Crimson Pro');
+}
+
+// =====================================================================
+// DRAW DUNHAM 1962
+// =====================================================================
+function drawDunham(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+  const pL=18,pR=18,pT=42,pB=52,gW=W-pL-pR,gH=H-pT-pB;
+  const n=DUNHAM.length,bW=Math.floor(gW/n);
+
+  DUNHAM.forEach((d,i)=>{
+    const x=pL+i*bW+2,bw=bW-4;
+    const hi=selD===d.n||hovD===d.n;
+    ctx.fillStyle=d.col;ctx.globalAlpha=hi?0.85:0.5;ctx.fillRect(x,pT,bw,gH);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.18)';ctx.lineWidth=hi?2:0.8;ctx.strokeRect(x,pT,bw,gH);
+    drawTextureDunham(d.n,x,pT,bw,gH,hi);
+    const cx=x+bw/2,cy=pT+gH/2;
+    lbl(d.n,cx,cy-8,hi?'#fff':'rgba(230,234,248,0.95)',`bold ${Math.min(11,bw*0.1)}px Crimson Pro`);
+    lbl(d.grani,cx,cy+8,'rgba(160,190,200,0.55)','italic 8px Crimson Pro');
+    ctx.font='8px Crimson Pro';ctx.fillStyle='rgba(138,142,154,0.55)';ctx.textAlign='center';
+    ctx.fillText(d.energia.split(' — ')[0],cx,pT+gH+12);
+  });
+
+  ctx.strokeStyle='rgba(200,204,216,0.25)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 8px Crimson Pro';ctx.fillStyle='rgba(138,142,154,0.5)';ctx.textAlign='left';
+  ctx.fillText('Energia depositazionale →',pL,pT+gH+25);
+  ctx.fillText('← Matrice micritica dominante',pL,pT+gH+38);
+  ctx.fillText('Grani dominanti →',pL+gW*0.5,pT+gH+38);
+  lbl('Classificazione Dunham (1962) — Rocce Carbonatiche',pL+gW/2,pT-18,'rgba(200,204,216,0.7)','italic 10px Crimson Pro');
+
+  if(selD){const d=DUNHAM.find(d=>d.n===selD);
+    if(d)showInfo(`<b>${d.n}</b><br><b>Def.:</b> ${d.def}<br><b>Porosità:</b> <span class="val">${d.por}</span><br><b>Esempi:</b> ${d.esempi}<br><br><span style="font-style:italic;font-size:.6rem">${d.note}</span>`);}
+  else if(selDC){const c=COMPON[selDC];
+    if(c)showInfo(`<b>${c.n}</b><br><b>Def.:</b> ${c.def}<br><b>Origine:</b> <span class="acc">${c.orig}</span><br><b>Ruolo:</b> ${c.ruolo}`);}
+}
+
+function drawTextureDunham(nome,x,y,w,h,hi){
+  ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  ctx.globalAlpha=hi?0.5:0.25;
+  if(nome==='Mudstone'){
+    for(let i=0;i<40;i++){ctx.beginPath();ctx.arc(x+Math.random()*w,y+Math.random()*h,0.8,0,2*Math.PI);ctx.fillStyle='rgba(180,210,220,0.8)';ctx.fill();}
+  } else if(nome==='Wackestone'){
+    for(let i=0;i<14;i++){ctx.beginPath();ctx.ellipse(x+5+Math.random()*(w-10),y+5+Math.random()*(h-10),3+Math.random()*3,2+Math.random()*2,Math.random()*Math.PI,0,2*Math.PI);ctx.fillStyle='rgba(160,200,180,0.8)';ctx.fill();}
+  } else if(nome==='Packstone'){
+    for(let i=0;i<22;i++){ctx.beginPath();ctx.ellipse(x+4+Math.random()*(w-8),y+4+Math.random()*(h-8),4+Math.random()*4,3+Math.random()*3,Math.random()*Math.PI,0,2*Math.PI);ctx.fillStyle='rgba(140,190,160,0.8)';ctx.fill();ctx.strokeStyle='rgba(180,220,190,0.4)';ctx.lineWidth=0.6;ctx.stroke();}
+  } else if(nome==='Grainstone'){
+    for(let i=0;i<28;i++){const r=3+Math.random()*4;ctx.beginPath();ctx.arc(x+4+Math.random()*(w-8),y+4+Math.random()*(h-8),r,0,2*Math.PI);ctx.fillStyle='rgba(120,190,140,0.8)';ctx.fill();ctx.strokeStyle='rgba(160,220,170,0.5)';ctx.lineWidth=0.8;ctx.stroke();ctx.beginPath();ctx.arc(x+4+Math.random()*(w-8),y+4+Math.random()*(h-8),1.5,0,2*Math.PI);ctx.fillStyle='rgba(80,150,100,0.5)';ctx.fill();}
+  } else if(nome==='Boundstone'){
+    for(let i=0;i<6;i++){const r=8+Math.random()*10;const cx=x+10+Math.random()*(w-20),cy=y+10+Math.random()*(h-20);ctx.beginPath();ctx.arc(cx,cy,r,0,2*Math.PI);ctx.fillStyle='rgba(80,160,120,0.4)';ctx.fill();ctx.strokeStyle='rgba(120,200,160,0.6)';ctx.lineWidth=1;ctx.stroke();for(let j=0;j<4;j++){const a=j*Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.strokeStyle='rgba(100,180,140,0.4)';ctx.lineWidth=0.8;ctx.stroke();}}
+  } else if(nome==='Crystalline'){
+    for(let i=0;i<18;i++){const s=5+Math.random()*8;ctx.beginPath();ctx.rect(x+4+Math.random()*(w-12),y+4+Math.random()*(h-12),s,s);ctx.fillStyle='rgba(80,130,180,0.35)';ctx.fill();ctx.strokeStyle='rgba(120,170,210,0.5)';ctx.lineWidth=0.8;ctx.stroke();}
+  }
+  ctx.restore();ctx.globalAlpha=1;
+}
+
+// =====================================================================
+// DRAW FOLK 1959
+// =====================================================================
+function drawFolk59(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+
+  const allocs=['bioclasti','oidi','pellet','intraclasti'];
+  const allocN=['Bioclasti','Oidi','Pellet','Intraclasti'];
+  const allocI=['🐚','⭕','·','▪'];
+  const pastes=['sparite','micrite'];
+  const pasteN=['Sparite (cemento)','Micrite (fango)'];
+
+  const pL=70,pR=15,pT=90,pB=110;
+  const gW=W-pL-pR,gH=H-pT-pB;
+  const cW=gW/allocs.length,rH=gH/pastes.length;
+
+  // Header colonne (allochems)
+  allocs.forEach((a,i)=>{
+    const x=pL+i*cW,cx=x+cW/2;
+    const hi=selFA===a;
+    ctx.fillStyle=hi?'rgba(0,212,255,0.12)':'rgba(20,28,38,0.4)';ctx.fillRect(x+2,pT-68,cW-4,64);
+    ctx.strokeStyle=hi?'rgba(0,212,255,0.4)':'rgba(200,204,216,0.1)';ctx.lineWidth=hi?1.2:0.4;ctx.strokeRect(x+2,pT-68,cW-4,64);
+    lbl(allocI[i],cx,pT-44,hi?'#00d4ff':'rgba(200,204,216,0.6)','18px serif');
+    lbl(allocN[i],cx,pT-22,hi?'#00d4ff':'rgba(200,204,216,0.75)','bold 10px Crimson Pro');
+  });
+
+  // Header righe (paste)
+  pastes.forEach((p,j)=>{
+    const y=pT+j*rH,cy=y+rH/2;
+    const hi=selFP===p;
+    ctx.fillStyle=hi?'rgba(255,107,53,0.1)':'rgba(20,28,38,0.4)';ctx.fillRect(2,y+2,pL-6,rH-4);
+    ctx.strokeStyle=hi?'rgba(255,107,53,0.35)':'rgba(200,204,216,0.1)';ctx.lineWidth=hi?1.2:0.4;ctx.strokeRect(2,y+2,pL-6,rH-4);
+    lbl(p==='sparite'?'Alta energia':'Bassa energia',pL/2,cy-8,'rgba(138,142,154,0.55)','italic 8px Crimson Pro');
+    lbl(pasteN[j],pL/2,cy+6,hi?'#ff6b35':'rgba(200,204,216,0.7)','bold 9px Crimson Pro');
+  });
+
+  // Celle matrice
+  allocs.forEach((a,i)=>{
+    pastes.forEach((p,j)=>{
+      const f=FOLK59[a]?.[p];if(!f)return;
+      const x=pL+i*cW+3,y=pT+j*rH+3,w=cW-6,h=rH-6;
+      const hiA=selFA===a,hiP=selFP===p;
+      const hi=hiA||hiP;
+      const hiB=hiA&&hiP;
+      ctx.fillStyle=f.col;ctx.globalAlpha=hiB?0.8:hi?0.55:0.38;ctx.fillRect(x,y,w,h);ctx.globalAlpha=1;
+      ctx.strokeStyle=hiB?'rgba(255,255,255,0.6)':hi?'rgba(255,255,255,0.3)':'rgba(200,204,216,0.12)';
+      ctx.lineWidth=hiB?2:hi?1:0.5;ctx.strokeRect(x,y,w,h);
+      const cx=x+w/2,cy2=y+h/2;
+      lbl(f.n,cx,cy2-5,hiB?'#fff':'rgba(230,234,248,0.9)','bold 10px Crimson Pro');
+      lbl(f.dunham,cx,cy2+9,'rgba(180,200,220,0.5)','italic 8px Crimson Pro');
+      if(hiB)showInfo(`<b>${f.n}</b><br><b>Ambiente:</b> <span class="acc">${f.amb}</span><br><b>Esempi:</b> <span class="val">${f.esempi}</span><br><b>Dunham:</b> <span style="color:#ffcc44">${f.dunham}</span><br><br><span style="font-style:italic;font-size:.6rem">${f.desc}</span>`);
+    });
+  });
+
+  // Riga speciali
+  const specs=[['dismicrite','Dismicrite'],['micrite_pura','Micrite pura']];
+  const spW=(gW)/specs.length;
+  specs.forEach(([k,label],i)=>{
+    const f=FOLK59[k];if(!f)return;
+    const x=pL+i*spW+3,y=pT+pastes.length*rH+8,w=spW-6,h=pB-20;
+    const hi=selFA===k;
+    ctx.fillStyle=f.col;ctx.globalAlpha=hi?0.8:0.38;ctx.fillRect(x,y,w,h);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.12)';ctx.lineWidth=hi?2:0.5;ctx.strokeRect(x,y,w,h);
+    lbl(f.n,x+w/2,y+h/2-5,hi?'#fff':'rgba(230,234,248,0.9)','bold 10px Crimson Pro');
+    lbl(f.dunham,x+w/2,y+h/2+9,'rgba(180,200,220,0.5)','italic 8px Crimson Pro');
+    if(hi)showInfo(`<b>${f.n}</b><br><b>Ambiente:</b> <span class="acc">${f.amb}</span><br><b>Esempi:</b> <span class="val">${f.esempi}</span><br><b>Dunham:</b> <span style="color:#ffcc44">${f.dunham}</span><br><br><span style="font-style:italic;font-size:.6rem">${f.desc}</span>`);
+  });
+  lbl('Rocce speciali',pL/2,pT+pastes.length*rH+8+(pB-20)/2,'rgba(138,142,154,0.5)','italic 9px Crimson Pro');
+
+  // Frecce direzionali
+  ctx.strokeStyle='rgba(0,212,255,0.2)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(pL,pT-70);ctx.lineTo(pL+gW,pT-70);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(255,107,53,0.2)';ctx.lineWidth=1;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(5,pT);ctx.lineTo(5,pT+pastes.length*rH);ctx.stroke();
+  ctx.setLineDash([]);
+  lbl('Folk (1959) — Allochem × Pasta di fondo',pL+gW/2,22,'rgba(200,204,216,0.7)','italic 10px Crimson Pro');
+}
+
+// =====================================================================
+// DRAW EVAPORITI
+// =====================================================================
+function drawEvaporiti(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='10px';box.style.right='auto';
+  const pL=58,pR=22,pT=42,pB=48,gW=W-pL-pR,gH=H-pT-pB;
+
+  // Asse X evaporazione
+  ctx.strokeStyle='rgba(200,204,216,0.5)';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  [0,20,40,60,80,100].forEach(p=>{
+    const x=pL+p/100*gW;
+    ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,pT+gH);ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x,pT+gH);ctx.lineTo(x,pT+gH+5);ctx.strokeStyle='rgba(200,204,216,0.4)';ctx.lineWidth=0.8;ctx.stroke();
+    ctx.font='9px Space Mono';ctx.fillStyle='#8a8e9a';ctx.textAlign='center';ctx.fillText(p+'%',x,pT+gH+18);
+  });
+  ctx.font='italic 11px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('% Evaporazione dell\'acqua di mare',pL+gW/2,pT+gH+36);
+  lbl('Sequenza di Precipitazione delle Evaporiti Marine',pL+gW/2,pT-20,'rgba(200,204,216,0.7)','italic 10px Crimson Pro');
+
+  const bH=Math.floor((gH-10)/EVAP.length)-3;
+  EVAP.forEach((e,i)=>{
+    const x1=pL+e.evap[0]/100*gW,x2=pL+e.evap[1]/100*gW;
+    const y=pT+4+i*(bH+3);
+    const hi=selE===e.n||hovE===e.n;
+    ctx.fillStyle=e.col;ctx.globalAlpha=hi?0.85:0.5;ctx.fillRect(x1,y,x2-x1,bH);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.6)':'rgba(200,204,216,0.2)';ctx.lineWidth=hi?1.5:0.7;ctx.strokeRect(x1,y,x2-x1,bH);
+    lbl(e.f,x1-4,y+bH/2+4,'rgba(180,184,200,0.65)','bold 8px Space Mono','right');
+    lbl(e.n,(x1+x2)/2,y+bH/2+4,hi?'#fff':'rgba(230,234,248,0.9)','bold 10px Crimson Pro');
+    ctx.font='8px Space Mono';ctx.fillStyle='rgba(138,142,154,0.6)';ctx.textAlign='left';ctx.fillText(e.sol+' g/L',x2+4,y+bH/2+4);
+  });
+
+  if(selE){const e=EVAP.find(e=>e.n===selE);
+    if(e)showInfo(`<b>${e.n}</b> &nbsp;<span class="val">${e.f}</span><br><b>Sol.:</b><span class="val"> ${e.sol} g/L</span> &nbsp;<b>Dens.:</b><span class="val"> ${e.dens} g/cm³</span><br><b>Precipita a:</b> <span class="acc">${e.evap[0]}–${e.evap[1]}% evap.</span><br><b>Giacitura:</b> ${e.giacit}<br><b>Esempi:</b> ${e.esempi}<br><br><span style="font-style:italic;font-size:.6rem">${e.note}</span>`);}
+  else if(selEC){const c=CONTESTI[selEC];
+    if(c)showInfo(`<b>${c.n}</b><br><b>Sequenza:</b> <span class="acc">${c.seq}</span><br><b>Esempi:</b> ${c.esempi}<br><br><span style="font-style:italic;font-size:.6rem">${c.desc}</span>`);}
+}
+
+// =====================================================================
+// DRAW
+// =====================================================================
+function draw(){
+  if(tab==='clastiche')drawClastiche();
+  else if(tab==='carbonatiche'){if(carbSchema==='folk59')drawFolk59();else drawDunham();}
+  else drawEvaporiti();
+}
+
+// =====================================================================
+// MOUSE (solo Folk74)
+// =====================================================================
+function inPolyS(v,q,f){const n=v.length;let ins=false,j=n-1;for(let i=0;i<n;i++){const[qi,fi]=v[i],[qj,fj]=v[j];if((fi>f)!==(fj>f)&&q<(qj-qi)*(f-fi)/(fj-fi)+qi)ins=!ins;j=i;}return ins;}
+
+C.addEventListener('mousemove',e=>{
+  const r=C.getBoundingClientRect();
+  const mx=(e.clientX-r.left)*(C.width/r.width);
+  const my=(e.clientY-r.top)*(C.height/r.height);
+
+  if(tab==='clastiche'){
+    // ── Folk74 triangolo ──────────────────────────────────────────
+    if(folkTri){
+      const coords=folkTri.folkInv(mx,my);
+      if(coords){
+        const folk=FOLK74.find(f=>inPolyS(f.v,coords.Q,coords.F));
+        if(folk&&hovF74!==folk.n){hovF74=folk.n;draw();}
+        else if(!folk&&hovF74){hovF74=null;draw();}
+        if(folk&&!selF74)showInfo(`<b>${folk.n}</b><br><b>Min.:</b> <span class="acc">${folk.min}</span><br><b>Maturità:</b> <span class="val">${folk.matur}</span><br><b>Ambiente:</b> ${folk.amb}`);
+        else if(!folk&&!selF74&&!selW)hideInfo();
+      } else {
+        if(hovF74){hovF74=null;draw();}
+        if(!selF74&&!selW)hideInfo();
+      }
+    }
+    // ── Wentworth barra ───────────────────────────────────────────
+    // Calcola la posizione della barra (stessa logica di drawClastiche)
+    const wW=Math.min(Math.floor(C.width*0.36),220);
+    const pT=32,pB=22,gH=C.height-pT-pB;
+    const barX=8,barW=20,rowH=gH/WENTWORTH.length;
+    const wi=Math.floor((my-pT)/rowH);
+    if(mx>=barX&&mx<=barX+barW&&wi>=0&&wi<WENTWORTH.length){
+      const w=WENTWORTH[wi];
+      if(hovW!==w.n){hovW=w.n;draw();}
+      if(!selW)showInfo(`<b>${w.n}</b> — <span class="val">${w.d} mm</span><br><b>Gruppo:</b> <span class="acc">${w.g}</span> — <b>Roccia:</b> ${w.roccia}`);
+    } else {
+      if(hovW){hovW=null;draw();}
+    }
+
+  } else if(tab==='carbonatiche'&&carbSchema==='dunham'){
+    // ── Dunham blocchi ────────────────────────────────────────────
+    const pL=18,pR=18,pT=42,pB=52,gW=C.width-pL-pR,gH=C.height-pT-pB;
+    const bW=Math.floor(gW/DUNHAM.length);
+    const di=Math.floor((mx-pL)/bW);
+    if(my>=pT&&my<=pT+gH&&di>=0&&di<DUNHAM.length){
+      const d=DUNHAM[di];
+      if(hovD!==d.n){hovD=d.n;draw();}
+      if(!selD&&!selDC)showInfo(`<b>${d.n}</b><br><b>Def.:</b> ${d.def}<br><b>Porosità:</b> <span class="val">${d.por}</span>`);
+    } else {
+      if(hovD){hovD=null;draw();}
+      if(!selD&&!selDC)hideInfo();
+    }
+
+  } else if(tab==='evaporiti'){
+    // ── Evaporiti barre ───────────────────────────────────────────
+    const pL=58,pR=22,pT=42,pB=48,gW=C.width-pL-pR,gH=C.height-pT-pB;
+    const bH=Math.floor((gH-10)/EVAP.length)-3;
+    const ei=Math.floor((my-pT-4)/(bH+3));
+    if(mx>=pL&&mx<=pL+gW&&ei>=0&&ei<EVAP.length){
+      const ev=EVAP[ei];
+      // Controlla se il cursore è sulla barra (entro il suo range x)
+      const x1=pL+ev.evap[0]/100*gW, x2=pL+ev.evap[1]/100*gW;
+      if(mx>=x1&&mx<=x2){
+        if(hovE!==ev.n){hovE=ev.n;draw();}
+        if(!selE&&!selEC)showInfo(`<b>${ev.n}</b> — <span class="val">${ev.f}</span><br><b>Precipita a:</b> <span class="acc">${ev.evap[0]}–${ev.evap[1]}% evap.</span><br><b>Solubilità:</b> <span class="val">${ev.sol} g/L</span>`);
+      } else {
+        if(hovE){hovE=null;draw();}
+        if(!selE&&!selEC)hideInfo();
+      }
+    } else {
+      if(hovE){hovE=null;draw();}
+      if(!selE&&!selEC)hideInfo();
+    }
+  }
+},{passive:true});
+
+C.addEventListener('mouseleave',()=>{
+  const changed=hovF74||hovW||hovD||hovE;
+  hovF74=null;hovW=null;hovD=null;hovE=null;
+  if(changed)draw();
+  if(!selW&&!selF74&&!selD&&!selDC&&!selFA&&!selFP&&!selE&&!selEC)hideInfo();
+});
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
+  tab=b.dataset.tab;
+  ['sbClastiche','sbCarbonatiche','sbEvaporiti'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById({clastiche:'sbClastiche',carbonatiche:'sbCarbonatiche',evaporiti:'sbEvaporiti'}[tab]).style.display='flex';
+  document.getElementById({clastiche:'sbClastiche',carbonatiche:'sbCarbonatiche',evaporiti:'sbEvaporiti'}[tab]).style.flexDirection='column';
+  clearSel();document.querySelectorAll('.btn').forEach(b=>b.classList.remove('on'));hideInfo();
+  document.getElementById('ibar').textContent={clastiche:'Rocce clastiche — Scala di Wentworth (1922) e triangolo Folk (1974)',carbonatiche:'Rocce carbonatiche — Dunham (1962) e Folk (1959)',evaporiti:'Evaporiti — Sequenza di precipitazione e solubilità'}[tab];
+  draw();
+}));
+
+// Dunham / Folk59 toggle
+document.getElementById('btnDunham').addEventListener('click',()=>{
+  carbSchema='dunham';
+  document.getElementById('btnDunham').classList.add('on');document.getElementById('btnFolk59').classList.remove('on');
+  document.getElementById('pDunham').style.display='block';document.getElementById('pFolk59').style.display='none';
+  clearSel();document.querySelectorAll('[data-d],[data-dc],[data-fa],[data-fp]').forEach(b=>b.classList.remove('on'));hideInfo();draw();
+});
+document.getElementById('btnFolk59').addEventListener('click',()=>{
+  carbSchema='folk59';
+  document.getElementById('btnFolk59').classList.add('on');document.getElementById('btnDunham').classList.remove('on');
+  document.getElementById('pFolk59').style.display='block';document.getElementById('pDunham').style.display='none';
+  clearSel();document.querySelectorAll('[data-d],[data-dc],[data-fa],[data-fp]').forEach(b=>b.classList.remove('on'));hideInfo();draw();
+});
+
+// Wentworth
+document.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.w;document.querySelectorAll('[data-w]').forEach(x=>x.classList.remove('on'));
+  if(selW===k){selW=null;hideInfo();}else{selW=k;selF74=null;b.classList.add('on');
+    const w=WENTWORTH.find(w=>w.n===k);
+    if(w)showInfo(`<b>${w.n}</b> &nbsp;<span class="val">${w.d} mm</span> &nbsp;φ: <span class="val">${w.phi}</span><br><b>Gruppo:</b> <span class="acc">${w.g}</span> — <b>Roccia:</b> ${w.roccia}<br><br><span style="font-style:italic">${w.desc}</span><br><b>Maturità:</b> <span class="val">${w.matur}</span>`);
+  }draw();
+}));
+
+// Folk74
+document.querySelectorAll('[data-f]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.f;document.querySelectorAll('[data-f]').forEach(x=>x.classList.remove('on'));
+  if(selF74===k){selF74=null;hideInfo();}else{selF74=k;selW=null;b.classList.add('on');
+    const f=FOLK74.find(f=>f.n===k);
+    if(f)showInfo(`<b>${f.n}</b><br><b>Min.:</b> <span class="acc">${f.min}</span><br><b>Maturità:</b> <span class="val">${f.matur}</span><br><b>Ambiente:</b> ${f.amb}<br><br><span style="font-style:italic;font-size:.6rem">${f.desc}</span>`);
+  }draw();
+}));
+
+// Dunham
+document.querySelectorAll('[data-d]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.d;document.querySelectorAll('[data-d],[data-dc]').forEach(x=>x.classList.remove('on'));
+  if(selD===k){selD=null;hideInfo();}else{selD=k;selDC=null;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-dc]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.dc;document.querySelectorAll('[data-d],[data-dc]').forEach(x=>x.classList.remove('on'));
+  if(selDC===k){selDC=null;hideInfo();}else{selDC=k;selD=null;b.classList.add('on');
+    const c=COMPON[k];if(c)showInfo(`<b>${c.n}</b><br>${c.def}<br><b>Origine:</b> <span class="acc">${c.orig}</span><br><b>Ruolo:</b> ${c.ruolo}`);
+  }draw();
+}));
+
+// Folk59
+document.querySelectorAll('[data-fa]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.fa;document.querySelectorAll('[data-fa]').forEach(x=>x.classList.remove('on'));
+  if(selFA===k){selFA=null;if(!selFP)hideInfo();}else{selFA=k;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-fp]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.fp;document.querySelectorAll('[data-fp]').forEach(x=>x.classList.remove('on'));
+  if(selFP===k){selFP=null;if(!selFA)hideInfo();}else{selFP=k;b.classList.add('on');}draw();
+}));
+
+// Evaporiti
+document.querySelectorAll('[data-e]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.e;document.querySelectorAll('[data-e],[data-ec]').forEach(x=>x.classList.remove('on'));
+  if(selE===k){selE=null;hideInfo();}else{selE=k;selEC=null;b.classList.add('on');}draw();
+}));
+document.querySelectorAll('[data-ec]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.ec;document.querySelectorAll('[data-e],[data-ec]').forEach(x=>x.classList.remove('on'));
+  if(selEC===k){selEC=null;hideInfo();}else{selEC=k;selE=null;b.classList.add('on');}draw();
+}));
+
+function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;draw();}
+window.addEventListener('resize',resize);
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>

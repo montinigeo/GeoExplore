@@ -16,6 +16,13 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 | [🔥 Serie di Bowen](#serie-bowen) | Cristallizzazione frazionata, quattro tipi di magma | [Apri](https://montinigeo.github.io/Simulazioni/serie_bowen.html) |
 | [🌿 Metamorfismo](#metamorfismo) | Facies P-T, percorsi geodinamici, Barrow, protoliti | [Apri](https://montinigeo.github.io/Simulazioni/metamorfismo.html) |
 
+### 🪨 Sedimentologia
+
+| Simulazione | Descrizione | Link |
+|-------------|-------------|------|
+| [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/Simulazioni/rocce_sedimentarie.html) |
+| [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/Simulazioni/ambienti_sedimentari.html) |
+
 ### 🔬 Petrografia
 
 | Simulazione | Descrizione | Link |
@@ -49,24 +56,25 @@ Classificazione completa delle rocce magmatiche secondo lo standard IUGS (Le Mai
 ### Schede
 
 **Streckeisen (QAPF)**
-- Doppio triangolo QAP (rocce sature e sovrasaturate) e FAP (rocce sottosaturate) con 20 + 10 campi classificativi
-- Toggle plutoniche/vulcaniche: le sigle e i nomi si aggiornano in tutti i settori e nel pannello laterale
-- Hover interattivo: composizione mineralogica, SiO₂, struttura e giacitura per ogni settore
-- Zona F=0–10% evidenziata come transizione verso il QAP (rocce "a feldspatoidi" accessori)
+- Doppio triangolo QAP (rocce sature e sovrasaturate) e FAP (rocce sottosaturate) con 21 + 10 campi classificativi
+- Toggle plutoniche/vulcaniche: sigle e nomi si aggiornano in tutti i settori e nel pannello laterale
+- Il triangolo FAP distingue la zona F=0–10% (rocce a feldspatoidi accessori, colori verde-teal) dalla zona F=10–60% (rocce propriamente sottosaturate, viola), e la foid-sienite è divisa in fsp. alc. foid-sienite (AP>0.90) e foid-sienite (AP 0.65–0.90)
+- Hover interattivo con composizione mineralogica, SiO₂, struttura e giacitura per ogni settore
 
 **Rocce Mafiche** (triangolo Ol-Opx-Cpx)
 - Sette campi ultramafia con confini IUGS corretti: Cpx/(Cpx+Opx) = 10% e 90% come discriminanti
 - Dunite, Harzburgite, Lherzolite, Wehrlite, Ortopirossenite, Websterite, Clinopirossenite
+- Hover/snap con evidenziazione del settore e pannello informativo in tempo reale
 
 **Piroclastiche**
-- Schema a matrice: granulometria dei clasti (blocchi → cenere fine) × composizione (basaltica → riolitica)
-- Sette tipi di rocce consolidate: agglomerato, breccia piroclastica, tufo lapillistico, tufo, ignimbrite, surge, lahar
-- Origine eruttiva, forma del deposito, esempi e note per ciascun tipo
+- Schema a matrice: granulometria clasti (blocchi → cenere fine) × composizione (basaltica → riolitica)
+- Sette tipi di rocce: agglomerato, breccia piroclastica, tufo lapillistico, tufo, ignimbrite, surge, lahar
+- Origine eruttiva, forma del deposito, esempi e note
 
 **Rocce Speciali**
 - Posizionate in un diagramma K₂O vs SiO₂ nelle loro zone geochimiche reali
 - Kimberlite, Lamproite, Carbonatite, Komatiite, Fonolite, Leucitite
-- Scheda dettagliata con minerali, profondità sorgente, esempi mondiali e nota petrografica
+- Profondità sorgente, esempi mondiali e nota petrografica
 
 ---
 
@@ -80,27 +88,26 @@ Approfondimento delle rocce basiche e ultramafiche con quattro diagrammi complem
 ### Schede
 
 **Ol-Opx-Cpx (IUGS)**
-- Triangolo ternario con confini corretti secondo Le Maitre (2002)
+- Triangolo ternario con confini esatti secondo Le Maitre (2002): linee Cpx/(Cpx+Opx)=10% e 90% che convergono al vertice Ol con punti corretti (90,9,1) e (90,1,9) sul bordo Ol=90%
 - Peridotiti (Ol>40%): Dunite, Harzburgite, Lherzolite, Wehrlite
 - Pirosseniti (Ol<40%): Ortopirossenite, Websterite, Clinopirossenite
-- Hover interattivo con mineralizzazione, SiO₂, densità e giacitura
+- Hover/snap con mineralizzazione, SiO₂, densità e giacitura
 
 **Ol-Px-Plag (IUGS)**
 - Triangolo per la classificazione dei gabbri e rocce basiche con plagioclasio
-- Otto campi: Dunite, Wehrlite, Olivin-Pirossenite, Pirossenite, Troctolite, Gabbro Olivinico, Gabbro/Norite, Anortosite
+- Sette campi: Dunite, Peridotite, Olivin-Pirossenite, Troctolite, Gabbro Olivinico, Gabbro/Norite, Anortosite
+- Confini: Ol=90%, Ol=40%, Ol=10%, Plag=10%, Plag=90%
 
 **Geodinamica**
 - Sezione litostratigrafica verticale per quattro contesti tettonici
 - Sequenza ofiolitica completa (tipo Penrose 1972): sedimenti → basalti a pillow → sheeted dykes → gabbri → zona di transizione → peridotite mantellica
-- Mantello d'arco: cuneo del mantello, metasomatismo da fluidi della lastra
-- Mantello cratonico: radice litosferia spessa, zona diamante, kimberliti
-- Rift/Hotspot: zona di fusione parziale, plume mantellico
+- Mantello d'arco, mantello cratonico (radice litosferia, zona diamante), Rift/Hotspot
 
 **Facies del Mantello**
-- Diagramma P-T (400–1800°C, 0–10 GPa) con campi di stabilità di plagioclasio, spinello, granato e diamante nel peridotite
-- Confini empirici da Green & Ringwood (1970) e O'Neill (1981)
-- Solidus secco del peridotite (McKenzie & Bickle 1988)
-- Tre percorsi geodinamici animati: subduzione oceanica, risalita astenosferica, radice cratonico
+- Diagramma P-T (400–1800°C, 0–10 GPa) con campi di stabilità di plagioclasio, spinello, granato e diamante
+- Facies spente di default: si attivano una alla volta con descrizione in pannello fisso superiore
+- Solidus secco del peridotite (McKenzie & Bickle 1988) con label esplicativo
+- Tre percorsi geodinamici: subduzione oceanica, risalita astenosferica, radice cratonico
 
 ---
 
@@ -109,32 +116,20 @@ Approfondimento delle rocce basiche e ultramafiche con quattro diagrammi complem
 
 **File:** `serie_magmatiche.html`
 
-Quattro diagrammi geochimici complementari per la classificazione delle serie magmatiche, con campioni non ambigui selezionati per coerenza tra i diagrammi.
+Quattro diagrammi geochimici complementari per la classificazione delle serie magmatiche.
 
 ### Schede
 
 **TAS (Total Alkali vs Silica)**
 - Campi delle rocce secondo Le Bas et al. (1986): 15 campi nominati
-- Linea MacDonald-Katsura (formula lineare corretta: Na₂O+K₂O = 13.5 − 0.19·SiO₂) per separare alcalino da subalcalino
+- Linea MacDonald-Katsura (formula corretta: Na₂O+K₂O = 13.5 − 0.19·SiO₂)
 - Aree degli inviluppi per cinque serie: tholeiitica, calcalcalina, alcalina, shoshonitica, alcalina K-ricca
-- Nota: la shoshonitica appare sopra la linea M-K nel TAS ma è geochimicamente subalcalina (distinzione su K₂O/Na₂O e Nb/Ta)
 
-**AFM (triangolo ternario)**
-- A = Na₂O+K₂O, F = FeOtot, M = MgO
-- Trend animati per serie tholeiitica (arricchimento in Fe) e calcalcalina (trend verso M)
-- Confine di Irvine & Baragar (1971) come toggle opzionale
-- Campioni posizionati: MORB, Andesite, Dacite, Basalto alcalino, Shoshonite
+**AFM** — trend animati per serie tholeiitica e calcalcalina; confine Irvine & Baragar come toggle
 
-**K₂O vs SiO₂**
-- Bande di Peccerillo & Taylor (1976) come rette con pendenza corretta (0.067, calibrata sui dati originali)
-- Quattro bande: Bassa-K (tholeiitica), Media-K (calcalcalina), Alta-K (shoshonitica), Molto alta-K (alcalina K-ricca)
-- Quattro percorsi geodinamici animati (inizialmente spenti): Arco di subduzione, Hotspot/Isola, Rift continentale, Dorsale oceanica
-- Campioni: MORB, Andesite, Dacite, Riolite, Shoshonite, Leucitite, Tefrite Vesuvio
+**K₂O vs SiO₂** — bande di Peccerillo & Taylor (1976) come rette con pendenza corretta; quattro percorsi geodinamici animati
 
-**Na₂O vs K₂O**
-- Linea Na₂O = K₂O come discriminante tra alcaline sodiche (Na>K: rift, hotspot) e potassiche (K>Na: post-collisione, shoshonitica)
-- Campi indicativi per le cinque serie
-- Campioni: MORB, Basalto alcalino, Fonolite, Shoshonite, Trachite, Leucitite, Tefrite Vesuvio
+**Na₂O vs K₂O** — linea Na₂O = K₂O; discriminante tra alcaline sodiche e potassiche
 
 ---
 
@@ -143,15 +138,7 @@ Quattro diagrammi geochimici complementari per la classificazione delle serie ma
 
 **File:** `serie_bowen.html`
 
-Simulazione animata della cristallizzazione frazionata nei magmi secondo la serie di Bowen, con quattro tipologie di magma.
-
-### Funzionalità
-
-- **Quattro magmi**: Basaltico, Andesitico, Riolitico, Ideale (tutti i minerali presenti)
-- **Serie continua**: barra a gradiente con indicatore An% (anortite nel plagioclasio) mobile durante la cristallizzazione
-- **Serie discontinua**: Olivina → Pirosseno → Anfibolo → Biotite con intervalli di temperatura
-- **Composizione finale normalizzata** al 100% per ciascun magma
-- Barre pre-cristallizzazione con bordo colorato che si riempiono progressivamente
+Simulazione animata della cristallizzazione frazionata nei magmi secondo la serie di Bowen, con quattro tipologie di magma (basaltico, andesitico, riolitico, ideale).
 
 ---
 
@@ -164,10 +151,66 @@ Simulazione interattiva del metamorfismo in un diagramma pressione-temperatura (
 
 ### Funzionalità
 
-- **Diagramma P-T** (150–900°C, 0–30 kbar) con nove facies colorate secondo IUGS: Zeoliti, Prehnite-Pumpellyite, Scisti Verdi, Anfibolitica, Granuliti, Scisti Blu, Eclogiti, UHP, Hornfels (con tre sottofacies termiche)
-- **Cinque protoliti**: Granito/Gneiss, Basalto/Gabbro, Arenaria, Pelite, Calcare/Marna — con mineralizzazione e roccia risultante per ogni facies
-- **Quattro percorsi P-T animati**: Subduzione oceanica (blu), Collisione continentale (rosso), Metamorfismo di contatto (arancio), Ultra-Alta Pressione UHP (viola)
-- **Sequenza di Barrow** (solo pelite): toggle indipendente per facies e minerali indice (clorite, biotite, granato, staurolite, cianite, sillimanite, cordierite)
+- Nove facies colorate: Zeoliti, Prehnite-Pumpellyite, Scisti Verdi, Anfibolitica, Granuliti, Scisti Blu, Eclogiti, UHP, Hornfels
+- Cinque protoliti con mineralizzazione per ogni facies
+- Quattro percorsi P-T animati: Subduzione oceanica, Collisione continentale, Metamorfismo di contatto, UHP
+- Sequenza di Barrow (solo pelite): minerali indice da clorite a cordierite
+
+---
+
+<a name="rocce-sedimentarie"></a>
+## 🔩 Rocce Sedimentarie — Classificazione
+
+**File:** `rocce_sedimentarie.html`
+
+Classificazione delle principali famiglie di rocce sedimentarie, organizzata in tre schede con hover/snap interattivo.
+
+### Schede
+
+**Clastiche**
+- Scala di Wentworth (1922): 12 classi granulometriche (masso → argilla) con barra verticale colorata; hover sulla barra mostra roccia risultante, ambiente deposizionale e maturità
+- Triangolo Folk (1974) Q-F-L: 9 campi per la composizione delle arenarie (Quarzarenite, Subarcose, Sublitarenite, Arcose, Litarenite feldspatica, Litarenite, Arcosa a Q basso, Greywacke feldspatico, Greywacke litico); hover con maturità, ambiente e sorgente
+- Confini corretti: Q=90%, Q=75%, Q=25%, F/(F+L)=0.75, F/(F+L)=0.25
+
+**Carbonatiche**
+- Toggle tra **Dunham (1962)** e **Folk (1959)**
+- Dunham: 6 blocchi (Mudstone→Crystalline) con schemi tessiturali disegnati sul canvas e indicatore di energia deposizionale; componenti selezionabili (micrite, sparite, bioclasti, oidi, pellet)
+- Folk: matrice 4×2 (Bioclasti/Oidi/Pellet/Intraclasti × Sparite/Micrite) con 8 combinazioni + riga speciali (Dismicrite, Micrite pura); selezione incrociata allochem+pasta evidenzia la cella specifica con corrispondenza Dunham
+
+**Evaporiti**
+- Sette minerali come barre orizzontali su asse % evaporazione (0–100%), solubilità indicata a destra
+- Sequenza di precipitazione: Calcite/Aragonite → Dolomite → Gesso → Anidrite → Alite → Silvite → Carnallite
+- Tre contesti selezionabili: Sabkha costiero, Bacino evaporitico basinale, Crisi di Salinità Messiniana (5.97–5.33 Ma)
+- Pannello informativo in basso a sinistra (non copre le barre)
+
+---
+
+<a name="ambienti-sedimentari"></a>
+## 🏜️ Ambienti di Sedimentazione
+
+**File:** `ambienti_sedimentari.html`
+
+Simulazione degli ambienti deposizionali dal continente all'oceano profondo, organizzata in quattro schede interattive.
+
+### Schede
+
+**Schema Generale**
+- Sezione trasversale stilizzata dal continente all'oceano profondo, con profilo topografico (montagna → pianura → shelf → scarpata → abisso) e livello del mare
+- Tre zone proporzionate alla realtà: Continentale (0–32%), Transizionale (32–44%), Marino (44–100%)
+- 12 cerchi cliccabili posizionati nella sezione (uno per ambiente); hover e click mostrano energia, granulometria, rocce e nota nella fascia descrittiva inferiore
+- Pannello sinistro con selezione per zona o per singolo ambiente (12 voci)
+
+**Ambienti Continentali**
+- Fluviale (canale braided, meandriforme, pianura alluvionale, conoide), Eolico, Lacustre, Glaciale
+- Layout: blocchi grafici con schema visivo nella metà superiore; pannello descrittivo con energia, granulometria, strutture, rocce, fossili e nota nella metà inferiore
+- Selezione sotto-ambiente auto-seleziona l'ambiente padre
+
+**Ambienti Transizionali**
+- Delta (tre tipi: fluvio-dominato/Mississippi, onda-dominato/Nilo, marea-dominato/Gange-Brahmaputra), Estuario, Laguna/Piattaforma carbonatica, Spiaggia/Barriera litorale
+
+**Ambienti Marini**
+- Piattaforma continentale, Rampa/Piattaforma carbonatica, Scarpata e Bacino, Bacino profondo
+- Selezionando il Bacino profondo: la **Sequenza di Bouma** (Ta→Te) appare come colonna stratigrafica nel blocco, gli altri ambienti si oscurano; ogni intervallo è selezionabile con descrizione del processo deposizionale
 
 ---
 
@@ -176,14 +219,7 @@ Simulazione interattiva del metamorfismo in un diagramma pressione-temperatura (
 
 **File:** `diagrammi_fase.html`
 
-Quattro diagrammi di fase binari per sistemi silicatici fondamentali in petrologia magmatica.
-
-### Sistemi inclusi
-
-- **Ab-An** (Albite-Anortite): soluzione solida completa con liquidus e solidus continui. Base per la comprensione del plagioclasio
-- **Di-An** (Diopside-Anortite): sistema con eutettico semplice a ~1274°C, An=42%. Modello per gabbri e basalti
-- **Lc-SiO₂** (Leucite-Silice): sistema con punto peritettico — cristallizzazione incongruente della leucite verso feldspato K. Fondamentale per i magmi potassici
-- **Ab-Or** (Albite-Ortoclasio): solvus e miscibilità parziale. Illustra l'evoluzione dei graniti e la pertitizzazione
+Quattro diagrammi di fase binari: Ab-An (soluzione solida completa), Di-An (eutettico semplice a ~1274°C), Lc-SiO₂ (punto peritettico, cristallizzazione incongruente), Ab-Or (solvus e pertitizzazione).
 
 ---
 
@@ -192,14 +228,7 @@ Quattro diagrammi di fase binari per sistemi silicatici fondamentali in petrolog
 
 **File:** `microscopio_polarizzato.html`
 
-Simulazione interattiva di un microscopio petrografico a luce polarizzata.
-
-### Funzionalità
-
-- **Modalità ortoscopica** e **conoscopica** con toggle
-- Selezione di minerali uniassici (quarzo, calcite, turmalina) e biassici (muscovite, biotite, olivina, orneblenda)
-- **Tavola Michel-Lévy**: indicatori di addizione (blu) e sottrazione (arancio) per la lamina λ=550 nm
-- Rotazione della platina con aggiornamento in tempo reale delle figure di interferenza
+Simulazione di microscopio petrografico a luce polarizzata con modalità ortoscopica e conoscopica, tavola Michel-Lévy, rotazione della platina in tempo reale.
 
 ---
 
@@ -208,13 +237,7 @@ Simulazione interattiva di un microscopio petrografico a luce polarizzata.
 
 **File:** `diffrattometro_xrd_v5.html`
 
-Simulazione di diffrazione a raggi X su polveri cristalline.
-
-### Funzionalità
-
-- Visualizzazione geometrica della legge di Bragg: nλ = 2d·sinθ
-- Selezione di minerali comuni con spaziature reticolare d caratteristiche
-- Diffractogramma interattivo con picchi di diffrazione
+Simulazione di diffrazione a raggi X su polveri: legge di Bragg, spaziature reticolari, diffractogramma con picchi di diffrazione.
 
 ---
 
@@ -223,13 +246,7 @@ Simulazione di diffrazione a raggi X su polveri cristalline.
 
 **File:** `moto_armonico.html`
 
-Simulazione del moto armonico con rappresentazione fasoriale.
-
-### Funzionalità
-
-- Piano fasoriale con fasore rotante e proiezione sull'asse reale
-- Grafico temporale di spostamento, velocità e accelerazione
-- Slider per frequenza (0.2–4 Hz), ampiezza e fase iniziale
+Piano fasoriale con fasore rotante e proiezione; grafico temporale di spostamento, velocità e accelerazione; slider per frequenza, ampiezza e fase iniziale.
 
 ---
 
@@ -238,14 +255,7 @@ Simulazione del moto armonico con rappresentazione fasoriale.
 
 **File:** `onde_sismiche.html`
 
-Propagazione delle onde sismiche attraverso la struttura interna della Terra.
-
-### Funzionalità
-
-- **Tre schede**: Onde P (con PKP verde lime), Onde S, Struttura interna
-- **Raggi curvilinei** calcolati con integrazione numerica della legge di Snell sferica
-- Raggi simmetrici rispetto all'asse verticale, slider per l'angolo di partenza
-- Zona d'ombra delle onde P (103°–143°) con spiegazione fisica
+Propagazione delle onde sismiche: onde P (con PKP), onde S, struttura interna; raggi curvilinei calcolati con integrazione numerica della legge di Snell sferica; zona d'ombra delle onde P (103°–143°).
 
 ---
 
@@ -254,13 +264,7 @@ Propagazione delle onde sismiche attraverso la struttura interna della Terra.
 
 **File:** `dinsar.html`
 
-Simulazione della tecnica DInSAR per la misura della deformazione del suolo.
-
-### Funzionalità
-
-- Geometria di acquisizione SAR con orbite ascendente e discendente
-- Calcolo della deformazione in linea di vista (LOS) da due acquisizioni
-- Interferogramma con frange di deformazione e unwrapping della fase
+Simulazione della tecnica DInSAR per la misura della deformazione del suolo: geometria di acquisizione SAR, calcolo della deformazione in linea di vista (LOS), interferogramma con frange di deformazione.
 
 ---
 
@@ -269,13 +273,7 @@ Simulazione della tecnica DInSAR per la misura della deformazione del suolo.
 
 **File:** `visibilita_sar_frane.html`
 
-Analisi della geometria di acquisizione SAR in relazione alla topografia e alle frane.
-
-### Funzionalità
-
-- Simulazione dell'angolo di incidenza locale in funzione della pendenza del versante
-- Zone di foreshortening, layover e ombra radar
-- Applicazione alla mappatura delle frane con SAR
+Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza locale, zone di foreshortening, layover e ombra radar; applicazione alla mappatura delle frane.
 
 ---
 
