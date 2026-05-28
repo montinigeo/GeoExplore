@@ -2,7 +2,7 @@
 
 Raccolta di diagrammi e strumenti di visualizzazione interattivi per la geologia, realizzati in HTML/JavaScript senza dipendenze esterne. Ogni file è autonomo e funziona direttamente nel browser.
 
-Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di classificazioni petrologiche, geochimiche, sedimentologiche e geofisiche. Il repository è in continua espansione.
+Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di classificazioni petrologiche, geochimiche, sedimentologiche e geofisiche. Il repository è in continua modifica e integrazione.
 
 ---
 
