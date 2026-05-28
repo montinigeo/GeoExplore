@@ -43,7 +43,7 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ---
 
-## 📖 Descrizione delle simulazioni
+## 📖 Descrizione degli argomenti trattati
 
 ---
 
