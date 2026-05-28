@@ -1,6 +1,8 @@
-# Simulazioni Interattive di Geologia
+# GeoExplore — Diagrammi Interattivi per le Scienze della Terra
 
-Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, senza dipendenze esterne. Ogni file è autonomo e funziona direttamente nel browser.
+Raccolta di diagrammi e strumenti di visualizzazione interattivi per la geologia, realizzati in HTML/JavaScript senza dipendenze esterne. Ogni file è autonomo e funziona direttamente nel browser.
+
+Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di classificazioni petrologiche, geochimiche, sedimentologiche e geofisiche. Il repository è in continua espansione.
 
 ---
 
@@ -10,35 +12,35 @@ Raccolta di simulazioni didattiche interattive realizzate in HTML/JavaScript, se
 
 | Simulazione | Descrizione | Link |
 |-------------|-------------|------|
-| [🪨 Rocce Magmatiche](#rocce-magmatiche) | Streckeisen QAPF, piroclastiche, rocce speciali | [Apri](https://montinigeo.github.io/Simulazioni/rocce_magmatiche.html) |
-| [⛰️ Rocce Mafiche e Ultramafiche](#rocce-mafiche) | Ol-Opx-Cpx, Ol-Px-Plag, geodinamica, facies mantello | [Apri](https://montinigeo.github.io/Simulazioni/rocce_mafiche.html) |
-| [📊 Serie Magmatiche](#serie-magmatiche) | TAS, AFM, K₂O-SiO₂, Na₂O-K₂O, percorsi geodinamici | [Apri](https://montinigeo.github.io/Simulazioni/serie_magmatiche.html) |
-| [🔥 Serie di Bowen](#serie-bowen) | Cristallizzazione frazionata, quattro tipi di magma | [Apri](https://montinigeo.github.io/Simulazioni/serie_bowen.html) |
-| [🌿 Metamorfismo](#metamorfismo) | Facies P-T, percorsi geodinamici, Barrow, protoliti | [Apri](https://montinigeo.github.io/Simulazioni/metamorfismo.html) |
+| [🪨 Rocce Magmatiche](#rocce-magmatiche) | Streckeisen QAPF, piroclastiche, rocce speciali | [Apri](https://montinigeo.github.io/GeoExplore/rocce_magmatiche.html) |
+| [⛰️ Rocce Mafiche e Ultramafiche](#rocce-mafiche) | Ol-Opx-Cpx, Ol-Px-Plag, geodinamica, facies mantello | [Apri](https://montinigeo.github.io/GeoExplore/rocce_mafiche.html) |
+| [📊 Serie Magmatiche](#serie-magmatiche) | TAS, AFM, K₂O-SiO₂, Na₂O-K₂O, percorsi geodinamici | [Apri](https://montinigeo.github.io/GeoExplore/serie_magmatiche.html) |
+| [🔥 Serie di Bowen](#serie-bowen) | Cristallizzazione frazionata, quattro tipi di magma | [Apri](https://montinigeo.github.io/GeoExplore/serie_bowen.html) |
+| [🌿 Metamorfismo](#metamorfismo) | Facies P-T, percorsi geodinamici, Barrow, protoliti | [Apri](https://montinigeo.github.io/GeoExplore/metamorfismo.html) |
 
 ### 🪨 Sedimentologia
 
 | Simulazione | Descrizione | Link |
 |-------------|-------------|------|
-| [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/Simulazioni/rocce_sedimentarie.html) |
-| [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/Simulazioni/ambienti_sedimentari.html) |
+| [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/GeoExplore/rocce_sedimentarie.html) |
+| [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/GeoExplore/ambienti_sedimentari.html) |
 
 ### 🔬 Petrografia
 
 | Simulazione | Descrizione | Link |
 |-------------|-------------|------|
-| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/Simulazioni/diagrammi_fase.html) |
-| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/Simulazioni/microscopio_polarizzato.html) |
-| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/Simulazioni/diffrattometro_xrd_v5.html) |
+| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/diagrammi_fase.html) |
+| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/microscopio_polarizzato.html) |
+| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/GeoExplore/diffrattometro_xrd_v5.html) |
 
 ### 📡 Geofisica
 
 | Simulazione | Descrizione | Link |
 |-------------|-------------|------|
-| [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/Simulazioni/moto_armonico.html) |
-| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/Simulazioni/onde_sismiche.html) |
-| [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/Simulazioni/dinsar.html) |
-| [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/Simulazioni/visibilita_sar_frane.html) |
+| [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/GeoExplore/moto_armonico.html) |
+| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/onde_sismiche.html) |
+| [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/GeoExplore/dinsar.html) |
+| [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/GeoExplore/visibilita_sar_frane.html) |
 
 ---
 
@@ -279,7 +281,7 @@ Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza 
 
 ## Autore
 
-Simulazioni sviluppate da Giovanni Montini con l'assistenza di Claude (Anthropic).
+Diagrammi sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
