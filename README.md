@@ -23,6 +23,7 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 |-------------|-------------|------|---------|
 | [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/GeoExplore/rocce_sedimentarie.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_sedimentologia.html) |
 | [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/GeoExplore/ambienti_sedimentari.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_sedimentologia.html) |
+| [🔬 Diagenesi e Idrocarburi](#diagenesi) | Zone diagenetiche, porosità, van Krevelen, sistema petrolifero | [Apri](https://montinigeo.github.io/GeoExplore/diagenesi.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_sedimentologia.html) |
 
 ### 🔬 Petrografia
 
@@ -212,6 +213,37 @@ Simulazione degli ambienti deposizionali dal continente all'oceano profondo, org
 **Ambienti Marini**
 - Piattaforma continentale, Rampa/Piattaforma carbonatica, Scarpata e Bacino, Bacino profondo
 - Selezionando il Bacino profondo: la **Sequenza di Bouma** (Ta→Te) appare come colonna stratigrafica nel blocco, gli altri ambienti si oscurano; ogni intervallo è selezionabile con descrizione del processo deposizionale
+
+---
+
+<a name="diagenesi"></a>
+## 🔬 Diagenesi e Idrocarburi
+
+**File:** `diagenesi.html`
+
+Evoluzione diagenetica dei sedimenti dalla sepoltura alla generazione di idrocarburi, organizzata in quattro schede interattive.
+
+### Schede
+
+**Zone Diagenetiche**
+- Diagramma profondità/temperatura (0–10 km, 0–300°C) con quattro fasce: Eodiagenetica, Mesodiagenetica, Tardi-diagenetica, Anchimetamorfismo
+- Hover sulla fascia mostra processi, porosità, fluidi e nota
+- Tre geoterme sovrapponibili: bacino normale (30°C/km), rift (45°C/km), cratonico (20°C/km)
+- Quattro processi selezionabili: compattazione, cementazione, dissoluzione, trasformazione argille
+
+**Evoluzione della Porosità**
+- Curve di compattazione per arenaria, argillite e carbonato (equazioni di Athy/Sclater)
+- Asse temperatura secondario a destra basato sulla geoterma selezionata
+- Linee tratteggiate alle temperature chiave (60°C, 120°C, 165°C) con indicazione delle finestre degli idrocarburi
+
+**Maturazione del Kerogene**
+- Diagramma di van Krevelen (H/C vs O/C) con quattro percorsi: Tipo I (algale), II (marino), III (terrestre), IV (inerte)
+- Fasce di maturità: immaturo → finestra olio → gas umido → gas secco
+- Marker di riflettanza vitrinite (Ro) selezionabili
+
+**Sistema Petrolifero**
+- Sezione geologica interattiva con i cinque elementi: source rock, reservoir, seal, trappola, migrazione
+- Quattro tipi di trappola selezionabili: anticlinale, faglia, stratigrafica, diapiro salino
 
 ---
 
