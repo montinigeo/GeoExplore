@@ -312,7 +312,7 @@ Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza 
 
 ## Autore
 
-Diagrammi sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
+Argomenti sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
