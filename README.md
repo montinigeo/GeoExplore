@@ -9,7 +9,7 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ### 🌋 Magmatismo e Metamorfismo
 
-| Simulazione | Descrizione | Link |
+| Argomento | Descrizione | Link |
 |-------------|-------------|------|
 | [🪨 Rocce Magmatiche](#rocce-magmatiche) | Streckeisen QAPF, piroclastiche, rocce speciali | [Apri](https://montinigeo.github.io/GeoExplore/rocce_magmatiche.html) |
 | [⛰️ Rocce Mafiche e Ultramafiche](#rocce-mafiche) | Ol-Opx-Cpx, Ol-Px-Plag, geodinamica, facies mantello | [Apri](https://montinigeo.github.io/GeoExplore/rocce_mafiche.html) |
@@ -19,14 +19,14 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ### 🪨 Sedimentologia
 
-| Simulazione | Descrizione | Link |
+| Argomento | Descrizione | Link |
 |-------------|-------------|------|
 | [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/GeoExplore/rocce_sedimentarie.html) |
 | [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/GeoExplore/ambienti_sedimentari.html) |
 
 ### 🔬 Petrografia
 
-| Simulazione | Descrizione | Link |
+| Argomento | Descrizione | Link |
 |-------------|-------------|------|
 | [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/diagrammi_fase.html) |
 | [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/microscopio_polarizzato.html) |
@@ -34,7 +34,7 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ### 📡 Geofisica
 
-| Simulazione | Descrizione | Link |
+| Argomento | Descrizione | Link |
 |-------------|-------------|------|
 | [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/GeoExplore/moto_armonico.html) |
 | [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/onde_sismiche.html) |
