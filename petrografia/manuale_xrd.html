@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale del Diffrattometro a Raggi X (XRD)</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#00c8f0;--accent2:#a8ff78;--accent3:#ffcc44;--accent4:#ff6b35;--accent5:#c060f0;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent2);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ol.steps{counter-reset:step;list-style:none;margin:1rem 0}
+ol.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+ol.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.green{border-color:rgba(168,255,120,.3);background:rgba(168,255,120,.04)}
+.highlight.yellow{border-color:rgba(255,204,68,.3);background:rgba(255,204,68,.04)}
+.highlight.orange{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.blue .hl-title{color:var(--accent)}
+.highlight.green .hl-title{color:var(--accent2)}
+.highlight.yellow .hl-title{color:var(--accent3)}
+.highlight.orange .hl-title{color:var(--accent4)}
+.highlight.purple .hl-title{color:var(--accent5)}
+.highlight p{margin:0;font-size:.9rem}
+.formula{font-family:var(--mono);font-size:.82rem;color:var(--accent);background:var(--surface2);border:1px solid var(--border2);padding:.45rem 1rem;border-radius:3px;margin:.6rem 0;display:inline-block}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Manuale · Diffrattometria XRD</p>
+  </div>
+  <ul>
+    <li class="sec-label">Fondamenti</li>
+    <li><a href="#intro">1. Raggi X e Materia</a></li>
+    <li><a href="#produzione" class="sub">1.1 Produzione dei raggi X</a></li>
+    <li><a href="#interazione" class="sub">1.2 Interazione con la materia</a></li>
+    <li class="sec-label">Cristallografia</li>
+    <li><a href="#cristall">2. Fondamenti Cristallografici</a></li>
+    <li><a href="#reticolo" class="sub">2.1 Reticolo cristallino</a></li>
+    <li><a href="#miller" class="sub">2.2 Indici di Miller</a></li>
+    <li><a href="#spaziature" class="sub">2.3 Spaziature reticolari</a></li>
+    <li class="sec-label">Diffrazione</li>
+    <li><a href="#bragg">3. La Legge di Bragg</a></li>
+    <li><a href="#derivaz" class="sub">3.1 Derivazione geometrica</a></li>
+    <li><a href="#condizioni" class="sub">3.2 Condizioni di diffrazione</a></li>
+    <li><a href="#metodo-polveri">4. Metodo delle Polveri</a></li>
+    <li><a href="#geometria" class="sub">4.1 Geometria Bragg-Brentano</a></li>
+    <li><a href="#pattern" class="sub">4.2 Il pattern di diffrazione</a></li>
+    <li><a href="#fattori" class="sub">4.3 Intensità e fattori</a></li>
+    <li class="sec-label">Analisi</li>
+    <li><a href="#qualit">5. Analisi Qualitativa</a></li>
+    <li><a href="#database" class="sub">5.1 Database ICDD</a></li>
+    <li><a href="#ricerca" class="sub">5.2 Ricerca e identificazione</a></li>
+    <li><a href="#quantit">6. Analisi Quantitativa</a></li>
+    <li><a href="#rir" class="sub">6.1 Metodo RIR</a></li>
+    <li><a href="#rietveld" class="sub">6.2 Raffinamento Rietveld</a></li>
+    <li><a href="#scherrer" class="sub">6.3 Formula di Scherrer</a></li>
+    <li class="sec-label">Applicazioni</li>
+    <li><a href="#appl-geo">7. Applicazioni Geologiche</a></li>
+    <li><a href="#argille" class="sub">7.1 Minerali argillosi</a></li>
+    <li><a href="#zeoliti-xrd" class="sub">7.2 Zeoliti e minerali rari</a></li>
+    <li><a href="#meta-xrd" class="sub">7.3 Rocce metamorfiche</a></li>
+    <li><a href="#biblio">8. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Petrografia</div>
+  <h1>Diffrattometria a Raggi X (XRD)</h1>
+  <p class="subtitle">Principi fisici, legge di Bragg, metodo delle polveri, analisi qualitativa e quantitativa, applicazioni geologiche</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- ══════════ 1. INTRO ══════════ -->
+<section id="intro">
+  <span class="section-num">01</span>
+  <h2>Raggi X e Interazione con la Materia</h2>
+  <div class="section-line"></div>
+
+  <p>I <strong>raggi X</strong> sono radiazione elettromagnetica con lunghezza d'onda λ compresa tra ~0.01 e ~10 nm (10 pm – 10 nm), corrispondente a energie di ~0.1–100 keV. Nella diffrattometria di polveri si usano lunghezze d'onda nella gamma 0.05–0.25 nm, dello stesso ordine di grandezza delle distanze interatomiche nei cristalli (~0.1–0.5 nm): questa corrispondenza è il presupposto fisico che rende possibile la diffrazione.</p>
+
+  <section id="produzione">
+    <h3>1.1 Produzione dei raggi X</h3>
+    <p>Nei diffrattometri da laboratorio i raggi X sono prodotti da un <strong>tubo a raggi X</strong> (tubo di Coolidge, 1913): elettroni emessi per effetto termoionico da un filamento di tungsteno sono accelerati attraverso una differenza di potenziale di 20–60 kV e bombardano un anodo metallico (<em>anticatodo</em>). L'interazione produce due componenti di radiazione:</p>
+
+    <dl class="deflist">
+      <dt>Radiazione di frenamento (Bremsstrahlung)</dt>
+      <dd>Spettro continuo prodotto dalla decelerazione degli elettroni nel campo coulombiano del nucleo dell'anodo. Fornisce un fondo continuo nel pattern di diffrazione (<em>rumore bianco</em>). La lunghezza d'onda minima è determinata dalla tensione di accelerazione: λ_min = hc/eV = 1.24/V(kV) nm.</dd>
+      <dt>Radiazione caratteristica</dt>
+      <dd>Picchi stretti a λ caratteristiche dell'anodo, prodotti da transizioni elettroniche dopo ionizzazione degli strati interni. Le righe più importanti per la diffrattometria sono Kα₁, Kα₂ (doppietto non risolto spesso usato come singolo Kα medio) e Kβ. La riga Kβ viene filtrata con un foglio di metallo (es. nichel per il rame) o con un monocromatore a cristallo.</dd>
+    </dl>
+
+    <p>Gli <strong>anodi più comuni</strong> e le relative lunghezze d'onda Kα sono:</p>
+
+    <table>
+      <tr><th>Anodo</th><th>λ Kα₁ (Å)</th><th>λ Kα₂ (Å)</th><th>λ Kα medio (Å)</th><th>Uso principale</th></tr>
+      <tr><td><strong>Cu (rame)</strong></td><td>1.54056</td><td>1.54439</td><td>1.54178</td><td>Minerali, metalli, materiali generici — il più usato</td></tr>
+      <tr><td><strong>Mo (molibdeno)</strong></td><td>0.70930</td><td>0.71359</td><td>0.71073</td><td>Struttura cristallina (cristallografia a singolo cristallo)</td></tr>
+      <tr><td><strong>Co (cobalto)</strong></td><td>1.78892</td><td>1.79278</td><td>1.79026</td><td>Materiali ferrosi (riduce fluorescenza rispetto a Cu)</td></tr>
+      <tr><td><strong>Fe (ferro)</strong></td><td>1.93604</td><td>1.93991</td><td>—</td><td>Campioni ricchi in manganese</td></tr>
+    </table>
+
+    <p>Le sorgenti <strong>sincrotrone</strong> producono raggi X con intensità 10⁸–10¹² volte superiore ai tubi convenzionali, con lunghezza d'onda sintonizzabile (da UV a raggi X duri). Permettono misure su campioni microscopici, ad alta risoluzione angolare, in condizioni in situ (alta T, alta P). Tra le principali sorgenti: ESRF (Grenoble), APS (Argonne), Spring-8 (Giappone).</p>
+  </section>
+
+  <section id="interazione">
+    <h3>1.2 Interazione dei raggi X con la materia</h3>
+    <p>Quando i raggi X interagiscono con un materiale, si verificano tre processi principali:</p>
+
+    <dl class="deflist">
+      <dt>Diffusione coerente (Thomson scattering)</dt>
+      <dd>Gli elettroni del materiale oscillano alla frequenza della radiazione incidente e riemettono radiazione della stessa lunghezza d'onda. Se gli atomi sono disposti in un reticolo periodico, le onde diffuse interferiscono costruttivamente in direzioni specifiche: questo è il fenomeno della <em>diffrazione</em>.</dd>
+      <dt>Diffusione incoerente (Compton scattering)</dt>
+      <dd>Collisione anelastica tra fotone e elettrone: il fotone perde parte della sua energia, la λ aumenta. Produce fondo diffuso nel pattern di diffrazione. Non contribuisce ai picchi di Bragg.</dd>
+      <dt>Assorbimento (fluorescenza X)</dt>
+      <dd>Il materiale assorbe i fotoni X ed emette fluorescenza caratteristica dei propri atomi. Se la λ della fluorescenza è vicina a quella della radiazione incidente, si produce un fondo elevato nel pattern (problema con campioni ferrosi e anodo Cu). Soluzione: usare anodo Co o Mo, oppure detector con risoluzione energetica (detector SDD).</dd>
+    </dl>
+
+    <p>Il coefficiente di <strong>assorbimento di massa</strong> μ/ρ (cm²/g) dipende dall'elemento e dalla λ: aumenta fortemente al di sopra di soglie di assorbimento caratteristiche (K-edges). Questo spiega perché la profondità di penetrazione dei raggi X è limitata (μm-mm) e perché i campioni devono essere preparati come polveri fini per l'analisi di fase.</p>
+  </section>
+</section>
+
+<!-- ══════════ 2. CRISTALLOGRAFIA ══════════ -->
+<section id="cristall">
+  <span class="section-num">02</span>
+  <h2>Fondamenti Cristallografici</h2>
+  <div class="section-line"></div>
+
+  <section id="reticolo">
+    <h3>2.1 Reticolo cristallino e cella unitaria</h3>
+    <p>Un <strong>cristallo</strong> è un solido con struttura atomica periodica tridimensionale. La periodicità è descritta dal <strong>reticolo di Bravais</strong>: un insieme di punti (nodi) distribuiti nello spazio secondo la relazione <strong>r</strong> = n₁<strong>a</strong> + n₂<strong>b</strong> + n₃<strong>c</strong>, dove <strong>a</strong>, <strong>b</strong>, <strong>c</strong> sono i vettori di cella e n₁, n₂, n₃ sono interi.</p>
+
+    <p>La <strong>cella unitaria</strong> è il parallelepipedo minimo che, traslato nelle tre direzioni, ricostruisce il cristallo intero. È definita da sei parametri: lunghezze dei lati <em>a</em>, <em>b</em>, <em>c</em> e angoli α (tra <em>b</em> e <em>c</em>), β (tra <em>a</em> e <em>c</em>), γ (tra <em>a</em> e <em>b</em>). Ci sono <strong>7 sistemi cristallini</strong> e <strong>14 reticoli di Bravais</strong>:</p>
+
+    <table>
+      <tr><th>Sistema</th><th>Parametri</th><th>Esempi mineralogici</th></tr>
+      <tr><td><strong>Cubico</strong></td><td>a=b=c, α=β=γ=90°</td><td>Galena, Halite, Pirite, Granato, Spinello</td></tr>
+      <tr><td><strong>Tetragonale</strong></td><td>a=b≠c, α=β=γ=90°</td><td>Zircone, Rutilo, Wulfenite, Vesuvianite</td></tr>
+      <tr><td><strong>Ortorombico</strong></td><td>a≠b≠c, α=β=γ=90°</td><td>Olivina, Ortopirosseno, Aragonite, Topazio</td></tr>
+      <tr><td><strong>Esagonale</strong></td><td>a=b≠c, α=β=90°, γ=120°</td><td>Quarzo (β), Grafite, Berillo, Apatite</td></tr>
+      <tr><td><strong>Trigonale (Romboedrico)</strong></td><td>a=b≠c, α=β=90°, γ=120°</td><td>Calcite, Dolomite, Quarzo (α), Ematite</td></tr>
+      <tr><td><strong>Monoclino</strong></td><td>a≠b≠c, α=γ=90°≠β</td><td>Clinopirosseno, Anfibolo, Gesso, K-feldspato</td></tr>
+      <tr><td><strong>Triclino</strong></td><td>a≠b≠c, α≠β≠γ≠90°</td><td>Plagioclasio, Cianite, Rodonite, Micoclino</td></tr>
+    </table>
+  </section>
+
+  <section id="miller">
+    <h3>2.2 Indici di Miller e piani reticolari</h3>
+    <p>I <strong>piani reticolari</strong> (hkl) sono famiglie di piani paralleli e equidistanti che contengono tutti i nodi del reticolo. Gli <strong>indici di Miller</strong> (h, k, l) descrivono l'orientazione di una famiglia di piani: sono i reciproci delle intercette del piano sugli assi <em>a</em>, <em>b</em>, <em>c</em> della cella unitaria, ridotti a interi. Convenzioni:</p>
+
+    <ul class="plain">
+      <li><strong>h, k, l interi</strong> — es. (100), (110), (111), (200), (hkl̄) con l̄=l negativo.</li>
+      <li><strong>{hkl}</strong> — indica la famiglia di piani equivalenti per simmetria (es. {100} per il cubo comprende (100), (010), (001), (1̄00), ecc.).</li>
+      <li><strong>[hkl]</strong> — indica una direzione cristallografica (vettore).</li>
+      <li><strong>Numero di piani</strong> — più alti sono gli indici, più densi sono i piani (minore spaziatura d_hkl), più debole è il riflesso di diffrazione.</li>
+    </ul>
+  </section>
+
+  <section id="spaziature">
+    <h3>2.3 Spaziature reticolari d_hkl</h3>
+    <p>La <strong>spaziatura d_hkl</strong> è la distanza perpendicolare tra piani adiacenti (hkl). La formula dipende dal sistema cristallino:</p>
+
+    <table>
+      <tr><th>Sistema</th><th>Formula d_hkl</th></tr>
+      <tr><td><strong>Cubico</strong></td><td>1/d² = (h²+k²+l²)/a²</td></tr>
+      <tr><td><strong>Tetragonale</strong></td><td>1/d² = (h²+k²)/a² + l²/c²</td></tr>
+      <tr><td><strong>Ortorombico</strong></td><td>1/d² = h²/a² + k²/b² + l²/c²</td></tr>
+      <tr><td><strong>Esagonale</strong></td><td>1/d² = 4(h²+hk+k²)/(3a²) + l²/c²</td></tr>
+      <tr><td><strong>Monoclino</strong></td><td>1/d² = h²/(a²sin²β) + k²/b² + l²/(c²sin²β) − 2hl·cosβ/(ac·sin²β)</td></tr>
+    </table>
+
+    <p>Le spaziature d_hkl sono caratteristiche di ogni specie mineralogica e costituiscono la <em>firma diffrattometrica</em> del minerale. Il diffrattogramma è essenzialmente un grafico delle intensità dei riflessi in funzione di d_hkl (o dell'angolo 2θ equivalente tramite la legge di Bragg).</p>
+  </section>
+</section>
+
+<!-- ══════════ 3. BRAGG ══════════ -->
+<section id="bragg">
+  <span class="section-num">03</span>
+  <h2>La Legge di Bragg</h2>
+  <div class="section-line"></div>
+
+  <section id="derivaz">
+    <h3>3.1 Derivazione geometrica</h3>
+    <p>William Henry Bragg e William Lawrence Bragg (<em>1913</em>, Premio Nobel per la Fisica 1915) hanno derivato la condizione per la diffrazione costruttiva dei raggi X da un reticolo cristallino. Il ragionamento geometrico è il seguente:</p>
+
+    <p>Consideriamo due piani reticolari adiacenti (hkl) separati dalla distanza d. Un fascio di raggi X monocromatici di lunghezza d'onda λ incide sui piani con angolo θ (angolo di Bragg, misurato dal piano, non dalla normale). Le onde riflesse dai due piani adiacenti percorrono cammini diversi: la differenza di cammino è 2d·sin(θ). L'<strong>interferenza costruttiva</strong> (diffrazione) avviene quando questa differenza di cammino è un multiplo intero di λ:</p>
+
+    <div class="formula">nλ = 2d · sin(θ)</div>
+
+    <p>dove <strong>n</strong> è l'<em>ordine di diffrazione</em> (intero positivo, solitamente n=1 nella convenzione dove d_hkl è già la spaziatura del piano n-esimo), <strong>d</strong> è la spaziatura interplanare in Å, <strong>λ</strong> è la lunghezza d'onda in Å, e <strong>θ</strong> è il semi-angolo di diffrazione (l'angolo tra il fascio incidente e il piano riflettente).</p>
+
+    <p>Nei diffrattogrammi l'asse x riporta tipicamente <strong>2θ</strong> (il doppio dell'angolo di Bragg): l'angolo tra il fascio trasmesso e il fascio diffratto. La conversione diretta è: d = λ/(2·sin(θ)) = λ/(2·sin(2θ/2)).</p>
+  </section>
+
+  <section id="condizioni">
+    <h3>3.2 Condizioni di diffrazione e assenze sistematiche</h3>
+    <p>Non tutti i piani (hkl) producono riflessi di diffrazione: alcune combinazioni di h, k, l sono vietate dalla simmetria del reticolo. Queste <strong>assenze sistematiche</strong> (systematic absences o extinction rules) permettono di determinare il tipo di reticolo di Bravais e il gruppo spaziale del cristallo:</p>
+
+    <ul class="plain">
+      <li><strong>Reticolo primitivo P</strong> — Nessuna assenza sistematica: tutti gli hkl producono riflessi.</li>
+      <li><strong>Reticolo centrato corpo I (BCC)</strong> — Assenti i riflessi con h+k+l = numero dispari. Es.: nel ferro BCC manca il riflesso (100), presente il (110).</li>
+      <li><strong>Reticolo centrato facce F (FCC)</strong> — Presenti solo i riflessi con h, k, l tutti pari o tutti dispari. Mancano i riflessi "misti". Es.: nel NaCl (FCC) i riflessi (100), (110), (210) sono assenti.</li>
+      <li><strong>Piani di scorrimento e assi di avvitamento</strong> — Producono assenze sistematiche nelle riflessioni hk0, h00, 0k0, 00l, ecc., permettendo di determinare il gruppo spaziale completo.</li>
+    </ul>
+
+    <div class="highlight blue">
+      <div class="hl-title">Limiti della legge di Bragg: finestra angolare accessibile</div>
+      <p>La legge di Bragg impone che sin(θ) = nλ/(2d) ≤ 1, quindi d ≥ λ/2. Con Cu Kα (λ=1.54 Å), i piani con d &lt;0.77 Å non sono accessibili. In pratica il limite inferiore per d è ~0.8–1.0 Å (2θ &lt;120–130°). Il limite superiore (2θ vicino a 0°) corrisponde a spaziature molto grandi (basse d, campioni molto ordinate come argille espanse). I diffrattometri XRD misurano tipicamente nell'intervallo 2–80° 2θ con CuKα.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 4. METODO POLVERI ══════════ -->
+<section id="metodo-polveri">
+  <span class="section-num">04</span>
+  <h2>Il Metodo delle Polveri (Debye-Scherrer)</h2>
+  <div class="section-line"></div>
+
+  <p>Peter Debye e Paul Scherrer (<em>1916</em>) hanno sviluppato il metodo delle polveri: invece di un singolo cristallo, si usa un campione <em>policristallino</em> (polvere) contenente milioni di cristalliti orientati casualmente. Statisticamente, per ogni famiglia di piani (hkl) esisteranno sempre cristalliti con l'orientazione corretta (angolo θ) per soddisfare la legge di Bragg: i raggi diffratti formano un <em>cono</em> attorno al fascio incidente (cono di Debye-Scherrer).</p>
+
+  <section id="geometria">
+    <h3>4.1 Geometria Bragg-Brentano (θ-2θ)</h3>
+    <p>La geometria <strong>Bragg-Brentano</strong> è la più comune nei diffrattometri da laboratorio moderni. Le sue caratteristiche:</p>
+
+    <ul class="plain">
+      <li><strong>Sorgente, campione e detector</strong> si trovano tutti sul <em>cerchio di focalizzazione</em>. Il campione è posizionato al centro.</li>
+      <li><strong>Scansione θ-2θ</strong>: il campione ruota di θ e il detector di 2θ contemporaneamente, mantenendo la geometria di riflessione. In alternativa, il campione è fisso e solo il tubo e il detector ruotano simmetricamente (geometria θ-θ).</li>
+      <li><strong>Solo piani paralleli alla superficie</strong> del campione contribuiscono alla diffrazione in questa geometria: questo è sia un vantaggio (risoluzione angolare ottima) che un limite (campioni con orientazione preferenziale danno pattern distorti).</li>
+      <li><strong>Risoluzione angolare tipica</strong>: 0.02–0.05° 2θ con anodo convenzionale; 0.001° con ottica avanzata (monocromatore, detector a filo).</li>
+    </ul>
+
+    <p>Altre geometrie meno comuni: <strong>Debye-Scherrer</strong> (trasmissione, campione in capillare), <strong>Laue</strong> (radiazione bianca, singolo cristallo), <strong>GIXRD</strong> (incidenza radente, superfici e film sottili).</p>
+  </section>
+
+  <section id="pattern">
+    <h3>4.2 Il pattern di diffrazione e le sue componenti</h3>
+    <p>Il <strong>diffrattogramma</strong> (o pattern di diffrazione) riporta l'intensità dei raggi X diffratti in funzione di 2θ. Le componenti principali sono:</p>
+
+    <dl class="deflist">
+      <dt>Picchi di diffrazione (riflessi di Bragg)</dt>
+      <dd>Picchi stretti e simmetrici (idealmente gaussiani o pseudo-Voigt) alle posizioni 2θ corrispondenti ai piani (hkl) del cristallo. La posizione dà d_hkl (e quindi i parametri di cella); l'intensità dà informazioni sulla struttura; la larghezza dà informazioni sulla dimensione dei cristalliti e sulle microtensioni.</dd>
+      <dt>Fondo (background)</dt>
+      <dd>Componente continua non strutturata dovuta a: scattering incoerente (Compton), fluorescenza del campione, diffusione dall'aria, fondo strumentale. Deve essere sottratto prima dell'analisi qualitativa e quantitativa.</dd>
+      <dt>Doppietto Kα₁-Kα₂</dt>
+      <dd>Il doppietto delle righe caratteristiche Kα₁ e Kα₂ produce picchi leggermente sdoppiati ad alti angoli 2θ (dove la risoluzione angolare è maggiore). A bassi angoli appare come un singolo picco. Nei software di analisi viene deconvoluto o trattato come sorgente monocromatica Kα medio.</dd>
+    </dl>
+  </section>
+
+  <section id="fattori">
+    <h3>4.3 Intensità dei riflessi: fattori che la determinano</h3>
+    <p>L'intensità di un riflesso di Bragg dipende da numerosi fattori fisici, alcuni strutturali (dipendono dal minerale) e alcuni strumentali/sperimentali:</p>
+
+    <table>
+      <tr><th>Fattore</th><th>Simbolo</th><th>Effetto</th></tr>
+      <tr><td><strong>Fattore di struttura</strong></td><td>F_hkl</td><td>Dipende dalla posizione e dal tipo degli atomi nella cella. Determinante per l'intensità relativa dei picchi dello stesso minerale.</td></tr>
+      <tr><td><strong>Fattore di scattering atomico</strong></td><td>f(sinθ/λ)</td><td>Aumenta con Z (numero atomico) e diminuisce ad alti angoli. Elementi pesanti (Fe, Ca) diffondono più degli elementi leggeri (O, Si).</td></tr>
+      <tr><td><strong>Fattore di temperatura (DWF)</strong></td><td>e^(-Bs²)</td><td>La vibrazione termica degli atomi riduce l'intensità, soprattutto ad alti angoli. B = 8π²⟨u²⟩ dove u è l'ampiezza media di vibrazione.</td></tr>
+      <tr><td><strong>Molteplicità</strong></td><td>M_hkl</td><td>Numero di piani equivalenti per simmetria. Es.: nel cubo {100} ha M=6, {111} ha M=8.</td></tr>
+      <tr><td><strong>Fattore di Lorentz-polarizzazione</strong></td><td>LP</td><td>Fattore geometrico e di polarizzazione della radiazione X. Corregge per la geometria della diffrazione e la polarizzazione del fascio.</td></tr>
+      <tr><td><strong>Orientazione preferenziale (texture)</strong></td><td>T_hkl</td><td>Se le cristalliti non sono orientate casualmente, alcuni riflessi risultano sovra- o sotto-intensi. Problema frequente con minerali a clivaggio perfetto (calcite, mica, gesso).</td></tr>
+      <tr><td><strong>Assorbimento</strong></td><td>A(θ)</td><td>Riduce l'intensità per assorbimento nel campione. Dipende da composizione e geometria. Per la geometria Bragg-Brentano con campione infinito e omogeneo, è costante e si cancella.</td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- ══════════ 5. ANALISI QUALITATIVA ══════════ -->
+<section id="qualit">
+  <span class="section-num">05</span>
+  <h2>Analisi Qualitativa: Identificazione delle Fasi</h2>
+  <div class="section-line"></div>
+
+  <p>L'<strong>analisi qualitativa</strong> XRD consiste nell'identificazione delle fasi cristalline presenti in un campione comparando il pattern misurato con i pattern di riferimento di minerali noti. È la più diffusa applicazione dell'XRD in campo geologico.</p>
+
+  <section id="database">
+    <h3>5.1 Il Database ICDD (PDF)</h3>
+    <p>L'<strong>ICDD</strong> (International Centre for Diffraction Data) gestisce il <strong>Powder Diffraction File (PDF)</strong>, il database standard mondiale per la diffrattometria di polveri. Il PDF contiene oltre 900.000 schede (entries) di composti organici, inorganici e minerali, ciascuna con:</p>
+
+    <ul class="plain">
+      <li><strong>Posizioni 2θ</strong> di tutti i picchi (o le spaziature d corrispondenti)</li>
+      <li><strong>Intensità relative</strong> normalizzate al picco più intenso (= 100)</li>
+      <li><strong>Parametri di cella</strong> e gruppo spaziale</li>
+      <li><strong>Formula chimica</strong> e nome del minerale</li>
+      <li><strong>Condizioni sperimentali</strong> in cui è stato misurato il pattern di riferimento</li>
+    </ul>
+
+    <p>Le schede PDF per i minerali più comuni sono disponibili gratuitamente nel database <strong>RRUFF</strong> (University of Arizona) e nell'<strong>American Mineralogist Crystal Structure Database</strong>. I software commerciali (HighScore Plus, JADE, DIFFRAC.EVA) includono l'accesso al PDF completo.</p>
+  </section>
+
+  <section id="ricerca">
+    <h3>5.2 Procedura di ricerca e identificazione</h3>
+    <p>La procedura standard di identificazione di fase in un campione geologico segue questi passi:</p>
+
+    <ol class="steps">
+      <li><strong>Acquisizione e pre-trattamento del diffrattogramma</strong> — Sottrazione del fondo (background fitting), deconvoluzione Kα₁/Kα₂, smoothing se necessario. Il fondo può essere sottratto con funzioni polinomiali o con il metodo Sonneveld-Visser.</li>
+      <li><strong>Ricerca e lista dei picchi</strong> — Identificazione automatica o manuale dei picchi con le loro posizioni 2θ e intensità relative. Una regola pratica: i picchi di un minerale devono essere presenti in rapporto di intensità coerente con quello del pattern di riferimento.</li>
+      <li><strong>Calcolo delle spaziature d</strong> — Conversione di ogni 2θ in d usando la legge di Bragg: d = λ/(2·sin(θ)).</li>
+      <li><strong>Ricerca nel database (Search-Match)</strong> — I software confrontano la lista d-I del campione con i pattern del PDF, producendo una lista di candidati ordinati per corrispondenza (figure of merit). Criteri di selezione: i tre/cinque picchi più intensi devono corrispondere; tutti i picchi del pattern di riferimento devono essere presenti nel campione.</li>
+      <li><strong>Verifica manuale</strong> — Confronto visivo del pattern calcolato del candidato con il pattern misurato. Identificazione dei picchi non assegnati (fasi minori, fasi sconosciute). Controllo di coerenza con le informazioni geologiche e chimiche sul campione.</li>
+      <li><strong>Raffinamento dei parametri di cella</strong> — Una volta identificate le fasi, i parametri di cella possono essere raffinati minimizzando la differenza tra le posizioni osservate e calcolate dei picchi. Dà stime molto precise di a, b, c, α, β, γ e può rilevare variazioni composizionali (es. contenuto in Fe del plagioclasio dalla variazione di d).</li>
+    </ol>
+
+    <div class="highlight green">
+      <div class="hl-title">Limiti della risoluzione: sovrappposizione di picchi</div>
+      <p>Nei campioni geologici polimineralici la sovrapposizione di picchi di fasi diverse è il problema principale. Con CuKα si hanno tipicamente 30–50 picchi per fase tra 5° e 70° 2θ; in una roccia con 5 fasi si possono avere centinaia di picchi sovrapposti. La risoluzione angolare del diffrattometro (tipicamente 0.02–0.05° 2θ) limita la capacità di separare picchi molto vicini. Il metodo Rietveld (vedi §6.2) affronta questo problema analizzando l'intero profilo anziché i singoli picchi.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 6. ANALISI QUANTITATIVA ══════════ -->
+<section id="quantit">
+  <span class="section-num">06</span>
+  <h2>Analisi Quantitativa</h2>
+  <div class="section-line"></div>
+
+  <p>L'<strong>analisi quantitativa</strong> XRD stima le percentuali in peso (o volume) delle fasi cristalline in un campione polimineralico. È uno strumento fondamentale in petrologia quantitativa, nella caratterizzazione degli argillosi, nel controllo di qualità industriale e nella geologia applicata.</p>
+
+  <section id="rir">
+    <h3>6.1 Metodo RIR (Reference Intensity Ratio)</h3>
+    <p>Il metodo <strong>RIR</strong> (Chung, 1974) usa le intensità dei picchi principali di ciascuna fase rapportate a un standard di riferimento (di solito il picco (113) del corindone α-Al₂O₃ a d=2.085 Å) per calcolare le proporzioni relative. Il fattore RIR (o I/Ic) è tabulato nel database PDF per ogni fase:</p>
+
+    <div class="formula">W_i = (I_i / RIR_i) / Σⱼ (Iⱼ / RIR_ⱼ) × 100%</div>
+
+    <p>dove W_i è la percentuale in peso della fase i, I_i è l'intensità del picco diagnostico normalizzata e RIR_i è il Reference Intensity Ratio della fase i. Il metodo è rapido ma richiede che tutte le fasi siano identificate (è un metodo <em>full pattern</em> semplificato).</p>
+
+    <p>Limitazioni: sensibile all'orientazione preferenziale, alla microdiversità composizionale (variazione di RIR con la composizione del minerale, es. plagioclasio), e alla presenza di fasi amorfe (non rilevate e sovrastimate le fasi cristalline). La precisione tipica è ±2–5% in peso.</p>
+  </section>
+
+  <section id="rietveld">
+    <h3>6.2 Raffinamento Rietveld</h3>
+    <p>Il metodo Rietveld (Hugo Rietveld, <em>1969</em>) è il metodo più potente per l'analisi quantitativa XRD. Invece di usare i singoli picchi, raffina un <strong>modello strutturale</strong> dell'intero diffrattogramma (full-pattern fitting), minimizzando la differenza tra il profilo calcolato e quello osservato con il metodo dei minimi quadrati.</p>
+
+    <p>Il profilo calcolato I_c(2θ) è espresso come somma contributi di tutte le fasi:</p>
+
+    <div class="formula">I_c(2θ) = S · Σ_φ [ S_φ · Σ_hkl (L_hkl · F_hkl² · G(2θ - 2θ_hkl)) ] + I_bkg</div>
+
+    <p>dove S_φ è il fattore di scala della fase φ (proporzionale alla quantità), L_hkl è il fattore geometrico, F_hkl è il fattore di struttura, G è la funzione di profilo (pseudo-Voigt o Pearson VII), e I_bkg è il fondo. I parametri raffinati includono: fattori di scala (→ quantità), parametri di cella (→ composizione), fattori di temperatura, parametri di profilo (→ microstruttura), orientazione preferenziale.</p>
+
+    <p>I principali <strong>software Rietveld</strong> gratuiti sono: <em>FullProf</em> (Rodriguez-Carvajal, 1993), <em>GSAS-II</em> (Toby &amp; Von Dreele, 2013), <em>Maud</em> (Lutterotti, 2010). Quelli commerciali: <em>TOPAS</em> (Bruker), <em>HighScore Plus</em> (Malvern PANalytical).</p>
+
+    <p>La qualità del raffinamento è valutata con i fattori R: <strong>R_wp</strong> (weighted profile R-factor, il più importante, deve essere &lt;10% per un buon raffinamento), <strong>R_p</strong> (profile R-factor), <strong>χ²</strong> (goodness of fit, idealmente vicino a 1.0). La precisione della quantificazione Rietveld è tipicamente ±0.5–2% in peso.</p>
+
+    <div class="highlight yellow">
+      <div class="hl-title">Stima del contenuto amorfo con Rietveld (metodo PONKCS)</div>
+      <p>Il metodo PONKCS (Partial Or No Known Crystal Structure, Scarlett &amp; Madsen, 2006) permette di quantificare le fasi amorfe (vetro vulcanico, gel, opale, ecc.) includendo nel raffinamento un profilo empirico della fase amorfa. In alternativa, il metodo dello <em>standard interno</em> aggiunge una quantità nota di standard cristallino (es. 20% corindone) al campione: la discrepanza tra il valore atteso e quello raffinato dà la percentuale di fase amorfa.</p>
+    </div>
+  </section>
+
+  <section id="scherrer">
+    <h3>6.3 La formula di Scherrer — dimensione dei cristalliti</h3>
+    <p>La <strong>larghezza dei picchi di diffrazione</strong> (FWHM, Full Width at Half Maximum) è inveramente proporzionale alla dimensione media dei cristalliti. Paul Scherrer (<em>1918</em>) ha derivato la relazione:</p>
+
+    <div class="formula">D = K·λ / (β·cos(θ))</div>
+
+    <p>dove <strong>D</strong> è la dimensione media del cristallita in direzione perpendicolare al piano (hkl) (in Å o nm), <strong>K</strong> è la costante di Scherrer (~0.9–1.0 per forme sferiche), <strong>λ</strong> è la lunghezza d'onda, <strong>β</strong> è la larghezza del picco corretta per l'allargamento strumentale (in radianti), e <strong>θ</strong> è l'angolo di Bragg del picco.</p>
+
+    <p>La formula di Scherrer è applicabile per cristalliti con D &lt; 100–200 nm. Per cristalliti più grandi, l'allargamento del picco è inferiore alla risoluzione strumentale. In mineralogia, la formula di Scherrer è usata per: (1) distinguere minerali ben cristallizzati da poco cristallini (es. illite ben cristallizzata vs. illite diagenetica); (2) stimare la dimensione dei cristalliti nelle nanoparticelle (es. goetite, ferreidrossidi); (3) monitorare la ricristallizzazione durante il metamorfismo.</p>
+
+    <div class="highlight orange">
+      <div class="hl-title">Allargamento per microtensioni (strain broadening)</div>
+      <p>L'allargamento dei picchi XRD ha due contributi: dimensione dei cristalliti (allargamento di Scherrer) e <em>microtensioni</em> (lattice strain, distorsioni reticolari locali). Il metodo di <strong>Williamson-Hall</strong> (1953) separa i due contributi tracciando β·cos(θ) vs. sin(θ): l'intercetta dà K·λ/D (dimensione) e la pendenza dà il termine di strain (ε). Applicazioni: quantificazione delle deformazioni in rocce tettonizzate, materiali sottoposti a stress meccanico.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 7. APPLICAZIONI GEOLOGICHE ══════════ -->
+<section id="appl-geo">
+  <span class="section-num">07</span>
+  <h2>Applicazioni Geologiche dell'XRD</h2>
+  <div class="section-line"></div>
+
+  <section id="argille">
+    <h3>7.1 Minerali argillosi: la sfida della cristallochimica</h3>
+    <p>I <strong>minerali argillosi</strong> (phyllosilicati a 7 e 10 Å: caolinite, illite, smectite, vermiculite, clorite e i minerali a strati misti) sono i più analizzati con XRD in campo geologico e applicativo (caratterizzazione dei suoli, petrografia delle rocce sedimentarie, studio della diagenesi). La loro identificazione XRD richiede procedure speciali per tre ragioni:</p>
+
+    <ul class="plain">
+      <li><strong>Dimensione submicronica</strong> — Le argille hanno cristalliti di 5–50 nm: i picchi XRD sono molto larghi (formula di Scherrer) e si sovrappongono facilmente.</li>
+      <li><strong>Forte orientazione preferenziale</strong> — I fillosilicati hanno clivaggio perfetto (001): nelle preparazioni standard i piani (00l) sono sovra-rappresentati. Per sfruttare questa proprietà si preparano vetrini orientati (oriented slides).</li>
+      <li><strong>Strati misti (mixed-layer minerals)</strong> — Illite/smectite, clorite/smectite, ecc. hanno spaziature basali variabili e non corrispondono a nessuna scheda PDF standard.</li>
+    </ul>
+
+    <p>La procedura standard per l'analisi delle argille prevede tre preparazioni del campione e tre diffrattogrammi:</p>
+
+    <ol class="steps">
+      <li><strong>Vetrino orientato naturale (N)</strong> — Campione disperso in acqua e sedimentato su vetrino di vetro. Mostra i riflessi (00l) con spaziature basali caratteristiche: caolinite d=7.15 Å, illite d=10 Å, smectite d=14–18 Å, clorite d=14 Å (difficile da distinguere da smectite).</li>
+      <li><strong>Vetrino orientato glicolato (EG)</strong> — Il campione è esposto a vapori di etilene glicole per 12–16 ore. La smectite espande a d=17 Å (il glicole intercala negli spazi interstrato) mentre illite e caolinite non cambiano. Questo distingue smectite da clorite (entrambe a ~14 Å nel campione naturale).</li>
+      <li><strong>Vetrino orientato calcinato (H)</strong> — Il campione è riscaldato a 550°C per 2 ore. La smectite collassa a 10 Å; la caolinite perde il suo riflesso (si destruttora); la clorite mantiene il riflesso a 14 Å (si trasforma in serpentino/talco). Permette di confermare la presenza di caolinite (scomparsa del picco 7.15 Å dopo calcinazione).</li>
+    </ol>
+
+    <p>Le <strong>trasformazioni diagenetiche delle argille</strong> rilevabili con XRD sono di grande importanza petrografica: la progressione smectite → illite/smectite misto → illite con la profondità di sepoltura (T 70–120°C) è monitorata con XRD misurando l'espansione con EG e la percentuale di strati smectitoidi nello strato misto I/S (parametro di Kübler per l'anchimorfismo). Il <strong>Kübler Index (KI)</strong> misura la larghezza del riflesso 001 dell'illite (FWHM in Δ°2θ) ed è usato come indicatore del grado di cristallinità dell'illite e quindi del grado di trasformazione diagenetica/anchimetamorfica: KI &lt;0.25 = epizona (basso metamorfismo); KI 0.25–0.42 = anchizona; KI &gt;0.42 = diagenesi.</p>
+  </section>
+
+  <section id="zeoliti-xrd">
+    <h3>7.2 Zeoliti e minerali a bassa T</h3>
+    <p>Le zeoliti (alluminosilicati microporosi con struttura a canali e cavità) sono difficili da distinguere otticamente ma danno pattern XRD caratteristici grazie alle loro spaziature d peculiari. Le più comuni nelle rocce vulcanoclastiche e nei sistemi geotermali sono:</p>
+
+    <table>
+      <tr><th>Zeolite</th><th>Formula</th><th>d principali (Å)</th><th>Ambiente</th></tr>
+      <tr><td><strong>Analcime</strong></td><td>NaAlSi₂O₆·H₂O</td><td>5.60, 3.43, 2.93</td><td>Diagenesi bassa, tufiti basaltiche</td></tr>
+      <tr><td><strong>Laumontite</strong></td><td>CaAl₂Si₄O₁₂·4H₂O</td><td>9.58, 4.72, 4.06</td><td>Facies zeoliti, T=150–250°C</td></tr>
+      <tr><td><strong>Clinoptilolite</strong></td><td>(Na,K,Ca)Al₂Si₁₀O₂₄·8H₂O</td><td>8.97, 4.49, 3.96</td><td>Tufiti marine (T&lt;50°C)</td></tr>
+      <tr><td><strong>Natrolite</strong></td><td>Na₂Al₂Si₃O₁₀·2H₂O</td><td>6.57, 5.89, 3.27</td><td>Sistemi idrotermali, basalti alcalini</td></tr>
+      <tr><td><strong>Stilbite</strong></td><td>NaCa₂Al₅Si₁₃O₃₆·14H₂O</td><td>9.08, 4.08, 3.76</td><td>Sistemi geotermali, zeoliti incipiente</td></tr>
+    </table>
+
+    <p>La presenza di zeoliti nelle rocce vulcanoclastiche in unità stratigrafiche successive con associazioni diverse (clinoptilolite → analcime → albite; o stilbite → laumontite → prehnite+pumpellyite) è usata come indicatore di paleotemperatura e consente la ricostruzione dei gradienti geotermici paleogenici.</p>
+  </section>
+
+  <section id="meta-xrd">
+    <h3>7.3 Applicazioni nelle rocce metamorfiche</h3>
+    <p>In petrologia metamorfica l'XRD è usato per:</p>
+
+    <dl class="deflist">
+      <dt>Identificazione dei polimorfi di Al₂SiO₅</dt>
+      <dd>Andalusite (ortorombica: d=5.54, 4.51, 2.79 Å), cianite (triclinica: d=3.18, 2.82, 2.76 Å) e sillimanite (ortorombica: d=3.38, 2.42, 2.19 Å) hanno pattern XRD ben distinti, utili quando la qualità del campione non permette l'identificazione ottica (granuli fini, alterazione).</dd>
+      <dt>Quantificazione della cristallinità dell'illite (KI)</dt>
+      <dd>Il Kübler Index (vedi §7.1) è usato per delimitare la transizione diagenesi/anchimetamorfismo/metamorfismo nelle sequenze metasedimentarie. È uno dei principali strumenti di mappatura del grado metamorfico nelle zone a basso grado.</dd>
+      <dt>Identificazione di fasi accessorie rare</dt>
+      <dd>Minerali presenti in quantità minori del 5% in peso (glaucofane, lawsonite, coesite) possono essere difficili da identificare otticamente ma danno picchi identificabili XRD se presenti in quantità sufficiente (&gt;1–2%). La coesite (d=3.09 Å principale) è più facilmente identificata con micro-Raman che con XRD standard sui campioni UHP.</dd>
+      <dt>Determinazione precisa dei parametri di cella</dt>
+      <dd>La composizione dei pirosseni (Mg/Fe/Ca), dei granati (almandino/grossulare/piropite), delle plagioclasi (An/Ab) e delle anfibole si riflette nei parametri di cella determinabili con precisione da XRD. Permette studi composizionali su polveri di aggregati polifasici senza necessità di analisi in microchimica (EDS/WDS).</dd>
+    </dl>
+
+    <div class="highlight purple">
+      <div class="hl-title">XRD vs. Microscopia ottica: complementarietà</div>
+      <p>XRD e microscopia ottica si complementano: il microscopio ottico dà informazioni texturali (forma, relazioni di contatto, strutture di deformazione) che l'XRD non può dare; l'XRD identifica con certezza fasi difficili otticamente (fasi amorfe, fasi submicroniche, polimorfi, minerali alterati), quantifica le proporzioni di fase e misura i parametri di cella. La migliore pratica in petrografia quantitativa moderna combina XRD (analisi modale quantitativa Rietveld) + EPMA/SEM-EDS (composizione chimica puntuale) + microscopio ottico (tessitura e petrografia descrittiva).</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 8. BIBLIO ══════════ -->
+<section id="biblio">
+  <span class="section-num">08</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Bragg W.H. &amp; Bragg W.L.</span> <span class="year">(1913)</span> — <span class="title">The reflection of X-rays by crystals</span>. <span class="journal">Proceedings of the Royal Society A, 88, 428–438.</span></p>
+  <p class="ref"><span class="authors">Chung F.H.</span> <span class="year">(1974)</span> — <span class="title">Quantitative interpretation of X-ray diffraction patterns of mixtures. I. Matrix-flushing method for quantitative multicomponent analysis</span>. <span class="journal">Journal of Applied Crystallography, 7, 519–525.</span></p>
+  <p class="ref"><span class="authors">Debye P. &amp; Scherrer P.</span> <span class="year">(1916)</span> — <span class="title">Interferenzen an regellos orientierten Teilchen im Röntgenlicht</span>. <span class="journal">Physikalische Zeitschrift, 17, 277–283.</span></p>
+  <p class="ref"><span class="authors">Kübler B.</span> <span class="year">(1968)</span> — <span class="title">Evaluation quantitative du métamorphisme par la cristallinité de l'illite</span>. <span class="journal">Bulletin du Centre de Recherches de Pau, 2, 385–397.</span></p>
+  <p class="ref"><span class="authors">Lutterotti L.</span> <span class="year">(2010)</span> — <span class="title">Total pattern fitting for the combined size–strain–stress–texture determination in thin film diffraction</span>. <span class="journal">Nuclear Instruments and Methods in Physics Research B, 268, 334–340.</span></p>
+  <p class="ref"><span class="authors">Moore D.M. &amp; Reynolds R.C.</span> <span class="year">(1997)</span> — <span class="title">X-Ray Diffraction and the Identification and Analysis of Clay Minerals</span>. <span class="journal">Oxford University Press, 2nd ed., 378 pp.</span></p>
+  <p class="ref"><span class="authors">Rietveld H.M.</span> <span class="year">(1969)</span> — <span class="title">A profile refinement method for nuclear and magnetic structures</span>. <span class="journal">Journal of Applied Crystallography, 2, 65–71.</span></p>
+  <p class="ref"><span class="authors">Rodriguez-Carvajal J.</span> <span class="year">(1993)</span> — <span class="title">Recent advances in magnetic structure determination by neutron powder diffraction</span>. <span class="journal">Physica B, 192, 55–69.</span></p>
+  <p class="ref"><span class="authors">Scarlett N.V.Y. &amp; Madsen I.C.</span> <span class="year">(2006)</span> — <span class="title">Quantification of phases with partial or no known crystal structures</span>. <span class="journal">Powder Diffraction, 21, 278–284.</span></p>
+  <p class="ref"><span class="authors">Scherrer P.</span> <span class="year">(1918)</span> — <span class="title">Bestimmung der Größe und der inneren Struktur von Kolloidteilchen mittels Röntgenstrahlen</span>. <span class="journal">Nachrichten von der Gesellschaft der Wissenschaften zu Göttingen, 2, 98–100.</span></p>
+  <p class="ref"><span class="authors">Toby B.H. &amp; Von Dreele R.B.</span> <span class="year">(2013)</span> — <span class="title">GSAS-II: the genesis of a modern open-source all purpose crystallography software package</span>. <span class="journal">Journal of Applied Crystallography, 46, 544–549.</span></p>
+  <p class="ref"><span class="authors">Warren B.E.</span> <span class="year">(1990)</span> — <span class="title">X-ray Diffraction</span>. <span class="journal">Dover Publications, New York, 381 pp.</span></p>
+  <p class="ref"><span class="authors">Williamson G.K. &amp; Hall W.H.</span> <span class="year">(1953)</span> — <span class="title">X-ray line broadening from filed aluminium and wolfram</span>. <span class="journal">Acta Metallurgica, 1, 22–31.</span></p>
+  <p class="ref"><span class="authors">Worden R.H. &amp; Morad S. (eds.)</span> <span class="year">(2009)</span> — <span class="title">Clay Mineral Cements in Sandstones</span>. <span class="journal">International Association of Sedimentologists, Blackwell, 512 pp.</span></p>
+</section>
+
+</main>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

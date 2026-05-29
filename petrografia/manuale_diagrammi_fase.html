@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale dei Diagrammi di Fase — Sistemi Silicatici</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#c060f0;--accent2:#00c8f0;--accent3:#a8ff78;--accent4:#ff6b35;--accent5:#ffcc44;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent3);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ol.steps{counter-reset:step;list-style:none;margin:1rem 0}
+ol.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+ol.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.green{border-color:rgba(168,255,120,.3);background:rgba(168,255,120,.04)}
+.highlight.orange{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight.yellow{border-color:rgba(255,204,68,.3);background:rgba(255,204,68,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.purple .hl-title{color:var(--accent)}
+.highlight.blue .hl-title{color:var(--accent2)}
+.highlight.green .hl-title{color:var(--accent3)}
+.highlight.orange .hl-title{color:var(--accent4)}
+.highlight.yellow .hl-title{color:var(--accent5)}
+.highlight p{margin:0;font-size:.9rem}
+.formula{font-family:var(--mono);font-size:.82rem;color:var(--accent2);background:var(--surface2);border:1px solid var(--border2);padding:.45rem 1rem;border-radius:3px;margin:.6rem 0;display:inline-block}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Manuale · Diagrammi di Fase</p>
+  </div>
+  <ul>
+    <li class="sec-label">Fondamenti</li>
+    <li><a href="#intro">1. Principio delle Fasi</a></li>
+    <li><a href="#gibbs" class="sub">1.1 Regola di Gibbs</a></li>
+    <li><a href="#un-comp" class="sub">1.2 Sistemi a un componente</a></li>
+    <li class="sec-label">Sistemi Binari</li>
+    <li><a href="#ab-an">2. Ab-An — Soluzione Solida</a></li>
+    <li><a href="#equil" class="sub">2.1 Cristallizzazione in equilibrio</a></li>
+    <li><a href="#frazion" class="sub">2.2 Cristallizzazione frazionata</a></li>
+    <li><a href="#zonatura" class="sub">2.3 Zonatura del plagioclasio</a></li>
+    <li><a href="#di-an">3. Di-An — Eutettico Semplice</a></li>
+    <li><a href="#eutettico" class="sub">3.1 Punto eutettico</a></li>
+    <li><a href="#petrol-dian" class="sub">3.2 Applicazioni petrologiche</a></li>
+    <li><a href="#lc-sio2">4. Lc-SiO₂ — Punto Peritettico</a></li>
+    <li><a href="#peritettico" class="sub">4.1 Cristallizzazione incongruente</a></li>
+    <li><a href="#petrol-lc" class="sub">4.2 Significato petrologico</a></li>
+    <li><a href="#ab-or">5. Ab-Or — Solvus e Pertiti</a></li>
+    <li><a href="#solvus" class="sub">5.1 Solvus e immiscibilità</a></li>
+    <li><a href="#pertiti" class="sub">5.2 Pertiti e antipertiti</a></li>
+    <li><a href="#bowentuttle" class="sub">5.3 Diagramma Bowen-Tuttle</a></li>
+    <li class="sec-label">Applicazioni</li>
+    <li><a href="#applicaz">6. Applicazioni Petrologiche</a></li>
+    <li><a href="#geotermo" class="sub">6.1 Geotermometri</a></li>
+    <li><a href="#geobar" class="sub">6.2 Geobarometri</a></li>
+    <li><a href="#biblio">7. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Petrografia</div>
+  <h1>Diagrammi di Fase nei Sistemi Silicatici</h1>
+  <p class="subtitle">Principio delle fasi di Gibbs, sistemi binari fondamentali e applicazioni petrologiche quantitative</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- ══════════ 1. INTRO ══════════ -->
+<section id="intro">
+  <span class="section-num">01</span>
+  <h2>Il Principio delle Fasi e i Diagrammi di Fase</h2>
+  <div class="section-line"></div>
+
+  <p>Un <strong>diagramma di fase</strong> rappresenta le condizioni di temperatura, pressione e composizione in cui le diverse fasi (solide, liquide, gassose) di un sistema sono stabili, metastabili o in equilibrio tra loro. Per i sistemi silicatici — magmi e rocce ignee e metamorfiche — i diagrammi di fase sono lo strumento fondamentale per comprendere la sequenza di cristallizzazione, la composizione dei liquidi residuali e le condizioni P-T dei processi geologici.</p>
+
+  <section id="gibbs">
+    <h3>1.1 La Regola delle Fasi di Gibbs</h3>
+    <p>La <strong>regola delle fasi di Gibbs</strong> (Willard Gibbs, 1876) definisce il numero di variabili intensive indipendenti (<em>gradi di libertà</em>, F) che possono variare senza modificare il numero di fasi presenti in equilibrio:</p>
+
+    <div class="formula">F = C − P + 2</div>
+
+    <p>dove <strong>C</strong> è il numero di <em>componenti</em> (il numero minimo di specie chimiche indipendenti necessarie a descrivere la composizione di tutte le fasi), <strong>P</strong> è il numero di <em>fasi</em> presenti in equilibrio, e <strong>2</strong> rappresenta le due variabili intensive temperatura e pressione.</p>
+
+    <p>In petrologia si lavora spesso a pressione costante (sistemi isobari), semplificando la regola a:</p>
+
+    <div class="formula">F = C − P + 1</div>
+
+    <p>I casi fondamentali per un sistema binario isobaro (C=2) sono:</p>
+
+    <table>
+      <tr><th>Fasi in equilibrio (P)</th><th>Gradi di libertà (F)</th><th>Significato</th></tr>
+      <tr><td>1 (solo liquido o solo solido)</td><td>2</td><td>T e composizione variano liberamente</td></tr>
+      <tr><td>2 (liquido + un solido)</td><td>1</td><td>Fissata T, la composizione di entrambe le fasi è determinata</td></tr>
+      <tr><td>3 (liquido + due solidi)</td><td>0</td><td>Sistema invariante: T e composizioni sono fisse (punto eutettico o peritettico)</td></tr>
+    </table>
+
+    <div class="note"><p>Il numero di <strong>componenti</strong> non corrisponde al numero di specie chimiche presenti, ma al numero minimo di specie indipendenti. Ad esempio, nel sistema Ab-An i due componenti sono NaAlSi₃O₈ e CaAl₂Si₂O₈, anche se fisicamente il plagioclasio è composto da Si, Al, Na, Ca, O.</p></div>
+  </section>
+
+  <section id="un-comp">
+    <h3>1.2 Sistemi a un componente</h3>
+    <p>I sistemi a un componente (C=1) producono diagrammi di fase con assi T e P. La regola di Gibbs dà F = 3−P: un campo monofasico ha F=2 (bivariante), una curva di equilibrio tra due fasi ha F=1 (univariante), un punto triplo ha F=0 (invariante).</p>
+
+    <h4>Sistema SiO₂</h4>
+    <p>Il diossido di silicio esiste in numerosi polimorfi stabili a diverse condizioni P-T. I principali sono: <strong>quarzo-α</strong> (stabile &lt;573°C a P atmosferica, trigonale) → <strong>quarzo-β</strong> (573–870°C, esagonale, transizione di secondo ordine reversibile e rapida) → <strong>tridimite</strong> (870–1470°C, ortorombica) → <strong>cristobalite</strong> (1470–1713°C, cubica) → <strong>fusione</strong> (&gt;1713°C). Ad alta pressione: <strong>coesiteite</strong> (&gt;3 GPa, monoclinica, diagnostica di UHP metamorfismo) e <strong>stishovite</strong> (&gt;10 GPa, rutilo-struttura, diagnostica di impatti meteoritici).</p>
+
+    <p>La transizione quarzo-α/β a 573°C è di importanza pratica nelle ceramiche e nelle analisi termiche: il brusco cambiamento di volume (~0.8%) durante il riscaldamento/raffreddamento può causare fratturazione. In geologia è usata come indicatore di temperatura nei xenoliti e nelle rocce vulcaniche.</p>
+
+    <h4>Sistema Al₂SiO₅ — i tre polimorfi</h4>
+    <p>I tre polimorfi di Al₂SiO₅ — <strong>andalusite</strong>, <strong>cianite</strong> e <strong>sillimanite</strong> — definiscono uno dei diagrammi P-T più importanti in petrologia metamorfica. Il <strong>punto triplo</strong> (dove i tre coesistono) si trova a circa T=500°C e P=0.38 GPa:</p>
+
+    <ul class="plain">
+      <li><strong>Andalusite</strong> — stabile a bassa P e alta T (campo a sinistra del punto triplo, bassa P). Cristalli prismatici ortorombici, spesso con inclusioni a croce (chiastolite). Indica metamorfismo di bassa pressione (contatto o bassa P regionale, gradiente &gt;25°C/km).</li>
+      <li><strong>Cianite</strong> — stabile ad alta P e media-alta T (campo superiore sinistro). Cristalli lamellari triclinici blu-grigi, clivaggio perfetto in due direzioni. Indica metamorfismo di alta pressione (subduzione, collisione profonda, gradiente &lt;15°C/km).</li>
+      <li><strong>Sillimanite</strong> — stabile ad alta T (campo a destra del punto triplo). Cristalli fibrosi o prismatici ortorombici, spesso in aggregati sericito-simili (fibrolite). Indica la zona metamorfica più calda.</li>
+    </ul>
+
+    <div class="highlight purple">
+      <div class="hl-title">Polimorfi come indicatori P-T</div>
+      <p>La presenza o assenza dei tre polimorfi in una roccia metamorfica permette di stimare il campo P-T raggiunto senza misurazioni analitiche. La coesistenza di andalusite + sillimanite (con assenza di cianite) indica percorsi P-T che attraversano il confine And-Sil senza passare per il campo della cianite: tipico di metamorfismo di bassa pressione con riscaldamento progressivo.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 2. AB-AN ══════════ -->
+<section id="ab-an">
+  <span class="section-num">02</span>
+  <h2>Sistema Ab-An — Soluzione Solida Completa</h2>
+  <div class="section-line"></div>
+
+  <p>Il sistema <strong>albite (Ab, NaAlSi₃O₈) — anortite (An, CaAl₂Si₂O₈)</strong> è il sistema binario più importante in petrologia ignea, in quanto descrive il comportamento del <strong>plagioclasio</strong>, il feldspato più abbondante nella crosta terrestre. I due end-member formano una serie di soluzioni solide complete a tutte le composizioni, con struttura cristallochimica identica (triclinica, tipo feldspato).</p>
+
+  <p>Il diagramma a pressione costante mostra due curve: il <strong>liquidus</strong> (al di sopra del quale il sistema è completamente fuso) e il <strong>solidus</strong> (al di sotto del quale il sistema è completamente cristallino). Tra le due curve coesistono liquido e cristalli di plagioclasio.</p>
+
+  <section id="equil">
+    <h3>2.1 Cristallizzazione in equilibrio</h3>
+    <p>Nella <strong>cristallizzazione in equilibrio</strong> (o cristallizzazione reversibile) si assumono: (1) diffusione infinitamente rapida nel liquido; (2) diffusione infinitamente rapida allo stato solido. In queste condizioni, le composizioni di liquido e cristallo seguono rispettivamente il liquidus e il solidus al diminuire della temperatura.</p>
+
+    <p>Il percorso di cristallizzazione di un liquido di composizione X₀ (es. An₅₀) si legge nel diagramma con la <strong>leva</strong>:</p>
+
+    <ol class="steps">
+      <li><strong>Inizio cristallizzazione (T = T_liquidus)</strong> — Il primo cristallo formato ha composizione An-ricca (letta sul solidus alla stessa T). Es.: liquido An₅₀ inizia a cristallizzare plagioclasio An₈₀.</li>
+      <li><strong>Raffreddamento progressivo</strong> — Al diminuire di T, il liquido diventa più Ab-ricco (segue il liquidus verso sinistra) e i cristalli diventano progressivamente più Ab-ricchi (seguono il solidus verso sinistra). Le proporzioni relative liquido/cristallo si leggono con la regola della leva: % liquido = (X₀ − X_solidus)/(X_liquidus − X_solidus) × 100.</li>
+      <li><strong>Fine cristallizzazione (T = T_solidus)</strong> — L'ultimo liquido ha composizione Ab-ricca; il cristallo finale ha esattamente la composizione iniziale X₀ (Ab₅₀ nell'esempio). Il sistema è completamente cristallino.</li>
+    </ol>
+
+    <div class="highlight blue">
+      <div class="hl-title">La Regola della Leva (Lever Rule)</div>
+      <p>Ad una temperatura T compresa tra liquidus e solidus, le proporzioni relative di liquido (L) e solido (S) si calcolano geometricamente: il segmento dal punto X₀ al liquidus dà la proporzione di solido, il segmento dal punto X₀ al solidus dà la proporzione di liquido. Matematicamente: % S = (X_liq − X₀)/(X_liq − X_sol) × 100; % L = (X₀ − X_sol)/(X_liq − X_sol) × 100.</p>
+    </div>
+  </section>
+
+  <section id="frazion">
+    <h3>2.2 Cristallizzazione frazionata</h3>
+    <p>Nella <strong>cristallizzazione frazionata</strong> (o cristallizzazione irreversibile) i cristalli vengono <em>rimossi</em> dal sistema (per sedimentazione gravitazionale, adesione alle pareti, ecc.) non appena si formano, impedendo la riequ­librazione con il liquido. Le conseguenze sono fondamentali:</p>
+
+    <ul class="plain">
+      <li><strong>Il liquido evolve verso Ab</strong> — senza riequ­librazione con i cristalli precedenti, il liquido diventa progressivamente più Ab-ricco rispetto al caso dell'equilibrio.</li>
+      <li><strong>I cristalli sono zonati</strong> — ogni cristallo, non più in equilibrio con il liquido al diminuire di T, mostra una composizione che varia dal nucleo (An-ricco) alla periferia (Ab-ricco). Questa è la <em>zonatura normale</em>.</li>
+      <li><strong>Residuo più Ab-ricco</strong> — il liquido finale è molto più Ab-ricco rispetto alla cristallizzazione in equilibrio, dove il liquido avrebbe esattamente la composizione iniziale X₀.</li>
+    </ul>
+
+    <p>La cristallizzazione frazionata del plagioclasio produce quindi una deriva composizionale del magma verso composizioni più sodiche e più siliciche, contribuendo alla differenziazione magmatica verso rioliti e graniti.</p>
+  </section>
+
+  <section id="zonatura">
+    <h3>2.3 Zonatura del plagioclasio e applicazioni</h3>
+    <p>La <strong>zonatura composizionale</strong> del plagioclasio è una delle strutture più informative in petrografia. Le principali tipologie sono:</p>
+
+    <dl class="deflist">
+      <dt>Zonatura normale</dt>
+      <dd>Nucleo An-ricco, bordo Ab-ricco. Prodotto di cristallizzazione frazionata durante il raffreddamento. La più comune nei plagioclasi vulcanici e intrusivi. Registra l'evoluzione del magma verso composizioni più differenziate.</dd>
+      <dt>Zonatura inversa</dt>
+      <dd>Nucleo Ab-ricco, bordo An-ricco. Indica rimescolamento di magmi (mixing): un magma Ab-ricco viene mescolato con un magma più primitivo An-ricco, o il cristallo viene portato in un ambiente più caldo. Anche la pressione di H₂O può causare zonatura inversa.</dd>
+      <dt>Zonatura oscillatoria</dt>
+      <dd>Alternanza di zone An-ricche e Ab-ricche visibile in luce polarizzata. Indica fluttuazioni ripetute delle condizioni di cristallizzazione: variazioni di T, P_H₂O, o convection-driven reequilibration nella camera magmatica. Comune nei plagioclasi di rocce vulcaniche attive.</dd>
+      <dt>Discontinuità di riassorbimento (sieve texture)</dt>
+      <dd>Zone con inclusioni vetrose disposte a setaccio (sieve texture): il cristallo è stato parzialmente riassorbito dal liquido prima di ricrescere. Indica decompressione rapida, mixing di magmi, o aumento di T. Diagnostica di processi dinamici nella camera magmatica.</dd>
+    </dl>
+
+    <p>La composizione del plagioclasio in funzione della profondità di cristallizzazione e del contenuto in H₂O del magma viene usata come <strong>igrometro</strong> (Ridolfi et al., 2010): l'An-contenuto del plagioclasio in equilibrio con il magma dipende dalla T e dal contenuto in H₂O. Confrontando la composizione del nucleo e del bordo del plagioclasio con modelli sperimentali si possono stimare le condizioni pre-eruttive.</p>
+  </section>
+</section>
+
+<!-- ══════════ 3. DI-AN ══════════ -->
+<section id="di-an">
+  <span class="section-num">03</span>
+  <h2>Sistema Di-An — Eutettico Semplice</h2>
+  <div class="section-line"></div>
+
+  <p>Il sistema <strong>diopside (Di, CaMgSi₂O₆) — anortite (An, CaAl₂Si₂O₈)</strong>, studiato sperimentalmente da Bowen (<em>1915</em>), è il prototipo dei sistemi eutettici silicatici. A differenza del sistema Ab-An, i due componenti <strong>non formano soluzioni solide</strong>: diopside e anortite cristallizzano come fasi pure, senza mescolamento reciproco nella struttura cristallina.</p>
+
+  <p>Il diagramma mostra: (1) la curva di liquidus del diopside (pendenza positiva verso An), (2) la curva di liquidus dell'anortite (pendenza positiva verso Di), e (3) il <strong>punto eutettico E</strong> dove le due curve si incontrano (~Di₅₈An₄₂, T ≈ 1274°C a P atmosferica). Il solidus è orizzontale alla temperatura eutettica.</p>
+
+  <section id="eutettico">
+    <h3>3.1 Il punto eutettico</h3>
+    <p>Il punto eutettico è il punto <strong>invariante</strong> (F=0 a P costante, con tre fasi in equilibrio: liquido + Di + An) dove il sistema cristallizza completamente a temperatura costante. Ha due proprietà fondamentali:</p>
+
+    <ul class="plain">
+      <li><strong>Temperatura minima di fusione</strong> — Nessuna miscela Di-An può rimanere liquida al di sotto di 1274°C. Qualunque composizione che raggiunga la composizione eutettica cristallizza completamente a questa temperatura.</li>
+      <li><strong>Composizione eutettica</strong> — ~Di₅₈An₄₂ è la composizione del liquido che cristallizza per ultimo in qualsiasi miscela Di-An, indipendentemente dalla composizione iniziale.</li>
+    </ul>
+
+    <p>Il percorso di cristallizzazione dipende dalla composizione iniziale rispetto all'eutettico:</p>
+
+    <ol class="steps">
+      <li><strong>Composizione Di-ricca (a sinistra dell'eutettico)</strong> — Al raggiungimento del liquidus del diopside, inizia la cristallizzazione di Di puro. Il liquido diventa progressivamente più An-ricco seguendo il liquidus verso E. Raggiunto E, cristallizza anche An; il sistema solidifica completamente a T costante.</li>
+      <li><strong>Composizione An-ricca (a destra dell'eutettico)</strong> — Analogamente, inizia la cristallizzazione di An puro; il liquido si sposta verso E.</li>
+      <li><strong>Composizione eutettica (= E)</strong> — Inizio di cristallizzazione immediato a 1274°C; cristallizzazione simultanea di Di e An in proporzioni eutettiche a T costante.</li>
+    </ol>
+
+    <div class="note"><p>In tutti i casi, il liquido <em>finale</em> ha sempre composizione eutettica, qualunque sia la composizione iniziale. Questo è il principio che spiega la tendenza dei magmi differenziati a convergere verso composizioni simili (es. rioliti con composizioni vicine all'eutettico nel sistema Qz-Ab-Or-An+H₂O di Tuttle &amp; Bowen, 1958).</p></div>
+  </section>
+
+  <section id="petrol-dian">
+    <h3>3.2 Applicazioni petrologiche del sistema Di-An</h3>
+    <p>Il sistema Di-An è il modello di riferimento per la cristallizzazione dei basalti e dei gabbri. Il punto eutettico rappresenta la composizione del <strong>basalto di dorsale oceanica</strong> allo stato di fusione parziale minima del mantello. Bowen (<em>1915</em>) lo usò per dimostrare che rocce di composizione apparentemente diversa (gabbri ricchi in plagioclasio vs. pirosseniti) possono derivare dallo stesso magma basaltico per cristallizzazione frazionata.</p>
+
+    <p>La distribuzione delle fasi al di sopra e al di sotto dell'eutettico spiega perché nei gabbri stratificati si osservano cumulati di pirosseno puro (cristallizzazione iniziale prima dell'eutettico) seguiti da livelli pirosseno+plagioclasio (cristallizzazione eutettica): la sequenza stratigrafica riflette il percorso di cristallizzazione nel diagramma.</p>
+
+    <p>L'<strong>effetto della pressione</strong> sul sistema Di-An sposta il punto eutettico: a pressioni più elevate (>1 GPa), la composizione eutettica si sposta verso An. Questo spiega perché i magmi generati a grande profondità tendono ad avere più pirosseno rispetto a quelli generati superficialmente. A pressioni &gt;1.5 GPa appare il granato (sistema Di-An-Py diventa rilevante per le eclogiti).</p>
+
+    <p>L'<strong>effetto dell'acqua</strong> abbassa la temperatura dell'eutettico e sposta la composizione verso Di. Questo è importante nei sistemi magmatici di arco dove l'acqua abbassa la T di cristallizzazione permettendo la persistenza del liquido a temperature più basse.</p>
+  </section>
+</section>
+
+<!-- ══════════ 4. LC-SIO2 ══════════ -->
+<section id="lc-sio2">
+  <span class="section-num">04</span>
+  <h2>Sistema Lc-SiO₂ — Cristallizzazione Incongruente</h2>
+  <div class="section-line"></div>
+
+  <p>Il sistema <strong>leucite (Lc, KAlSi₂O₆) — SiO₂</strong> introduce il concetto di <strong>cristallizzazione incongruente</strong>: la leucite non fonde congruentemente (producendo un liquido di uguale composizione) ma si decompone al riscaldamento producendo un liquido di composizione diversa e un solido residuo (<strong>sanidino, KAlSi₃O₈</strong>):</p>
+
+  <div class="formula">Leucite (KAlSi₂O₆) + SiO₂ liquido ⇌ Sanidino (KAlSi₃O₈)</div>
+
+  <p>Il diagramma mostra un <strong>punto peritettico P</strong> (detto anche <em>punto di reazione</em>) a circa T=1150°C, dove coesistono liquido + leucite + sanidino. A differenza dell'eutettico, il sistema non rimane a T costante durante tutta la cristallizzazione: appena tutta la leucite viene consumata dalla reazione (o tutto il liquido viene consumato), il sistema lascia il punto peritettico.</p>
+
+  <section id="peritettico">
+    <h3>4.1 Percorsi di cristallizzazione nel sistema Lc-SiO₂</h3>
+    <p>Esistono tre comportamenti distinti in funzione della composizione iniziale rispetto al punto peritettico P e all'eutettico E:</p>
+
+    <dl class="deflist">
+      <dt>Composizione ricca in Lc (a sinistra di P, es. Lc₇₀SiO₂₃₀)</dt>
+      <dd>Al raffreddamento, cristallizza leucite. Il liquido si sposta verso P lungo il liquidus della leucite. Al punto peritettico, la leucite reagisce con il liquido per formare sanidino: la reazione avviene a T costante fino a che il <em>liquido</em> viene consumato prima della leucite. Il prodotto finale è leucite + sanidino (senza liquido residuo). La roccia sarà leucitifera.</dd>
+      <dt>Composizione al punto peritettico (= P)</dt>
+      <dd>Cristallizzazione di leucite fino a P; qui tutta la leucite reagisce con il liquido per formare sanidino a T costante. Il prodotto finale è solo sanidino.</dd>
+      <dt>Composizione ricca in SiO₂ (a destra di P)</dt>
+      <dd>Al raffreddamento, cristallizza leucite. Al punto peritettico, la leucite reagisce con il liquido per formare sanidino: la reazione avviene a T costante fino a che tutta la <em>leucite</em> viene consumata prima del liquido. Il liquido residuale contiene ancora SiO₂ in eccesso e continua a raffreddarsi verso l'eutettico E (sanidino + quarzo, ~990°C), dove cristallizza completamente. La roccia finale è sanidino + quarzo (senza leucite).</dd>
+    </dl>
+
+    <p>Nella <strong>cristallizzazione frazionata</strong>, se i cristalli di leucite vengono separati dal liquido prima di raggiungere P, la reazione di riassorbimento non avviene e la leucite è preservata nella roccia. Questo spiega la presenza di leucite nelle rocce vulcaniche potassiche italiane (Colli Albani, Vesuvio), dove la rapida solidificazione impedisce la completa reazione peritettica.</p>
+  </section>
+
+  <section id="petrol-lc">
+    <h3>4.2 Significato petrologico della cristallizzazione incongruente</h3>
+    <p>Il comportamento peritettico è fondamentale per comprendere:</p>
+
+    <ul class="plain">
+      <li><strong>Presenza di leucite nelle rocce vulcaniche</strong> — La leucite è instabile al di sotto di ~605°C a P atmosferica; si converte in pseudo-leucite (analcime + K-feldspato) se il raffreddamento è lento. La leucite fresca è preservata solo nelle rocce vulcaniche italiane di composizione ultra-potassica e nelle lamproiti.</li>
+      <li><strong>Assenza di quarzo + leucite nella stessa roccia</strong> — Quarzo e leucite non possono coesistere (sono reattivi tra loro: producono K-feldspato). Trovare entrambi indicherebbe equilibrio non raggiunto. Questa regola è usata per diagnosticare la saturazione in silice dei magmi potassici.</li>
+      <li><strong>Punto peritettico olivina-pirosseno (serie di Bowen)</strong> — Il comportamento peritettico si ripete nella serie di Bowen: l'olivina, a una certa temperatura, reagisce con il liquido per formare enstatite (ortopirosseno). Se la reazione è incompleta, si trovano cristalli di olivina incamiciati da ortopirosseno (struttura kelifitica) nei gabbri e nelle peridotiti.</li>
+    </ul>
+
+    <div class="highlight orange">
+      <div class="hl-title">Reazione peritettica olivina-pirosseno in Bowen</div>
+      <p>Nella serie discontinua di Bowen, l'olivina è instabile nel liquido più evoluto e reagisce per formare pirosseno: Fo + SiO₂(liq) → En. Se la cristallizzazione è frazionata e l'olivina viene separata prima di completare la reazione, il liquido residuale mantiene più SiO₂ disponibile per cristallizzare quarzo o feldspato. Questo è il meccanismo di Bowen per spiegare la suite olivina-basalto → andesite → riolite senza importazione di materiale esterno.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 5. AB-OR ══════════ -->
+<section id="ab-or">
+  <span class="section-num">05</span>
+  <h2>Sistema Ab-Or — Solvus e Pertiti</h2>
+  <div class="section-line"></div>
+
+  <p>Il sistema <strong>albite (Ab, NaAlSi₃O₈) — ortoclasio (Or, KAlSi₃O₈)</strong> è il sistema binario dei feldspati alcalini. A differenza del plagioclasio (soluzione solida completa), i feldspati alcalini mostrano una <strong>miscibilità limitata allo stato solido</strong>: ad alta temperatura formano soluzioni solide complete (sanidino), ma al raffreddamento si separano in due fasi immiscibili per smescolamento subsolidus. Questo fenomeno è descritto dal <strong>solvus</strong>.</p>
+
+  <section id="solvus">
+    <h3>5.1 Il solvus e l'immiscibilità allo stato solido</h3>
+    <p>Il <strong>solvus</strong> è la curva che delimita il campo di miscibilità completa (al di sopra) da quello di immiscibilità (al di sotto) nello stato solido. Nel sistema Ab-Or:</p>
+
+    <ul class="plain">
+      <li><strong>Ad alta T (&gt;700°C circa)</strong> — Sanidino: soluzione solida completa Or-Ab. Un unico feldspato con struttura monoclinica.</li>
+      <li><strong>Tra solvus e solidus</strong> — Al raffreddamento attraverso il solvus, il sanidino si separa in due feldspati: una fase Or-ricca (ortoclasio, microclino) e una fase Ab-ricca (albite). La separazione avviene per diffusione allo stato solido.</li>
+      <li><strong>Al di sotto del solvus</strong> — I due feldspati coesistono come fase distinte con composizioni sempre più Or-ricca e Ab-ricca al diminuire di T.</li>
+    </ul>
+
+    <p>La velocità di raffreddamento controlla la scala della separazione: raffreddamento lento (plutoniti) → pertiti macroscopiche visibili al microscopio; raffreddamento rapido (vulcaniti) → sanidino omogeneo non pertitizzato (non ha avuto tempo di separare le fasi).</p>
+  </section>
+
+  <section id="pertiti">
+    <h3>5.2 Pertiti e antipertiti</h3>
+    <p>Le <strong>pertiti</strong> sono intercrescenze di albite (lamelle, vene, patch) in un ospite di feldspato K. Le <strong>antipertiti</strong> sono l'inverso: lamelle di feldspato K in albite. Le principali morfologie di pertite sono:</p>
+
+    <dl class="deflist">
+      <dt>Pertite a lamelle (lamellar perthite)</dt>
+      <dd>Lamelle di albite orientate secondo piani cristallografici specifici nell'ospite di K-feldspato. Tipica di raffreddamento lento in plutoniti. Visibile al microscopio ottico come lamelle birifrangenti nell'ospite.</dd>
+      <dt>Pertite a vene (vein perthite)</dt>
+      <dd>Vene irregolari di albite che attraversano il K-feldspato ospite. Forma intermedia.</dd>
+      <dt>Pertite a patch (patch perthite)</dt>
+      <dd>Aggregati irregolari di albite nell'ospite di K-feldspato. Suggerisce ridiffusione parziale a T intermedie.</dd>
+      <dt>Criptopertite</dt>
+      <dd>Separazione submicroscopica (&lt;1 μm) rilevabile solo con la microscopia elettronica (TEM). Indica raffreddamento relativamente rapido che ha iniziato ma non completato la separazione su scala macroscopica.</dd>
+    </dl>
+
+    <p>L'analisi delle pertiti fornisce informazioni sulla <strong>storia termica</strong> della roccia: composizione globale del feldspato originale (integrando la composizione di ospite + lamelle con la regola della leva), T di separazione (dal solvus), e velocità di raffreddamento (dalla scala della pertitizzazione).</p>
+  </section>
+
+  <section id="bowentuttle">
+    <h3>5.3 Il diagramma di Bowen-Tuttle (Ab-Or + H₂O)</h3>
+    <p>Bowen &amp; Tuttle (<em>1950</em>) hanno determinato sperimentalmente il diagramma di fase del sistema Ab-Or in presenza di acqua (P_H₂O = P_totale). Il risultato è rivoluzionario per la petrologia granitica:</p>
+
+    <p>In presenza di H₂O, il sistema Ab-Or mostra un <strong>minimo</strong> (non un eutettico, perché Ab e Or formano comunque soluzioni solide) nella curva del liquidus a circa Or₃₃Ab₆₇, con T di fusione abbassata a ~650–700°C. Questo minimo si sposta verso Or al crescere di P_H₂O.</p>
+
+    <p>Il sistema Ab-Or + An + Qz + H₂O (sistema quaternario) produce il <strong>minimo granitico</strong>: la composizione del liquido verso cui convergono tutti i graniti durante la cristallizzazione frazionata o verso cui i granitoidi si spostano durante la fusione parziale. Questo spiega:</p>
+
+    <ul class="plain">
+      <li><strong>La composizione quasi universale dei graniti</strong> — La gran parte dei graniti si concentra attorno alla composizione del minimo granitico nel diagramma Qz-Ab-Or (triangolo normativo di O'Connor, 1965). I graniti da fusione parziale crostale (S-type) hanno composizione vicina al minimo idrato.</li>
+      <li><strong>La T di fusione dei graniti (&lt;700°C)</strong> — Molto inferiore alla T di fusione dei singoli componenti (~1000–1500°C). Questo rende possibile l'anatessi nella crosta continentale a profondità moderate (&lt;30 km) quando è presente H₂O.</li>
+    </ul>
+
+    <div class="highlight green">
+      <div class="hl-title">Il triangolo normativo Qz-Ab-Or</div>
+      <p>Le norme CIPW (Cross, Iddings, Pirsson &amp; Washington, 1902) calcolano la composizione mineralogica equivalente (normativa) di una roccia a partire dall'analisi chimica. I graniti proiettati nel triangolo normativo Qz-Ab-Or si concentrano intorno al minimo granitico (circa Qz₃₀Ab₄₀Or₃₀ a P_H₂O=0.5 GPa). Questa concentrazione è la prova più convincente che i graniti derivano dalla cristallizzazione frazionata o dalla fusione parziale verso il minimo termodinamico del sistema feldspatico + quarzo.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 6. APPLICAZIONI ══════════ -->
+<section id="applicaz">
+  <span class="section-num">06</span>
+  <h2>Applicazioni Petrologiche dei Diagrammi di Fase</h2>
+  <div class="section-line"></div>
+
+  <p>I diagrammi di fase non sono solo strumenti teorici ma sono alla base di numerose applicazioni quantitative in petrologia, dalla stima delle condizioni di cristallizzazione dei magmi alla calibrazione dei geotermometri e geobarometri.</p>
+
+  <section id="geotermo">
+    <h3>6.1 Geotermometri basati sui diagrammi di fase</h3>
+    <p>Un <strong>geotermometro</strong> usa la composizione di una o due fasi mineralogiche coesistenti per stimare la temperatura di cristallizzazione o di equilibrio. I principali geotermometri feldispatici derivano direttamente dai diagrammi di fase:</p>
+
+    <dl class="deflist">
+      <dt>Geotermometro plagioclasio-liquido (An-Ab)</dt>
+      <dd>La composizione del plagioclasio e del liquido in equilibrio, letta sul diagramma Ab-An a pressione nota, dà la temperatura di cristallizzazione. Ridolfi et al. (2010) hanno calibrato il geotermometro anfibolo-plagioclasio per i magmi calcalcalini, con accuratezza di ±30°C.</dd>
+      <dt>Geotermometro due-feldspati (alkali feldspato)</dt>
+      <dd>Le composizioni di K-feldspato e plagioclasio coesistenti in equilibrio subsolidus permettono di stimare la T di ultima riequ­librazione usando il solvus del sistema Ab-Or. Whitney &amp; Stormer (1977) e Fuhrman &amp; Lindsley (1988) hanno calibrato questo geotermometro. Accuratezza ~±25°C se le fasi sono effettivamente in equilibrio.</dd>
+      <dt>Geotermometro pirosseni (Di-En-Hd-Fs)</dt>
+      <dd>La composizione dei clinopirosseni e degli ortopirosseni coesistenti permette di stimare T usando le curve di partizione dei componenti Fe-Mg tra le due strutture. Wells (1977), Brey &amp; Köhler (1990).</dd>
+    </dl>
+  </section>
+
+  <section id="geobar">
+    <h3>6.2 Geobarometri e termobarometria</h3>
+    <p>Un <strong>geobarometro</strong> usa reazioni mineralogiche che dipendono fortemente dalla pressione e poco dalla temperatura. I principali per le rocce ignee e metamorfiche:</p>
+
+    <dl class="deflist">
+      <dt>Geobarometro Al-in-anfibolo</dt>
+      <dd>Il contenuto in Al tettraedrico dell'anfibolo in equilibrio con plagioclasio + K-feldspato + quarzo + biotite + ilmenite + magnetite + liquido (assemblaglio standard) è funzione della pressione. Hammarstrom &amp; Zen (1986), Hollister et al. (1987), Anderson &amp; Smith (1995). Usato per stimare la profondità di messa in posto dei batoliti granitoidi. Accuratezza ~±0.5–1 kbar.</dd>
+      <dt>Geobarometro granato-pirosseno-plagioclasio-quarzo (GAPQ)</dt>
+      <dd>La reazione An = Grs + 2Ky + Qz (garnet + kyanite isobar) è fortemente dipendente da P. Usato nei gneiss e nelle eclogiti. Newton &amp; Haselton (1981).</dd>
+      <dt>Geobarometro coesiteite/quarzo</dt>
+      <dd>La presenza di coesiteite (invece di quarzo) indica P &gt;2.7 GPa: il confine quarzo-coesiteite nel sistema SiO₂ è il più semplice e diretto geobarometro per UHP. Non richiede calibrazione aggiuntiva — è direttamente letto dal diagramma di fase di SiO₂.</dd>
+    </dl>
+
+    <div class="highlight yellow">
+      <div class="hl-title">Pseudosezioni e termobarometria moderna</div>
+      <p>I software moderni (THERMOCALC, Perple_X, Domino) calcolano <em>pseudosezioni</em>: diagrammi di fase calcolati per la composizione bulk specifica di una roccia, mostrando quali fasi sono stabili ad ogni P e T. Confrontando il campo P-T dell'assemblaglio ossevato con quello calcolato si ottengono stime quantitative di T e P con incertezze di ±20–50°C e ±0.1–0.2 GPa. Questa tecnica ha rivoluzionato la termobarometria a partire dagli anni 2000.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 7. BIBLIO ══════════ -->
+<section id="biblio">
+  <span class="section-num">07</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Anderson J.L. &amp; Smith D.R.</span> <span class="year">(1995)</span> — <span class="title">The effects of temperature and f O₂ on the Al-in-hornblende barometer</span>. <span class="journal">American Mineralogist, 80, 549–559.</span></p>
+  <p class="ref"><span class="authors">Bowen N.L.</span> <span class="year">(1913)</span> — <span class="title">The melting phenomena of the plagioclase feldspars</span>. <span class="journal">American Journal of Science, 35, 577–599.</span></p>
+  <p class="ref"><span class="authors">Bowen N.L.</span> <span class="year">(1915)</span> — <span class="title">The crystallization of haplobasaltic, haplodioritic and related magmas</span>. <span class="journal">American Journal of Science, 40, 161–185.</span></p>
+  <p class="ref"><span class="authors">Bowen N.L.</span> <span class="year">(1928)</span> — <span class="title">The Evolution of the Igneous Rocks</span>. <span class="journal">Princeton University Press, 334 pp.</span></p>
+  <p class="ref"><span class="authors">Bowen N.L. &amp; Tuttle O.F.</span> <span class="year">(1950)</span> — <span class="title">The system NaAlSi₃O₈–KAlSi₃O₈–H₂O</span>. <span class="journal">Journal of Geology, 58, 489–511.</span></p>
+  <p class="ref"><span class="authors">Brey G.P. &amp; Köhler T.</span> <span class="year">(1990)</span> — <span class="title">Geothermobarometry in four-phase lherzolites II. New thermobarometers and practical assessment of existing thermobarometers</span>. <span class="journal">Journal of Petrology, 31, 1353–1378.</span></p>
+  <p class="ref"><span class="authors">Cross W., Iddings J.P., Pirsson L.V. &amp; Washington H.S.</span> <span class="year">(1902)</span> — <span class="title">A quantitative chemico-mineralogical classification and nomenclature of igneous rocks</span>. <span class="journal">Journal of Geology, 10, 555–690.</span></p>
+  <p class="ref"><span class="authors">Fuhrman M.L. &amp; Lindsley D.H.</span> <span class="year">(1988)</span> — <span class="title">Ternary feldspar modeling and thermometry</span>. <span class="journal">American Mineralogist, 73, 201–215.</span></p>
+  <p class="ref"><span class="authors">Gibbs J.W.</span> <span class="year">(1876)</span> — <span class="title">On the equilibrium of heterogeneous substances</span>. <span class="journal">Transactions of the Connecticut Academy, 3, 108–248.</span></p>
+  <p class="ref"><span class="authors">Hammarstrom J.M. &amp; Zen E-an</span> <span class="year">(1986)</span> — <span class="title">Aluminum in hornblende: an empirical igneous geobarometer</span>. <span class="journal">American Mineralogist, 71, 1297–1313.</span></p>
+  <p class="ref"><span class="authors">Newton R.C. &amp; Haselton H.T.</span> <span class="year">(1981)</span> — <span class="title">Thermodynamics of the garnet-plagioclase-Al₂SiO₅-quartz geobarometer</span>. In: Newton R.C. et al. (eds.), <span class="title">Thermodynamics of Minerals and Melts</span>. <span class="journal">Springer, 131–147.</span></p>
+  <p class="ref"><span class="authors">O'Connor J.T.</span> <span class="year">(1965)</span> — <span class="title">A classification for quartz-rich igneous rocks based on feldspar ratios</span>. <span class="journal">USGS Professional Paper 525-B, B79–B84.</span></p>
+  <p class="ref"><span class="authors">Ridolfi F. et al.</span> <span class="year">(2010)</span> — <span class="title">Stability and chemical equilibrium of amphibole in calc-alkaline magmas: an overview, new thermobarometric formulations and application to subduction-related volcanoes</span>. <span class="journal">Contributions to Mineralogy and Petrology, 160, 45–66.</span></p>
+  <p class="ref"><span class="authors">Tuttle O.F. &amp; Bowen N.L.</span> <span class="year">(1958)</span> — <span class="title">Origin of granite in the light of experimental studies in the system NaAlSi₃O₈–KAlSi₃O₈–SiO₂–H₂O</span>. <span class="journal">Geological Society of America Memoir 74, 153 pp.</span></p>
+  <p class="ref"><span class="authors">Wells P.R.A.</span> <span class="year">(1977)</span> — <span class="title">Pyroxene thermometry in simple and complex systems</span>. <span class="journal">Contributions to Mineralogy and Petrology, 62, 129–139.</span></p>
+  <p class="ref"><span class="authors">Whitney J.A. &amp; Stormer J.C.</span> <span class="year">(1977)</span> — <span class="title">The distribution of NaAlSi₃O₈ between coexisting microcline and plagioclase and its effect on geothermometric calculations</span>. <span class="journal">American Mineralogist, 62, 687–691.</span></p>
+</section>
+
+</main>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
