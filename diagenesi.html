@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Diagenesi e Idrocarburi</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0c10;--panel:#111318;--border:#1e2230;--accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;--text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Space Mono',monospace;overflow:hidden;display:flex;flex-direction:column}
+header{flex-shrink:0;padding:.35rem 1.2rem;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0d1018,transparent);display:flex;align-items:center;gap:.8rem}
+header h1{font-family:'Crimson Pro',serif;font-weight:300;font-style:italic;font-size:1.05rem;color:var(--accent)}
+.tabs{display:flex;gap:.2rem;margin-left:auto}
+.tab{padding:.22rem .8rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:.58rem;cursor:pointer;border-radius:3px;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.tab.on,.tab:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,212,255,.06)}
+.main{display:flex;flex:1;min-height:0}
+.sb{width:210px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);padding:.6rem;display:flex;flex-direction:column;gap:.3rem;overflow-y:auto}
+.sl{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem}
+.btn{width:100%;padding:.2rem .4rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.73rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left;padding-left:.45rem}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(255,107,53,.07)}
+.tog{display:flex;gap:.2rem}
+.tog .btn{font-size:.6rem;text-align:center;padding:.16rem 0;flex:1}
+.cw{flex:1;min-width:0;position:relative}
+canvas{width:100%;height:100%;display:block}
+#infoBox{position:absolute;bottom:10px;right:10px;width:255px;background:rgba(7,9,14,.94);border:1px solid var(--border);border-radius:5px;padding:.55rem .75rem;font-family:'Crimson Pro',serif;font-size:.68rem;line-height:1.8;color:var(--muted);pointer-events:none;display:none}
+#infoBox b{color:var(--text);font-style:normal;font-size:.72rem}
+.val{color:var(--accent);font-family:'Space Mono',monospace;font-size:.58rem}
+.acc{color:var(--accent3)}
+.ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.22rem 1rem;background:var(--panel);font-size:.58rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Diagenesi &amp; Idrocarburi</h1>
+  <div class="tabs">
+    <button class="tab on" data-tab="zone">Zone Diagenetiche</button>
+    <button class="tab"    data-tab="poros">Evoluzione Porosità</button>
+    <button class="tab"    data-tab="kero">Maturazione Kerogene</button>
+    <button class="tab"    data-tab="sistema">Sistema Petrolifero</button>
+  </div>
+</header>
+<div class="main">
+
+<!-- SIDEBAR ZONE -->
+<aside class="sb" id="sbZone">
+  <div class="sl">Zone diagenetiche</div>
+  <button class="btn" data-z="Eodiagenetica">Eodiagenetica (0–1 km)</button>
+  <button class="btn" data-z="Mesodiagenetica">Mesodiagenetica (1–3.5 km)</button>
+  <button class="btn" data-z="Tardi-diagenetica">Tardi-diagenetica (3.5–6 km)</button>
+  <button class="btn" data-z="Anchimetamorfismo">Anchimetamorfismo (>6 km)</button>
+  <div class="sl" style="margin-top:.4rem">Geoterma</div>
+  <button class="btn" data-g="normale">Bacino normale (30°C/km)</button>
+  <button class="btn" data-g="rift">Bacino di rift (45°C/km)</button>
+  <button class="btn" data-g="cratonico">Cratonico (20°C/km)</button>
+  <div class="sl" style="margin-top:.4rem">Processi</div>
+  <button class="btn" data-proc="compatt">Compattazione</button>
+  <button class="btn" data-proc="cemento">Cementazione</button>
+  <button class="btn" data-proc="dissoluz">Dissoluzione</button>
+  <button class="btn" data-proc="argille">Trasform. argille</button>
+</aside>
+
+<!-- SIDEBAR POROSITA -->
+<aside class="sb" id="sbPoros" style="display:none">
+  <div class="sl">Litologia</div>
+  <button class="btn on" data-lit="arenaria">Arenaria</button>
+  <button class="btn on" data-lit="argillite">Argillite / Shale</button>
+  <button class="btn on" data-lit="carbonato">Carbonato</button>
+  <div class="sl" style="margin-top:.4rem">Geoterma</div>
+  <button class="btn" data-gp="normale">Normale (30°C/km)</button>
+  <button class="btn" data-gp="rift">Rift (45°C/km)</button>
+  <button class="btn" data-gp="cratonico">Cratonico (20°C/km)</button>
+  <div class="sl" style="margin-top:.4rem">Finestre</div>
+  <button class="btn on" data-fw="olio">Finestra dell'olio</button>
+  <button class="btn on" data-fw="gas">Finestra del gas</button>
+</aside>
+
+<!-- SIDEBAR KEROGENE -->
+<aside class="sb" id="sbKero" style="display:none">
+  <div class="sl">Tipo di kerogene</div>
+  <button class="btn on" data-k="I">Tipo I — Algale/Lacustre</button>
+  <button class="btn on" data-k="II">Tipo II — Marino</button>
+  <button class="btn on" data-k="III">Tipo III — Terrestre</button>
+  <button class="btn on" data-k="IV">Tipo IV — Inerte</button>
+  <div class="sl" style="margin-top:.4rem">Indicatori maturità</div>
+  <button class="btn" data-ro="0.5">Ro = 0.5% (inizio finestra olio)</button>
+  <button class="btn" data-ro="0.7">Ro = 0.7% (olio ottimale)</button>
+  <button class="btn" data-ro="1.3">Ro = 1.3% (gas umido)</button>
+  <button class="btn" data-ro="2.0">Ro = 2.0% (gas secco)</button>
+  <div class="sl" style="margin-top:.4rem">Prodotto atteso</div>
+  <button class="btn" data-k2="olio">Principale: Olio</button>
+  <button class="btn" data-k2="gas">Principale: Gas</button>
+</aside>
+
+<!-- SIDEBAR SISTEMA PETROLIFERO -->
+<aside class="sb" id="sbSistema" style="display:none">
+  <div class="sl">Elementi del sistema</div>
+  <button class="btn" data-sp="source">🟤 Source rock (roccia madre)</button>
+  <button class="btn" data-sp="reservoir">🟡 Reservoir (roccia serbatoio)</button>
+  <button class="btn" data-sp="seal">🔵 Seal (roccia di copertura)</button>
+  <button class="btn" data-sp="trap">🔺 Trap (trappola strutturale)</button>
+  <button class="btn" data-sp="migrazione">→ Migrazione</button>
+  <div class="sl" style="margin-top:.4rem">Tipo di trappola</div>
+  <button class="btn" data-trap="anticlinale">Anticlinale</button>
+  <button class="btn" data-trap="faglia">Faglia</button>
+  <button class="btn" data-trap="stratigrafica">Stratigrafica</button>
+  <button class="btn" data-trap="sale">Diapiro salino</button>
+</aside>
+
+<div class="cw"><canvas id="C"></canvas><div id="infoBox"></div></div>
+</div>
+<div class="ibar" id="ibar">Zone diagenetiche — evoluzione dei sedimenti con la profondità e la temperatura</div>
+
+<script>
+'use strict';
+// =====================================================================
+// DATI
+// =====================================================================
+const ZONE=[
+  {n:'Eodiagenetica',    z:[0,1.0],  T:[15,40],  col:'#3a8040',
+   proc:'Compattazione meccanica, cementazione precoce (carbonatica, ferruginosa), dissoluzione aragonite→calcite, bioturbazione, formazione concrezioni',
+   por:'Alta (>30%) → Media (~25%)',fluidi:'Marini o meteoritici (acque dolci)',
+   note:'Dominata da processi fisici e biochimici a bassa temperatura. I fluidi sono ancora in stretta comunicazione con la superficie. La materia organica è immatura (gas biogenico batterico).'},
+  {n:'Mesodiagenetica',  z:[1.0,3.5],T:[40,120], col:'#8a6030',
+   proc:'Cementazione quarzifera (overgrowth), smectite→illite (70-90°C), maturazione MO → olio (60-120°C), dolomitizzazione di sepoltura, dissoluzione feldspato → caolinite, compattazione chimica (stiloliti)',
+   por:'Media (~25%) → Bassa (~10%)',fluidi:'Fluidi di formazione (acque connate), fluidi organici',
+   note:'Zona principale di evoluzione diagenetica. Finestra degli idrocarburi liquidi (60-120°C). La transizione smectite→illite libera acqua e silice, favorendo la cementazione. Le stiloliti indicano pressione-soluzione intensa.'},
+  {n:'Tardi-diagenetica',z:[3.5,6.0],T:[120,200], col:'#7a4a80',
+   proc:'Illite→clorite (>130°C), cracking olio→gas termogenico (>120°C), ricristallizzazione quarzo, inizio facies zeoliti',
+   por:'Molto bassa (<5%)',fluidi:'Fluidi profondi, CO₂, H₂S',
+   note:'Transizione verso il metamorfismo incipiente. Il cracking termico trasforma l\'olio in gas secco (metano). La porosità è quasi completamente obliterata dalla cementazione.'},
+  {n:'Anchimetamorfismo',z:[6.0,10.0],T:[200,300], col:'#4a3a70',
+   proc:'Facies zeoliti (laumontite, analcime), facies prehnite-pumpellyite, grafitizzazione materia organica, filladi e metapeliti',
+   por:'<1% (porosità obliterata)',fluidi:'Fluidi metamorfici (H₂O, CO₂)',
+   note:'Inizio del metamorfismo sensu stricto. La materia organica si converte in grafite (inerte). Si raccorda con la facies zeoliti e prehnite-pumpellyite del diagramma P-T del metamorfismo.'},
+];
+
+const GEOTERME=[
+  {n:'Bacino normale',  grad:30, col:'#c87840', id:'normale'},
+  {n:'Bacino di rift',  grad:45, col:'#c84040', id:'rift'},
+  {n:'Cratonico',       grad:20, col:'#4080c8', id:'cratonico'},
+];
+
+const PROCESSI={
+  compatt:{n:'Compattazione',col:'#6a8a5a',
+    def:'Riduzione del volume dei pori per carico litostatico. Meccanica (<1 km) e chimica (stiloliti, >1 km).',
+    effetto:'Riduzione porosità dal 40-50% iniziale al 5-15% a 3-4 km di profondità.',
+    minerali:'Deformazione plastica delle argille, frattura dei grani di quarzo, sutura grani-grano.',
+    esempi:'Stiloliti nei calcari, grain crushing nelle arenarie profonde, compattazione delle argille in shale.'},
+  cemento:{n:'Cementazione',col:'#8a6a3a',
+    def:'Precipitazione di minerali nei pori intergranulari da fluidi di formazione. Riduce irreversibilmente la porosità.',
+    effetto:'Riduzione porosità del 10-20% nei reservoirs arenacei profondi.',
+    minerali:'Quarzo autigenico (overgrowth), calcite, dolomite, anidrite, caolinite, illite.',
+    esempi:'Overgrowth quarzifero nelle arenarie del Brent (Mare del Nord), calcite nei sandstone del Rotliegend.'},
+  dissoluz:{n:'Dissoluzione',col:'#5a7a8a',
+    def:'Creazione di porosità secondaria per dissoluzione di minerali instabili da fluidi acidi (CO₂, acidi organici).',
+    effetto:'Aumento locale della porosità del 5-15% (porosità vuggy, moldic, intercrystallina).',
+    minerali:'Dissoluzione feldspati→caolinite, carbonati instabili, oidi aragonitici.',
+    esempi:'Porosità moldica per dissoluzione oidi (Bahamas), porosità da dissoluzione feldspati (Brent).'},
+  argille:{n:'Trasformazioni argille',col:'#7a5a7a',
+    def:'Progressione diagenetica dei minerali argillosi con temperatura e profondità.',
+    effetto:'Smectite→illite libera H₂O (compattazione) e SiO₂ (cementazione quarzifera).',
+    minerali:'Smectite (0-70°C) → Illite-smectite mista (70-90°C) → Illite (>120°C) → Clorite (>150°C).',
+    esempi:'Transizione smectite-illite nei bacini del Mare del Nord, Gulf Coast (USA).'},
+};
+
+const LITOLOGIE={
+  arenaria: {n:'Arenaria',col:'#c8a850',
+    fn:z=>40*Math.exp(-0.27*z),
+    note:'Compattazione meccanica dominante <1 km; cementazione quarzifera >1 km. Finestra di porosità ottimale a 1-2 km (20-30%).'},
+  argillite:{n:'Argillite / Shale',col:'#8a7a6a',
+    fn:z=>60*Math.exp(-0.45*z),
+    note:'Compattazione rapida: da 60-70% in superficie a <10% a 3 km. Fonte primaria degli idrocarburi (source rock).'},
+  carbonato: {n:'Carbonato',col:'#5a8a9a',
+    fn:z=>40*Math.exp(-0.35*z)+5*(1-Math.exp(-0.5*z)),
+    note:'Comportamento complesso: dissoluzione carsica può aumentare la porosità mentre la cementazione la riduce. Importanti reservoir carbonatici (Medio Oriente).'},
+};
+
+const FINESTRE={
+  olio:{n:"Finestra dell'olio",col:'rgba(200,120,30,0.25)',Ro:[0.5,1.3],depth_n:[1.5,4.0],
+    note:'Temperatura 60-120°C. Ro 0.5-1.3%. Produzione di olio grezzo + gas in soluzione.'},
+  gas:{n:'Finestra del gas',col:'rgba(200,50,50,0.20)',Ro:[1.3,4.0],depth_n:[4.0,8.0],
+    note:'Temperatura 120-225°C. Ro 1.3-4.0%. Gas umido (Ro 1.3-2.0%) poi gas secco (>Ro 2.0%).'},
+};
+
+const KEROGENE={
+  I:  {n:'Tipo I — Algale/Lacustre',col:'#50b050',prod:'Principalmente olio',
+    path:[[0.03,1.65],[0.05,1.50],[0.08,1.30],[0.10,1.00],[0.11,0.70],[0.12,0.40],[0.12,0.15]],
+    note:'Kerogene algaceo da laghi o ambienti lacustri ristretti. Elevatissimo potenziale per olio. Esempi: bacino di Uinta (USA), lacustri cinesi, Green River Formation.'},
+  II: {n:'Tipo II — Marino',col:'#50a0d0',prod:'Olio e gas',
+    path:[[0.08,1.35],[0.12,1.20],[0.18,1.00],[0.22,0.80],[0.26,0.55],[0.27,0.30],[0.27,0.10]],
+    note:'Kerogene marino da alghe, acritarchi, materiale lipidico. Il più comune nelle source rocks. Esempi: Kimmeridge Clay (Mare del Nord), Monterey Fm (California), Toarciano (bacini europei).'},
+  III:{n:'Tipo III — Terrestre',col:'#c8a050',prod:'Gas secco',
+    path:[[0.18,1.00],[0.22,0.85],[0.28,0.65],[0.30,0.45],[0.32,0.28],[0.32,0.12],[0.32,0.05]],
+    note:'Kerogene ligno-cellulosico da piante terrestri. Scarso potenziale per olio, principalmente gas. Esempi: carbone, shale carbonacei continentali, delta systems.'},
+  IV: {n:'Tipo IV — Inerte (inertinite)',col:'#888888',prod:'Nessun idrocarburo',
+    path:[[0.05,0.55],[0.05,0.35],[0.05,0.15],[0.05,0.05]],
+    note:'Materiale carbonizzo rimaneggiato, ossidato o riscaldato. Nessun potenziale per idrocarburi. Indicatore di riciclaggio sedimentario.'},
+};
+
+const SISTEMA_INFO={
+  source:{n:'Source Rock (Roccia Madre)',col:'#8a5a30',
+    def:'Roccia ricca in materia organica (TOC >0.5%) che ha generato idrocarburi per maturazione termica.',
+    examples:'Kimmeridge Clay (Mare del Nord, Giurassico sup.), Monterey Fm (California, Miocene), Barnett Shale (Texas, Carbonifero).',
+    requisiti:'TOC >0.5% (buono >2%), kerogene Tipo I o II, sepoltura nella finestra di maturazione (Ro>0.5%).',
+    note:'La qualità della source rock si valuta con la pirolisi Rock-Eval (S1, S2, Tmax, HI, OI).'},
+  reservoir:{n:'Reservoir (Roccia Serbatoio)',col:'#c8a030',
+    def:'Roccia porosa e permeabile che accumula gli idrocarburi migrati dalla source rock.',
+    examples:'Arenarie del Brent (Mare del Nord), carbonati del Medio Oriente (Cretaceo), chalk (Ekofisk, Norvegia).',
+    requisiti:'Porosità >5-10%, permeabilità >0.1 mD (convenzionale) o <0.1 mD (tight/shale).',
+    note:'I migliori reservoir hanno porosità 15-30% e permeabilità >100 mD. I carbonati fratturati possono avere k molto alta.'},
+  seal:{n:'Seal (Roccia di Copertura)',col:'#3a60a0',
+    def:'Roccia impermeabile che impedisce la migrazione verticale degli idrocarburi fuori dalla trappola.',
+    examples:'Evaporiti (halite, anidrite), argilliti compattate, shale.',
+    requisiti:'Permeabilità <0.01 mD, pressione capillare elevata, continuità laterale.',
+    note:'Le evaporiti sono i migliori seal (permeabilità quasi nulla). Gli shale compattati sono i più comuni. La fratturazione può compromettere il seal.'},
+  trap:{n:'Trappola strutturale/stratigrafica',col:'#a04060',
+    def:'Configurazione geometrica che impedisce la migrazione laterale degli idrocarburi, concentrandoli nel reservoir.',
+    examples:'Anticlinali (60% delle riserve mondiali), faglie, cunei stratigrafici, reef carbonatici.',
+    requisiti:'Chiusura strutturale o stratigrafica, seal integro, sincronismo con la migrazione.',
+    note:'Le trappole da anticlinale sono le più semplici da individuare sismicamente. Le trappole stratigrafiche sono più difficili ma sempre più importanti.'},
+  migrazione:{n:'Migrazione degli idrocarburi',col:'#60a060',
+    def:'Movimento degli idrocarburi dalla source rock al reservoir, in due fasi: primaria (espulsione) e secondaria (migrazione nel carrier bed).',
+    examples:'Migrazione verticale lungo faglie, migrazione laterale lungo strati permeabili.',
+    requisiti:'Gradiente di pressione, differenza di densità (olio/gas più leggeri dell\'acqua), pathway permeabili.',
+    note:'La migrazione primaria avviene per fratturazione idraulica e diffusione. La migrazione secondaria può percorrere centinaia di km. La migrazione avviene tipicamente dopo Ro>0.5%.'},
+};
+
+const TRAP_SCHEMES={
+  anticlinale:'La trappola anticlinale è la più classica: il reservoir è piegato a cupola, il gas occupa la sommità (gas cap), l\'olio al di sotto, l\'acqua nella parte inferiore (acquifero). Il seal è uno strato impermeabile sopra il reservoir.',
+  faglia:'La trappola da faglia si forma quando una faglia impermeabile blocca la migrazione laterale. Il reservoir si trova nel blocco alzato o abbassato, sigillato dalla roccia di copertura e dalla faglia stessa.',
+  stratigrafica:'La trappola stratigrafica dipende da variazioni laterali di facies: il reservoir si chiude per eteropia (pinch-out), per discordanza angolare o per variazione di porosità. Difficile da individuare sismicamente.',
+  sale:'Il diapiro salino (halocinesi) deforma il sovrasso creando trappole periclinali intorno al domo. Il sale è il seal ideale. Importanti giacimenti nel Golfo del Messico, Mar del Nord (Rotliegend), Brasile (pre-salt).',
+};
+
+// =====================================================================
+// STATO
+// =====================================================================
+const C=document.getElementById('C');
+const ctx=C.getContext('2d');
+const box=document.getElementById('infoBox');
+let tab='zone';
+let selZ=null,selG=new Set(),selProc=null;
+let selLit=new Set(['arenaria','argillite','carbonato']);
+let selGP='normale',selFW=new Set(['olio','gas']);
+let selK=new Set(['I','II','III','IV']),selRo=null,selK2=null;
+let selSP=null,selTrap=null;
+let hovZ=null;
+
+function showInfo(h){box.innerHTML=h;box.style.display='block';}
+function hideInfo(){box.style.display='none';}
+function lbl(t,x,y,fill,font,align){
+  ctx.font=font||'bold 11px Crimson Pro';ctx.textAlign=align||'center';
+  ctx.strokeStyle='rgba(5,7,12,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+  ctx.strokeText(t,x,y);ctx.fillStyle=fill||'#e8eaf0';ctx.fillText(t,x,y);
+}
+
+// =====================================================================
+// DRAW ZONE DIAGENETICHE
+// =====================================================================
+function drawZone(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+
+  const pL=65,pR=15,pT=30,pB=50,gW=W-pL-pR,gH=H-pT-pB;
+  const Zmax=10,Tmax=300;
+  const tz=z=>pT+(z/Zmax)*gH;
+  const tT=T=>pL+(T/Tmax)*gW;
+
+  // Griglia profondità
+  ctx.font='11px Space Mono';ctx.fillStyle='#8a8e9a';ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  [0,1,2,3,4,5,6,7,8,9,10].forEach(z=>{
+    ctx.beginPath();ctx.moveTo(pL,tz(z));ctx.lineTo(pL+gW,tz(z));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(z+' km',pL-5,tz(z)+4);
+  });
+  // Griglia temperatura
+  [0,50,100,150,200,250,300].forEach(T=>{
+    ctx.beginPath();ctx.moveTo(tT(T),pT);ctx.lineTo(tT(T),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(T+'°C',tT(T),pT+gH+18);
+  });
+  // Assi
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 13px Crimson Pro';ctx.fillStyle='#dde0ea';ctx.textAlign='center';
+  ctx.fillText('Temperatura (°C)',pL+gW/2,pT+gH+38);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Profondità (km)',0,0);ctx.restore();
+
+  // Zone diagenetiche come fasce orizzontali
+  ZONE.forEach(z=>{
+    const y1=tz(z.z[0]),y2=tz(z.z[1]);
+    const hi=selZ===z.n||hovZ===z.n;
+    ctx.fillStyle=z.col;ctx.globalAlpha=hi?0.65:0.35;
+    ctx.fillRect(pL,y1,gW,y2-y1);ctx.globalAlpha=1;
+    ctx.strokeStyle=hi?'rgba(255,255,255,0.5)':'rgba(200,204,216,0.15)';
+    ctx.lineWidth=hi?1.8:0.7;ctx.strokeRect(pL,y1,gW,y2-y1);
+    // Label zona
+    lbl(z.n,pL+10,y1+(y2-y1)/2,hi?'#fff':z.col,'bold 14px Crimson Pro','left');
+    lbl(z.T[0]+'–'+z.T[1]+'°C  |  '+z.z[0]+'–'+z.z[1]+' km',
+      pL+10,y1+(y2-y1)/2+18,'rgba(210,220,230,0.85)','italic 12px Crimson Pro','left');
+    // Porosità indicativa
+    lbl('Porosità: '+z.por,pL+gW-10,y1+(y2-y1)/2,'rgba(180,255,140,0.9)','12px Crimson Pro','right');
+  });
+
+  // Geoterme selezionate
+  const geoterme_sel=GEOTERME.filter(g=>selG.has(g.id));
+  if(geoterme_sel.length===0){
+    // Mostra quella normale di default
+    drawGeoterma(GEOTERME[0],pL,pT,gW,gH,Zmax,Tmax,false);
+  } else {
+    geoterme_sel.forEach(g=>drawGeoterma(g,pL,pT,gW,gH,Zmax,Tmax,true));
+  }
+
+  // Processi selezionati (overlay)
+  if(selProc&&PROCESSI[selProc]){
+    const p=PROCESSI[selProc];
+    showInfo(`<b>${p.n}</b><br>
+      <b>Definizione:</b> ${p.def}<br>
+      <b>Effetto sulla porosità:</b> <span class="acc">${p.effetto}</span><br>
+      <b>Minerali coinvolti:</b> ${p.minerali}<br>
+      <b>Esempi:</b> <span class="val">${p.esempi}</span>`);
+  } else if(selZ){
+    const z=ZONE.find(z=>z.n===selZ);
+    if(z)showInfo(`<b>${z.n}</b><br>
+      <b>Profondità:</b> <span class="val">${z.z[0]}–${z.z[1]} km</span> &nbsp;
+      <b>T:</b> <span class="val">${z.T[0]}–${z.T[1]}°C</span><br>
+      <b>Processi:</b> <span class="acc">${z.proc}</span><br>
+      <b>Porosità:</b> <span class="val">${z.por}</span><br>
+      <b>Fluidi:</b> ${z.fluidi}<br><br>
+      <span style="font-style:italic;font-size:.6rem">${z.note}</span>`);
+  }
+}
+
+function drawGeoterma(g,pL,pT,gW,gH,Zmax,Tmax,hi){
+  const tz=z=>pT+(z/Zmax)*gH;
+  const tT=T=>pL+(T/Tmax)*gW;
+  ctx.beginPath();
+  for(let z=0;z<=Zmax;z+=0.1){
+    const T=15+g.grad*z;
+    if(T>Tmax) break;
+    const x=tT(T),y=tz(z);
+    z===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle=g.col;ctx.lineWidth=hi?2.5:1.5;ctx.globalAlpha=hi?0.9:0.5;ctx.stroke();ctx.globalAlpha=1;
+  // Label
+  const T_at5=15+g.grad*5;
+  if(T_at5<=Tmax){
+    lbl(g.n+' ('+g.grad+'°C/km)',tT(T_at5)+5,tz(5)+5,g.col,'bold 12px Crimson Pro','left');
+  }
+}
+
+// =====================================================================
+// DRAW POROSITA
+// =====================================================================
+function drawPoros(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+
+  const pL=60,pR=20,pT=30,pB=50,gW=W-pL-pR,gH=H-pT-pB;
+  const Zmax=8,Pmax=65;
+  const tz=z=>pT+(z/Zmax)*gH;
+  const tp=p=>pL+(p/Pmax)*gW;
+
+  // Griglia
+  ctx.font='11px Space Mono';ctx.fillStyle='#8a8e9a';ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  [0,1,2,3,4,5,6,7,8].forEach(z=>{
+    ctx.beginPath();ctx.moveTo(pL,tz(z));ctx.lineTo(pL+gW,tz(z));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(z+' km',pL-5,tz(z)+4);
+  });
+  [0,10,20,30,40,50,60].forEach(p=>{
+    ctx.beginPath();ctx.moveTo(tp(p),pT);ctx.lineTo(tp(p),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(p+'%',tp(p),pT+gH+18);
+  });
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 13px Crimson Pro';ctx.fillStyle='#dde0ea';ctx.textAlign='center';
+  ctx.fillText('Porosità (%)',pL+gW/2,pT+gH+38);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Profondità (km)',0,0);ctx.restore();
+
+  // Geoterma selezionata per il contesto delle finestre
+  const geo=GEOTERME.find(g=>g.id===selGP)||GEOTERME[0];
+
+  // Finestre olio e gas (sovrapposte come fasce di profondità)
+  if(selFW.has('olio')){
+    const d1=45/geo.grad,d2=120/geo.grad;
+    ctx.fillStyle='rgba(200,120,30,0.15)';ctx.fillRect(pL,tz(d1),gW,tz(Math.min(d2,Zmax))-tz(d1));
+    lbl("Finestra olio",pL+gW-8,tz((d1+Math.min(d2,Zmax))/2),'rgba(255,170,60,0.9)','italic 12px Crimson Pro','right');
+  }
+  if(selFW.has('gas')){
+    const d1=120/geo.grad,d2=225/geo.grad;
+    if(d1<Zmax){
+      ctx.fillStyle='rgba(200,50,50,0.12)';ctx.fillRect(pL,tz(d1),gW,tz(Math.min(d2,Zmax))-tz(d1));
+      lbl("Finestra gas",pL+gW-8,tz((d1+Math.min(d2,Zmax))/2),'rgba(255,90,80,0.9)','italic 12px Crimson Pro','right');
+    }
+  }
+
+  // Curve di porosità
+  Object.entries(LITOLOGIE).forEach(([key,lit])=>{
+    if(!selLit.has(key))return;
+    ctx.beginPath();let first=true;
+    for(let z=0;z<=Zmax;z+=0.05){
+      const p=lit.fn(z);
+      const x=tp(p),y=tz(z);
+      if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle=lit.col;ctx.lineWidth=2.5;ctx.globalAlpha=0.85;ctx.stroke();ctx.globalAlpha=1;
+    // Label a dx
+    const pAt2=lit.fn(2);
+    lbl(lit.n,tp(pAt2)+8,tz(2),lit.col,'bold 13px Crimson Pro','left');
+  });
+
+  // Asse temperatura secondario a destra (basato su selGP)
+  ctx.font='10px Space Mono';ctx.fillStyle='#aab0b8';ctx.textAlign='left';
+  [0,1,2,3,4,5,6,7,8].forEach(z=>{
+    const T=Math.round(15+geo.grad*z);
+    ctx.fillText(T+'°C',pL+gW+4,tz(z)+4);
+  });
+  ctx.font='italic 11px Crimson Pro';ctx.fillStyle='rgba(200,204,216,0.55)';ctx.textAlign='left';
+  ctx.save();ctx.translate(pL+gW+36,pT+gH/2);ctx.rotate(Math.PI/2);
+  ctx.fillText('T (°C) — '+geo.n+' '+geo.grad+'°C/km',0,0);ctx.restore();
+  // Linea geoterma
+  ctx.beginPath();
+  for(let z=0;z<=Zmax;z+=0.1){
+    const p_at_z=Math.min(Pmax,15+geo.grad*z)/Pmax*gW; // mappa T→spazio come proporzione
+    // Non serve: la geoterma sul grafico porosità non ha senso diretto
+    // invece evidenzio le profondità delle finestre con linee tratteggiate
+  }
+  // Linee tratteggiate alle profondità di inizio/fine finestre
+  const finW=[
+    {d:45/geo.grad,  col:'rgba(255,170,60,0.7)',  label:'T=45°C'},
+    {d:60/geo.grad,  col:'rgba(255,185,40,0.8)',  label:'T=60°C — inizio olio'},
+    {d:120/geo.grad, col:'rgba(255,110,50,0.8)',   label:'T=120°C — fine olio'},
+    {d:165/geo.grad, col:'rgba(255,70,60,0.8)',   label:'T=165°C — gas umido'},
+  ];
+  ctx.setLineDash([6,4]);
+  finW.forEach(f=>{
+    if(f.d>Zmax)return;
+    ctx.beginPath();ctx.moveTo(pL,tz(f.d));ctx.lineTo(pL+gW,tz(f.d));
+    ctx.strokeStyle=f.col;ctx.lineWidth=1;ctx.stroke();
+    lbl(f.label,pL+4,tz(f.d)-4,f.col,'italic 9px Crimson Pro','left');
+  });
+  ctx.setLineDash([]);
+  lbl('Geoterma: '+geo.n+' ('+geo.grad+'°C/km)',pL+gW/2,pT-14,'rgba(210,215,225,0.75)','italic 11px Crimson Pro');
+}
+
+// =====================================================================
+// DRAW KEROGENE (van Krevelen)
+// =====================================================================
+function drawKero(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='auto';box.style.right='10px';
+
+  const pL=65,pR=30,pT=30,pB=55,gW=W-pL-pR,gH=H-pT-pB;
+  // Assi: X=O/C (0-0.4), Y=H/C (0-1.8)
+  const OCmax=0.40,HCmax=1.80;
+  const tx=oc=>pL+(oc/OCmax)*gW;
+  const ty=hc=>pT+gH-(hc/HCmax)*gH;
+
+  // Griglia
+  ctx.font='11px Space Mono';ctx.fillStyle='#8a8e9a';ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  [0,0.05,0.10,0.15,0.20,0.25,0.30,0.35,0.40].forEach(oc=>{
+    ctx.beginPath();ctx.moveTo(tx(oc),pT);ctx.lineTo(tx(oc),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(oc.toFixed(2),tx(oc),pT+gH+18);
+  });
+  [0,0.3,0.6,0.9,1.2,1.5,1.8].forEach(hc=>{
+    ctx.beginPath();ctx.moveTo(pL,ty(hc));ctx.lineTo(pL+gW,ty(hc));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(hc.toFixed(1),pL-5,ty(hc)+4);
+  });
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 13px Crimson Pro';ctx.fillStyle='#dde0ea';ctx.textAlign='center';
+  ctx.fillText('Rapporto O/C atomico',pL+gW/2,pT+gH+40);
+  ctx.save();ctx.translate(16,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Rapporto H/C atomico',0,0);ctx.restore();
+
+  // Fasce di maturità
+  const matur=[
+    {n:'Immaturo',Hmin:1.1,col:'rgba(50,140,60,0.18)'},
+    {n:"Finestra olio",Hmin:0.6,Hmax:1.1,col:'rgba(220,130,30,0.18)'},
+    {n:'Gas umido',Hmin:0.3,Hmax:0.6,col:'rgba(220,60,30,0.15)'},
+    {n:'Gas secco',Hmax:0.3,col:'rgba(180,30,30,0.15)'},
+  ];
+  matur.forEach(m=>{
+    const y1=m.Hmin!==undefined?ty(m.Hmin):pT;
+    const y2=m.Hmax!==undefined?ty(m.Hmax):pT+gH;
+    ctx.fillStyle=m.col;ctx.fillRect(pL,y1,gW,y2-y1);
+    lbl(m.n,pL+5,y1+14,
+      m.n==='Immaturo'?'rgba(80,200,90,0.9)':
+      m.n==="Finestra olio"?'rgba(255,165,40,0.9)':
+      m.n==='Gas umido'?'rgba(255,100,60,0.9)':'rgba(255,80,70,0.9)',
+      'italic 12px Crimson Pro','left');
+  });
+
+  // Percorsi kerogene
+  Object.entries(KEROGENE).forEach(([key,k])=>{
+    if(!selK.has(key))return;
+    ctx.beginPath();
+    k.path.forEach(([oc,hc],i)=>i?ctx.lineTo(tx(oc),ty(hc)):ctx.moveTo(tx(oc),ty(hc)));
+    ctx.strokeStyle=k.col;ctx.lineWidth=2.5;ctx.globalAlpha=0.85;ctx.stroke();ctx.globalAlpha=1;
+    // Punti lungo il percorso
+    k.path.forEach(([oc,hc],i)=>{
+      ctx.beginPath();ctx.arc(tx(oc),ty(hc),i===0?5:3,0,2*Math.PI);
+      ctx.fillStyle=k.col;ctx.globalAlpha=i===0?0.9:0.5;ctx.fill();ctx.globalAlpha=1;
+    });
+    // Label inizio percorso
+    const[oc0,hc0]=k.path[0];
+    lbl(k.n,tx(oc0)+8,ty(hc0),k.col,'bold 12px Crimson Pro','left');
+  });
+
+  // Ro markers se selezionati
+  if(selRo){
+    const roInfo={
+      '0.5':{H:1.0,label:'Ro=0.5% — Inizio finestra olio'},
+      '0.7':{H:0.85,label:'Ro=0.7% — Olio ottimale'},
+      '1.3':{H:0.55,label:'Ro=1.3% — Gas umido'},
+      '2.0':{H:0.35,label:'Ro=2.0% — Gas secco'},
+    };
+    const ri=roInfo[selRo];
+    if(ri){
+      ctx.beginPath();ctx.moveTo(pL,ty(ri.H));ctx.lineTo(pL+gW,ty(ri.H));
+      ctx.strokeStyle='rgba(255,255,255,0.4)';ctx.lineWidth=1;ctx.setLineDash([5,4]);ctx.stroke();ctx.setLineDash([]);
+      lbl(ri.label,pL+gW/2,ty(ri.H)-5,'rgba(255,255,255,0.8)','bold 13px Crimson Pro');
+    }
+  }
+
+  // Info kerogene selezionato
+  if(selK2){
+    const target=selK2==='olio'?'I':'III';
+    const k=KEROGENE[target];
+    showInfo(`<b>${k.n}</b><br><b>Prodotto principale:</b> <span class="acc">${k.prod}</span><br><br><span style="font-style:italic;font-size:.6rem">${k.note}</span>`);
+  }
+}
+
+// =====================================================================
+// DRAW SISTEMA PETROLIFERO
+// =====================================================================
+function drawSistema(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  box.style.left='10px';box.style.right='auto';
+
+  const pL=20,pR=20,pT=40,pB=30,gW=W-pL-pR,gH=H-pT-pB;
+  const trap=selTrap||'anticlinale';
+
+  // Schema sezione geologica con il tipo di trappola selezionata
+  drawTrappa(trap,pL,pT,gW,gH);
+
+  // Legenda elementi
+  const legend=[
+    {n:'Source rock',  col:'#8a5a30'},
+    {n:'Reservoir',    col:'#c8a030'},
+    {n:'Seal',         col:'#3a60a0'},
+    {n:'Trappola',     col:'#a04060'},
+    {n:'Migrazione',   col:'#60a060'},
+  ];
+  legend.forEach((l,i)=>{
+    const x=pL+10,y=pT+gH+8+i*0;  // orizzontale
+    ctx.fillStyle=l.col;ctx.globalAlpha=0.8;
+    ctx.fillRect(pL+(i*(gW/5))+5,pT+gH+8,14,10);ctx.globalAlpha=1;
+    lbl(l.n,pL+(i*(gW/5))+24,pT+gH+17,l.col,'bold 10px Crimson Pro','left');
+  });
+
+  // Info elemento selezionato
+  if(selSP&&SISTEMA_INFO[selSP]){
+    const s=SISTEMA_INFO[selSP];
+    showInfo(`<b>${s.n}</b><br>
+      <b>Definizione:</b> ${s.def}<br>
+      <b>Esempi:</b> <span class="val">${s.examples}</span><br>
+      <b>Requisiti:</b> <span class="acc">${s.requisiti}</span><br><br>
+      <span style="font-style:italic;font-size:.6rem">${s.note}</span>`);
+  } else if(selTrap){
+    showInfo(`<b>Trappola: ${selTrap}</b><br><br>
+      <span style="font-style:italic">${TRAP_SCHEMES[selTrap]}</span>`);
+  }
+}
+
+function drawTrappa(tipo,pL,pT,gW,gH){
+  const cx=pL+gW/2,cy=pT+gH*0.45;
+
+  // Strati di base
+  const strati=[
+    {y:0.75,h:0.12,col:'#5a3a1a',n:'Basamento'},
+    {y:0.63,h:0.12,col:'#aa7040',n:'Source rock'},
+    {y:0.50,h:0.13,col:'#c8a030',n:'Reservoir'},
+    {y:0.38,h:0.12,col:'#5a80c0',n:'Seal'},
+    {y:0.25,h:0.13,col:'#6a7a5a',n:'Sovrasso'},
+    {y:0.10,h:0.15,col:'#4a5a4a',n:'Copertura'},
+  ];
+
+  if(tipo==='anticlinale'){
+    // Strati piegati a cupola
+    strati.forEach(s=>{
+      const y0=pT+s.y*gH,h=s.h*gH;
+      ctx.beginPath();
+      // Piega sinusoidale
+      for(let x=0;x<=gW;x+=2){
+        const xr=(x/gW-0.5)*2;
+        const deflect=s.y<0.50&&s.y>0.25?-gH*0.08*(1-xr*xr):0;
+        const py=y0+deflect+(s.y<0.38?gH*0.06*(1-xr*xr):0);
+        x===0?ctx.moveTo(pL+x,py):ctx.lineTo(pL+x,py);
+      }
+      for(let x=gW;x>=0;x-=2){
+        const xr=(x/gW-0.5)*2;
+        const deflect=s.y<0.50&&s.y>0.25?-gH*0.08*(1-xr*xr):0;
+        ctx.lineTo(pL+x,y0+h+deflect+(s.y<0.38?gH*0.06*(1-xr*xr):0));
+      }
+      ctx.closePath();
+      ctx.fillStyle=s.col;ctx.globalAlpha=0.65;ctx.fill();ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(200,204,216,0.15)';ctx.lineWidth=0.8;ctx.stroke();
+      lbl(s.n,pL+gW-10,y0+h/2+4,s.col,'bold 13px Crimson Pro','right');
+    });
+    // Olio e gas nel nucleo
+    const yRes=pT+0.50*gH,hRes=0.13*gH;
+    const xc=pL+gW/2;
+    // Gas cap
+    ctx.beginPath();ctx.ellipse(xc,yRes-gH*0.06,gW*0.12,hRes*0.35,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(220,50,50,0.6)';ctx.fill();
+    lbl('Gas',xc,yRes-gH*0.06+4,'#ff8080','bold 11px Crimson Pro');
+    // Olio
+    ctx.beginPath();ctx.ellipse(xc,yRes-gH*0.01,gW*0.18,hRes*0.30,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(180,120,0,0.5)';ctx.fill();
+    lbl('Olio',xc,yRes+4,'#c8a030','bold 11px Crimson Pro');
+    // Acqua
+    ctx.beginPath();ctx.ellipse(xc,yRes+hRes*0.3,gW*0.22,hRes*0.20,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(30,80,180,0.3)';ctx.fill();
+    lbl('Acqua',xc,yRes+hRes*0.3+4,'#4080c8','bold 11px Crimson Pro');
+
+  } else if(tipo==='faglia'){
+    // Strati orizzontali con faglia verticale
+    strati.forEach(s=>{
+      const y0=pT+s.y*gH,h=s.h*gH;
+      // Blocco sinistro (alzato)
+      ctx.fillStyle=s.col;ctx.globalAlpha=0.65;
+      ctx.fillRect(pL,y0-gH*0.05,gW*0.45,h);ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(200,204,216,0.12)';ctx.lineWidth=0.8;
+      ctx.strokeRect(pL,y0-gH*0.05,gW*0.45,h);
+      // Blocco destro (abbassato)
+      ctx.fillStyle=s.col;ctx.globalAlpha=0.65;
+      ctx.fillRect(pL+gW*0.55,y0,gW*0.45,h);ctx.globalAlpha=1;
+      ctx.strokeRect(pL+gW*0.55,y0,gW*0.45,h);
+      if(s.n!=='Basamento')lbl(s.n,pL+gW*0.43,y0+h/2-gH*0.025+4,s.col,'bold 12px Crimson Pro','right');
+    });
+    // Faglia
+    ctx.beginPath();ctx.moveTo(pL+gW*0.50,pT);ctx.lineTo(pL+gW*0.50,pT+gH);
+    ctx.strokeStyle='rgba(255,100,100,0.7)';ctx.lineWidth=3;ctx.stroke();
+    lbl('Faglia',pL+gW*0.50,pT+15,'rgba(255,100,100,0.85)','bold 13px Space Mono');
+    // Olio nel blocco alzato
+    const yRes=pT+(0.50+0.05)*gH;
+    ctx.beginPath();ctx.ellipse(pL+gW*0.22,yRes+0.065*gH,gW*0.15,0.05*gH,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(180,120,0,0.55)';ctx.fill();
+    lbl('Olio',pL+gW*0.22,yRes+0.065*gH+4,'#c8a030','bold 11px Crimson Pro');
+
+  } else if(tipo==='stratigrafica'){
+    // Strati con pinch-out a destra
+    strati.forEach((s,si)=>{
+      const y0=pT+s.y*gH,h=s.h*gH;
+      const taper=si===3?0.6:1.0; // il reservoir si chiude
+      ctx.beginPath();
+      ctx.moveTo(pL,y0);ctx.lineTo(pL+gW*taper,y0);
+      ctx.lineTo(pL+gW*taper,y0+h);ctx.lineTo(pL,y0+h);ctx.closePath();
+      ctx.fillStyle=s.col;ctx.globalAlpha=0.65;ctx.fill();ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(200,204,216,0.12)';ctx.lineWidth=0.8;ctx.stroke();
+      lbl(s.n,pL+10,y0+h/2+4,s.col,'bold 10px Crimson Pro','left');
+    });
+    lbl('Pinch-out →',pL+gW*0.62,pT+0.55*gH,'rgba(220,224,240,0.85)','italic 12px Crimson Pro','left');
+    // Olio intrappolato
+    const yRes=pT+0.55*gH;
+    ctx.beginPath();ctx.ellipse(pL+gW*0.35,yRes,gW*0.15,0.04*gH,0,0,2*Math.PI);
+    ctx.fillStyle='rgba(180,120,0,0.55)';ctx.fill();
+    lbl('Olio',pL+gW*0.35,yRes+4,'#c8a030','bold 11px Crimson Pro');
+
+  } else if(tipo==='sale'){
+    // Diapiro salino
+    strati.forEach(s=>{
+      const y0=pT+s.y*gH,h=s.h*gH;
+      // Con discontinuità centrale per il sale
+      ctx.fillStyle=s.col;ctx.globalAlpha=0.55;
+      ctx.fillRect(pL,y0,gW*0.35,h);
+      ctx.fillRect(pL+gW*0.65,y0,gW*0.35,h);ctx.globalAlpha=1;
+      ctx.strokeStyle='rgba(200,204,216,0.10)';ctx.lineWidth=0.8;
+      ctx.strokeRect(pL,y0,gW*0.35,h);ctx.strokeRect(pL+gW*0.65,y0,gW*0.35,h);
+    });
+    // Sale (diapiro)
+    ctx.beginPath();
+    ctx.moveTo(pL+gW*0.35,pT+gH);
+    ctx.bezierCurveTo(pL+gW*0.35,pT+gH*0.6,pL+gW*0.40,pT+gH*0.1,pL+gW*0.50,pT+gH*0.05);
+    ctx.bezierCurveTo(pL+gW*0.60,pT+gH*0.1,pL+gW*0.65,pT+gH*0.6,pL+gW*0.65,pT+gH);
+    ctx.closePath();
+    ctx.fillStyle='rgba(200,180,120,0.7)';ctx.fill();
+    ctx.strokeStyle='rgba(220,200,140,0.5)';ctx.lineWidth=1.5;ctx.stroke();
+    lbl('Sale',pL+gW/2,pT+gH*0.35,'rgba(220,200,140,0.9)','bold 15px Crimson Pro');
+    // Trappole periclinali
+    ['Olio','Olio'].forEach((t,i)=>{
+      const x=i===0?pL+gW*0.20:pL+gW*0.75;
+      const y=pT+gH*0.42;
+      ctx.beginPath();ctx.ellipse(x,y,gW*0.10,0.04*gH,0,0,2*Math.PI);
+      ctx.fillStyle='rgba(180,120,0,0.55)';ctx.fill();
+      lbl(t,x,y+4,'#c8a030','bold 10px Crimson Pro');
+    });
+  }
+
+  // Frecce migrazione
+  if(selSP==='migrazione'||!selSP){
+    ctx.strokeStyle='rgba(100,220,100,0.65)';ctx.lineWidth=1.5;ctx.setLineDash([5,3]);
+    const arrowY=pT+gH*0.65;
+    ctx.beginPath();ctx.moveTo(pL+gW*0.15,arrowY);ctx.lineTo(pL+gW*0.45,arrowY-gH*0.15);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(pL+gW*0.85,arrowY);ctx.lineTo(pL+gW*0.55,arrowY-gH*0.15);ctx.stroke();
+    ctx.setLineDash([]);
+    lbl('migrazione →',pL+gW*0.28,arrowY+12,'rgba(100,220,100,0.7)','italic 10px Crimson Pro');
+  }
+
+  // Titolo tipo trappola
+  lbl('Trappola: '+tipo.charAt(0).toUpperCase()+tipo.slice(1),pL+gW/2,pT-12,'rgba(200,204,216,0.7)','italic 14px Crimson Pro');
+}
+
+// =====================================================================
+// DRAW
+// =====================================================================
+function draw(){
+  if(tab==='zone')drawZone();
+  else if(tab==='poros')drawPoros();
+  else if(tab==='kero')drawKero();
+  else drawSistema();
+}
+
+// =====================================================================
+// MOUSE
+// =====================================================================
+C.addEventListener('mousemove',e=>{
+  if(tab!=='zone')return;
+  const r=C.getBoundingClientRect();
+  const my=(e.clientY-r.top)*(C.height/r.height);
+  const pT=30,pB=50,gH=C.height-pT-pB,Zmax=10;
+  const z=(my-pT)/gH*Zmax;
+  const zone=ZONE.find(zn=>z>=zn.z[0]&&z<zn.z[1]);
+  const newH=zone?zone.n:null;
+  if(hovZ!==newH){hovZ=newH;draw();}
+},{passive:true});
+C.addEventListener('mouseleave',()=>{if(hovZ){hovZ=null;draw();}});
+
+// =====================================================================
+// CONTROLLI
+// =====================================================================
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');
+  tab=b.dataset.tab;
+  ['sbZone','sbPoros','sbKero','sbSistema'].forEach(id=>document.getElementById(id).style.display='none');
+  const map={zone:'sbZone',poros:'sbPoros',kero:'sbKero',sistema:'sbSistema'};
+  const sb=document.getElementById(map[tab]);sb.style.display='flex';sb.style.flexDirection='column';
+  hideInfo();
+  document.getElementById('ibar').textContent={
+    zone:'Zone diagenetiche — evoluzione dei sedimenti con profondità e temperatura',
+    poros:'Evoluzione della porosità — curve di compattazione per arenarie, argilliti e carbonati',
+    kero:'Maturazione del kerogene — diagramma di van Krevelen e finestre degli idrocarburi',
+    sistema:'Sistema petrolifero — elementi e tipi di trappola',
+  }[tab];
+  draw();
+}));
+
+// Zone
+document.querySelectorAll('[data-z]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.z;
+  document.querySelectorAll('[data-z]').forEach(x=>x.classList.remove('on'));
+  if(selZ===k){selZ=null;hideInfo();}else{selZ=k;b.classList.add('on');}draw();
+}));
+// Geoterme (toggle multi)
+document.querySelectorAll('[data-g]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.g;
+  if(selG.has(k)){selG.delete(k);b.classList.remove('on');}else{selG.add(k);b.classList.add('on');}draw();
+}));
+// Processi
+document.querySelectorAll('[data-proc]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.proc;
+  document.querySelectorAll('[data-proc]').forEach(x=>x.classList.remove('on'));
+  if(selProc===k){selProc=null;hideInfo();}else{selProc=k;b.classList.add('on');}draw();
+}));
+// Litologie (toggle multi)
+document.querySelectorAll('[data-lit]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.lit;
+  if(selLit.has(k)){selLit.delete(k);b.classList.remove('on');}else{selLit.add(k);b.classList.add('on');}draw();
+}));
+// Geoterma porosità
+document.querySelectorAll('[data-gp]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.gp;
+  document.querySelectorAll('[data-gp]').forEach(x=>x.classList.remove('on'));
+  selGP=k;b.classList.add('on');draw();
+}));
+// Finestre
+document.querySelectorAll('[data-fw]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.fw;
+  if(selFW.has(k)){selFW.delete(k);b.classList.remove('on');}else{selFW.add(k);b.classList.add('on');}draw();
+}));
+// Kerogene tipi (toggle multi)
+document.querySelectorAll('[data-k]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.k;
+  if(selK.has(k)){selK.delete(k);b.classList.remove('on');}else{selK.add(k);b.classList.add('on');}draw();
+}));
+// Ro markers
+document.querySelectorAll('[data-ro]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.ro;
+  document.querySelectorAll('[data-ro]').forEach(x=>x.classList.remove('on'));
+  if(selRo===k){selRo=null;}else{selRo=k;b.classList.add('on');}draw();
+}));
+// Kerogene prodotto
+document.querySelectorAll('[data-k2]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.k2;
+  document.querySelectorAll('[data-k2]').forEach(x=>x.classList.remove('on'));
+  if(selK2===k){selK2=null;hideInfo();}else{selK2=k;b.classList.add('on');}draw();
+}));
+// Sistema petrolifero
+document.querySelectorAll('[data-sp]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.sp;
+  document.querySelectorAll('[data-sp]').forEach(x=>x.classList.remove('on'));
+  selTrap=null;document.querySelectorAll('[data-trap]').forEach(x=>x.classList.remove('on'));
+  if(selSP===k){selSP=null;hideInfo();}else{selSP=k;b.classList.add('on');}draw();
+}));
+// Tipo trappola
+document.querySelectorAll('[data-trap]').forEach(b=>b.addEventListener('click',()=>{
+  const k=b.dataset.trap;
+  document.querySelectorAll('[data-trap]').forEach(x=>x.classList.remove('on'));
+  selSP=null;document.querySelectorAll('[data-sp]').forEach(x=>x.classList.remove('on'));
+  if(selTrap===k){selTrap=null;hideInfo();}else{selTrap=k;b.classList.add('on');}draw();
+}));
+
+// Inizializzazione bottoni on
+document.querySelectorAll('[data-lit],[data-fw],[data-k]').forEach(b=>{
+  const key=b.dataset.lit||b.dataset.fw||b.dataset.k;
+  if(selLit.has(key)||selFW.has(key)||selK.has(key))b.classList.add('on');
+});
+// Geoterma default
+document.querySelectorAll('[data-gp]').forEach(b=>{
+  if(b.dataset.gp===selGP)b.classList.add('on');
+});
+
+function resize(){C.width=C.parentElement.clientWidth;C.height=C.parentElement.clientHeight;if(C.width>0&&C.height>0)draw();}
+window.addEventListener('resize',resize);
+setTimeout(()=>resize(),80);
+</script>
+</body>
+</html>
