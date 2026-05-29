@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale — Microscopio a Luce Polarizzata</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c10;--panel:#111318;--border:#1e2230;
+  --accent:#00d4ff;--accent2:#ff6b35;--accent3:#a8ff78;
+  --text:#e8eaf0;--muted:#c8ccd8;--dim:#8a8e9a;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Crimson Pro',serif;font-weight:300;font-size:1.05rem;line-height:1.8}
+
+/* LAYOUT */
+.wrapper{max-width:860px;margin:0 auto;padding:2rem 1.5rem 4rem}
+
+/* HEADER */
+header{border-bottom:1px solid var(--border);padding-bottom:1.5rem;margin-bottom:2.5rem}
+header h1{font-family:'Crimson Pro',serif;font-weight:600;font-size:2rem;color:var(--accent);margin-bottom:.3rem}
+header .subtitle{font-style:italic;color:var(--muted);font-size:1rem}
+
+/* INDICE */
+nav.toc{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1.2rem 1.5rem;margin-bottom:2.5rem}
+nav.toc h2{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.8rem}
+nav.toc ol{padding-left:1.2rem;color:var(--muted)}
+nav.toc li{margin:.25rem 0;font-size:.95rem}
+nav.toc a{color:var(--muted);text-decoration:none;transition:color .15s}
+nav.toc a:hover{color:var(--accent)}
+nav.toc ol ol{margin-top:.2rem}
+nav.toc ol ol li{font-size:.88rem;color:var(--dim)}
+
+/* SEZIONI */
+section{margin-bottom:3rem}
+h2.sec{font-family:'Crimson Pro',serif;font-weight:600;font-size:1.5rem;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:.4rem;margin-bottom:1.2rem;margin-top:2rem}
+h3.sub{font-family:'Crimson Pro',serif;font-weight:600;font-size:1.15rem;color:var(--accent2);margin:1.4rem 0 .6rem}
+h4.subsub{font-family:'Space Mono',monospace;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:1rem 0 .4rem}
+
+p{margin-bottom:.9rem;color:var(--text)}
+em{font-style:italic;color:var(--muted)}
+strong{font-weight:600;color:var(--text)}
+
+/* FORMULE */
+.formula{background:var(--panel);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:.6rem 1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:.9rem;color:var(--accent3);overflow-x:auto}
+.formula .comment{color:var(--dim);font-size:.8rem}
+
+/* BOX */
+.box{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem 1.2rem;margin:1.2rem 0}
+.box.info{border-left:3px solid var(--accent)}
+.box.warning{border-left:3px solid var(--accent2)}
+.box.key{border-left:3px solid var(--accent3)}
+.box h4{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.box.info h4{color:var(--accent)}
+.box.warning h4{color:var(--accent2)}
+.box.key h4{color:var(--accent3)}
+
+/* TABELLE */
+table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.9rem}
+th{background:var(--panel);color:var(--accent);font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:.5rem .8rem;border:1px solid var(--border);text-align:left}
+td{padding:.45rem .8rem;border:1px solid var(--border);color:var(--muted)}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+
+/* LISTA */
+ul,ol{padding-left:1.4rem;margin-bottom:.9rem}
+li{margin:.3rem 0;color:var(--text)}
+li strong{color:var(--accent2)}
+
+/* FIGURE SCHEMA (SVG inline) */
+.fig{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:1rem;margin:1.2rem 0;text-align:center}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{font-size:.82rem;color:var(--dim);margin-top:.5rem;font-style:italic}
+
+/* NOTA A PIE' */
+footer{border-top:1px solid var(--border);padding-top:1rem;margin-top:3rem;font-size:.8rem;color:var(--dim);text-align:center}
+
+/* BACK TO TOP */
+.backtop{display:inline-block;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);text-decoration:none;float:right;margin-top:.3rem}
+.backtop:hover{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<header>
+  <h1>Microscopio a Luce Polarizzata</h1>
+  <div class="subtitle">Manuale di Ottica Cristallografica per Petrografia e Mineralogia</div>
+</header>
+
+<nav class="toc">
+  <h2>Indice</h2>
+  <ol>
+    <li><a href="#luce">Luce e polarizzazione</a></li>
+    <li><a href="#birifrangenza">Birifrangenza</a>
+      <ol>
+        <li><a href="#indici">Indici di rifrazione</a></li>
+        <li><a href="#indicatrice">Indicatrice ottica</a></li>
+        <li><a href="#uniassici">Cristalli uniassici</a></li>
+        <li><a href="#biassici">Cristalli biassici</a></li>
+      </ol>
+    </li>
+    <li><a href="#microscopio">Il microscopio polarizzato</a>
+      <ol>
+        <li><a href="#componenti">Componenti principali</a></li>
+        <li><a href="#nicol-paralleli">Nicol paralleli (luce trasmessa)</a></li>
+        <li><a href="#nicol-incrociati">Nicol incrociati</a></li>
+        <li><a href="#estinzione">Estinzione e posizioni diagnostiche</a></li>
+      </ol>
+    </li>
+    <li><a href="#ortoscopica">Luce ortoscopica</a>
+      <ol>
+        <li><a href="#colori">Colori di interferenza</a></li>
+        <li><a href="#levy">Tavola di Michel-Lévy</a></li>
+        <li><a href="#orientazione">Effetto dell'orientazione della sezione</a></li>
+      </ol>
+    </li>
+    <li><a href="#conoscopica">Luce conoscopica</a>
+      <ol>
+        <li><a href="#figura-uni">Figura di interferenza uniassica</a></li>
+        <li><a href="#figura-bi">Figura di interferenza biassica</a></li>
+        <li><a href="#centratura">Centratura della figura</a></li>
+      </ol>
+    </li>
+    <li><a href="#lamina">Lamina compensatrice e segno ottico</a></li>
+    <li><a href="#minerali">Proprietà ottiche dei minerali comuni</a></li>
+  </ol>
+</nav>
+
+<!-- ================================================================ -->
+<section id="luce">
+  <h2 class="sec">1. Luce e polarizzazione <a class="backtop" href="#">↑ indice</a></h2>
+
+  <p>La luce visibile è un'onda elettromagnetica trasversale: il campo elettrico oscilla perpendicolarmente alla direzione di propagazione. La luce naturale (non polarizzata) è una sovrapposizione di onde che vibrano in tutti i piani contenenti la direzione di propagazione.</p>
+
+  <p>La <strong>luce polarizzata linearmente</strong> vibra in un unico piano. Si ottiene facendo passare la luce naturale attraverso un <em>polarizzatore</em> — nel microscopio moderno un filtro di polaroide, storicamente un prisma di Nicol (da cui il nome "nicol" rimasto nell'uso corrente).</p>
+
+  <div class="box info">
+    <h4>Convenzione</h4>
+    <p>Nel microscopio polarizzato il polarizzatore è orientato con il piano di vibrazione Est-Ovest (E-W). L'analizzatore, se inserito, è orientato Nord-Sud (N-S), perpendicolare al polarizzatore — configurazione detta <em>nicol incrociati</em>.</p>
+  </div>
+
+  <p>Quando due polarizzatori sono incrociati (a 90°), nessuna luce li attraversa entrambi: il polarizzatore produce luce polarizzata E-W, l'analizzatore trasmette solo la componente N-S — che è nulla. Il campo visivo appare completamente buio. Questa è la condizione di partenza per le osservazioni in luce polarizzata.</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="birifrangenza">
+  <h2 class="sec">2. Birifrangenza <a class="backtop" href="#">↑ indice</a></h2>
+
+  <h3 class="sub" id="indici">2.1 Indici di rifrazione</h3>
+  <p>In un mezzo isotropo (vetro, minerali cubici) la luce si propaga alla stessa velocità in tutte le direzioni e l'indice di rifrazione è unico: <em>n = c/v</em>. Nei cristalli non cubici la velocità dipende dalla direzione di propagazione e dalla direzione di vibrazione del campo elettrico: esistono più indici di rifrazione.</p>
+
+  <p>I tre indici principali sono convenzionalmente indicati con le lettere greche:</p>
+  <ul>
+    <li><strong>α</strong> — indice minimo (raggio più veloce)</li>
+    <li><strong>β</strong> — indice intermedio</li>
+    <li><strong>γ</strong> — indice massimo (raggio più lento)</li>
+  </ul>
+
+  <h3 class="sub" id="indicatrice">2.2 Indicatrice ottica</h3>
+  <p>L'<strong>indicatrice ottica</strong> (o ellissoide degli indici) è una rappresentazione geometrica che descrive come varia l'indice di rifrazione in funzione della direzione di vibrazione della luce. Si costruisce riportando, da un punto centrale, vettori di lunghezza proporzionale all'indice di rifrazione nella corrispondente direzione di vibrazione. La superficie così ottenuta è un ellissoide.</p>
+
+  <p>Per ogni direzione di propagazione della luce, la sezione dell'indicatrice perpendicolare a quella direzione è un'ellisse i cui assi indicano le due direzioni di vibrazione permesse e i corrispondenti indici di rifrazione.</p>
+
+  <h3 class="sub" id="uniassici">2.3 Cristalli uniassici</h3>
+  <p>I cristalli con simmetria tetragonale, esagonale e trigonale hanno un'indicatrice a <strong>simmetria di rivoluzione</strong> attorno all'asse cristallografico principale (asse c). Questa è la direzione dell'<em>asse ottico</em> — l'unica direzione lungo la quale la luce si propaga senza birifrangenza.</p>
+
+  <p>L'indicatrice ha due indici principali:</p>
+  <ul>
+    <li><strong>n<sub>o</sub></strong> — indice del <em>raggio ordinario</em>, uguale in tutte le direzioni nel piano perpendicolare all'asse c</li>
+    <li><strong>n<sub>e</sub></strong> — indice del <em>raggio straordinario</em>, massimo lungo l'asse c</li>
+  </ul>
+
+  <p>La <strong>birifrangenza</strong> è la differenza tra i due indici:</p>
+  <div class="formula">Δn = |n<sub>e</sub> − n<sub>o</sub></div>
+
+  <p>Il <strong>segno ottico</strong> dipende dal rapporto tra i due indici:</p>
+  <ul>
+    <li><strong>Uniassico positivo (+)</strong>: n<sub>e</sub> &gt; n<sub>o</sub> — l'indicatrice è un ellissoide prolato (allungato lungo l'asse ottico)</li>
+    <li><strong>Uniassico negativo (−)</strong>: n<sub>e</sub> &lt; n<sub>o</sub> — l'indicatrice è un ellissoide oblato (schiacciato lungo l'asse ottico)</li>
+  </ul>
+
+  <div class="fig">
+    <svg viewBox="0 0 500 200" xmlns="http://www.w3.org/2000/svg" style="max-height:180px">
+      <!-- Uniassico + -->
+      <ellipse cx="130" cy="100" rx="35" ry="65" fill="none" stroke="#00d4ff" stroke-width="1.5"/>
+      <ellipse cx="130" cy="100" rx="35" ry="35" fill="none" stroke="#00d4ff" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="130" y1="30" x2="130" y2="170" stroke="#a8ff78" stroke-width="1.5"/>
+      <text x="130" y="22" fill="#a8ff78" font-family="Space Mono" font-size="9" text-anchor="middle">asse ottico</text>
+      <text x="175" y="104" fill="#00d4ff" font-family="Crimson Pro" font-size="11" font-style="italic">n<tspan font-size="9" dy="3">e</tspan></text>
+      <text x="155" y="142" fill="#00d4ff" font-family="Crimson Pro" font-size="11" font-style="italic">n<tspan font-size="9" dy="3">o</tspan></text>
+      <text x="130" y="192" fill="#c8ccd8" font-family="Crimson Pro" font-size="12" text-anchor="middle" font-style="italic">uniassico +</text>
+      <!-- Uniassico - -->
+      <ellipse cx="370" cy="100" rx="65" ry="35" fill="none" stroke="#ff6b35" stroke-width="1.5"/>
+      <ellipse cx="370" cy="100" rx="35" ry="35" fill="none" stroke="#ff6b35" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="370" y1="60" x2="370" y2="140" stroke="#a8ff78" stroke-width="1.5"/>
+      <text x="370" y="52" fill="#a8ff78" font-family="Space Mono" font-size="9" text-anchor="middle">asse ottico</text>
+      <text x="370" y="125" fill="#ff6b35" font-family="Crimson Pro" font-size="11" font-style="italic" text-anchor="middle">n<tspan font-size="9" dy="3">e</tspan></text>
+      <text x="445" y="104" fill="#ff6b35" font-family="Crimson Pro" font-size="11" font-style="italic">n<tspan font-size="9" dy="3">o</tspan></text>
+      <text x="370" y="192" fill="#c8ccd8" font-family="Crimson Pro" font-size="12" text-anchor="middle" font-style="italic">uniassico −</text>
+    </svg>
+    <figcaption>Indicatrici ottiche per cristalli uniassici: ellissoide prolato (positivo) e oblato (negativo).</figcaption>
+  </div>
+
+  <h3 class="sub" id="biassici">2.4 Cristalli biassici</h3>
+  <p>I cristalli con simmetria ortorombica, monoclina e triclina hanno un'indicatrice con tre assi di lunghezza diversa (ellissoide triassiale): α &lt; β &lt; γ. Esistono <strong>due assi ottici</strong>, cioè due direzioni di propagazione prive di birifrangenza — da cui il nome "biassico".</p>
+
+  <p>I due assi ottici giacciono nel <em>piano degli assi ottici</em> (piano XZ, contenente α e γ). L'angolo acuto tra i due assi ottici è detto <strong>2V</strong> ed è un parametro diagnostico fondamentale.</p>
+
+  <p>Il segno ottico dei biassici dipende dalla posizione dell'asse β:</p>
+  <ul>
+    <li><strong>Biassico positivo (+)</strong>: β è più vicino ad α → la bisettrice acuta (Bxa) coincide con γ</li>
+    <li><strong>Biassico negativo (−)</strong>: β è più vicino a γ → la bisettrice acuta coincide con α</li>
+  </ul>
+
+  <div class="box key">
+    <h4>Relazione tra 2V e birifrangenza apparente</h4>
+    <p>La birifrangenza massima osservabile in una sezione non dipende solo da Δn = γ − α, ma anche dall'orientazione della sezione rispetto all'indicatrice. La sezione che mostra la birifrangenza massima è quella parallela al piano degli assi ottici contenente α e γ.</p>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<section id="microscopio">
+  <h2 class="sec">3. Il microscopio polarizzato <a class="backtop" href="#">↑ indice</a></h2>
+
+  <h3 class="sub" id="componenti">3.1 Componenti principali</h3>
+  <p>Il microscopio a luce polarizzata (detto anche microscopio petrografico o polarizzatore) è composto da:</p>
+  <ul>
+    <li><strong>Sorgente luminosa</strong> — luce bianca (tungsteno o LED)</li>
+    <li><strong>Polarizzatore</strong> — filtro che produce luce polarizzata E-W; è fisso sotto il piatto portaoggetti</li>
+    <li><strong>Condensatore</strong> — in luce conoscopica convoglia un fascio conico sul campione</li>
+    <li><strong>Piatto portaoggetti rotante</strong> — supporto graduato su cui si pone il vetrino; ruotando il piatto si cambia l'orientazione del cristallo rispetto ai nicol</li>
+    <li><strong>Obiettivo</strong> — raccoglie la luce trasmessa dal campione</li>
+    <li><strong>Analizzatore</strong> — filtro orientato N-S, inseribile/estraibile; in posizione crea i nicol incrociati</li>
+    <li><strong>Lente di Bertrand</strong> — lente ausiliaria inseribile per la visione conoscopica; proietta nel piano focale posteriore dell'obiettivo</li>
+    <li><strong>Oculare</strong> — ingrandisce l'immagine finale</li>
+  </ul>
+
+  <h3 class="sub" id="nicol-paralleli">3.2 Nicol paralleli (luce trasmessa)</h3>
+  <p>Con l'<strong>analizzatore estratto</strong>, si osserva la luce polarizzata trasmessa dal campione senza ulteriori filtraggi. In questa configurazione si valutano:</p>
+  <ul>
+    <li><strong>Colore del minerale</strong> — colore proprio (es. biotite bruna, ortopirosseno verde pallido)</li>
+    <li><strong>Pleocroismo</strong> — variazione del colore proprio al ruotare del piatto; indica che l'assorbimento dipende dalla direzione di vibrazione</li>
+    <li><strong>Forma, clivaggio, frattura</strong> — proprietà morfologiche</li>
+    <li><strong>Indice di rifrazione relativo</strong> — confronto con il balsamo del Canada (n ≈ 1.537) tramite il rilievo e i bordi di Becke</li>
+  </ul>
+
+  <h3 class="sub" id="nicol-incrociati">3.3 Nicol incrociati</h3>
+  <p>Con l'<strong>analizzatore inserito</strong> (nicol incrociati, NX), il campo visivo appare buio per i minerali isotropi e per le sezioni particolari dei minerali anisotropi. I minerali anisotropi in orientazione generica mostrano <em>colori di interferenza</em>.</p>
+
+  <p><strong>Meccanismo fisico:</strong> la luce polarizzata E-W dal polarizzatore entra nel cristallo birifrangente e viene decomposta nelle due direzioni di vibrazione permesse dal cristallo (raggio ordinario e straordinario). I due raggi si propagano con velocità diverse, accumulando un <em>ritardo di fase</em> Γ. All'uscita dal cristallo si ricombinano: la luce risultante ha una polarizzazione diversa da quella originale E-W. L'analizzatore N-S trasmette la componente N-S di questa luce — che non è più nulla — producendo i colori di interferenza.</p>
+
+  <h3 class="sub" id="estinzione">3.4 Estinzione</h3>
+  <p>L'<strong>estinzione</strong> si verifica quando il cristallo appare buio a nicol incrociati, cioè quando una delle due direzioni di vibrazione del cristallo è parallela al polarizzatore (E-W) o all'analizzatore (N-S). In queste posizioni la luce non viene decomposta e mantiene la polarizzazione E-W originale, che l'analizzatore blocca completamente.</p>
+
+  <p>Ruotando il piatto di 360° si incontrano <strong>quattro posizioni di estinzione</strong>, distanziate di 90°. L'angolo tra una caratteristica cristallografica (clivaggio, faccia, asse lungo) e la posizione di estinzione è detto <em>angolo di estinzione</em>, ed è diagnostico per molti minerali.</p>
+
+  <ul>
+    <li><strong>Estinzione parallela</strong> — l'estinzione avviene quando il clivaggio è parallelo al reticolo dell'oculare (0°); tipica di ortopirosseni, olivina</li>
+    <li><strong>Estinzione simmetrica</strong> — l'estinzione è equidistante tra due direzioni di clivaggio</li>
+    <li><strong>Estinzione obliqua</strong> — angolo diverso da 0°; tipica di clinopirosseni, plagioclasi</li>
+    <li><strong>Estinzione ondulante</strong> — il limite di estinzione non è netto ma si propaga come un'onda al ruotare del piatto; indica deformazione plastica (es. quarzo deformato)</li>
+  </ul>
+</section>
+
+<!-- ================================================================ -->
+<section id="ortoscopica">
+  <h2 class="sec">4. Luce ortoscopica <a class="backtop" href="#">↑ indice</a></h2>
+
+  <p>In luce <strong>ortoscopica</strong> (configurazione normale, senza lente di Bertrand) il fascio luminoso è parallelo — ogni raggio percorre il cristallo nella stessa direzione, perpendicolare al piano del vetrino. Si osserva un'area del campione con illuminazione uniforme.</p>
+
+  <h3 class="sub" id="colori">4.1 Colori di interferenza</h3>
+  <p>Il <strong>ritardo di fase</strong> accumulato dalla luce attraversando una sezione sottile di spessore <em>t</em> con birifrangenza Δn è:</p>
+  <div class="formula">Γ = Δn · t <span class="comment">&nbsp;&nbsp;(in nm, con t in nm)</span></div>
+
+  <p>In termini pratici, con t in µm:</p>
+  <div class="formula">Γ (nm) = Δn · t (µm) · 1000</div>
+
+  <p>L'<strong>intensità</strong> della luce trasmessa a nicol incrociati dipende dall'orientazione del cristallo (angolo θ tra asse lento e polarizzatore) e dal ritardo:</p>
+  <div class="formula">I = I<sub>0</sub> · sin²(2θ) · sin²(πΓ/λ)</div>
+
+  <p>Il fattore <em>sin²(2θ)</em> spiega l'estinzione ogni 90° (θ = 0°, 90°, 180°, 270°); il fattore <em>sin²(πΓ/λ)</em> determina il colore osservato in funzione del ritardo.</p>
+
+  <p>Per luce bianca, le diverse lunghezze d'onda vengono estinte selettivamente: il colore osservato è la composizione delle lunghezze d'onda non estinte. La sequenza di colori al crescere del ritardo costituisce la <strong>scala degli ordini di interferenza</strong>:</p>
+
+  <table>
+    <tr><th>Ritardo (nm)</th><th>Colore</th><th>Ordine</th></tr>
+    <tr><td>0</td><td>Nero</td><td rowspan="5">I ordine</td></tr>
+    <tr><td>40–100</td><td>Grigi</td></tr>
+    <tr><td>150–230</td><td>Bianchi, gialli</td></tr>
+    <tr><td>230–270</td><td>Arancio, rosso</td></tr>
+    <tr><td>270–280</td><td>Rosso violaceo → viola di I ordine</td></tr>
+    <tr><td>280–550</td><td>Indaco, blu, verde, giallo, arancio</td><td>II ordine</td></tr>
+    <tr><td>550–830</td><td>Rosso, viola, blu, verde, giallo</td><td>II ordine (fine)</td></tr>
+    <tr><td>830–1100</td><td>Colori pastello (rosa, verde chiaro)</td><td>III ordine</td></tr>
+    <tr><td>&gt;1100</td><td>Bianco perla (colori sempre più tenui)</td><td>&gt;III ordine</td></tr>
+  </table>
+
+  <div class="box warning">
+    <h4>Il viola di primo ordine</h4>
+    <p>Il colore rosso-viola che chiude il I ordine e apre il II (ritardo ~270–280 nm) è detto <em>viola sensitivo</em> o <em>tinta di passaggio</em>. È particolarmente sensibile alle variazioni di ritardo: piccole differenze producono forti cambiamenti di colore — proprietà sfruttata dalla lamina compensatrice.</p>
+  </div>
+
+  <h3 class="sub" id="levy">4.2 Tavola di Michel-Lévy</h3>
+  <p>La <strong>tavola di Michel-Lévy</strong> è un diagramma che mette in relazione tre grandezze: il ritardo di fase Γ (asse orizzontale), la birifrangenza Δn (asse verticale o linee diagonali) e lo spessore della sezione (linee diagonali o asse verticale). Se si conoscono due delle tre grandezze, la terza si ricava dalla tavola.</p>
+
+  <p>Nella petrografia pratica la tavola si usa principalmente per:</p>
+  <ul>
+    <li><strong>Stimare la birifrangenza</strong>: osservando il colore di interferenza massimo del minerale (a 45° dall'estinzione) e sapendo lo spessore standard della sezione (30 µm), si legge Δn sulla tavola</li>
+    <li><strong>Verificare lo spessore</strong>: usando il quarzo come riferimento (Δn = 0.009, colore atteso grigio-bianco di I ordine a 30 µm)</li>
+  </ul>
+
+  <div class="box info">
+    <h4>Spessore standard</h4>
+    <p>Le sezioni sottili vengono convenzionalmente preparate a <strong>30 µm</strong> di spessore. A questa spessore il quarzo mostra colori grigi di I ordine (Γ ≈ 270 nm), usato come controllo di qualità della sezione.</p>
+  </div>
+
+  <h3 class="sub" id="orientazione">4.3 Effetto dell'orientazione della sezione</h3>
+  <p>La birifrangenza osservata in una sezione dipende dall'orientazione del cristallo rispetto al taglio. Non sempre si osserva la birifrangenza massima Δn:</p>
+
+  <ul>
+    <li><strong>Uniassici — sezione parallela all'asse ottico</strong> (φ = 90°): si vede la birifrangenza massima Δn = |n<sub>e</sub> − n<sub>o</sub>|</li>
+    <li><strong>Uniassici — sezione perpendicolare all'asse ottico</strong> (φ = 0°): il cristallo è apparentemente isotropo, campo sempre buio</li>
+    <li><strong>Orientazioni intermedie</strong>: Δn<sub>app</sub> = Δn · sin(φ), con φ angolo tra la sezione e l'asse ottico</li>
+  </ul>
+
+  <p>Questo spiega perché grani dello stesso minerale in una sezione sottile reale mostrano colori di interferenza diversi: dipende dall'orientazione casuale di ciascun granulo.</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="conoscopica">
+  <h2 class="sec">5. Luce conoscopica <a class="backtop" href="#">↑ indice</a></h2>
+
+  <p>In luce <strong>conoscopica</strong> si inserisce la lente di Bertrand e si usa il condensatore a forte apertura numerica. Il campione è illuminato da un fascio <em>conico</em> — raggi che attraversano il cristallo con inclinazioni diverse simultaneamente. La lente di Bertrand proietta nel piano focale posteriore dell'obiettivo, dove si forma la <em>figura di interferenza</em>.</p>
+
+  <p>La figura di interferenza è una "mappa" dell'intera indicatrice ottica: ogni punto della figura corrisponde a una direzione di propagazione diversa attraverso il cristallo. Si distinguono due elementi:</p>
+  <ul>
+    <li><strong>Isocromi</strong> — linee di uguale ritardo (uguale colore di interferenza); a ritardo crescente allontanandosi dal centro</li>
+    <li><strong>Isogiure</strong> — zone scure che indicano le posizioni di estinzione per ciascuna direzione; la loro forma distingue uniassici da biassici</li>
+  </ul>
+
+  <h3 class="sub" id="figura-uni">5.1 Figura di interferenza uniassica</h3>
+  <p>La figura di un cristallo uniassico (<em>figura di Biot-Fouquet</em>) vista con sezione perpendicolare all'asse ottico è caratterizzata da:</p>
+  <ul>
+    <li><strong>Isocromi circolari</strong> — concentricamente attorno al centro (melatopo), dove l'asse ottico emerge perpendicolarmente</li>
+    <li><strong>Isogiure a croce nera</strong> — i bracci della croce sono paralleli ai nicol (E-W e N-S); il centro della croce coincide con il melatopo</li>
+  </ul>
+
+  <p>Ruotando il piatto, la croce <strong>rimane fissa</strong> se la sezione è esattamente perpendicolare all'asse ottico. Se la sezione è obliqua il melatopo è decentrato e descrive un cerchio attorno al centro del campo al ruotare del piatto.</p>
+
+  <h3 class="sub" id="figura-bi">5.2 Figura di interferenza biassica</h3>
+  <p>La figura di un cristallo biassico vista con sezione perpendicolare alla bisettrice acuta (Bxa) mostra:</p>
+  <ul>
+    <li><strong>Isocromi ovalizzate</strong> — attorno ai due melatopi (punti dove i due assi ottici emergono); la distanza tra i melatopi è proporzionale all'angolo 2V</li>
+    <li><strong>Isogiure iperboliche</strong> — due rami di iperbole che connettono le zone scure attorno ai due melatopi</li>
+  </ul>
+
+  <p>Ruotando il piatto, le isogiure si aprono e si chiudono:</p>
+  <ul>
+    <li><strong>A 0° e 90°</strong>: le isogiure si avvicinano (tendono a formare una croce)</li>
+    <li><strong>A 45°</strong>: le isogiure si aprono al massimo, i due rami si allontanano — in questa posizione i melatopi sono più facilmente visibili e si misura 2V</li>
+  </ul>
+
+  <div class="box info">
+    <h4>Stima di 2V dalla figura conoscopica</h4>
+    <p>Quando i due melatopi sono visibili nel campo, la loro distanza angolare è proporzionale a 2V. Con obiettivo 40×, un melatopo al bordo del campo corrisponde approssimativamente a 2V ≈ 45°. Con obiettivo 20×, a 2V ≈ 70°. Se entrambi i melatopi escono dal campo si stima 2V &gt; 80–90°.</p>
+  </div>
+
+  <h3 class="sub" id="centratura">5.3 Centratura della figura</h3>
+  <p>Per ottenere una figura centrata (melatopo al centro del campo per gli uniassici; Bxa al centro per i biassici) occorre scegliere grani con l'orientazione adatta:</p>
+  <ul>
+    <li><strong>Uniassici</strong>: scegliere grani che mostrano il colore di interferenza più basso (sezione quasi perpendicolare all'asse ottico)</li>
+    <li><strong>Biassici — sezione ⊥ Bxa</strong>: scegliere grani con colore basso e figura simmetrica; i due melatopi appaiono equidistanti dal centro</li>
+    <li><strong>Biassici — sezione ⊥ OA</strong>: un solo melatopo al centro, utile per segno ottico preciso</li>
+  </ul>
+</section>
+
+<!-- ================================================================ -->
+<section id="lamina">
+  <h2 class="sec">6. Lamina compensatrice e segno ottico <a class="backtop" href="#">↑ indice</a></h2>
+
+  <p>La <strong>lamina compensatrice</strong> è una lastra di materiale birifrangente a ritardo noto, inserita a 45° rispetto ai nicol (direzione NE-SW). L'asse lento della lamina è orientato NE-SW per convenzione. Le lamine più usate sono:</p>
+
+  <table>
+    <tr><th>Lamina</th><th>Ritardo</th><th>Materiale tipico</th><th>Uso principale</th></tr>
+    <tr><td>Lamina λ (rosso I ordine)</td><td>550 nm</td><td>Gesso</td><td>Determinazione segno ottico</td></tr>
+    <tr><td>Lamina λ/4</td><td>147 nm</td><td>Mica</td><td>Misure precise su minerali I ordine</td></tr>
+    <tr><td>Quarzo cuneare</td><td>0–3000 nm variabile</td><td>Quarzo</td><td>Misura ritardo precisa</td></tr>
+  </table>
+
+  <h3 class="sub">6.1 Principio di addizione e sottrazione</h3>
+  <p>Quando la lamina è inserita, il ritardo totale osservato è la <strong>somma algebrica</strong> del ritardo del minerale e di quello della lamina:</p>
+  <ul>
+    <li><strong>Addizione</strong>: l'asse lento del minerale è parallelo all'asse lento della lamina (entrambi NE-SW) → i ritardi si sommano → il colore sale di ordine</li>
+    <li><strong>Sottrazione</strong>: l'asse lento del minerale è perpendicolare all'asse lento della lamina (NW-SE) → i ritardi si sottraggono → il colore scende di ordine</li>
+  </ul>
+
+  <h3 class="sub">6.2 Determinazione del segno ottico in luce conoscopica</h3>
+  <p>Con la <strong>lamina λ (550 nm)</strong> inserita in luce conoscopica, il viola di I ordine attorno ai melatopi si trasforma:</p>
+
+  <h4 class="subsub">Cristalli uniassici</h4>
+  <p>Nei quattro quadranti attorno alla croce nera:</p>
+  <ul>
+    <li>Quadranti NE e SW (asse lento lamina): se diventano <strong>blu</strong> (II ordine) → <strong>addizione</strong> → l'asse lento del minerale è NE-SW → segno <strong>positivo (+)</strong></li>
+    <li>Quadranti NE e SW: se diventano <strong>giallo</strong> (I ordine inferiore) → <strong>sottrazione</strong> → segno <strong>negativo (−)</strong></li>
+  </ul>
+
+  <div class="box key">
+    <h4>Regola mnemonica per uniassici</h4>
+    <p><strong>"Blu NE → positivo"</strong>: se nei quadranti NE-SW il colore sale verso il blu quando si inserisce la lamina λ, il minerale è uniassico positivo.</p>
+  </div>
+
+  <h4 class="subsub">Cristalli biassici</h4>
+  <p>Con figura di Bxa (piatto a 45°, isogiure aperte al massimo):</p>
+  <ul>
+    <li>Se la zona tra i due melatopi (concavità delle isogiure) diventa <strong>blu</strong> → segno <strong>positivo (+)</strong></li>
+    <li>Se la zona tra i due melatopi diventa <strong>gialla</strong> → segno <strong>negativo (−)</strong></li>
+  </ul>
+
+  <p>Il ragionamento fisico è lo stesso: nella concavità delle isogiure l'asse lento del minerale è parallelo o perpendicolare all'asse lento della lamina a seconda del segno ottico.</p>
+
+  <h3 class="sub">6.3 Determinazione del segno ottico in luce ortoscopica</h3>
+  <p>Su un singolo granulo a 45° dall'estinzione, con la lamina inserita:</p>
+  <ul>
+    <li>Se il colore <strong>sale</strong> di ordine → addizione → asse lento del granulo è NE-SW</li>
+    <li>Se il colore <strong>scende</strong> di ordine → sottrazione → asse lento è NW-SE</li>
+  </ul>
+  <p>Conoscendo l'orientazione dell'asse lento rispetto alla cristallografia del minerale si ricava il segno ottico — ma questo richiede una sezione di orientazione nota, quindi è meno affidabile della determinazione conoscopica.</p>
+</section>
+
+<!-- ================================================================ -->
+<section id="minerali">
+  <h2 class="sec">7. Proprietà ottiche dei minerali comuni <a class="backtop" href="#">↑ indice</a></h2>
+
+  <table>
+    <tr>
+      <th>Minerale</th>
+      <th>Sistema</th>
+      <th>Tipo ottico</th>
+      <th>Δn</th>
+      <th>2V</th>
+      <th>Colori a 30 µm</th>
+      <th>Note diagnostiche</th>
+    </tr>
+    <tr>
+      <td>Quarzo</td>
+      <td>Trigonale</td>
+      <td>Uniassico +</td>
+      <td>0.009</td>
+      <td>—</td>
+      <td>Grigio–bianco I ord.</td>
+      <td>Estinzione ondulante se deformato</td>
+    </tr>
+    <tr>
+      <td>Calcite</td>
+      <td>Trigonale</td>
+      <td>Uniassico −</td>
+      <td>0.172</td>
+      <td>—</td>
+      <td>Bianco perla (&gt;III ord.)</td>
+      <td>Birifrangenza elevatissima, colori "lattei"</td>
+    </tr>
+    <tr>
+      <td>Muscovite</td>
+      <td>Monoclino</td>
+      <td>Biassico −</td>
+      <td>0.040</td>
+      <td>~40°</td>
+      <td>Giallo–arancio II ord.</td>
+      <td>Estinzione quasi parallela, sfaldatura perfetta</td>
+    </tr>
+    <tr>
+      <td>Biotite</td>
+      <td>Monoclino</td>
+      <td>Biassico −</td>
+      <td>0.050</td>
+      <td>~25°</td>
+      <td>III ord. (mascherato)</td>
+      <td>Forte pleocroismo bruno; assorbimento spesso nasconde colori</td>
+    </tr>
+    <tr>
+      <td>Olivina</td>
+      <td>Ortorombico</td>
+      <td>Biassico +</td>
+      <td>0.035</td>
+      <td>~82°</td>
+      <td>Giallo–rosso I–II ord.</td>
+      <td>Colori vivaci, spesso alterata in iddingsite/serpentino</td>
+    </tr>
+    <tr>
+      <td>Ortopirosseno</td>
+      <td>Ortorombico</td>
+      <td>Biassico +</td>
+      <td>0.015</td>
+      <td>~60°</td>
+      <td>Grigio–giallo I ord.</td>
+      <td>Estinzione parallela, clivaggio a 90°, pleocroismo debole</td>
+    </tr>
+    <tr>
+      <td>Clinopirosseno (Aug.)</td>
+      <td>Monoclino</td>
+      <td>Biassico +</td>
+      <td>0.025</td>
+      <td>~58°</td>
+      <td>Giallo–verde I–II ord.</td>
+      <td>Estinzione obliqua ~40°, clivaggio a 87°</td>
+    </tr>
+    <tr>
+      <td>Plagioclasio</td>
+      <td>Triclino</td>
+      <td>Biassico −</td>
+      <td>0.012</td>
+      <td>~80°</td>
+      <td>Grigio I ord.</td>
+      <td>Geminazioni polisinteti; 2V varia con composizione</td>
+    </tr>
+    <tr>
+      <td>K-feldspato</td>
+      <td>Monoclino/Triclino</td>
+      <td>Biassico −</td>
+      <td>0.006</td>
+      <td>~60°</td>
+      <td>Grigio I ord. basso</td>
+      <td>Geminazione Carlsbad; pertiti visibili</td>
+    </tr>
+    <tr>
+      <td>Sillimanite</td>
+      <td>Ortorombico</td>
+      <td>Biassico +</td>
+      <td>0.020</td>
+      <td>~30°</td>
+      <td>Bianco–giallo I–II ord.</td>
+      <td>Abito fibroso (fibrolite) o prismatico; estinzione parallela</td>
+    </tr>
+    <tr>
+      <td>Andalusite</td>
+      <td>Ortorombico</td>
+      <td>Biassico −</td>
+      <td>0.010</td>
+      <td>~85°</td>
+      <td>Grigio I ord.</td>
+      <td>Pleocroismo rosa-verde; inclusioni a croce (chiasostolite)</td>
+    </tr>
+    <tr>
+      <td>Cianite</td>
+      <td>Triclino</td>
+      <td>Biassico −</td>
+      <td>0.016</td>
+      <td>~82°</td>
+      <td>Giallo I ord.</td>
+      <td>Durezza anisotropa 4.5//c e 6.5⊥c; estinzione obliqua</td>
+    </tr>
+  </table>
+
+  <div class="box info">
+    <h4>Come usare questa tabella</h4>
+    <p>I valori di Δn e 2V sono valori medi; possono variare con la composizione (es. plagioclasi, olivine). I colori a 30 µm sono per sezioni in orientazione ottimale (massima birifrangenza). In pratica si osserva spesso una birifrangenza apparente inferiore.</p>
+  </div>
+</section>
+
+<footer>
+  <p>Manuale di Ottica Cristallografica &mdash; Giovanni Montini &mdash; con l'assistenza di Claude (Anthropic)</p>
+</footer>
+
+</div>
+</body>
+</html>
