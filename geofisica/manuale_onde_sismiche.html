@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di Sismologia — Onde Sismiche e Struttura della Terra</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#3090f0;--accent2:#a8ff78;--accent3:#ffcc44;--accent4:#ff6b35;--accent5:#c060f0;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent2);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ol.steps{counter-reset:step;list-style:none;margin:1rem 0}
+ol.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+ol.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.blue{border-color:rgba(48,144,240,.3);background:rgba(48,144,240,.04)}
+.highlight.green{border-color:rgba(168,255,120,.3);background:rgba(168,255,120,.04)}
+.highlight.yellow{border-color:rgba(255,204,68,.3);background:rgba(255,204,68,.04)}
+.highlight.orange{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.blue .hl-title{color:var(--accent)}
+.highlight.green .hl-title{color:var(--accent2)}
+.highlight.yellow .hl-title{color:var(--accent3)}
+.highlight.orange .hl-title{color:var(--accent4)}
+.highlight.purple .hl-title{color:var(--accent5)}
+.highlight p{margin:0;font-size:.9rem}
+.formula{font-family:var(--mono);font-size:.82rem;color:var(--accent);background:var(--surface2);border:1px solid var(--border2);padding:.45rem 1rem;border-radius:3px;margin:.6rem 0;display:inline-block}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Manuale · Sismologia</p>
+  </div>
+  <ul>
+    <li class="sec-label">Fondamenti</li>
+    <li><a href="#intro">1. Onde Elastiche</a></li>
+    <li><a href="#parametri" class="sub">1.1 Parametri fondamentali</a></li>
+    <li><a href="#elasticita" class="sub">1.2 Costanti elastiche</a></li>
+    <li class="sec-label">Tipi di Onde</li>
+    <li><a href="#tipi">2. Onde P, S, L, R</a></li>
+    <li><a href="#onde-p" class="sub">2.1 Onde P (primarie)</a></li>
+    <li><a href="#onde-s" class="sub">2.2 Onde S (secondarie)</a></li>
+    <li><a href="#onde-sup" class="sub">2.3 Onde di superficie</a></li>
+    <li class="sec-label">Propagazione</li>
+    <li><a href="#propag">3. Propagazione nella Terra</a></li>
+    <li><a href="#snell" class="sub">3.1 Legge di Snell</a></li>
+    <li><a href="#raggi" class="sub">3.2 Raggi curvilinei</a></li>
+    <li><a href="#discontin" class="sub">3.3 Discontinuità principali</a></li>
+    <li class="sec-label">Struttura Interna</li>
+    <li><a href="#struttura">4. Struttura della Terra</a></li>
+    <li><a href="#prem" class="sub">4.1 Profilo PREM</a></li>
+    <li><a href="#zona-ombra" class="sub">4.2 Zona d'ombra</a></li>
+    <li><a href="#nucleo" class="sub">4.3 Nucleo esterno e interno</a></li>
+    <li class="sec-label">Fasi Sismiche</li>
+    <li><a href="#fasi">5. PKP, SKS e Fasi Complesse</a></li>
+    <li><a href="#nomencl" class="sub">5.1 Nomenclatura</a></li>
+    <li><a href="#anisotrop" class="sub">5.2 Anisotropia e splitting</a></li>
+    <li class="sec-label">Sismogramma</li>
+    <li><a href="#sismogramma">6. Sismogramma e Localizzazione</a></li>
+    <li><a href="#lettura" class="sub">6.1 Lettura del sismogramma</a></li>
+    <li><a href="#wadati" class="sub">6.2 Metodo di Wadati</a></li>
+    <li><a href="#localiz" class="sub">6.3 Localizzazione ipocentrale</a></li>
+    <li class="sec-label">Magnitudo</li>
+    <li><a href="#magnitudo">7. Magnitudo e Intensità</a></li>
+    <li><a href="#scale-m" class="sub">7.1 Scale di magnitudo</a></li>
+    <li><a href="#mercalli" class="sub">7.2 Scala Mercalli Modificata</a></li>
+    <li><a href="#gr" class="sub">7.3 Relazione Gutenberg-Richter</a></li>
+    <li><a href="#biblio">8. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Geofisica</div>
+  <h1>Onde Sismiche e Struttura Interna della Terra</h1>
+  <p class="subtitle">Fondamenti di sismologia: propagazione delle onde elastiche, profilo di velocità PREM, fasi sismiche, sismogramma e scala delle magnitudo</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- ══════════ 1. INTRO ══════════ -->
+<section id="intro">
+  <span class="section-num">01</span>
+  <h2>Onde Elastiche e Parametri Fondamentali</h2>
+  <div class="section-line"></div>
+
+  <p>Un <strong>terremoto</strong> è il rilascio improvviso di energia elastica accumulata per deformazione della crosta o del mantello lungo una faglia o in una zona di subduzione. L'energia si propaga sotto forma di <strong>onde elastiche</strong> che attraversano la Terra in tutte le direzioni, registrate dai sismografi a grandi distanze e usate per dedurre la struttura interna del pianeta.</p>
+
+  <p>La sismologia è la disciplina che studia queste onde. Oltre all'applicazione diretta alla valutazione della pericolosità sismica, le onde sismiche sono il principale strumento con cui conosciamo la struttura interna della Terra: la distinzione crosta-mantello-nucleo, le discontinuità di fase, lo stato fisico del nucleo esterno — tutta questa conoscenza deriva dall'analisi dei tempi di percorso e delle ampiezze delle onde sismiche registrate globalmente.</p>
+
+  <section id="parametri">
+    <h3>1.1 Parametri fondamentali delle onde</h3>
+    <p>Un'onda elastica è una perturbazione che si propaga in un mezzo trasferendo energia senza trasferire materia. I parametri fondamentali che la descrivono sono:</p>
+
+    <dl class="deflist">
+      <dt>Lunghezza d'onda (λ)</dt>
+      <dd>Distanza tra due punti adiacenti in fase (es. cresta-cresta o nodo-nodo). Per le onde sismiche varia da ~1 m (onde locali ad alta frequenza) a ~1000 km (modi normali della Terra). Unità: m, km.</dd>
+      <dt>Periodo (T) e frequenza (f)</dt>
+      <dd>T è il tempo di un ciclo completo; f = 1/T è il numero di cicli al secondo. Le onde sismiche spaziano da ~0.001 Hz (modi propri della Terra) a ~100 Hz (microtremori, prospezioni). I terremoti tettonici dominanti: 0.01–10 Hz. Unità: s, Hz.</dd>
+      <dt>Velocità di fase (v)</dt>
+      <dd>Velocità con cui si propaga una cresta (o un nodo) dell'onda: v = λ·f = λ/T. Nelle onde sismiche di volume, v dipende dalle proprietà elastiche e dalla densità del mezzo. Unità: km/s.</dd>
+      <dt>Velocità di gruppo (U)</dt>
+      <dd>Velocità con cui si propaga il <em>pacchetto d'onda</em> (l'energia). Coincide con la velocità di fase nei mezzi non dispersivi; differisce nelle onde di superficie, che sono dispersive (v dipende da f). La dispersione delle onde di Love e Rayleigh è la principale fonte di informazione sullo spessore della crosta.</dd>
+      <dt>Ampiezza (A)</dt>
+      <dd>Massimo spostamento delle particelle rispetto alla posizione di equilibrio. L'ampiezza è proporzionale all'energia dell'onda (E ∝ A²) e decresce con la distanza per geometrical spreading e per anelasticità.</dd>
+    </dl>
+
+    <p>La relazione fondamentale che lega tutti questi parametri è:</p>
+    <div class="formula">v = λ · f = λ / T</div>
+  </section>
+
+  <section id="elasticita">
+    <h3>1.2 Costanti elastiche e velocità sismiche</h3>
+    <p>La velocità di propagazione delle onde sismiche dipende dalle <strong>proprietà elastiche</strong> del mezzo e dalla sua densità. Le costanti elastiche fondamentali sono:</p>
+
+    <dl class="deflist">
+      <dt>Modulo di incompressibilità (bulk modulus, K)</dt>
+      <dd>Resistenza del mezzo alla compressione uniforme: K = −V · (dP/dV). Misura quanto è difficile comprimere il mezzo senza cambiarne la forma. Aumenta con la profondità nella Terra. Unità: Pa (pascal).</dd>
+      <dt>Modulo di rigidità (shear modulus, G o μ)</dt>
+      <dd>Resistenza del mezzo alla deformazione di taglio senza variazione di volume. G = 0 nei liquidi (che non resistono al taglio): questa è la ragione per cui le onde S non si propagano nei liquidi. Aumenta con la profondità nel mantello solido, è nullo nel nucleo esterno liquido. Unità: Pa.</dd>
+      <dt>Costanti di Lamé (λ_L, μ)</dt>
+      <dd>Parametri alternativi usati nella teoria dell'elasticità: μ = G (modulo di rigidità); λ_L = K − 2G/3 (primo parametro di Lamé). Permettono di esprimere velocità P e S in forma compatta.</dd>
+    </dl>
+
+    <p>Le velocità delle onde P e S in funzione delle costanti elastiche e della densità ρ sono:</p>
+
+    <div class="formula">V_P = √[(K + 4G/3) / ρ]</div>
+    <div class="formula">V_S = √[G / ρ]</div>
+
+    <p>Poiché G=0 nei liquidi, V_S=0 nei fluidi. Poiché K &gt; 0 sempre, V_P &gt; 0 sia nei solidi che nei liquidi. Il rapporto V_P/V_S = √[(K/G + 4/3)] dipende dal rapporto di Poisson σ = (3K−2G)/(6K+2G): per le rocce crostali tipiche σ ≈ 0.25 e V_P/V_S ≈ 1.73 (√3). Questo rapporto è diagnostico del tipo di roccia e dello stato di saturazione di fluidi.</p>
+
+    <div class="highlight blue">
+      <div class="hl-title">V_P/V_S come indicatore petrofisico</div>
+      <p>Il rapporto V_P/V_S (o equivalentemente il rapporto di Poisson σ) è diagnostico dello stato fisico e della composizione della roccia. Valori tipici: granito σ≈0.24; basalto σ≈0.28; serpentinite σ≈0.38 (alta, ricca in fluidi); roccia completamente satura σ→0.5 (liquido puro, teorico). Nel nucleo esterno liquido G=0 → σ=0.5. L'analisi tomografica di V_P/V_S è usata per individuare zone di fusione parziale sotto i vulcani.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 2. TIPI DI ONDE ══════════ -->
+<section id="tipi">
+  <span class="section-num">02</span>
+  <h2>Tipi di Onde Sismiche</h2>
+  <div class="section-line"></div>
+
+  <p>Le onde sismiche si dividono in due grandi categorie: le <strong>onde di volume</strong> (body waves), che si propagano attraverso l'interno della Terra, e le <strong>onde di superficie</strong> (surface waves), che si propagano lungo la superficie terrestre e decadono in profondità.</p>
+
+  <section id="onde-p">
+    <h3>2.1 Onde P — Onde Primarie (Compressione)</h3>
+    <p>Le <strong>onde P</strong> (o onde primarie, o onde di compressione, o onde longitudinali) sono le più veloci: arrivano per prime al sismografo, da cui il nome. Il moto delle particelle è <em>parallelo</em> alla direzione di propagazione: la roccia si comprime e si espande alternativamente nella direzione del raggio sismico, come la molla di un giocattolo compresso e rilasciato.</p>
+
+    <p>Velocità tipiche: crosta continentale superiore 5.5–6.2 km/s; crosta inferiore 6.5–7.0 km/s; Moho ~8.1 km/s nel mantello superiore; mantello superiore 8.0–8.5 km/s; mantello inferiore fino a ~13.7 km/s; nucleo esterno 8.0–10.3 km/s (diminuzione brusca alla CMB per cambiamento di rigidità); nucleo interno ~11.2 km/s. Le onde P si propagano in <strong>tutti i mezzi</strong>: solidi, liquidi e gas.</p>
+
+    <p>La <strong>conversione P→S e S→P</strong> avviene alle interfacce: un'onda P incidente su una discontinuità produce onde P e S riflesse e trasmesse. Le ampiezze relative dipendono dall'angolo di incidenza e dalle proprietà elastiche dei due mezzi (coefficienti di riflessione di Zoeppritz, 1919).</p>
+  </section>
+
+  <section id="onde-s">
+    <h3>2.2 Onde S — Onde Secondarie (Taglio)</h3>
+    <p>Le <strong>onde S</strong> (o onde secondarie, o onde di taglio, o onde trasversali) arrivano dopo le P. Il moto delle particelle è <em>perpendicolare</em> alla direzione di propagazione: la roccia subisce deformazioni di taglio nel piano trasversale al raggio sismico. Poiché i liquidi non resistono al taglio (G=0), le onde S <strong>non si propagano nei fluidi</strong>: questa proprietà è la prova diretta che il nucleo esterno è liquido.</p>
+
+    <p>Velocità tipiche: crosta continentale 3.2–3.7 km/s; mantello superiore ~4.5 km/s; mantello inferiore fino a ~7.3 km/s; nucleo interno ~3.6 km/s (solido). Le onde S sono più lente delle P di un fattore V_P/V_S ≈ 1.73 nella crosta.</p>
+
+    <p>Le onde S si dividono per direzione del moto: <strong>SH</strong> (moto orizzontale, nel piano della superficie) e <strong>SV</strong> (moto nel piano verticale contenente il raggio). Questa distinzione è importante perché SH e SV si comportano diversamente alle interfacce e generano diversi tipi di onde di superficie.</p>
+  </section>
+
+  <section id="onde-sup">
+    <h3>2.3 Onde di superficie: Love e Rayleigh</h3>
+    <p>Le onde di superficie si propagano lungo la superficie della Terra. Sono più lente delle onde di volume ma hanno ampiezze molto più grandi a grandi distanze (decadono come r⁻¹ invece di r⁻² delle onde di volume per spreading geometrico). Sono le onde che causano i maggiori danni nei terremoti a grande distanza.</p>
+
+    <dl class="deflist">
+      <dt>Onde di Love (A.E.H. Love, 1911)</dt>
+      <dd>Moto delle particelle orizzontale, trasversale alla direzione di propagazione (SH). Si generano per interferenza costruttiva delle onde SH riflesse nella crosta. Richiedono una struttura a strati con velocità che aumenta con la profondità (waveguide crustal). Sono dispersive: le onde di lungo periodo campionano il mantello superiore (veloci), quelle di corto periodo campionano solo la crosta (lente). Velocità tipica: 3.0–5.0 km/s.</dd>
+      <dt>Onde di Rayleigh (Lord Rayleigh, 1885)</dt>
+      <dd>Moto delle particelle ellittico retrograde nel piano verticale contenente la direzione di propagazione: combinazione di componente P e SV. Si propagano anche in un semispazio omogeneo (non richiedono strati). Sono dispersive. Velocità ≈ 0.92·V_S a corto periodo. Il moto retrogrado (ellisse percorsa in senso antiorario rispetto alla direzione di propagazione) è diagnostico: i sismografi a tre componenti lo misurano direttamente.</dd>
+    </dl>
+
+    <p>La <strong>dispersione</strong> delle onde di superficie (dipendenza della velocità dalla frequenza/periodo) è lo strumento principale per determinare la struttura della crosta e del mantello superiore in sismologia regionale e globale. Analizzando come V_gruppo varia con il periodo si invertono i profili V_S(z) con tecniche di inversione (es. metodo di Herrmann &amp; Ammon).</p>
+
+    <table>
+      <tr><th>Tipo</th><th>Moto particelle</th><th>Velocità tipica</th><th>Propagazione</th></tr>
+      <tr><td><strong>P</strong></td><td>Longitudinale (∥ raggio)</td><td>5.5–13.7 km/s</td><td>Tutti i mezzi</td></tr>
+      <tr><td><strong>S</strong></td><td>Trasversale (⊥ raggio)</td><td>3.2–7.3 km/s</td><td>Solo solidi</td></tr>
+      <tr><td><strong>Love</strong></td><td>SH, orizzontale trasverso</td><td>3.0–5.0 km/s</td><td>Superficie, strati</td></tr>
+      <tr><td><strong>Rayleigh</strong></td><td>Ellittico retrogrado (P+SV)</td><td>~0.92 V_S</td><td>Superficie, semispazio</td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- ══════════ 3. PROPAGAZIONE ══════════ -->
+<section id="propag">
+  <span class="section-num">03</span>
+  <h2>Propagazione delle Onde nella Terra</h2>
+  <div class="section-line"></div>
+
+  <section id="snell">
+    <h3>3.1 Rifrazione e riflessione: legge di Snell</h3>
+    <p>Quando un'onda sismica raggiunge un'interfaccia tra due mezzi con velocità diverse, parte dell'energia è <strong>riflessa</strong> (torna nel mezzo originale) e parte è <strong>rifratta</strong> (trasmessa nel secondo mezzo). L'angolo di rifrazione è dato dalla <strong>legge di Snell</strong>:</p>
+
+    <div class="formula">sin(i₁)/V₁ = sin(i₂)/V₂ = p</div>
+
+    <p>dove i₁ è l'angolo di incidenza, i₂ è l'angolo di rifrazione, V₁ e V₂ sono le velocità nei due mezzi, e <strong>p</strong> è il <em>parametro del raggio</em> (ray parameter), invariante lungo tutto il percorso del raggio in un mezzo stratificato orizzontalmente. Il parametro del raggio p = sin(i)/V = 1/V_apparente ha le dimensioni di s/km.</p>
+
+    <p>Quando V₂ &gt; V₁, l'onda si rifrange lontano dalla normale (i₂ &gt; i₁). Esiste un <strong>angolo critico</strong> i_c = arcsin(V₁/V₂) per cui l'onda rifratta viaggia orizzontalmente lungo l'interfaccia (onde testa, head waves): queste onde, risalendo poi alla superficie, arrivano prima delle onde dirette a distanze sufficientemente grandi. Questo principio è alla base della <strong>sismica a rifrazione</strong> usata per determinare lo spessore della crosta.</p>
+
+    <p>Quando V₂ &lt; V₁ (inversione di velocità) o quando i₁ &gt; i_c, si ha <strong>riflessione totale</strong>: tutta l'energia viene riflessa. Una zona a bassa velocità nel mantello (Low Velocity Zone, LVZ, asteno­sfera) crea una zona d'ombra da rifrazione e intrappola le onde per riflessione multipla interna.</p>
+  </section>
+
+  <section id="raggi">
+    <h3>3.2 Raggi curvilinei nel mantello</h3>
+    <p>In un mezzo in cui la velocità varia continuamente con la profondità (come il mantello, dove V_P aumenta da ~8 km/s a ~13.7 km/s tra 30 e 2900 km), i raggi sismici <strong>curvano verso le zone a bassa velocità</strong>. Il principio di Fermat stabilisce che i raggi seguono il percorso di <em>minimo tempo</em>, che corrisponde geometricamente a raggi curvi convessi verso la superficie quando la velocità aumenta con la profondità.</p>
+
+    <p>Per un mezzo a simmetria sferica (come la Terra), il parametro del raggio p = r·sin(i)/V(r) è costante lungo un dato raggio (equazione di Bouguer, analoga alla legge di Snell in coordinate cartesiane). Il punto di massima profondità (punto di svolta, turning point) del raggio è raggiunto quando i = 90°: r_turn = p · V(r_turn).</p>
+
+    <p>La relazione tra distanza epicentrale Δ (in gradi) e tempo di percorso t definisce le <strong>curve di tempo-distanza</strong> (travel time curves o T-Δ curves), fondamentali per la sismologia globale. Per ogni tipo di onda (P, S, PKP, SKS, ecc.) esiste una curva T-Δ caratteristica, tabulata nei modelli di Jeffreys &amp; Bullen (1940) e successivamente nel modello IASP91 e PREM.</p>
+
+    <div class="highlight green">
+      <div class="hl-title">Principio di Fermat e raggi sismici</div>
+      <p>Il principio di Fermat afferma che un raggio sismico segue il percorso per cui il tempo di percorso è stazionario (minimo, massimo o punto di sella). In pratica: i raggi curvano verso le zone a bassa velocità (come la luce si rifrange verso il mezzo più denso nell'ottica). Questo spiega perché i raggi sismici nel mantello descrivono archi curvi convessi verso la superficie, tornando alla superficie a distanze angolari determinate dalla profondità del punto di svolta.</p>
+    </div>
+  </section>
+
+  <section id="discontin">
+    <h3>3.3 Le principali discontinuità sismiche</h3>
+    <p>All'interno della Terra esistono numerose <strong>discontinuità sismiche</strong>: superfici dove la velocità delle onde cambia bruscamente, producendo riflessioni e rifrazioni identificabili nei sismogrammi. Le principali sono:</p>
+
+    <table>
+      <tr><th>Discontinuità</th><th>Profondità</th><th>Natura</th><th>Scoperta</th></tr>
+      <tr><td><strong>Moho</strong></td><td>5–10 km (oceani), 25–70 km (continenti)</td><td>Crosta/Mantello: aumento brusco di V_P da ~7 a ~8 km/s</td><td>Mohorovičić, 1909</td></tr>
+      <tr><td><strong>LVZ asteno­sfera</strong></td><td>~80–220 km</td><td>Zona a bassa velocità per fusione parziale (~1%); V_S scende da ~4.5 a ~4.3 km/s</td><td>Gutenberg, 1926</td></tr>
+      <tr><td><strong>410 km</strong></td><td>~410 km</td><td>Transizione di fase olivina → wadsleyite; aumento V_P di ~4%</td><td>tabulata anni '30</td></tr>
+      <tr><td><strong>520 km</strong></td><td>~520 km</td><td>Transizione wadsleyite → ringwoodite (meno netta)</td><td>—</td></tr>
+      <tr><td><strong>660 km</strong></td><td>~660 km</td><td>Transizione ringwoodite → perovskite + periclasio; aumento V_P di ~7%. Limite mantello superiore/inferiore</td><td>—</td></tr>
+      <tr><td><strong>CMB</strong></td><td>~2891 km</td><td>Core-Mantle Boundary: V_P scende da ~13.7 a ~8.0 km/s (mantello solido → nucleo liquido); V_S → 0</td><td>Oldham, 1906</td></tr>
+      <tr><td><strong>D''</strong></td><td>~2600–2891 km</td><td>Strato anomalo sopra la CMB; zona di interazione nucleo-mantello, plume mantellici</td><td>Bullen, 1949</td></tr>
+      <tr><td><strong>ICB</strong></td><td>~5150 km</td><td>Inner Core Boundary: nucleo esterno liquido → nucleo interno solido; riappare V_S ~3.6 km/s</td><td>Lehmann, 1936</td></tr>
+    </table>
+
+    <p>Le discontinuità a 410 e 660 km delimitano la <strong>zona di transizione del mantello</strong>. La 410 km è esotermica (calore rilasciato) e si approfondisce nelle zone fredde (subduzione); la 660 km è endotermica (assorbe calore) e si innalza nelle zone fredde — questo comportamento contrapposto è una delle ragioni per cui la convezione mantellica può essere ostacolata o stratificata in corrispondenza della 660 km.</p>
+  </section>
+</section>
+
+<!-- ══════════ 4. STRUTTURA ══════════ -->
+<section id="struttura">
+  <span class="section-num">04</span>
+  <h2>Struttura Interna della Terra</h2>
+  <div class="section-line"></div>
+
+  <section id="prem">
+    <h3>4.1 Il modello PREM</h3>
+    <p>Il <strong>PREM</strong> (Preliminary Reference Earth Model, Dziewoński &amp; Anderson, 1981) è il modello di riferimento globale per la struttura interna della Terra, costruito combinando dati di velocità sismica, modi propri della Terra (free oscillations) e dati geodetici (momento di inerzia). Fornisce profili radiali di V_P, V_S, densità ρ, pressione P e parametri elastici K e G in funzione del raggio:</p>
+
+    <table>
+      <tr><th>Strato</th><th>Profondità (km)</th><th>V_P (km/s)</th><th>V_S (km/s)</th><th>ρ (g/cm³)</th></tr>
+      <tr><td><strong>Crosta superiore</strong></td><td>0–15</td><td>5.8–6.5</td><td>3.2–3.7</td><td>2.6–2.9</td></tr>
+      <tr><td><strong>Crosta inferiore</strong></td><td>15–35</td><td>6.5–7.1</td><td>3.6–3.9</td><td>2.9–3.0</td></tr>
+      <tr><td><strong>Mantello sup. (lid)</strong></td><td>35–80</td><td>8.0–8.2</td><td>4.4–4.5</td><td>3.37</td></tr>
+      <tr><td><strong>Astenosfera (LVZ)</strong></td><td>80–220</td><td>7.9–8.0</td><td>4.3–4.4</td><td>3.37–3.44</td></tr>
+      <tr><td><strong>Mantello sup.</strong></td><td>220–410</td><td>8.6–9.1</td><td>4.6–4.9</td><td>3.44–3.54</td></tr>
+      <tr><td><strong>Zona di transiz.</strong></td><td>410–660</td><td>9.1–10.2</td><td>4.9–5.6</td><td>3.54–3.99</td></tr>
+      <tr><td><strong>Mantello inferiore</strong></td><td>660–2891</td><td>10.2–13.7</td><td>5.6–7.3</td><td>3.99–5.57</td></tr>
+      <tr><td><strong>Nucleo esterno</strong></td><td>2891–5150</td><td>8.0–10.4</td><td>0</td><td>9.9–12.2</td></tr>
+      <tr><td><strong>Nucleo interno</strong></td><td>5150–6371</td><td>11.0–11.3</td><td>3.5–3.6</td><td>12.8–13.1</td></tr>
+    </table>
+
+    <p>Il PREM è un modello monodimensionale (1D) che rappresenta la media globale: la struttura reale della Terra è tridimensionale, con variazioni laterali di velocità rivelate dalla <strong>tomografia sismica</strong>. Le anomalie positive di velocità (zone fredde) e negative (zone calde) nel mantello rivelano la geometria delle slab subducenti, dei plume caldi e delle strutture residue di antiche subduzione.</p>
+  </section>
+
+  <section id="zona-ombra">
+    <h3>4.2 La zona d'ombra delle onde P</h3>
+    <p>La <strong>zona d'ombra sismica</strong> delle onde P è una delle prove più eloquenti dell'esistenza del nucleo. Si osserva sperimentalmente che i sismografi posti a distanze angolari epicentrali tra ~103° e ~143° dall'epicentro non ricevono onde P dirette: questa fascia silenziosa si chiama zona d'ombra.</p>
+
+    <p>La spiegazione fu fornita da Oldham (1906) e Gutenberg (1914): la forte diminuzione di velocità alla CMB (da ~13.7 a ~8.0 km/s) causa una rifrazione verso la normale (legge di Snell) molto pronunciata. I raggi che lambiscono la CMB vengono deviati verso l'interno della Terra; quelli che la attraversano emergono sull'altro lato a distanze &gt;143°. La regione tra 103° e 143° rimane quindi priva di onde P dirette (zona d'ombra). Le onde P vengono comunque ricevute a distanze &gt;143° come <strong>PKP</strong> (onde che attraversano il nucleo), ma con un ritardo rispetto alle extrapolazioni del ramo diretto.</p>
+
+    <p>Per le <strong>onde S</strong> esiste una zona d'ombra ancora più ampia (~103°–180°) perché le onde S non si propagano nel nucleo esterno liquido: non c'è trasmissione delle onde S attraverso il nucleo. Questo fu la prova definitiva che il nucleo esterno è allo stato liquido.</p>
+  </section>
+
+  <section id="nucleo">
+    <h3>4.3 Nucleo esterno e nucleo interno</h3>
+    <p>Il <strong>nucleo esterno</strong> (2891–5150 km di profondità) è liquido: V_S=0, densità ~10–12 g/cm³. La composizione prevalente è ferro e nichel (~90% Fe) con ~5–10% di elementi leggeri (S, O, Si, H: dibattuto) che abbassano la densità rispetto al ferro puro sotto le medesime P-T. La convezione nel nucleo esterno, trainata dal raffreddamento e dalla solidificazione progressiva del nucleo interno, genera il <strong>campo magnetico terrestre</strong> per effetto dinamo.</p>
+
+    <p>Il <strong>nucleo interno</strong> (5150–6371 km) è solido: V_S ≈ 3.6 km/s, densità ~13 g/cm³. Fu scoperto da Inge Lehmann (1936) grazie all'osservazione di onde PKiKP (riflesse dall'ICB) e PKIKP (trasmesse attraverso il nucleo interno). È composto quasi interamente da ferro ε (fase esagonale ad alta pressione) con tracce di nichel. Il nucleo interno è anisotropo: le onde P viaggiano più velocemente lungo l'asse polare che lungo l'equatore, suggerendo una struttura cristallina orientata (forse grandi cristalli di ferro allineati).</p>
+
+    <div class="highlight orange">
+      <div class="hl-title">La scoperta di Inge Lehmann</div>
+      <p>Nel 1936 la sismologa danese Inge Lehmann analizzò i sismogrammi del terremoto di Murchison (Nuova Zelanda, 1929) e osservò onde P nella zona d'ombra tra 103° e 143° che non avrebbero dovuto esserci se il nucleo fosse stato completamente liquido. Propose l'esistenza di un nucleo interno solido con velocità più alta, che refringe le onde verso la superficie nella zona d'ombra. La scoperta fu confermata nel 1970 con i sismometri delle stazioni WWSSN. Lehmann visse fino a 104 anni e assistette alla conferma della sua scoperta.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 5. FASI ══════════ -->
+<section id="fasi">
+  <span class="section-num">05</span>
+  <h2>PKP, SKS e Fasi Sismiche Complesse</h2>
+  <div class="section-line"></div>
+
+  <section id="nomencl">
+    <h3>5.1 Nomenclatura delle fasi sismiche</h3>
+    <p>Ogni tipo di onda sismica che segue un percorso specifico nella Terra è chiamata <strong>fase sismica</strong> e viene identificata con un codice alfabetico che descrive il suo percorso:</p>
+
+    <dl class="deflist">
+      <dt>Lettere maiuscole per le onde di volume nel mantello</dt>
+      <dd><strong>P</strong> = onda P nel mantello; <strong>S</strong> = onda S nel mantello; <strong>K</strong> = onda P nel nucleo esterno (dall'inglese <em>Kern</em>); <strong>I</strong> = onda P nel nucleo interno; <strong>J</strong> = onda S nel nucleo interno (ipotetica, raramente osservata).</dd>
+      <dt>Lettere minuscole per le onde riflesse</dt>
+      <dd><strong>p, s</strong> = onda P o S che risale dalla sorgente alla superficie prima di diventare maiuscola; <strong>c</strong> = riflessione alla CMB (Core Mantle Boundary); <strong>i</strong> = riflessione alla ICB (Inner Core Boundary).</dd>
+      <dt>Combinazioni</dt>
+      <dd><strong>PKP</strong> = P nel mantello + P nel nucleo esterno + P nel mantello; <strong>PcP</strong> = P riflessa alla CMB; <strong>PKiKP</strong> = P che si riflette alla superficie dell'ICB; <strong>PKIKP</strong> = P che attraversa anche il nucleo interno; <strong>SKS</strong> = S nel mantello + K (P) nel nucleo esterno + S nel mantello; <strong>ScS</strong> = S riflessa alla CMB.</dd>
+    </dl>
+
+    <table>
+      <tr><th>Fase</th><th>Percorso</th><th>Dist. tipica (°)</th><th>Utilizzo</th></tr>
+      <tr><td><strong>P</strong></td><td>P diretto nel mantello</td><td>0–103°</td><td>Localizzazione, struttura mantello</td></tr>
+      <tr><td><strong>S</strong></td><td>S diretto nel mantello</td><td>0–103°</td><td>Localizzazione, V_S mantello</td></tr>
+      <tr><td><strong>PcP</strong></td><td>P riflessa alla CMB</td><td>30–70°</td><td>Struttura CMB, topografia</td></tr>
+      <tr><td><strong>PKP</strong></td><td>P attraverso nucleo esterno</td><td>143°–180°</td><td>Struttura nucleo</td></tr>
+      <tr><td><strong>PKIKP</strong></td><td>P attraverso nucleo interno</td><td>150°–180°</td><td>Anisotropia nucleo interno</td></tr>
+      <tr><td><strong>SKS</strong></td><td>S-P nel nucleo-S</td><td>83°–180°</td><td>Anisotropia mantello (splitting)</td></tr>
+      <tr><td><strong>PP, SS</strong></td><td>P (o S) riflessa sulla superficie</td><td>40°–180°</td><td>Struttura mantello superiore</td></tr>
+      <tr><td><strong>ScS</strong></td><td>S riflessa alla CMB</td><td>30°–80°</td><td>Q del mantello, struttura CMB</td></tr>
+    </table>
+  </section>
+
+  <section id="anisotrop">
+    <h3>5.2 Anisotropia sismica e splitting delle SKS</h3>
+    <p>L'<strong>anisotropia sismica</strong> è la dipendenza della velocità delle onde dalla direzione di propagazione, causata dall'orientazione preferenziale dei minerali (cristallographic preferred orientation, CPO) o dalla fabbrica composita (forma preferred orientation, SPO). Nel mantello, l'anisotropia è principalmente causata dall'allineamento dell'olivina per flusso visco­plastico.</p>
+
+    <p>Le onde <strong>SKS</strong> (S→K nel nucleo→S) sono usate per misurare l'anisotropia del mantello. Poiché la fase K nel nucleo esterno (liquido) è un'onda P, l'onda SKS emerge nel mantello superiore come onda S linearmente polarizzata. Se il mantello è anisotropo, l'onda S si <strong>divide (splitting)</strong> in due onde quasi-S con polarizzazioni ortogonali e velocità diverse: la componente veloce (φ, fast axis azimuth) viaggia nella direzione di allineamento dell'olivina, quella lenta (⊥ φ) nella direzione perpendicolare. Il ritardo temporale δt (tipicamente 0.5–2 s) misura l'intensità dell'anisotropia.</p>
+
+    <p>Lo splitting delle SKS è uno dei principali strumenti per studiare:</p>
+    <ul class="plain">
+      <li><strong>Flusso astenosferico</strong> — φ parallela alla direzione del flusso convettivo. Sotto le placche in movimento, l'olivina si allinea con la direzione di spostamento della placca.</li>
+      <li><strong>Geometria delle slab</strong> — nelle zone di subduzione, l'anisotropia sopra la slab (flusso nel cuneo mantellico) e sotto la slab divergono, rivelando la dinamica della subduzione.</li>
+      <li><strong>Orogenesi antica (fabric litosferico)</strong> — φ parallela agli assi orogenici: le strutture tettoniche antiche lasciano una firma anisotropa nel mantello litosferico che persiste per centinaia di Ma.</li>
+    </ul>
+  </section>
+</section>
+
+<!-- ══════════ 6. SISMOGRAMMA ══════════ -->
+<section id="sismogramma">
+  <span class="section-num">06</span>
+  <h2>Il Sismogramma e la Localizzazione degli Epicentri</h2>
+  <div class="section-line"></div>
+
+  <section id="lettura">
+    <h3>6.1 Lettura di un sismogramma</h3>
+    <p>Un <strong>sismogramma</strong> è il registro temporale del moto del suolo prodotto da un sismometro. I sismometri moderni misurano il moto del suolo in tre componenti: verticale (Z), Nord-Sud (N) ed Est-Ovest (E). L'ampiezza registrata dipende dalla grandezza del terremoto, dalla distanza epicentrale e dalla risposta strumentale del sismometro.</p>
+
+    <p>In un sismogramma di un terremoto a distanza teleismica (>1000 km) si riconoscono in successione temporale:</p>
+
+    <ol class="steps">
+      <li><strong>Arrivo P (onda primaria)</strong> — Prima fase visibile: oscillazione breve, alta frequenza (1–5 Hz), ampiezza bassa. Registrata principalmente sulla componente verticale. Il tempo di arrivo permette di stimare la distanza epicentrale.</li>
+      <li><strong>Arrivo S (onda secondaria)</strong> — Arriva dopo P di un tempo Ts−Tp ≈ Δ/8 s (approssimazione empirica dove Δ è la distanza in km), con maggiore ampiezza. Predomina sulle componenti orizzontali. Il rapporto Ts/Tp permette di calcolare l'ipocentro con il metodo di Wadati.</li>
+      <li><strong>Fasi riflesse e convertite</strong> — PcP, ScS, PP, SS arrivano tra P e le onde di superficie per terremoti teleisimici. La loro identificazione richiede il confronto con le curve T-Δ di riferimento.</li>
+      <li><strong>Onde di superficie (Love e Rayleigh)</strong> — Arrivano per ultime, hanno le ampiezze maggiori per i terremoti tettonici profondi. Love (L) precede di poco Rayleigh (R). Sono dispersive: le componenti di lungo periodo arrivano prima delle componenti di corto periodo. Dominano per terremoti con M &gt; 6.</li>
+      <li><strong>Coda sismica</strong> — Oscillazioni decrescenti dopo le onde di superficie, causate da scattering multiplo delle onde P e S in eterogeneità della crosta. Il tasso di decadimento della coda è usato per stimare l'attenuazione (Q crostale).</li>
+    </ol>
+  </section>
+
+  <section id="wadati">
+    <h3>6.2 Il diagramma di Wadati e la profondità focale</h3>
+    <p>Il <strong>diagramma di Wadati</strong> (Wadati, 1933) è il metodo grafico più semplice per determinare la profondità focale e l'ora origine del terremoto da registrazioni di più stazioni sismiche. Il principio è basato sulla relazione lineare tra Ts (tempo di arrivo S) e Tp (tempo di arrivo P):</p>
+
+    <div class="formula">Ts − T₀ = (V_P/V_S) · (Tp − T₀)</div>
+
+    <p>dove T₀ è l'ora origine del terremoto. Riordinando:</p>
+
+    <div class="formula">Ts = (V_P/V_S) · Tp − (V_P/V_S − 1) · T₀</div>
+
+    <p>Nel diagramma Ts vs. Tp si ottiene una <strong>retta</strong> con pendenza V_P/V_S ≈ 1.73 (per crosta continentale) e intercetta sull'asse Ts proporzionale a T₀. La pendenza permette di misurare V_P/V_S indipendentemente da qualsiasi modello di velocità, e l'intercetta dà T₀. Per terremoti profondi il diagramma di Wadati mostra pendenze diverse da quelle superficiali, rivelando la dipendenza di V_P/V_S dalla profondità.</p>
+  </section>
+
+  <section id="localiz">
+    <h3>6.3 Localizzazione ipocentrale</h3>
+    <p>La <strong>localizzazione dell'ipocentro</strong> (la posizione tridimensionale della sorgente: latitudine, longitudine, profondità h) richiede almeno tre stazioni per l'epicentro e quattro per la profondità. I metodi principali sono:</p>
+
+    <h4>Triangolazione (metodo grafico)</h4>
+    <p>Da ogni stazione si calcola la distanza epicentrale Δ_i usando la differenza di tempo S-P: Δ_i ≈ (Ts-Tp)_i × 8 km/s (approssimazione). Si tracciano cerchi di raggio Δ_i centrati su ogni stazione: l'epicentro è l'intersezione dei cerchi. Con tre stazioni si ottengono tre cerchi che idealmente si incontrano in un punto; in pratica formano un triangolo di errore (<em>triangle of uncertainty</em>).</p>
+
+    <h4>Metodo dei minimi quadrati (inversione)</h4>
+    <p>I sistemi moderni usano l'inversione iterativa dei tempi di arrivo osservati: si parte da una posizione iniziale ipotetica, si calcolano i tempi di arrivo teorici con un modello di velocità, si minimizza la differenza tra osservato e calcolato con il metodo dei minimi quadrati (algoritmo di Geiger, 1910). La profondità è il parametro più difficile da determinare: richiede stazioni vicine (&lt;2Δh) o l'uso di fasi riflesse (pP, sP).</p>
+
+    <h4>Profondità focale</h4>
+    <p>La <strong>profondità focale</strong> è il parametro più critico per la valutazione del pericolo sismico: terremoti superficiali (h &lt; 70 km) sono i più distruttivi per la vicinanza alla superficie. La classificazione internazionale distingue: <em>superficiali</em> (h &lt; 70 km), <em>intermedi</em> (70–300 km), <em>profondi</em> (300–700 km). I terremoti profondi (&gt;300 km) si verificano solo nelle zone di subduzione dove la slab fredda mantiene la rigidità a profondità altrimenti troppo calde.</p>
+
+    <div class="highlight purple">
+      <div class="hl-title">Il piano di Wadati-Benioff</div>
+      <p>La distribuzione degli ipocentri nelle zone di subduzione, visualizzata in sezione trasversale, definisce il <strong>piano di Wadati-Benioff</strong>: una zona sismogenica inclinata (30°–80°) che segue il tetto della slab subducente fino a ~700 km di profondità. La geometria del piano rivela l'angolo di subduzione, la curvatura della slab e il limite inferiore della sismicità (dove la slab diventa troppo calda per fratturarsi in modo fragile). I meccanismi focali lungo il piano distinguono le onde tensionali (<em>downdip extension</em>) dalla compressione (<em>downdip compression</em>).</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 7. MAGNITUDO ══════════ -->
+<section id="magnitudo">
+  <span class="section-num">07</span>
+  <h2>Magnitudo e Intensità Sismica</h2>
+  <div class="section-line"></div>
+
+  <p>La <strong>magnitudo</strong> è una misura strumentale della grandezza di un terremoto basata sull'ampiezza delle onde sismiche registrate. L'<strong>intensità</strong> è invece una misura della percezione e degli effetti del terremoto in un dato luogo, indipendente dagli strumenti.</p>
+
+  <section id="scale-m">
+    <h3>7.1 Le scale di magnitudo</h3>
+
+    <h4>Magnitudo locale M_L (Richter, 1935)</h4>
+    <p>Charles Richter (1935) definì la magnitudo locale come il logaritmo in base 10 dell'ampiezza massima registrata da uno sismometro Wood-Anderson standard a 100 km dall'epicentro, con correzione per l'attenuazione:</p>
+    <div class="formula">M_L = log₁₀(A) − log₁₀(A₀(Δ))</div>
+    <p>dove A è l'ampiezza in mm e A₀(Δ) è la funzione di calibrazione (ampiezza di riferimento per un terremoto di M_L=0 a distanza Δ). La scala è logaritmica: M_L=7 ha un'ampiezza 10 volte maggiore di M_L=6 (ma ~32 volte più energia). Valida per distanze &lt;600 km nel Southern California; satura per M_L &gt;~7.</p>
+
+    <h4>Magnitudo onde di superficie M_s (Gutenberg, 1945)</h4>
+    <p>Usa l'ampiezza delle onde di Rayleigh di periodo ~20 s per terremoti a distanze teleisimiche (20°–160°). Formula: M_s = log₁₀(A/T) + 1.66·log₁₀(Δ) + 3.3. Valida per terremoti superficiali (h &lt; 50 km); satura per M_s &gt;~8.5.</p>
+
+    <h4>Magnitudo onde di volume m_b (Gutenberg &amp; Richter, 1956)</h4>
+    <p>Usa l'ampiezza delle onde P di periodo 1–10 s: m_b = log₁₀(A/T) + Q(Δ, h). Adatta per tutti i terremoti indipendentemente dalla profondità; satura per m_b &gt;~6.5. Usata nel monitoraggio degli esplosioni nucleari.</p>
+
+    <h4>Magnitudo momento M_w (Hanks &amp; Kanamori, 1979)</h4>
+    <p>La <strong>magnitudo momento</strong> M_w è la scala moderna di riferimento, l'unica non soggetta a saturazione. È basata sul <strong>momento sismico scalare M₀</strong>:</p>
+    <div class="formula">M₀ = μ · A · D</div>
+    <p>dove μ è il modulo di rigidità della roccia (~3×10¹⁰ Pa), A è l'area della faglia e D è lo spostamento medio sulla faglia. M₀ ha le dimensioni di N·m (newton-metro). La relazione con M_w è:</p>
+    <div class="formula">M_w = (2/3) · log₁₀(M₀) − 6.07</div>
+    <p>M_w non satura e copre l'intero range sismico. I più grandi terremoti registrati: 1960 Valdivia (Cile) M_w=9.5; 2004 Sumatra-Andaman M_w=9.1; 2011 Tōhoku (Giappone) M_w=9.0.</p>
+
+    <table>
+      <tr><th>Scala</th><th>Tipo di onda</th><th>Periodo</th><th>Distanza</th><th>Saturazione</th></tr>
+      <tr><td><strong>M_L</strong></td><td>Onde locali (Wood-Anderson)</td><td>0.1–2 s</td><td>&lt;600 km</td><td>~M7</td></tr>
+      <tr><td><strong>M_s</strong></td><td>Rayleigh</td><td>~20 s</td><td>20°–160°</td><td>~M8.5</td></tr>
+      <tr><td><strong>m_b</strong></td><td>P</td><td>1–10 s</td><td>&gt;600 km</td><td>~M6.5</td></tr>
+      <tr><td><strong>M_w</strong></td><td>Momento sismico M₀</td><td>Tutto lo spettro</td><td>Qualsiasi</td><td>Nessuna</td></tr>
+    </table>
+  </section>
+
+  <section id="mercalli">
+    <h3>7.2 La Scala Mercalli Modificata (MCS/MM)</h3>
+    <p>La <strong>Scala Mercalli Modificata</strong> (Wood &amp; Neumann, 1931, basata su Mercalli 1902) valuta l'<em>intensità macrosismica</em>: gli effetti del terremoto osservati in un dato luogo, in funzione dei danni, della percezione umana e delle deformazioni del terreno. È espressa in gradi romani da I a XII:</p>
+
+    <table>
+      <tr><th>Grado</th><th>Descrizione</th></tr>
+      <tr><td><strong>I</strong></td><td>Non percepito; registrato solo dagli strumenti</td></tr>
+      <tr><td><strong>II–III</strong></td><td>Percepito da poche persone a riposo; oscillazioni lievi</td></tr>
+      <tr><td><strong>IV–V</strong></td><td>Percepito da molti; oggetti oscillano, finestre vibrano; piccole crepe</td></tr>
+      <tr><td><strong>VI–VII</strong></td><td>Percepito da tutti; danni leggeri a edifici; caduta di calcinacci; panico</td></tr>
+      <tr><td><strong>VIII–IX</strong></td><td>Danni gravi; crollo di edifici non antisismici; fratture del terreno</td></tr>
+      <tr><td><strong>X–XI</strong></td><td>Distruzione di molti edifici; grandi frane; rottura di condotte</td></tr>
+      <tr><td><strong>XII</strong></td><td>Distruzione totale; deformazione del terreno visibile</td></tr>
+    </table>
+
+    <p>Le <strong>carte isosismiche</strong> (isoipse di uguale intensità) rivelano la geometria della sorgente, la direttività della rottura, gli effetti di sito (amplificazione su sedimenti molli) e la distribuzione degli effetti cosismici (liquefazione, frana, maremoto). L'intensità decresce con la distanza dall'epicentro ma può avere anomalie positive su depositi alluvionali soffici (effetto di sito).</p>
+  </section>
+
+  <section id="gr">
+    <h3>7.3 La relazione di Gutenberg-Richter e la sismicità</h3>
+    <p>Gutenberg &amp; Richter (1944) hanno stabilito la relazione statistica fondamentale tra la frequenza dei terremoti e la loro magnitudo:</p>
+
+    <div class="formula">log₁₀(N) = a − b · M</div>
+
+    <p>dove N è il numero cumulativo di terremoti con magnitudo ≥ M in un dato intervallo temporale e area geografica, <em>a</em> è una costante che dipende dal livello di attività sismica della regione, e <em>b</em> è il <strong>valore b</strong> (b-value), tipicamente ~1.0 ± 0.2 globalmente.</p>
+
+    <p>Il valore b = 1 implica che per ogni aumento di 1 unità di magnitudo il numero di terremoti diminuisce di un fattore 10. In media: per ogni M≥7 ci sono ~10 M≥6, ~100 M≥5, ~1000 M≥4. Il valore b varia geograficamente e nel tempo:</p>
+
+    <ul class="plain">
+      <li><strong>b &lt; 1</strong> (es. 0.6–0.8) — Maggiore proporzione di grandi terremoti. Tipico delle regioni con alte tensioni tettoniche (zone di subduzione mature, faglia di S. Andreas).</li>
+      <li><strong>b &gt; 1</strong> (es. 1.3–1.5) — Maggiore proporzione di piccoli terremoti. Tipico delle zone vulcaniche (sciami sismici), delle regioni a bassa sismicità, dei fluidi in pressione nel sottosuolo (geotermia, fracking).</li>
+      <li><strong>Variazione temporale di b</strong> — La diminuzione del b-value prima di grandi terremoti è stata proposta come precursore sismico (aumento relativo dei terremoti medi rispetto ai piccoli), ma la sua affidabilità predittiva rimane controversa.</li>
+    </ul>
+
+    <p>La relazione G-R implica che il <strong>momento sismico totale</strong> rilasciato dalla sismicità è dominato dai terremoti di grande magnitudo: un solo M_w=9.0 rilascia più energia di tutte le M_w≤7 del mondo in un anno. Il terremoto di Valdivia del 1960 (M_w=9.5) ha rilasciato circa il 25% di tutta l'energia sismica globale del XX secolo.</p>
+
+    <div class="highlight yellow">
+      <div class="hl-title">Relazione magnitudo — energia</div>
+      <p>La relazione tra magnitudo momento M_w ed energia sismica irradiata E_s è: log₁₀(E_s) = 1.5·M_w + 4.8 (con E_s in Joule). Ogni aumento di 1 unità di M_w corrisponde a un aumento di ~32 volte nell'energia irradiata (10^1.5 ≈ 31.6). Due unità di M_w corrispondono a ~1000 volte più energia. Un M_w=8 rilascia ~30 volte più energia di un M_w=7, e ~900 volte più di un M_w=6. Il terremoto di Tōhoku 2011 (M_w=9.0) ha rilasciato ~900 volte più energia di quello de L'Aquila 2009 (M_w=6.3).</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 8. BIBLIO ══════════ -->
+<section id="biblio">
+  <span class="section-num">08</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Aki K. &amp; Richards P.G.</span> <span class="year">(2002)</span> — <span class="title">Quantitative Seismology</span>. <span class="journal">University Science Books, 2nd ed., 700 pp.</span></p>
+  <p class="ref"><span class="authors">Bullen K.E.</span> <span class="year">(1949)</span> — <span class="title">An Introduction to the Theory of Seismology</span>. <span class="journal">Cambridge University Press, 276 pp.</span></p>
+  <p class="ref"><span class="authors">Dziewoński A.M. &amp; Anderson D.L.</span> <span class="year">(1981)</span> — <span class="title">Preliminary reference Earth model</span>. <span class="journal">Physics of the Earth and Planetary Interiors, 25, 297–356.</span></p>
+  <p class="ref"><span class="authors">Geiger L.</span> <span class="year">(1910)</span> — <span class="title">Herdbestimmung bei Erdbeben aus den Ankunftszeiten</span>. <span class="journal">Nachrichten von der Gesellschaft der Wissenschaften zu Göttingen, 4, 331–349.</span></p>
+  <p class="ref"><span class="authors">Gutenberg B.</span> <span class="year">(1914)</span> — <span class="title">Über Erdbebenwellen VIIA. Beobachtungen an Registrierungen von Fernbeben</span>. <span class="journal">Nachrichten der Königlichen Gesellschaft der Wissenschaften zu Göttingen, 125–176.</span></p>
+  <p class="ref"><span class="authors">Gutenberg B. &amp; Richter C.F.</span> <span class="year">(1944)</span> — <span class="title">Frequency of earthquakes in California</span>. <span class="journal">Bulletin of the Seismological Society of America, 34, 185–188.</span></p>
+  <p class="ref"><span class="authors">Hanks T.C. &amp; Kanamori H.</span> <span class="year">(1979)</span> — <span class="title">A moment magnitude scale</span>. <span class="journal">Journal of Geophysical Research, 84, 2348–2350.</span></p>
+  <p class="ref"><span class="authors">Jeffreys H. &amp; Bullen K.E.</span> <span class="year">(1940)</span> — <span class="title">Seismological Tables</span>. <span class="journal">British Association for the Advancement of Science, London.</span></p>
+  <p class="ref"><span class="authors">Kennett B.L.N. &amp; Engdahl E.R.</span> <span class="year">(1991)</span> — <span class="title">Traveltimes for global earthquake location and phase identification</span>. <span class="journal">Geophysical Journal International, 105, 429–465.</span></p>
+  <p class="ref"><span class="authors">Lay T. &amp; Wallace T.C.</span> <span class="year">(1995)</span> — <span class="title">Modern Global Seismology</span>. <span class="journal">Academic Press, San Diego, 521 pp.</span></p>
+  <p class="ref"><span class="authors">Lehmann I.</span> <span class="year">(1936)</span> — <span class="title">P'</span>. <span class="journal">Publications du Bureau Central Séismologique International, Série A, 14, 87–115.</span></p>
+  <p class="ref"><span class="authors">Love A.E.H.</span> <span class="year">(1911)</span> — <span class="title">Some Problems of Geodynamics</span>. <span class="journal">Cambridge University Press, 180 pp.</span></p>
+  <p class="ref"><span class="authors">Mercalli G.</span> <span class="year">(1902)</span> — <span class="title">Sulle modificazioni proposte alla scala sismica De Rossi-Forel</span>. <span class="journal">Bollettino della Società Sismologica Italiana, 6, 66–77.</span></p>
+  <p class="ref"><span class="authors">Mohorovičić A.</span> <span class="year">(1909)</span> — <span class="title">Das Beben vom 8. X 1909</span>. <span class="journal">Jahrbuch des Meteorologischen Observatoriums in Zagreb, 9, 1–63.</span></p>
+  <p class="ref"><span class="authors">Oldham R.D.</span> <span class="year">(1906)</span> — <span class="title">The constitution of the interior of the Earth as revealed by earthquakes</span>. <span class="journal">Quarterly Journal of the Geological Society, 62, 456–475.</span></p>
+  <p class="ref"><span class="authors">Rayleigh Lord (Strutt J.W.)</span> <span class="year">(1885)</span> — <span class="title">On waves propagated along the plane surface of an elastic solid</span>. <span class="journal">Proceedings of the London Mathematical Society, 17, 4–11.</span></p>
+  <p class="ref"><span class="authors">Richter C.F.</span> <span class="year">(1935)</span> — <span class="title">An instrumental earthquake magnitude scale</span>. <span class="journal">Bulletin of the Seismological Society of America, 25, 1–32.</span></p>
+  <p class="ref"><span class="authors">Shearer P.M.</span> <span class="year">(2009)</span> — <span class="title">Introduction to Seismology</span>. <span class="journal">Cambridge University Press, 2nd ed., 396 pp.</span></p>
+  <p class="ref"><span class="authors">Wadati K.</span> <span class="year">(1933)</span> — <span class="title">On the travel time of earthquake waves</span>. <span class="journal">Geophysical Magazine (Japan), 7, 101–111.</span></p>
+  <p class="ref"><span class="authors">Wood H.O. &amp; Neumann F.</span> <span class="year">(1931)</span> — <span class="title">Modified Mercalli intensity scale of 1931</span>. <span class="journal">Bulletin of the Seismological Society of America, 21, 277–283.</span></p>
+</section>
+
+</main>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
