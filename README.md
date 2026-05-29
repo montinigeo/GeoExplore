@@ -9,37 +9,37 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 ### 🌋 Magmatismo e Metamorfismo
 
-| Argomento | Descrizione | Link |
-|-------------|-------------|------|
-| [🪨 Rocce Magmatiche](#rocce-magmatiche) | Streckeisen QAPF, piroclastiche, rocce speciali | [Apri](https://montinigeo.github.io/GeoExplore/rocce_magmatiche.html) |
-| [⛰️ Rocce Mafiche e Ultramafiche](#rocce-mafiche) | Ol-Opx-Cpx, Ol-Px-Plag, geodinamica, facies mantello | [Apri](https://montinigeo.github.io/GeoExplore/rocce_mafiche.html) |
-| [📊 Serie Magmatiche](#serie-magmatiche) | TAS, AFM, K₂O-SiO₂, Na₂O-K₂O, percorsi geodinamici | [Apri](https://montinigeo.github.io/GeoExplore/serie_magmatiche.html) |
-| [🔥 Serie di Bowen](#serie-bowen) | Cristallizzazione frazionata, quattro tipi di magma | [Apri](https://montinigeo.github.io/GeoExplore/serie_bowen.html) |
-| [🌿 Metamorfismo](#metamorfismo) | Facies P-T, percorsi geodinamici, Barrow, protoliti | [Apri](https://montinigeo.github.io/GeoExplore/metamorfismo.html) |
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [🪨 Rocce Magmatiche](#rocce-magmatiche) | Streckeisen QAPF, piroclastiche, rocce speciali | [Apri](https://montinigeo.github.io/GeoExplore/rocce_magmatiche.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_magmatismo_metamorfismo.html) |
+| [⛰️ Rocce Mafiche e Ultramafiche](#rocce-mafiche) | Ol-Opx-Cpx, Ol-Px-Plag, geodinamica, facies mantello | [Apri](https://montinigeo.github.io/GeoExplore/rocce_mafiche.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_magmatismo_metamorfismo.html) |
+| [📊 Serie Magmatiche](#serie-magmatiche) | TAS, AFM, K₂O-SiO₂, Na₂O-K₂O, percorsi geodinamici | [Apri](https://montinigeo.github.io/GeoExplore/serie_magmatiche.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_magmatismo_metamorfismo.html) |
+| [🔥 Serie di Bowen](#serie-bowen) | Cristallizzazione frazionata, quattro tipi di magma | [Apri](https://montinigeo.github.io/GeoExplore/serie_bowen.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_magmatismo_metamorfismo.html) |
+| [🌿 Metamorfismo](#metamorfismo) | Facies P-T, percorsi geodinamici, Barrow, protoliti | [Apri](https://montinigeo.github.io/GeoExplore/metamorfismo.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_magmatismo_metamorfismo.html) |
 
 ### 🪨 Sedimentologia
 
-| Argomento | Descrizione | Link |
-|-------------|-------------|------|
-| [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/GeoExplore/rocce_sedimentarie.html) |
-| [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/GeoExplore/ambienti_sedimentari.html) |
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [🔩 Rocce Sedimentarie](#rocce-sedimentarie) | Clastiche (Wentworth, Folk), carbonatiche (Dunham, Folk), evaporiti | [Apri](https://montinigeo.github.io/GeoExplore/rocce_sedimentarie.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_sedimentologia.html) |
+| [🏜️ Ambienti di Sedimentazione](#ambienti-sedimentari) | Continentali, transizionali, marini, sequenza di Bouma | [Apri](https://montinigeo.github.io/GeoExplore/ambienti_sedimentari.html) | [📖](https://montinigeo.github.io/GeoExplore/manuale_sedimentologia.html) |
 
 ### 🔬 Petrografia
 
-| Argomento | Descrizione | Link |
-|-------------|-------------|------|
-| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/diagrammi_fase.html) |
-| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/microscopio_polarizzato.html) |
-| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/GeoExplore/diffrattometro_xrd_v5.html) |
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/diagrammi_fase.html) | — |
+| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/microscopio_polarizzato.html) | — |
+| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/GeoExplore/diffrattometro_xrd_v5.html) | — |
 
 ### 📡 Geofisica
 
-| Argomento | Descrizione | Link |
-|-------------|-------------|------|
-| [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/GeoExplore/moto_armonico.html) |
-| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/onde_sismiche.html) |
-| [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/GeoExplore/dinsar.html) |
-| [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/GeoExplore/visibilita_sar_frane.html) |
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/GeoExplore/moto_armonico.html) | — |
+| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/onde_sismiche.html) | — |
+| [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/GeoExplore/dinsar.html) | — |
+| [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/GeoExplore/visibilita_sar_frane.html) | — |
 
 ---
 

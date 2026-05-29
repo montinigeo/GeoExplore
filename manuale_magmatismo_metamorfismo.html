@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di Magmatismo e Metamorfismo</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#ff6b35;--accent2:#00c8f0;--accent3:#a8ff78;--accent4:#c060f0;--accent5:#ffcc44;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+nav .part-divider{margin:.6rem 1.2rem .3rem;border-top:1px solid var(--border2);padding-top:.5rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);opacity:.7}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+.part-header{margin:3rem 0 2rem;padding:1.2rem 1.5rem;background:var(--surface);border:1px solid var(--border2);border-radius:6px}
+.part-header .part-num{font-family:var(--mono);font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.4rem}
+.part-header h2{font-family:var(--serif);font-size:1.6rem;font-weight:500;color:var(--text);margin:0}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:0.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+blockquote{border-left:3px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:var(--surface);border-radius:0 4px 4px 0}
+blockquote p{margin:0;font-style:italic;color:var(--text);font-size:.95rem}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent3);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ol.steps{counter-reset:step;list-style:none;margin:1rem 0}
+ol.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+ol.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.red{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.green{border-color:rgba(168,255,120,.3);background:rgba(168,255,120,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight.yellow{border-color:rgba(255,204,68,.3);background:rgba(255,204,68,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.red .hl-title{color:var(--accent)}
+.highlight.blue .hl-title{color:var(--accent2)}
+.highlight.green .hl-title{color:var(--accent3)}
+.highlight.purple .hl-title{color:var(--accent4)}
+.highlight.yellow .hl-title{color:var(--accent5)}
+.highlight p{margin:0;font-size:.9rem}
+.formula{font-family:var(--mono);font-size:.8rem;color:var(--accent2);background:var(--surface2);border:1px solid var(--border2);padding:.4rem .8rem;border-radius:3px;margin:.5rem 0;display:inline-block}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Magmatismo &amp; Metamorfismo</p>
+  </div>
+  <ul>
+    <li class="part-divider">Parte I — Magmatismo</li>
+    <li class="sec-label">Origini e processi</li>
+    <li><a href="#magmi">1. Origine dei magmi</a></li>
+    <li><a href="#viscosita" class="sub">1.1 Proprietà fisiche</a></li>
+    <li><a href="#fusione" class="sub">1.2 Fusione parziale</a></li>
+    <li><a href="#cristalliz">2. Cristallizzazione</a></li>
+    <li><a href="#bowen" class="sub">2.1 Serie di Bowen</a></li>
+    <li><a href="#differenziaz" class="sub">2.2 Differenziazione</a></li>
+    <li class="sec-label">Classificazione</li>
+    <li><a href="#classif">3. Classificazione IUGS</a></li>
+    <li><a href="#qapf" class="sub">3.1 Triangolo QAPF</a></li>
+    <li><a href="#mafiche-class" class="sub">3.2 Rocce mafiche-ultrabasiche</a></li>
+    <li><a href="#piro-class" class="sub">3.3 Rocce piroclastiche</a></li>
+    <li><a href="#speciali-class" class="sub">3.4 Rocce speciali</a></li>
+    <li class="sec-label">Geochimica</li>
+    <li><a href="#geochem">4. Geochimica magmatica</a></li>
+    <li><a href="#serie-chem" class="sub">4.1 Serie magmatiche</a></li>
+    <li><a href="#diagrammi" class="sub">4.2 Diagrammi classificativi</a></li>
+    <li><a href="#ree" class="sub">4.3 Terre rare e spider</a></li>
+    <li><a href="#geodin-chem" class="sub">4.4 Evoluzione geodinamica</a></li>
+    <li class="sec-label">Geodinamica</li>
+    <li><a href="#geodin">5. Magmatismo geodinamico</a></li>
+    <li><a href="#morb" class="sub">5.1 Dorsali oceaniche (MORB)</a></li>
+    <li><a href="#archi" class="sub">5.2 Archi magmatici</a></li>
+    <li><a href="#hotspot" class="sub">5.3 Hotspot e OIB</a></li>
+    <li><a href="#rift" class="sub">5.4 Rift continentale</a></li>
+    <li><a href="#postcoll" class="sub">5.5 Post-collisionale</a></li>
+    <li class="part-divider">Parte II — Metamorfismo</li>
+    <li class="sec-label">Fondamenti</li>
+    <li><a href="#meta-intro">6. Introduzione</a></li>
+    <li><a href="#meta-tipi" class="sub">6.1 Tipi di metamorfismo</a></li>
+    <li><a href="#meta-agenti" class="sub">6.2 Agenti e variabili</a></li>
+    <li class="sec-label">Facies e percorsi</li>
+    <li><a href="#facies">7. Facies metamorfiche</a></li>
+    <li><a href="#barrow">8. Serie di Barrow</a></li>
+    <li><a href="#percorsi">9. Percorsi P-T</a></li>
+    <li class="sec-label">Protoliti</li>
+    <li><a href="#protoliti">10. Protoliti e paragenesi</a></li>
+    <li class="part-divider">Parte III — Sintesi</li>
+    <li><a href="#ciclo">11. Ciclo delle rocce</a></li>
+    <li><a href="#anatessi" class="sub">11.1 Anatessi e migmatiti</a></li>
+    <li><a href="#graniti" class="sub">11.2 Granitogenesi</a></li>
+    <li><a href="#biblio">12. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Petrologia Ignea e Metamorfica</div>
+  <h1>Magmatismo e Metamorfismo</h1>
+  <p class="subtitle">Origini dei magmi, cristallizzazione, classificazione IUGS, geochimica, geodinamica del magmatismo, facies metamorfiche, percorsi P-T e raccordi petrologici</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- PARTE I -->
+<div class="part-header">
+  <div class="part-num">Parte I</div>
+  <h2>Magmatismo</h2>
+</div>
+
+<!-- ══════════ 1. ORIGINE DEI MAGMI ══════════ -->
+<section id="magmi">
+  <span class="section-num">01</span>
+  <h2>Origine e Proprietà dei Magmi</h2>
+  <div class="section-line"></div>
+
+  <p>Un <strong>magma</strong> è un sistema silicatico fuso (totalmente o parzialmente), contenente volatili disciolti (H₂O, CO₂, SO₂, HCl, HF) e talvolta cristalli in sospensione. La sua composizione chimica riflette quella della sorgente e i processi che ha subito durante la risalita. La <strong>lava</strong> è il magma degasato che raggiunge la superficie.</p>
+
+  <section id="viscosita">
+    <h3>1.1 Proprietà fisiche dei magmi</h3>
+    <p>La <strong>viscosità</strong> è la proprietà fisica più importante per il comportamento eruttivo di un magma. Dipende da tre fattori principali:</p>
+
+    <dl class="deflist">
+      <dt>Composizione (SiO₂)</dt>
+      <dd>La viscosità aumenta esponenzialmente con il contenuto in SiO₂: i polimeri silicatici tetraedrici [SiO₄]⁴⁻ si concatenano formando reticoli sempre più rigidi. Basalto (~50% SiO₂): η ≈ 10²–10⁴ Pa·s; Andesite (~60%): η ≈ 10⁵–10⁸ Pa·s; Riolite (~75%): η ≈ 10⁸–10¹² Pa·s.</dd>
+      <dt>Temperatura</dt>
+      <dd>La viscosità diminuisce con la temperatura (relazione di Arrhenius): η ∝ e^(E/RT). Un aumento di 100°C può ridurre la viscosità di 1–2 ordini di grandezza. I magmi basaltici eruttano a 1100–1200°C, i rioliti a 700–850°C.</dd>
+      <dt>Contenuto in H₂O</dt>
+      <dd>L'acqua è il flussante più efficace: anche 1–2% di H₂O riduce la viscosità di 2–3 ordini di grandezza, rompendo i legami Si-O-Si con gruppi -OH. Per questo i magmi di arco (ricchi in H₂O) possono essere più fluidi di quanto suggerisca la loro composizione.</dd>
+    </dl>
+
+    <p>La <strong>temperatura di liquidus</strong> (T a cui inizia la cristallizzazione al raffreddamento) e il <strong>liquidus wet</strong> (in presenza di H₂O) sono fondamentali per la petrogenetica: la presenza di H₂O abbassa la T di liquidus fino a 200–400°C, permettendo la fusione parziale della crosta continentale a temperature relativamente basse (~650–700°C).</p>
+  </section>
+
+  <section id="fusione">
+    <h3>1.2 Meccanismi di fusione parziale</h3>
+    <p>La roccia del mantello e della crosta non fonde completamente ma produce un liquido silicatico per <strong>fusione parziale</strong>. I tre meccanismi principali sono:</p>
+
+    <ol class="steps">
+      <li><strong>Decompressione adiabatica</strong> — risalita di materiale astenosferico senza scambio di calore con l'esterno. Quando la T di fusione diminuisce più rapidamente della temperatura effettiva del materiale, si ha fusione. Meccanismo dominante alle dorsali oceaniche e negli hotspot.</li>
+      <li><strong>Aggiunta di volatili (flux melting)</strong> — l'acqua liberata dalla subduzione della placca oceanica abbassa il solidus del mantello (da ~1200°C a ~900°C) inducendo la fusione. Meccanismo dominante negli archi magmatici sopra le zone di subduzione.</li>
+      <li><strong>Riscaldamento conduttivo</strong> — contatto con magma caldo preesistente o con la risalita di mantello caldo. Meccanismo secondario; importante per la fusione della crosta inferiore (anatessi) in contesti di alta temperatura.</li>
+    </ol>
+
+    <p>Il <strong>grado di fusione parziale</strong> (F, fraction melted) controlla la composizione del liquido generato. A F basso (&lt;5–10%) il liquido è più ricco in elementi incompatibili (K, Rb, Ba, La, Th) e più alcalino. A F alto (&gt;20–30%) il liquido si avvicina alla composizione del protolite. Questo principio spiega la diversità delle serie magmatiche negli stessi contesti geodinamici.</p>
+
+    <div class="highlight blue">
+      <div class="hl-title">Coefficiente di partizione e incompatibilità</div>
+      <p>Il coefficiente di partizione K<sub>d</sub> = C<sub>minerale</sub>/C<sub>liquido</sub> descrive la distribuzione di un elemento tra minerale e liquido. Elementi con K<sub>d</sub> &lt; 1 sono <em>incompatibili</em> (si concentrano nel liquido): K, Rb, Cs, Ba, Th, U, La, Ce, Nb, Ta. Elementi con K<sub>d</sub> &gt; 1 sono <em>compatibili</em> (rimangono nel solido): Ni, Cr, Co, V, Sc. La geochimica degli elementi in traccia permette di identificare la mineralogica del residuo della fusione.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 2. CRISTALLIZZAZIONE ══════════ -->
+<section id="cristalliz">
+  <span class="section-num">02</span>
+  <h2>Cristallizzazione e Differenziazione Magmatica</h2>
+  <div class="section-line"></div>
+
+  <section id="bowen">
+    <h3>2.1 La serie di Bowen (1922)</h3>
+    <p>Norman L. Bowen (<em>Bowen, 1922</em>) ha definito sperimentalmente la sequenza di cristallizzazione dei silicati al raffreddamento di un magma basaltico. La <strong>serie di reazione di Bowen</strong> comprende due rami paralleli che convergono verso la composizione granitica:</p>
+
+    <table>
+      <tr><th>T (°C)</th><th>Ramo discontinuo (mafici)</th><th>Ramo continuo (feldspati)</th></tr>
+      <tr><td>~1200</td><td><strong>Olivina</strong> (Fo-Fa)</td><td><strong>Plagioclasio An-ricco</strong> (anortite An₉₀)</td></tr>
+      <tr><td>~1100</td><td><strong>Pirosseno</strong> (enstatite, iperstene)</td><td>Plagioclasio An₇₀–₈₀ (bytownite)</td></tr>
+      <tr><td>~1050</td><td><strong>Anfibolo</strong> (hornblenda)</td><td>Plagioclasio An₅₀–₆₀ (labradorite)</td></tr>
+      <tr><td>~950</td><td><strong>Biotite</strong></td><td>Plagioclasio An₃₀–₄₀ (andesina)</td></tr>
+      <tr><td>~700</td><td colspan="2">Convergenza: <strong>Feldspato K</strong> + <strong>Muscovite</strong> + <strong>Quarzo</strong></td></tr>
+    </table>
+
+    <p>Il ramo dei mafici è <em>discontinuo</em> perché ogni minerale è instabile nella composizione del liquido residuale più evoluto e reagisce (poiché la reazione non è completa in natura, rimangono spesso relitti del minerale precedente incamiciati da quello successivo, struttura <em>kelifitica</em>). Il ramo dei feldspati è <em>continuo</em> perché plagioclasio forma soluzioni solide complete tra anortite (An) e albite (Ab), con progressiva evoluzione verso la composizione Ab-ricca al diminuire della temperatura (<em>cristallizzazione zonata</em>).</p>
+  </section>
+
+  <section id="differenziaz">
+    <h3>2.2 Meccanismi di differenziazione magmatica</h3>
+    <p>La <strong>differenziazione magmatica</strong> è il processo per cui un magma parentale produce magmi figlio di composizione diversa. I meccanismi principali sono:</p>
+
+    <dl class="deflist">
+      <dt>Cristallizzazione frazionata</dt>
+      <dd>Separazione fisica dei cristalli formatisi per raffreddamento dal liquido residuale. I cristalli si separano per gravità (settling, cumuli al fondo della camera) o per adesione alle pareti (in-situ crystallization). Il liquido residuale si impoverisce nei componenti compatibili e si arricchisce negli incompatibili. Produce la suite completa dalla roccia basaltica alla riolite (<em>linea di Fenner</em>).</dd>
+      <dt>Assimilazione (AFC — Assimilation + Fractional Crystallization)</dt>
+      <dd>Il magma caldo fonde e assimila rocce incassanti, modificando la propria composizione. L'assimilazione è endotermica: richiede energia termica dal magma, che pertanto cristallizza in misura maggiore. Importante in crosta continentale spessa (contaminazione crostale).</dd>
+      <dt>Mixing e mingling</dt>
+      <dd>Mescolamento di due magmi di composizione diversa (es. basaltico e riolitico). Il <em>mixing</em> produce composizioni intermedie omogenee; il <em>mingling</em> produce strutture ibride eterogene con filamenti e enclavi di uno dei due magmi nell'altro. Evidenziato da enclavi magmatiche mafiche nei graniti.</dd>
+      <dt>Immiscibilità dei liquidi</dt>
+      <dd>A certe composizioni e temperature, un magma silicatico può separarsi in due liquidi immiscibili (es. silicatico + ossidico, silicatico + carbonatitico). Meccanismo minore ma importante per la genesi delle carbonatiti.</dd>
+    </dl>
+
+    <div class="highlight green">
+      <div class="hl-title">Cumuli e sequenze ofiolitiche</div>
+      <p>I <strong>cumuli</strong> sono rocce magmatiche formate dall'accumulo gravitazionale di cristalli (cumulati ortomafici: duniti, peridotiti, pirosseniti; cumulati felsici: anortositi, troctoliti). La sequenza ofiolitica (Penrose, 1972) dal basso verso l'alto — peridotiti di mantello → gabbrici cumulatici → gabbri isotropi → sheeted dykes → basalti a pillow → sedimenti pelagici — è il prodotto della cristallizzazione frazionata sotto una dorsale oceanica.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ══════════ 3. CLASSIFICAZIONE ══════════ -->
+<section id="classif">
+  <span class="section-num">03</span>
+  <h2>Classificazione delle Rocce Magmatiche (IUGS)</h2>
+  <div class="section-line"></div>
+
+  <p>La classificazione IUGS (International Union of Geological Sciences) delle rocce magmatiche (<em>Le Maitre et al., 2002</em>) è lo standard internazionale. Si basa sulla composizione modale (% volumetrica dei minerali) per le rocce coarse-grained (plutoniche) e sulla composizione chimica per le rocce afanitiche (vulcaniche).</p>
+
+  <section id="qapf">
+    <h3>3.1 Doppio triangolo di Streckeisen (QAPF)</h3>
+    <p>Per le rocce faneritiche con contenuto in silice da saturato a sovrasaturato, si usa il <strong>triangolo QAP</strong> (Quarzo-Feldspato Alcalino-Plagioclasio); per le rocce sottosaturate (con feldspatoidi) si usa il <strong>triangolo FAP</strong> (Feldspatoidi-Feldspato Alcalino-Plagioclasio). I due triangoli formano il doppio triangolo QAPF di Streckeisen (<em>Streckeisen, 1974</em>).</p>
+
+    <p>Nel triangolo <strong>QAP</strong> i confini principali sono: Q=20% (soglia tra rocce quarzose e feldispatoidi-free), AP=0.35 e AP=0.65 (discriminanti dei tre rami felspatici: fsp alcalino-ricco, fsp intermedio, plagioclasio-ricco). I 15 campi principali includono granito, granodiorite, tonalite, sienite, monzonite, diorite, gabbro/norite. La <em>serie di alkali-feldspar granite</em> è il limite superiore con AP&gt;0.90.</p>
+
+    <p>Nel triangolo <strong>FAP</strong> il confine F=10% separa due fasce: F=0–10% (rocce a feldspatoidi <em>accessori</em>, palette verde-teal, es. sienite a feldspatoidi, monzonite a feldspatoidi) da F=10–60% (rocce propriamente <em>sottosaturate</em>, palette viola, es. foid-sienite, foid monzodiorite, tefrifonolite). La foid-sienite è ulteriormente divisa al confine AP=0.90 in <em>feldspato alcalino foid-sienite</em> (AP&gt;0.90) e <em>foid-sienite</em> (AP 0.65–0.90). La foidolite (F&gt;60%) è un campo unico non suddiviso.</p>
+
+    <div class="note"><p>Per le rocce vulcaniche con fenocristalli (&gt;20% modale) si usa la classificazione modale; per le rocce afanitiche si usa il diagramma TAS (Total Alkali vs. Silica, <em>Le Bas et al., 1986</em>). Le sigle plutoniche/vulcaniche si corrispondono: granito/riolite, diorite/andesite, gabbro/basalto, sienite/trachite, foid-sienite/fonolite.</p></div>
+  </section>
+
+  <section id="mafiche-class">
+    <h3>3.2 Rocce mafiche e ultramafiche</h3>
+    <p>Per le rocce con contenuto in mafici &gt;90% (M&gt;90), l'IUGS utilizza il <strong>triangolo Ol-Opx-Cpx</strong> (Olivina-Ortopirosseno-Clinopirosseno). I confini IUGS corretti usano il rapporto Cpx/(Cpx+Opx)=10% e 90% come discriminanti, con i punti esatti (90,9,1) e (90,1,9) sul bordo Ol=90%:</p>
+
+    <table>
+      <tr><th>Roccia</th><th>Composizione</th><th>Gruppo</th></tr>
+      <tr><td><strong>Dunite</strong></td><td>Ol &gt;90%</td><td>Peridotite</td></tr>
+      <tr><td><strong>Harzburgite</strong></td><td>Ol 40–90%, Cpx/(Cpx+Opx) &lt;10%</td><td>Peridotite</td></tr>
+      <tr><td><strong>Lherzolite</strong></td><td>Ol 40–90%, Cpx/(Cpx+Opx) 10–90%</td><td>Peridotite</td></tr>
+      <tr><td><strong>Wehrlite</strong></td><td>Ol 40–90%, Cpx/(Cpx+Opx) &gt;90%</td><td>Peridotite</td></tr>
+      <tr><td><strong>Ortopirossenite</strong></td><td>Ol &lt;40%, Cpx/(Cpx+Opx) &lt;10%</td><td>Pirossenite</td></tr>
+      <tr><td><strong>Websterite</strong></td><td>Ol &lt;40%, Cpx/(Cpx+Opx) 10–90%</td><td>Pirossenite</td></tr>
+      <tr><td><strong>Clinopirossenite</strong></td><td>Ol &lt;40%, Cpx/(Cpx+Opx) &gt;90%</td><td>Pirossenite</td></tr>
+    </table>
+
+    <p>Per i <strong>gabbri e le rocce basiche con plagioclasio</strong> (M=10–90%, Plag dominante su Fsp alcalino) si usa il triangolo <strong>Ol-Px-Plag</strong>: confini a Ol=90%, Ol=40%, Ol=10%, Plag=10%, Plag=90%. I sette campi sono: Dunite → Peridotite → Olivin-Pirossenite → Troctolite → Gabbro Olivinico → Gabbro/Norite → Anortosite.</p>
+  </section>
+
+  <section id="piro-class">
+    <h3>3.3 Rocce piroclastiche</h3>
+    <p>Le rocce piroclastiche si classificano per <strong>granulometria dei clasti</strong> e per <strong>composizione del magma parentale</strong>. La classificazione granulometrica usa la scala Wentworth adattata:</p>
+
+    <table>
+      <tr><th>Clasti</th><th>Dimensione</th><th>Roccia consolid.</th><th>Ambiente tipico</th></tr>
+      <tr><td><strong>Blocchi/Bombe</strong></td><td>&gt;64 mm</td><td>Agglomerato / Breccia piro.</td><td>Prossimale, stromboliano-vulcaniano</td></tr>
+      <tr><td><strong>Lapilli</strong></td><td>2–64 mm</td><td>Tufo lapillistico</td><td>Colonna pliniana, surge freatomagmatico</td></tr>
+      <tr><td><strong>Cenere grossolana</strong></td><td>0.0625–2 mm</td><td>Tufo</td><td>Colonna pliniana, caduta distale</td></tr>
+      <tr><td><strong>Cenere fine</strong></td><td>&lt;0.0625 mm</td><td>Tufo fine / Cineriti</td><td>Colonna ultra-pliniana, dispersione globale</td></tr>
+    </table>
+
+    <p>Le <strong>ignimbriti</strong> sono depositi da flusso piroclastico (<em>pyroclastic density current</em>) originato da collasso di colonna pliniana. Caratterizzate da pomice + cenere ± fiamme saldati (welded) o non saldati, a seconda della temperatura di deposizione. Le ignimbriti delle eruzioni caldericole sono i depositi piroclastici di volume maggiore: Ignimbrite Campana (39 ka, ~200 km³ DRE), Toba (74 ka, ~2800 km³ DRE).</p>
+
+    <p>I <strong>surge</strong> sono flussi piroclastici diluiti e turbolenti, con caratteristica stratificazione incrociata e strutture a antidune. I <strong>lahar</strong> sono colate di fango vulcanico (piroclastiti + acqua) che possono percorrere centinaia di km lungo le valli (Nevado del Ruiz 1985, 23.000 vittime).</p>
+  </section>
+
+  <section id="speciali-class">
+    <h3>3.4 Rocce magmatiche speciali</h3>
+    <p>Alcune rocce magmatiche non rientrano agevolmente nel triangolo QAPF per le loro composizioni estreme o inusuali:</p>
+
+    <dl class="deflist">
+      <dt>Kimberlite</dt>
+      <dd>Roccia ultramafica K-ricca, altamente porfiritica, con olivina serpentinizzata, flogopite, ilmenite, granato piropico. Risale da profondità &gt;150 km (mantello sub-cratonico) attraverso pipe kimberlitiche in tempi brevissimi (ore-giorni). Unica roccia che porta diamanti in superficie. Bacino di Kimberley (Sudafrica), Mirny (Siberia).</dd>
+      <dt>Lamproite</dt>
+      <dd>Simile alla kimberlite ma più ricca in K e SiO₂ (45–55%). Contiene flogopite + richterite (anfibolo K-ricco) + diopside ± leucite. La miniera di Argyle (Australia) produce &gt;95% dei diamanti rosa mondiali da una lamproite.</dd>
+      <dt>Carbonatite</dt>
+      <dd>Roccia magmatica composta da &gt;50% di minerali carbonatici (calcite, dolomite, ankerite). SiO₂ &lt;10%. Unico vulcano attivo con lava carbonatitica: Oldoinyo Lengai (Tanzania), che erutta natrocarbonatite a ~500°C (nera alla solidificazione, si decolora in bianco in poche ore). Fonte mondiale di Nb, REE, P.</dd>
+      <dt>Komatiite</dt>
+      <dd>Lava ultramafica archea (MgO &gt;18%) con caratteristica <em>texture spinifex</em> (cristalli di olivina a forma di foglie di pino, diagnostica della deposizione rapida ad altissima temperatura, &gt;1600°C). Quasi esclusivamente Archeana (mantello ~200-300°C più caldo). Barberton Greenstone Belt (Sudafrica, 3.5 Ga), Munro Township (Ontario, 2.7 Ga).</dd>
+      <dt>Fonolite</dt>
+      <dd>Roccia vulcanica ricca in nefelina + sanidino + aegirina/anfibolo sodico. Equivalente vulcanico della foid-sienite (Streckeisen). "Suona come una campana" (onde acustiche particolari). Tipica dei complessi alcalini di rift maturo e hotspot: Tenerife (Canarie), Kenya Rift, Laacher See (Germania, 12.9 ka).</dd>
+      <dt>Leucitite</dt>
+      <dd>Roccia vulcanica con leucite (KAlSi₂O₆) &gt;40% + augite + olivina ± flogopite. Tipica delle zone post-collisionali con mantello litosferico K-ricco. I Colli Albani costituiscono il più grande distretto leucitifico del mondo (560 km²). Vesuvio, Roccamonfina.</dd>
+    </dl>
+  </section>
+</section>
+
+<!-- ══════════ 4. GEOCHIMICA ══════════ -->
+<section id="geochem">
+  <span class="section-num">04</span>
+  <h2>Geochimica Magmatica</h2>
+  <div class="section-line"></div>
+
+  <section id="serie-chem">
+    <h3>4.1 Caratteristiche delle serie magmatiche</h3>
+    <p>Una <strong>serie magmatica</strong> è un gruppo di rocce cogeneti­che derivate da un magma parentale comune per cristallizzazione frazionata, con o senza contaminazione crostale. Le principali serie sono definite in base ai loro trend geochimici nei diagrammi di variazione:</p>
+
+    <dl class="deflist">
+      <dt>Serie tholeitica (subalcalina bassa-K)</dt>
+      <dd>Caratterizzata da arricchimento in Fe totale nelle fasi iniziali di differenziazione (trend Fenner nel diagramma AFM) prima dell'arricchimento in silice. FeO*/MgO aumenta rapidamente. Tipica delle dorsali oceaniche (MORB), degli hotspot oceanici in fase di alto-grado di fusione, e degli archi insulari primitivi. La cristallizzazione del plagioclasio avviene precocemente (basso contenuto in H₂O). Rocce: basalto tholeitico → basalto ferro-titanifero → icelandite → riolite.</dd>
+      <dt>Serie calcalcalina</dt>
+      <dd>Trend di differenziazione con Fe/Mg quasi costante nel diagramma AFM (trend Bowen): nessun arricchimento significativo in ferro, arricchimento progressivo in silice. Caratteristica degli archi continentali e insulari maturi. Riflette alta fugacità di ossigeno (f O₂) e presenza di H₂O nei magmi di subduzione. Rocce: basalto calcalcalino → andesite → dacite → riolite. Importante per la costruzione della crosta continentale.</dd>
+      <dt>Serie alcalina sodica</dt>
+      <dd>Elevato rapporto Na₂O+K₂O/SiO₂; trend verso composizioni ricche in Na. Tipica dei rift continentali maturi (EARS — East African Rift System), degli hotspot oceanici in fase di basso grado di fusione (OIB alcalino). Rocce: basanite/tefrite → fonolite → foidite. Minerali: nefelina, leucite, analcime.</dd>
+      <dt>Serie alcalina potassica (shoshonitica)</dt>
+      <dd>K₂O/Na₂O &gt; 1, forte arricchimento in K con la differenziazione. Si trova nella parte posteriore degli archi magmatici (back-arc, high-K arc), nelle zone post-collisionali e nei domini cratonici. Rocce: shoshonite → latite → trachite → riolite K-ricca. In Italia: Colli Albani, Vesuvio, Campi Flegrei (K₂O/Na₂O &gt; 1 in molte eruzioni).</dd>
+    </dl>
+
+    <p>La classificazione chimica usa il diagramma <strong>K₂O vs SiO₂</strong> (Peccerillo &amp; Taylor, 1976): le quattro bande sub-parallele (a pendenza positiva) dividono il campo compositivo in serie Low-K (tholeitica), Medium-K (calcalcalina), High-K (shoshonitica-calcalcalina alta-K) e Ultra-K/Kamafugite.</p>
+  </section>
+
+  <section id="diagrammi">
+    <h3>4.2 Diagrammi geochimici classificativi</h3>
+
+    <h4>TAS — Total Alkali vs. Silica (Le Bas et al., 1986)</h4>
+    <p>Il diagramma TAS è lo strumento classificativo standard per le rocce vulcaniche, raccomandato dall'IUGS per le rocce a tessitura fine. L'asse x è SiO₂ (%), l'asse y è Na₂O+K₂O (%). La <strong>linea di MacDonald-Katsura</strong> (Na₂O+K₂O = 13.5 − 0.19·SiO₂) separa il campo subAlcalino (sotto) dall'alcalino (sopra). I 15 campi includono le principali rocce vulcaniche con le rispettive denominazioni.</p>
+
+    <h4>AFM (Wager &amp; Deer, 1939; Irvine &amp; Baragar, 1971)</h4>
+    <p>Triangolo A (Na₂O+K₂O) – F (FeO* totale) – M (MgO). Il <strong>confine di Irvine &amp; Baragar (1971)</strong> separa la serie calcalcalina (percorso verso il vertice A senza arricchimento in Fe) dalla serie tholeitica (percorso verso il vertice F con forte arricchimento in Fe nelle fasi iniziali). Il trend tholeitico mostra un netto aumento di F/M prima della risalita verso A nella zona acida.</p>
+
+    <h4>Na₂O vs. K₂O</h4>
+    <p>La retta Na₂O = K₂O divide le serie sodiche (sopra) dalle potassiche (sotto). Le MORB e gli OIB si trovano quasi tutte nel campo sodico; le shoshoniti e le serie post-collisionali nel campo potassico. Utile per distinguere basalti di arco (K-arricchiti) da basalti di dorsale (K-impoveriti).</p>
+
+    <h4>Nb/Y vs. Zr/Y (Winchester &amp; Floyd, 1977)</h4>
+    <p>Diagramma particolarmente utile per rocce alterate o metamorfosate in cui gli elementi maggiori sono stati mobilizzati. Gli elementi immobili Nb, Y, Zr mantengono le loro concentrazioni originali. Permette di classificare basalti, andesibasalti, andesiti/daciti e rioliti e di discriminare tra MORB, WPB (within-plate basalt) e arco vulcanico.</p>
+  </section>
+
+  <section id="ree">
+    <h3>4.3 Terre rare (REE) e diagrammi multielemento (Spider)</h3>
+    <p>Gli elementi delle <strong>terre rare</strong> (REE, rare earth elements: La–Lu, + Y) formano una serie con proprietà chimiche molto simili ma con K<sub>d</sub> progressivamente crescenti al diminuire del raggio ionico (La → Lu). I pattern di REE normalizzati ai condrite (o al mantello primitivo) rivelano:</p>
+
+    <ul class="plain">
+      <li><strong>Inclinazione del pattern</strong> — Le/Yb elevato indica arricchimento in REE pesanti (LREE &gt; HREE): tipico di OIB e magmi da basso grado di fusione con granato nel residuo (il granato ritiene fortemente le HREE). Le/Yb basso indica pattern piatto o arricchimento in HREE: tipico di MORB e magmi da alto grado di fusione senza granato.</li>
+      <li><strong>Anomalia di Eu</strong> — L'Eu²⁺ entra nel reticolo del plagioclasio in luogo di Ca²⁺. Anomalia negativa di Eu (deplezione): il liquido si è separato dopo frazionamento di plagioclasio. Anomalia positiva: il residuo è arricchito in plagioclasio (anortositi, cumulati).</li>
+      <li><strong>Anomalia di Ce</strong> — Nei sedimenti e nelle acque marine, Ce³⁺ si ossida in Ce⁴⁺ (insolubile). Anomalia negativa di Ce: ambiente ossidante (acque marine). Assente nei magmi primari.</li>
+    </ul>
+
+    <p>I <strong>diagrammi multielemento</strong> (spider diagrams) normalizzano le concentrazioni di 10–20 elementi alla composizione del mantello primitivo o del MORB, ordinati per grado di incompatibilità decrescente da sinistra a destra (Cs, Rb, Ba, Th, U, Nb, K, La, Ce, Sr, Nd, Sm, Zr, Hf, Eu, Ti, Gd, Tb, Y, Yb, Lu):</p>
+
+    <ul class="plain">
+      <li><strong>MORB</strong> — pattern piatto, deplezione in LILE (Large Ion Lithophile Elements: Cs, Rb, Ba, K), senza anomalia di Nb/Ta.</li>
+      <li><strong>OIB</strong> — pattern inclinato verso LILE, arricchimento in tutti gli elementi incompatibili, senza anomalia negativa di Nb/Ta.</li>
+      <li><strong>Arco magmatico</strong> — forte arricchimento in LILE (K, Ba, Rb: portati dall'acqua di deidratazione della slab) + <em>anomalia negativa di Nb-Ta</em> diagnostica. Nb e Ta sono immobili in fluidi acquosi e rimangono nel residuo della slab subducta. Questa anomalia è il segnale geochimico più affidabile di un'origine da arco.</li>
+    </ul>
+
+    <div class="highlight yellow">
+      <div class="hl-title">Anomalia di Nb-Ta: firma dell'arco</div>
+      <p>L'anomalia negativa di Nb e Ta negli spider diagrams è il criterio geochimico più usato per riconoscere rocce formate in ambiente di subduzione — sia nelle rocce moderne che nelle sequenze antiche. Riflette il trattenimento di Nb e Ta nelle fasi rutilo e ilmenite presenti nella crosta subducente, mentre K, Ba, Rb vengono mobilizzati dai fluidi acquosi e metasomatizzano il cuneo del mantello soprastante.</p>
+    </div>
+  </section>
+
+  <section id="geodin-chem">
+    <h3>4.4 Evoluzione geochimica nelle serie magmatiche per contesto geodinamico</h3>
+    <p>La composizione e l'evoluzione geochimica di una serie magmatica dipendono strettamente dal contesto geodinamico in cui si forma, che ne controlla il tipo di sorgente, il grado di fusione, la presenza di volatili e il percorso di differenziazione.</p>
+
+    <h4>Dorsali oceaniche — serie tholeitica di dorsale (N-MORB, E-MORB)</h4>
+    <p>Alle dorsali oceaniche la decompressione adiabatica di mantello astenosferico produce magmi tholeiitici di dorsale (<strong>MORB</strong>). I basalti di dorsale normale (<em>N-MORB</em>) sono impoveriti in LILE e LREE rispetto al mantello primitivo: il mantello sorgente è già <em>depleto</em> da precedenti episodi di fusione. I basalti arricchiti (<em>E-MORB</em>) mostrano pattern più abbondanti, prodotti da mantello meno depleto o con contributo di sorgente di tipo plume. La serie evolve verso ferrospessartiti, icelanditi e rioliti tholeiitiche per cristallizzazione frazionata di plagioclasio + olivina + pirosseno. Il contenuto in H₂O molto basso (&lt;0.5%) favorisce la cristallizzazione precoce del plagioclasio e il trend ferrifero.</p>
+
+    <h4>Archi magmatici — serie calcalcalina e shoshonitica</h4>
+    <p>Negli archi, l'acqua rilasciata dalla slab subducente (da serpentiniti, anfiboli, fengite) metasomatizza il cuneo del mantello abbassando la T del solidus e inducendo fusione a ~70–200 km di profondità. I magmi primari sono basalti calcalcalini o andesibasalti con H₂O = 2–6%. L'alto contenuto idrico ritarda la saturazione in plagioclasio, favorendo la precoce cristallizzazione di anfibolo e magnetite: questo drena Fe e Ti dal liquido, impedendo il trend ferrifero e producendo il classico trend calcalcalino. La progressiva differenziazione produce la suite basalto → andesite → dacite → riolite, con arricchimento progressivo in K. Nella parte posteriore dell'arco (back-arc) o negli archi maturi, il grado di fusione diminuisce e la sorgente è più arricchita in LILE, producendo magmi shoshonitico-potassici.</p>
+
+    <h4>Hotspot e OIB — serie alcalina oceanica</h4>
+    <p>Gli hotspot (Hawaii, Réunion, Islanda, Canarie) derivano da plume del mantello profondi che campionano sorgenti non depleto della transizione mantello inferiore-superiore o del layer D''. Il mantello sorgente OIB è <em>arricchito</em> in LILE, LREE e Nb/Ta rispetto a MORB, riflettendo un reservoir antico e non estratto da precedenti fusioni. Il grado di fusione è variabile: in fase di ascesa del plume (shield stage) il grado è alto (10–20%) e produce basalti tholeiitici (esempio: basalti di Kīlauea, Hawaii); nella fase di declino (post-shield, post-erosional) il grado è basso (&lt;5%) e produce basalti alcalini, basaniti, fonoliti. La serie OIB mostra pattern REE fortemente inclinati con arricchimento in LREE e assenza di anomalia Nb-Ta.</p>
+
+    <h4>Rift continentale — serie alcalina continentale</h4>
+    <p>Nei rift continentali (EARS, Reno-Rhin Graben, Basin and Range) la fusione è indotta da decompressione adiabatica di mantello litosfe­rico stirato e assottigliato. I magmi attraversano spessori crostali variabili: in rift maturi con crosta assottigliata, arrivano quasi indisturbati (basalti alcalini, basaniti); in rift incipiente con crosta continentale spessa, subiscono contaminazione crostale e AFC. La <strong>bimodalità</strong> (presenza di basalti e rioliti con gap composizionale intermedio) è caratteristica dei rift continentali: i basalti riscaldano la crosta inferiore inducendo fusione parziale che produce rioliti peralcaline (comenditi, pantelleriti). La serie alcalina del EARS comprende basaniti → fonoliti → foiditi (con minor grado di fusione) e basalti → trachiti → comenditi (con maggior differenziazione).</p>
+
+    <h4>Post-collisionale — serie potassica e ultra-potassica</h4>
+    <p>Dopo la collisione e il delamination del mantello litosferico, lo sprofondamento del pannello delaminato espone la base crostale e il mantello astenosferico al riscaldamento. I magmi post-collisionali campionano un mantello metasomatizzato da fluidi dell'antica subduzione, con forte arricchimento in K, Rb, Ba, Th, e forte deplezione in Nb, Ti (residua firma della subduzione). In Italia, le Alpi producono magmatismo calcalcalino di arco e successivamente shoshonitico (Adamello, ~34 Ma); l'Appennino e il Tirreno sono associati a magmatismo potassico (Colli Albani, Vesuvio, Campi Flegrei) e ultra-potassico (lamproiti di Murcia e Leucititi dei Colli Albani) generato da mantello litosferico K-metasomatizzato. Il <strong>magmatismo di tipo Romano</strong> (Ultra-K con leucite) rappresenta l'estremo potassico di questa evoluzione in contesti di rift post-collisionale.</p>
+
+    <div class="highlight purple">
+      <div class="hl-title">L'anomalia italiana: un laboratorio naturale di serie magmatiche</div>
+      <p>Il Mediterraneo centrale ospita quasi tutte le serie magmatiche in un'area ristretta: (1) MORB nel Mar Tirreno (crosta oceanica giurassica sepolta); (2) calcalcalina di arco (Sardegna oligocenica, Aeolian arc); (3) shoshonitica e potassica (Campi Flegrei, Vesuvio); (4) ultra-potassica e leucitifera (Colli Albani, Vulsini, Monti Ernici); (5) alcalina sodica (Pantelleria, Linosa). Questa varietà riflette la complessa geodinamica della subduzione adriatica e dello slab rollback tirrenico.</p>
+    </div>
+  </section>
+</section>
+<!-- ══════════ 5. GEODINAMICA ══════════ -->
+<section id="geodin">
+  <span class="section-num">05</span>
+  <h2>Il Magmatismo nei Contesti Geodinamici</h2>
+  <div class="section-line"></div>
+
+  <section id="morb">
+    <h3>5.1 Dorsali oceaniche e MORB</h3>
+    <p>Le dorsali oceaniche sono i siti di maggior produzione magmatica sulla Terra: ~60 km³/anno, pari a ~75% del volume totale di magma prodotto. La fusione avviene per <strong>decompressione adiabatica</strong> del mantello astenosfe­rico che risale sotto la dorsale. La camera magmatica (AMC, Axial Magma Chamber) è tipicamente sottile (poche decine di m) e discontinua; la lava erutta come basalti a pillow in acqua profonda o come sheet flows in prossimità dell'asse.</p>
+
+    <p>Le <strong>ofioliti</strong> sono frammenti di crosta oceanica e mantello superiore obdotti su crosta continentale. La sequenza ofiolitica tipo Penrose (1972) comprende dall'alto: sedimenti pelagici → basalti a pillow (Layer 2A) → sheeted dykes (Layer 2B) → gabbri isotropi (Layer 3) → gabbri cumulatici → peridotiti di transizione → erzolite di mantello con harzburgite depleta. Le ofioliti della Liguria (ofioliti giurassiche dell'Appennino settentrionale) e di Cipro (Troodos) sono esempi classici.</p>
+
+    <p>Le dorsali si classificano in base al tasso di espansione: <em>veloci</em> (East Pacific Rise, 10–15 cm/anno: topografia piatta, camera magmatica continua) e <em>lente</em> (Mid-Atlantic Ridge, 2–4 cm/anno: valley assiale, camera discontinua, maggiore esposizione di peridotiti). Le dorsali lente producono E-MORB più frequentemente per interazione con plume mantellici.</p>
+  </section>
+
+  <section id="archi">
+    <h3>5.2 Archi magmatici e subduzione</h3>
+    <p>Il magmatismo di subduzione nasce dal <strong>flux melting</strong> del mantello sopra la slab: l'acqua e i fluidi supercritici rilasciati dalla deidratazione della crosta oceanica abbassano il solidus del cuneo del mantello. La profondità di fusione è ~100–150 km, corrispondente alla profondità della slab a ~100 km (regola empirica di Syracuse &amp; Abers, 2006).</p>
+
+    <p>I <strong>fronti vulcanici</strong> sono paralleli alla fossa e localizzati ~100–200 km dal bordo della placca sovrastante. Gli archi insulari (es. Aeolian, Lesser Antilles, Aleutine) si sviluppano su crosta oceanica; gli archi continentali (es. Ande, Cascades, Appennino) su crosta continentale spessa con possibile assimilazione crostale. La <strong>zonazione trasversale</strong> degli archi (dalla fossa verso l'entroterra) mostra aumento di K₂O a SiO₂ fissa: bassa-K al fronte → media-K → alta-K (shoshonitica) verso il back-arc. Questo gradiente riflette la profondità crescente della slab.</p>
+
+    <p>Le <strong>eruzioni pliniane</strong> caratteristiche degli archi (Pinatubo 1991, Krakatoa 1883, Vesuvio 79 d.C.) sono legate all'alto contenuto in H₂O e volatili dei magmi calcalcalini: la decompressione durante la risalita porta alla nucleazione massiva di bolle di vapore, producendo colonne eruttive di 20–40 km e flussi piroclastici catastrofici.</p>
+  </section>
+
+  <section id="hotspot">
+    <h3>5.3 Hotspot e punti caldi (OIB)</h3>
+    <p>Gli hotspot sono siti di attività vulcanica persistente, non correlati alle dorsali o ai margini di placca, spesso interpretati come espressione di <strong>plume mantellici</strong> che risalgono dall'interfaccia nucleo-mantello (layer D''). Il modello dei plume (Morgan, 1971) spiega la formazione di catene di isole vulcaniche parallele al moto di placca (es. Hawaii-Emperor chain, Réunion-Deccan Traps).</p>
+
+    <p>Le <strong>Large Igneous Provinces (LIP)</strong> sono l'espressione più spettacolare dei plume mantellici: eruzioni di enormi volumi di basalti tholeiitici in tempi brevi (1–3 Ma). Le Deccan Traps (India, 65 Ma, ~500.000 km³) coincidono con la K-Pg mass extinction. Le Siberian Traps (252 Ma) coincidono con la mass extinction di fine Permiano. I Columbia River Basalts (USA, 16 Ma) si sono formati in &lt;2 Ma.</p>
+
+    <p>La composizione degli OIB varia in base alla profondità e alla natura del plume. Wilson (1989) ha identificato quattro end-member isotopici: <em>HIMU</em> (alto ²⁰⁶Pb/²⁰⁴Pb, mantello con crosta oceanica riciclata antica), <em>EM1</em> (enriched mantle 1, con sedimenti pelagici riciclati), <em>EM2</em> (enriched mantle 2, con sedimenti continentali riciclati), <em>DMM</em> (mantello depleto, sorgente MORB). Gli hotspot campionano combinazioni di questi end-member rivelando la storia del riciclaggio mantellico.</p>
+  </section>
+
+  <section id="rift">
+    <h3>5.4 Rift continentale</h3>
+    <p>Il rift continentale inizia con l'assottigliamento della litosfera per stiramento tettonico (<em>passive rifting</em>) o per il riscaldamento da un plume sub-litosferico (<em>active rifting</em>). In entrambi i casi, la decompressione del mantello astenoferico induce fusione parziale con grado variabile.</p>
+
+    <p>L'<strong>East African Rift System (EARS)</strong> è il sistema di rift continentale più esteso e attivo, esteso per ~3000 km dal Mozambico all'Afar. Mostra una progressione dal rifting incipiente (Ethiopia Rift, vulcani shield con trachiti e ignimbriti) al rifting maturo (Kenya, bacini lacustri profondi, fonoliti e basaniti). Nell'Afar il rift è così avanzato da ospitare crosta sub-oceanica (transizione verso il Mar Rosso e il Golfo di Aden).</p>
+
+    <p>La <strong>bimodalità</strong> basalto-riolite è una firma caratteristica del rifting continentale: i basalti derivano direttamente dal mantello; le rioliti (spesso peralcaline: comenditi e pantelleriti) derivano dalla fusione parziale della crosta inferiore riscaldata dai basalti underplated. Le composizioni intermedie (andesiti, daciti) sono rare o assenti (<em>Daly gap</em>).</p>
+  </section>
+
+  <section id="postcoll">
+    <h3>5.5 Magmatismo post-collisionale</h3>
+    <p>Dopo la collisione di due placche continentali, la subduzione rallenta e cessa. Il delamination della radice litosferia ispessita (Molnar &amp; Tapponnier, 1975; Kay &amp; Kay, 1993) o il slab rollback provocano risalita di astenosfera e fusione di mantello metasomatizzato dalla precedente subduzione. I magmi sono tipicamente K-ricchi, con firma geochemica mista (anomalia Nb-Ta residua + arricchimento LILE).</p>
+
+    <p>In ambiente <strong>post-collisionale alpino</strong>, il magmatismo si sviluppa dai 45 ai 5 Ma nel Mediterraneo centrale con progressione da calcalcalino (Sardegna, 32–13 Ma) a shoshonitico (Toscana, 7–2 Ma) a ultra-potassico (Lazio, 0.7–0 Ma). La minaccia eruttiva dei Campi Flegrei (ultima eruzione: 1538 d.C., Monte Nuovo) e del Vesuvio (ultimo ciclo: 79 d.C.–1944 d.C.) è strettamente collegata a questo contesto geodinamico.</p>
+  </section>
+</section>
+
+<!-- PARTE II -->
+<div class="part-header">
+  <div class="part-num">Parte II</div>
+  <h2>Metamorfismo</h2>
+</div>
+
+<!-- ══════════ 6. INTRO METAMORFISMO ══════════ -->
+<section id="meta-intro">
+  <span class="section-num">06</span>
+  <h2>Introduzione al Metamorfismo</h2>
+  <div class="section-line"></div>
+
+  <p>Il <strong>metamorfismo</strong> è l'insieme delle trasformazioni mineralogiche, strutturali e composizionali che una roccia subisce allo stato solido in risposta a variazioni di temperatura (T), pressione (P) e/o composizione chimica del fluido (X), in condizioni diverse da quelle superficiali. Il limite inferiore verso la diagenesi è convenzionalmente fissato a ~200°C o all'apparizione della prima zona di Barrow; il limite superiore verso la fusione è il solidus della roccia.</p>
+
+  <section id="meta-tipi">
+    <h3>6.1 Tipi di metamorfismo</h3>
+    <table>
+      <tr><th>Tipo</th><th>Agente dominante</th><th>Distribuzione</th><th>Esempio</th></tr>
+      <tr><td><strong>Regionale</strong></td><td>T + P (litostatic)</td><td>Orogeni, cinture metamorfiche</td><td>Alpi, Appalachi, Scotland</td></tr>
+      <tr><td><strong>Di contatto</strong></td><td>T (intrusione)</td><td>Alone termico intorno agli intrusivi</td><td>Aureola del Predazzo (Dolomiti)</td></tr>
+      <tr><td><strong>Dinamico</strong></td><td>Stress meccanico</td><td>Zone di taglio, faglie</td><td>Miloniti, cataclasiti, pseudotachiliti</td></tr>
+      <tr><td><strong>Idrotermale</strong></td><td>Fluidi caldi + T</td><td>Dorsali oceaniche, sistemi geotermici</td><td>Greenschist seafloor, Larderello</td></tr>
+      <tr><td><strong>Impatto</strong></td><td>Shock P ultra-alta</td><td>Crateri da impatto meteoritico</td><td>Ries (Germania), Chicxulub</td></tr>
+    </table>
+  </section>
+
+  <section id="meta-agenti">
+    <h3>6.2 Agenti e variabili del metamorfismo</h3>
+    <p>Le tre variabili fondamentali che definiscono le condizioni metamorfiche sono:</p>
+    <dl class="deflist">
+      <dt>Temperatura (T)</dt>
+      <dd>Controlla la velocità delle reazioni e determina quali minerali sono stabili. Deriva dalla geotermia regionale (20–30°C/km in crosta stabile), dall'intrusione di magmi, o dalla frizione meccanica. Aumenta con la profondità di sepoltura.</dd>
+      <dt>Pressione (P)</dt>
+      <dd>Pressione litostatica (P = ρgh) + pressione deviatorica (stress). La pressione litostatica aumenta di ~0.27 GPa/km in crosta continentale. Altera i raggi ionici e favorisce minerali densi ad alta pressione (granato, glaucofane, giadeite, coesiteite, diamante).</dd>
+      <dt>Composizione del fluido (X)</dt>
+      <dd>I fluidi (H₂O, CO₂, soluzione salina) agiscono come catalizzatori e trasportatori di massa. La presenza di CO₂ stabilizza calcite a scapito del tremolit; l'H₂O è necessaria per la formazione di anfiboli, miche, cloriti.</dd>
+    </dl>
+    <p>Il <strong>grado metamorfico</strong> esprime l'intensità del metamorfismo in termini di T-P raggiunti. La <strong>tessitura</strong> (foliazione, lineazione, blastesi) riflette le condizioni di stress durante il metamorfismo. Il <strong>geobarometro</strong> e il <strong>geotermometro</strong> usano la composizione di coppie di minerali coesistenti per calcolare T e P delle condizioni di picco.</p>
+  </section>
+</section>
+
+<!-- ══════════ 7. FACIES ══════════ -->
+<section id="facies">
+  <span class="section-num">07</span>
+  <h2>Le Facies Metamorfiche</h2>
+  <div class="section-line"></div>
+
+  <p>Il concetto di <strong>facies metamorfica</strong> (Eskola, 1920) definisce un insieme di assemblaggi mineralogici caratteristici di un determinato campo P-T, indipendentemente dalla composizione del protolite. Ogni facies raggruppa tutte le rocce che hanno raggiunto l'equilibrio metamorfico a condizioni P-T simili.</p>
+
+  <h3>7.1 Facies Zeoliti (T: 150–250°C; P: 0.1–0.4 GPa)</h3>
+  <p>La facies più bassa, di transizione dalla diagenesi al metamorfismo sensu stricto. Minerali diagnostici: <strong>laumontite</strong> (CaAl₂Si₄O₁₂·4H₂O), <strong>analcime</strong>, <strong>stilbite</strong>, <strong>prehnite</strong>. Si forma in sequenze vulcanoclastiche sepolte, in aureole di bassa temperatura e in sistemi geotermici. Caratteristica della base delle ofioliti sottoposte a metamorfismo seafloor.</p>
+
+  <h3>7.2 Facies Prehnite-Pumpellyite (T: 250–350°C; P: 0.3–0.8 GPa)</h3>
+  <p>Minerali diagnostici: <strong>prehnite</strong> (Ca₂Al₂Si₃O₁₀(OH)₂) + <strong>pumpellyite</strong> (complesso Ca-Mg-Al-silicato idrato). Transizione tra zeoliti e scisti verdi. Frequente nella crosta oceanica alterata in prossimità delle dorsali e nei margini di arco. La prehnite è spesso visibile come vene bianche nelle rocce basaltiche.</p>
+
+  <h3>7.3 Facies Scisti Verdi (T: 300–500°C; P: 0.3–0.8 GPa)</h3>
+  <p>Il colore verde è dovuto alla <strong>clorite</strong> + <strong>actinolite</strong> + <strong>epidoto</strong> + <strong>albite</strong>. Il quarzo ricristallizza, le feldspati si albitizzano. Le peliti sviluppano <strong>fillade</strong> e <strong>filloniti</strong> con foliazione visibile. Minerali diagnostici nelle metabasiti: actinolite, clorite, albite, epidoto, titanite. La foliazione (scistosità) diventa ben sviluppata. Corrisponde alla Zona a Clorite + Biotite di Barrow nelle peliti.</p>
+
+  <h3>7.4 Facies Anfibolitica (T: 500–700°C; P: 0.5–1.2 GPa)</h3>
+  <p>Minerali diagnostici: <strong>hornblenda</strong> (anfibolo calcico) + <strong>plagioclasio</strong> (An &gt;17%) nelle metabasiti. Le peliti danno <strong>micascisti</strong> a granato + staurolite + cianite o sillimanite (in funzione di P/T). Il quarzo è deformato in nastri. La foliazione è prominente. Corrisponde alla Zona a Granato → Sillimanite di Barrow. La transizione anfibolitica-granuliti avviene con la scomparsa di hornblenda e l'entrata di pirosseno clinopiroxeno.</p>
+
+  <h3>7.5 Facies Granuliti (T: 700–1000°C; P: 0.6–1.5 GPa)</h3>
+  <p>La facies più alta del metamorfismo regionale in crosta media-inferiore. Minerali diagnostici: <strong>ortopirosseno</strong> + <strong>clinopirosseno</strong> + <strong>plagioclasio</strong> ± granato ± cordierite ± spinello. I fluidi acquosi sono assenti (anidre): la disidratazione è completa. La tessitura è granoblastica, senza foliazione (rocce massive). Le granuliti di alta pressione (Grt + Cpx) indicano la crosta inferiore di orogeni collisionali; quelle di bassa P (Opx + Cord) indicano contesti di alta T regionale (archi, hotspot continentali). Il terreno granulittico del Québec (Grenville) è un esempio classico di crosta inferiore esumata.</p>
+
+  <h3>7.6 Facies Scisti Blu (T: 150–500°C; P: 0.5–2.0 GPa)</h3>
+  <p>Facies di alta pressione e bassa temperatura, tipica della subduzione fredda. Minerali diagnostici: <strong>glaucofane</strong> (anfibolo sodico blu) + <strong>lawsonite</strong> + <strong>aragonite</strong> ± giadeite. Il colore blu è dovuto al glaucofane. La formazione di scisti blu richiede un gradiente geotermico basso (&lt;10°C/km): croste oceaniche fredde e giovani subducenti velocemente. Esempi: François (California), Zermatt-Saas (Alpi), blueschist di Syros (Grecia), Shuksan (Washington).</p>
+
+  <h3>7.7 Facies Eclogiti (T: 450–800°C; P: 1.5–4.0 GPa)</h3>
+  <p>La facies di altissima pressione del metamorfismo di subduzione. Minerali diagnostici: <strong>onfacite</strong> (clinopirosseno Na-Al-ricco, verde) + <strong>granato piropo-almandino</strong> (rosso). Assenza completa di plagioclasio (instabile ad alta pressione). Il plagioclasio si decompone in omfacite + kyanite + quarzo/coesiteite. Le eclogiti indicano profondità di sepoltura &gt;45–50 km. Le eclogiti di Trescolmen (Alpi Centrali) e del Dora-Maira (Piemonte) sono tra le più studiate al mondo.</p>
+
+  <h3>7.8 Facies Ultra-Alta Pressione (UHP, P: &gt;2.7 GPa)</h3>
+  <p>Riconosciuta con la scoperta della <strong>coesiteite</strong> (SiO₂ ad alta pressione, Chopin 1984) e del <strong>diamante micrometrico</strong> in rocce crostali continentali — evidenza che rocce continentali possono subire subduzione fino a &gt;100 km di profondità. Le unità UHP più note: Dora-Maira (Piemonte, coesite a 3.5 GPa, ~100 km), Dabie-Sulu (Cina, diamante microcristallino), Papua Nuova Guinea. La scoperta UHP ha rivoluzionato la comprensione dei cicli crostali profondi.</p>
+
+  <h3>7.9 Facies Hornfels (Metamorfismo di Contatto)</h3>
+  <p>Metamorfismo termico a bassa pressione intorno alle intrusioni magmatiche. L'aureola termale decresce in T dall'intrusione verso l'esterno. Minerali diagnostici (nelle peliti): <strong>andalusite</strong> (polimorfo di Al₂SiO₅ a bassa P), <strong>cordierite</strong>, <strong>biotite</strong>, spinello. Nelle calcari: wollastonite, diopsido, grossulare. Le rocce di contatto sono compatte, prive di foliazione (hornfels). Raggio dell'aureola: da pochi dm per dicchi sottili a 5–10 km per batoliti.</p>
+</section>
+
+<!-- ══════════ 8. BARROW ══════════ -->
+<section id="barrow">
+  <span class="section-num">08</span>
+  <h2>La Serie di Barrow nelle Peliti</h2>
+  <div class="section-line"></div>
+
+  <p>George Barrow (<em>Barrow, 1893</em>) ha mappato in Scozia (Scottish Highlands) le <strong>isograde</strong> metamorfiche nelle metapeliti: superfici nel terreno che corrispondono alla prima apparizione di un dato minerale al crescere del grado metamorfico. I minerali indice di Barrow definiscono sette zone di crescente temperatura:</p>
+
+  <ol class="steps">
+    <li><strong>Zona a Clorite</strong> (T ~300–400°C) — Transizione dalla diagenesi al metamorfismo. Clorite + moscovite + quarzo + albite. Rocce: filladi e metapeliti a basso grado. Clorite verde (Mg-Fe-Al-silicato).</li>
+    <li><strong>Zona a Biotite</strong> (T ~400–450°C) — Prima apparizione della biotite per reazione: clorite + moscovite + quarzo → biotite + clorite + H₂O. Biotite nera nelle micaschisti.</li>
+    <li><strong>Zona a Granato</strong> (T ~450–520°C) — Almandino (Fe₃Al₂Si₃O₁₂) come primo granato. Reazione: clorite + moscovite + quarzo → almandino + biotite + H₂O. Il granato resiste all'erosione producendo granulati rotondi nei sedimenti fluviali (source indicator).</li>
+    <li><strong>Zona a Staurolite</strong> (T ~520–580°C) — Staurolite (Fe₂Al₉O₆(SiO₄)₄(OH)₂), cristalli bruni a croce o romboide. Appare per: clorite + granato + biotite + quarzo → staurolite + biotite + H₂O.</li>
+    <li><strong>Zona a Cianite</strong> (T ~550–650°C, P media-alta) — Cianite (Al₂SiO₅ blu, triclinica), polimorfo stabile a pressioni intermedie. Indica condizioni P ≥ ~0.5 GPa. Coesiste con staurolite nelle zone di transizione.</li>
+    <li><strong>Zona a Sillimanite</strong> (T ~650–750°C) — Sillimanite (Al₂SiO₅ prismatica, ortorombica), polimorfo stabile ad alta T. Reazione: cianite → sillimanite (iso-compositionale). Indica raggiungimento della zona più interna dell'orogene.</li>
+    <li><strong>Zona a Cordierite</strong> (T ~700–800°C, P bassa) — Cordierite ((Mg,Fe)₂Al₄Si₅O₁₈), cristalli blu-violacei, stabile a bassa P e alta T (metamorfismo di bassa pressione). Indica gradiente geotermico elevato (&gt;25–30°C/km).</li>
+  </ol>
+
+  <div class="note"><p>I tre polimorfi di Al₂SiO₅ — <strong>andalusite</strong> (bassa P, alta T), <strong>cianite</strong> (alta P, media T), <strong>sillimanite</strong> (alta T) — sono i principali indicatori dei gradienti P-T. Il punto triplo (dove i tre polimorfi coesistono) si trova a circa T=500°C e P=0.38 GPa. La loro presenza o assenza in una roccia permette di stimare le condizioni P-T ragiunte.</p></div>
+</section>
+
+<!-- ══════════ 9. PERCORSI P-T ══════════ -->
+<section id="percorsi">
+  <span class="section-num">09</span>
+  <h2>Percorsi P-T e Geodinamica del Metamorfismo</h2>
+  <div class="section-line"></div>
+
+  <p>Il <strong>percorso P-T-t</strong> (pressure-temperature-time path) di una roccia è la traiettoria che essa descrive nello spazio P-T durante la sepoltura, il picco metamorfico e l'esumazione. La forma del percorso rivela il contesto geodinamico e i meccanismi di esumazione.</p>
+
+  <h3>9.1 Subduzione oceanica</h3>
+  <p>La crosta oceanica fredda subducente segue un gradiente geotermico basso (~5–10°C/km): alta P con bassa T. Il percorso P-T è quasi verticale nel diagramma, attraversando le facies zeoliti → scisti blu → eclogiti. L'esumazione avviene per underplating (scraping off) e ritorno del materiale nella zona di subduzione (<em>extrusion tectonics</em>). Gli scisti blu e le eclogiti di subduzione hanno una breve finestra di stabilità: se subiscono riscaldamento durante l'esumazione, si retrogradano rapidamente in scisti verdi o anfibolitico. La preservazione degli scisti blu richiede esumazione rapida (&lt;5–10 Ma).</p>
+
+  <h3>9.2 Collisione continentale</h3>
+  <p>Durante la collisione continentale, la crosta si ispessisce fino a 60–80 km (Tibet attuale: ~70 km). Il percorso P-T inizia con rapido aumento di P (sepoltura) seguito da aumento di T (riscaldamento conduttivo), producendo un percorso <em>orario</em> (clockwise) nello spazio P-T. Il picco metamorfico è nelle facies anfibolitica → granuliti → eclogiti. L'esumazione avviene per erosione superficiale e/o detachment extensionale nel cuore dell'orogene. Le rocce UHP del Dora-Maira indicano subduzione continentale fino a 100 km seguita da rapida esumazione di 3–4 cm/anno.</p>
+
+  <h3>9.3 Metamorfismo di contatto</h3>
+  <p>L'intrusione di un corpo magmatico caldo produce un breve aumento di T a P quasi costante (bassa): il percorso è quasi orizzontale nel diagramma P-T, da bassa T verso alta T. Il raffreddamento dell'intrusione porta il percorso di ritorno lungo la stessa traiettoria (percorso <em>antiorario</em> o quasi). Facies tipica: hornfels. La grandezza dell'aureola dipende dalla dimensione dell'intrusivo e dalla profondità di messa in posto.</p>
+
+  <h3>9.4 Ultra-Alta Pressione (UHP)</h3>
+  <p>I percorsi UHP mostrano pressioni &gt;2.7 GPa (profondità &gt;80 km): la roccia continentale viene trascinata nella subduzione a grande profondità e poi rapidamente esumate. L'evidenza mineralogica: coesiteite (invece di quarzo), diamante micrometrico, Na in granato, K in clinopirosseno, TiO₂ in quarzo. Il percorso P-T è fortemente <em>orario</em> con picco a profondità estrema. La rapida esumazione impedisce la completa retrogradazione; le inclusioni di coesiteite e diamante in granato vengono preservate grazie alla resistenza meccanica del minerale ospite.</p>
+</section>
+
+<!-- ══════════ 10. PROTOLITI ══════════ -->
+<section id="protoliti">
+  <span class="section-num">10</span>
+  <h2>Protoliti e Paragenesi Metamorfiche</h2>
+  <div class="section-line"></div>
+
+  <p>Il <strong>protolite</strong> è la roccia originale prima del metamorfismo. La composizione chimica del protolite, insieme alle condizioni P-T, determina l'assemblaglio mineralogico (paragenesi) della roccia metamorfica.</p>
+
+  <table>
+    <tr><th>Protolite</th><th>Scisti Verdi</th><th>Anfibolitica</th><th>Granuliti</th><th>Scisti Blu / Eclogiti</th></tr>
+    <tr>
+      <td><strong>Pelite</strong> (argilla)</td>
+      <td>Clorite + Moscovite + Quarzo + Albite</td>
+      <td>Biotite + Granato + Staurolite + Plagioclasio ± Cianite</td>
+      <td>Sillimanite + K-feldspato + Quarzo ± Granato ± Cordierite</td>
+      <td>Glaucofane + Lawsonite / Omfacite + Granato + Cianite</td>
+    </tr>
+    <tr>
+      <td><strong>Basalto / Gabbro</strong></td>
+      <td>Actinolite + Clorite + Epidoto + Albite</td>
+      <td>Hornblenda + Plagioclasio ± Granato ± Epidoto</td>
+      <td>Opx + Cpx + Plagioclasio ± Granato</td>
+      <td>Glaucofane + Epidoto / Omfacite + Granato Piropico</td>
+    </tr>
+    <tr>
+      <td><strong>Granito / Gneiss felsico</strong></td>
+      <td>Muscovite + Quarzo + Albite ± Clorite</td>
+      <td>Biotite + Muscovite + Quarzo + Plagioclasio ± Granato</td>
+      <td>K-feldspato + Quarzo + Plagioclasio ± Granato ± Sillimanite</td>
+      <td>Fengite (Ph) + Quarzo / Omfacite + Granato + K-feldspato</td>
+    </tr>
+    <tr>
+      <td><strong>Arenaria (quarzitica)</strong></td>
+      <td>Quarzo + Muscovite ± Clorite</td>
+      <td>Quarzo + Moscovite ± Biotite</td>
+      <td>Quarzo puro (metaquarzite)</td>
+      <td>Quarzo/Coesiteite (UHP)</td>
+    </tr>
+    <tr>
+      <td><strong>Calcare / Marna</strong></td>
+      <td>Calcite + Quarzo + Clorite ± Biotite</td>
+      <td>Calcite + Tremolit ± Grossulare ± Diopside</td>
+      <td>Wollastonite + Diopside ± Grossulare ± Scapolite</td>
+      <td>Calcite / Aragonite + Omfacite + Granato</td>
+    </tr>
+  </table>
+
+  <h3>10.1 Metamorfismo retrogrado</h3>
+  <p>Il <strong>metamorfismo retrogrado</strong> è la riequilibrazione parziale o totale di una roccia metamorfica ad alta T/P durante l'esumazione verso condizioni di minore T e P. È favorito dalla presenza di fluidi (H₂O in particolare). Esempi tipici: corona kelifitica di anfibolo intorno a granato (retrogrado da eclogite ad anfibolitica); pseudomorfosi di clorite dopo granato o biotite (retrogrado a scisti verdi). La conservazione delle paragenesi di picco dipende dalla velocità di esumazione e dalla presenza/assenza di fluidi.</p>
+</section>
+
+<!-- PARTE III -->
+<div class="part-header">
+  <div class="part-num">Parte III</div>
+  <h2>Sintesi Petrologica</h2>
+</div>
+
+<!-- ══════════ 11. CICLO ══════════ -->
+<section id="ciclo">
+  <span class="section-num">11</span>
+  <h2>Ciclo delle Rocce: Raccordi tra Magmatismo e Metamorfismo</h2>
+  <div class="section-line"></div>
+
+  <section id="anatessi">
+    <h3>11.1 Anatessi e migmatiti</h3>
+    <p>L'<strong>anatessi</strong> è la fusione parziale di rocce crostali a temperature metamorfiche elevate (&gt;650–700°C in presenza di H₂O), producendo un magma di composizione granitica. È il processo che chiude il ciclo magmatico-metamorfico: le rocce metamorfiche di alto grado possono liquefarsi parzialmente, generando nuovi magmi.</p>
+
+    <p>Le <strong>migmatiti</strong> sono rocce di aspetto misto (dal greco <em>migma</em> = miscela): contengono sia frazioni leucocratiche (leucosoma, fuso ricristallizzato) sia frazioni meso- e melanocratiche (mesosom e restite, residuo dell'anatessi). La struttura tipica è a bande o <em>nebulite</em>. La composizione del leucosoma riflette quella del fuso granitico prodotto per anatessi di peliti o gneiss. I leucosomi agisco come nucleo per i graniti anatettici (S-type granites).</p>
+
+    <div class="highlight red">
+      <div class="hl-title">Solidus delle peliti in presenza di H₂O</div>
+      <p>La curva del solidus wet per le peliti scende a ~640–670°C a 0.5 GPa (18 km di profondità): temperature raggiungibili nella crosta inferiore di orogeni attivi. Quando la T supera il solidus wet, si produce fusione parziale. Il leucosoma tipico ha composizione di granodiorite o granito (70–77% SiO₂). La musa­covite breakdown reaction (Ms + Qtz → Kfs + Als + Melt + H₂O) è la principale reazione d'anatessi nelle metapeliti.</p>
+    </div>
+  </section>
+
+  <section id="graniti">
+    <h3>11.2 Granitogenesi: classificazione I-S-A-M</h3>
+    <p>Chappell &amp; White (<em>1974</em>) hanno proposto la distinzione fondamentale tra <strong>graniti di tipo I</strong> (Igneous source) e <strong>graniti di tipo S</strong> (Sedimentary source), successivamente estesa da Loiselle &amp; Wones (<em>1979</em>) con il <strong>tipo A</strong> (Anorogenic) e da White (<em>1979</em>) con il <strong>tipo M</strong> (Mantle):</p>
+
+    <table>
+      <tr><th>Tipo</th><th>Sorgente</th><th>Caratteristiche</th><th>Contesto</th><th>Esempi</th></tr>
+      <tr>
+        <td><strong>I-type</strong></td>
+        <td>Crosta profonda (ignea e meta-ignea)</td>
+        <td>Metaluminoso (A/CNK &lt;1.1), magnetite-bearing, δ¹⁸O 6–10‰, basso P₂O₅</td>
+        <td>Archi continentali, post-collisionale precoce</td>
+        <td>Batolite della Sierra Nevada, Adamello</td>
+      </tr>
+      <tr>
+        <td><strong>S-type</strong></td>
+        <td>Metasedimenti (peliti, psammiti)</td>
+        <td>Peraluminoso (A/CNK &gt;1.1), ilmenite-bearing, muscovite primaria, cordierite, alto P₂O₅, δ¹⁸O &gt;10‰</td>
+        <td>Collisione continentale, anatessi crostale</td>
+        <td>Lachlan Fold Belt (Australia), graniti ercinici della Maremma</td>
+      </tr>
+      <tr>
+        <td><strong>A-type</strong></td>
+        <td>Crosta inferiore anidra o mantello</td>
+        <td>Alto Fe/(Fe+Mg), alto Ga/Al, alto F, Nb, Y, REE; peralcalino o metaluminoso</td>
+        <td>Rift, post-collisionale tardivo, hotspot continentale</td>
+        <td>Comenditi di Pantelleria, graniti della Nigeria</td>
+      </tr>
+      <tr>
+        <td><strong>M-type</strong></td>
+        <td>Mantello (tonaliti TTG + trondhjemiti oceaniche)</td>
+        <td>Basso K, alto Sr, alto Na, basso δ¹⁸O (&lt;6‰), deplezione in LILE</td>
+        <td>Archi insulari primitivi, Archeano</td>
+        <td>TTG (tonaliti-trondhjemiti-granodioriti) dei greenstone belt</td>
+      </tr>
+    </table>
+
+    <p>Le <strong>TTG</strong> (tonalite-trondhjemite-granodiorite) archee sono la prima crosta continentale formata sulla Terra primitiva (&gt;2.5 Ga). Si originano per fusione parziale di crosta basaltica idratata in subduzione a profondità significative (con granato nel residuo: HREE basse). Costituiscono i nuclei cratonici antichi (Kaapvaal, Superior, Pilbara). La loro abbondanza nel record archeo suggerisce che la geodinamica archea fosse diversa dall'attuale (subduzione piatta, mantello più caldo).</p>
+  </section>
+</section>
+
+<!-- ══════════ 12. BIBLIOGRAFIA ══════════ -->
+<section id="biblio">
+  <span class="section-num">12</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Barrow G.</span> <span class="year">(1893)</span> — <span class="title">On an intrusion of muscovite-biotite gneiss in the south-eastern Highlands of Scotland and its accompanying metamorphism</span>. <span class="journal">Quarterly Journal of the Geological Society, 49, 330–358.</span></p>
+  <p class="ref"><span class="authors">Bowen N.L.</span> <span class="year">(1922)</span> — <span class="title">The reaction principle in petrogenesis</span>. <span class="journal">Journal of Geology, 30, 177–198.</span></p>
+  <p class="ref"><span class="authors">Chappell B.W. &amp; White A.J.R.</span> <span class="year">(1974)</span> — <span class="title">Two contrasting granite types</span>. <span class="journal">Pacific Geology, 8, 173–174.</span></p>
+  <p class="ref"><span class="authors">Chopin C.</span> <span class="year">(1984)</span> — <span class="title">Coesite and pure pyrope in high-grade blueschists of the Western Alps: a first record and some consequences</span>. <span class="journal">Contributions to Mineralogy and Petrology, 86, 107–118.</span></p>
+  <p class="ref"><span class="authors">Eskola P.</span> <span class="year">(1920)</span> — <span class="title">The mineral facies of rocks</span>. <span class="journal">Norsk Geologisk Tidsskrift, 6, 143–194.</span></p>
+  <p class="ref"><span class="authors">Irvine T.N. &amp; Baragar W.R.A.</span> <span class="year">(1971)</span> — <span class="title">A guide to the chemical classification of the common volcanic rocks</span>. <span class="journal">Canadian Journal of Earth Sciences, 8, 523–548.</span></p>
+  <p class="ref"><span class="authors">Kay R.W. &amp; Kay S.M.</span> <span class="year">(1993)</span> — <span class="title">Delamination and delamination magmatism</span>. <span class="journal">Tectonophysics, 219, 177–189.</span></p>
+  <p class="ref"><span class="authors">Le Bas M.J. et al.</span> <span class="year">(1986)</span> — <span class="title">A chemical classification of volcanic rocks based on the total alkali-silica diagram</span>. <span class="journal">Journal of Petrology, 27, 745–750.</span></p>
+  <p class="ref"><span class="authors">Le Maitre R.W. (ed.) et al.</span> <span class="year">(2002)</span> — <span class="title">Igneous rocks: a classification and glossary of terms</span>. <span class="journal">Cambridge University Press, 2nd ed., 236 pp.</span></p>
+  <p class="ref"><span class="authors">Loiselle M.C. &amp; Wones D.R.</span> <span class="year">(1979)</span> — <span class="title">Characteristics and origin of anorogenic granites</span>. <span class="journal">Geological Society of America Abstracts with Programs, 11, 468.</span></p>
+  <p class="ref"><span class="authors">Magoon L.B. &amp; Dow W.G. (eds.)</span> <span class="year">(1994)</span> — <span class="title">The Petroleum System — From Source to Trap</span>. <span class="journal">AAPG Memoir 60, 655 pp.</span></p>
+  <p class="ref"><span class="authors">Molnar P. &amp; Tapponnier P.</span> <span class="year">(1975)</span> — <span class="title">Cenozoic tectonics of Asia: effects of a continental collision</span>. <span class="journal">Science, 189, 419–426.</span></p>
+  <p class="ref"><span class="authors">Morgan W.J.</span> <span class="year">(1971)</span> — <span class="title">Convection plumes in the lower mantle</span>. <span class="journal">Nature, 230, 42–43.</span></p>
+  <p class="ref"><span class="authors">Peccerillo A. &amp; Taylor S.R.</span> <span class="year">(1976)</span> — <span class="title">Geochemistry of Eocene calc-alkaline volcanic rocks from the Kastamonu area, northern Turkey</span>. <span class="journal">Contributions to Mineralogy and Petrology, 58, 63–81.</span></p>
+  <p class="ref"><span class="authors">Penrose Conference Participants</span> <span class="year">(1972)</span> — <span class="title">Ophiolites</span>. <span class="journal">Geotimes, 17, 24–25.</span></p>
+  <p class="ref"><span class="authors">Streckeisen A.</span> <span class="year">(1974)</span> — <span class="title">Classification and nomenclature of plutonic rocks</span>. <span class="journal">Geologische Rundschau, 63, 773–786.</span></p>
+  <p class="ref"><span class="authors">Syracuse E.M. &amp; Abers G.A.</span> <span class="year">(2006)</span> — <span class="title">Global compilation of variations in slab depth beneath arc volcanoes and implications</span>. <span class="journal">Geochemistry Geophysics Geosystems, 7, Q05017.</span></p>
+  <p class="ref"><span class="authors">Winchester J.A. &amp; Floyd P.A.</span> <span class="year">(1977)</span> — <span class="title">Geochemical discrimination of different magma series and their differentiation products using immobile elements</span>. <span class="journal">Chemical Geology, 20, 325–343.</span></p>
+  <p class="ref"><span class="authors">Wilson M.</span> <span class="year">(1989)</span> — <span class="title">Igneous Petrogenesis</span>. <span class="journal">Unwin Hyman, London, 466 pp.</span></p>
+</section>
+
+</main>
+
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.15,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

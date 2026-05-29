@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di Sedimentologia</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#00c8f0;--accent2:#f0a030;--accent3:#80e060;--accent4:#c060f0;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+
+/* ── NAV LATERALE ── */
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+
+/* ── CONTENUTO ── */
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+
+/* Intestazione */
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+
+/* Sezioni */
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:0.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+
+/* Citazioni e note */
+blockquote{border-left:3px solid var(--accent);padding:.8rem 1.2rem;margin:1.5rem 0;background:var(--surface);border-radius:0 4px 4px 0}
+blockquote p{margin:0;font-style:italic;color:var(--text);font-size:.95rem}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent3);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+
+/* Tabelle */
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+
+/* Classificazioni */
+.classif{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:5px;overflow:hidden;margin:1.5rem 0}
+.classif-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:1px;background:var(--border)}
+.classif-cell{background:var(--surface);padding:.55rem .7rem}
+.classif-cell.header{background:var(--surface2)}
+.classif-cell .label{font-family:var(--mono);font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:.2rem}
+.classif-cell .value{font-family:var(--sans);font-size:.88rem;color:var(--text)}
+.classif-cell .sub{font-size:.78rem;color:var(--muted);font-style:italic}
+
+/* Sequenze e liste */
+.steps{counter-reset:step;list-style:none;margin:1rem 0}
+.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+
+/* Definizioni */
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+
+/* Referenze */
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+
+/* Badge colori litologie */
+.badge{display:inline-block;padding:.12rem .5rem;border-radius:3px;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;margin:.1rem .1rem}
+
+/* Highlight box */
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.green{border-color:rgba(128,224,96,.3);background:rgba(128,224,96,.04)}
+.highlight.orange{border-color:rgba(240,160,48,.3);background:rgba(240,160,48,.04)}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.green .hl-title{color:var(--accent3)}
+.highlight.orange .hl-title{color:var(--accent2)}
+.highlight.blue .hl-title{color:var(--accent)}
+.highlight.purple .hl-title{color:var(--accent4)}
+.highlight p{margin:0;font-size:.9rem}
+
+/* Formula */
+.formula{font-family:var(--mono);font-size:.8rem;color:var(--accent);background:var(--surface2);border:1px solid var(--border2);padding:.4rem .8rem;border-radius:3px;margin:.5rem 0;display:inline-block}
+
+/* Scrollbar */
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* Responsive */
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Manuale di Sedimentologia</p>
+  </div>
+  <ul>
+    <li class="sec-label">Introduzione</li>
+    <li><a href="#intro">1. Ciclo Sedimentario</a></li>
+    <li class="sec-label">Classificazione</li>
+    <li><a href="#clastiche">2. Rocce Clastiche</a></li>
+    <li><a href="#clastiche" class="sub">2.1 Scala di Wentworth</a></li>
+    <li><a href="#folk74" class="sub">2.2 Triangolo Folk (1974)</a></li>
+    <li><a href="#maturita" class="sub">2.3 Maturità</a></li>
+    <li><a href="#carbonatiche">3. Rocce Carbonatiche</a></li>
+    <li><a href="#dunham" class="sub">3.1 Classificazione Dunham</a></li>
+    <li><a href="#folk59" class="sub">3.2 Classificazione Folk</a></li>
+    <li><a href="#allochems" class="sub">3.3 Componenti carbonatici</a></li>
+    <li><a href="#evaporiti">4. Rocce Evaporitiche</a></li>
+    <li class="sec-label">Ambienti</li>
+    <li><a href="#continentali">5. Ambienti Continentali</a></li>
+    <li><a href="#fluviale" class="sub">5.1 Fluviale</a></li>
+    <li><a href="#eolico" class="sub">5.2 Eolico</a></li>
+    <li><a href="#lacustre" class="sub">5.3 Lacustre</a></li>
+    <li><a href="#glaciale" class="sub">5.4 Glaciale</a></li>
+    <li><a href="#transizionali">6. Ambienti Transizionali</a></li>
+    <li><a href="#delta" class="sub">6.1 Delta</a></li>
+    <li><a href="#estuario" class="sub">6.2 Estuario</a></li>
+    <li><a href="#laguna" class="sub">6.3 Laguna e Piattaforma</a></li>
+    <li><a href="#spiaggia" class="sub">6.4 Spiaggia e Shoreface</a></li>
+    <li><a href="#marini">7. Ambienti Marini</a></li>
+    <li><a href="#piattaforma" class="sub">7.1 Piattaforma continentale</a></li>
+    <li><a href="#rampa" class="sub">7.2 Rampa carbonatica</a></li>
+    <li><a href="#scarpata" class="sub">7.3 Scarpata e Bacino</a></li>
+    <li><a href="#bacino" class="sub">7.4 Bacino profondo</a></li>
+    <li class="sec-label">Diagenesi</li>
+    <li><a href="#diagenesi">8. Diagenesi</a></li>
+    <li><a href="#zone-diag" class="sub">8.1 Zone diagenetiche</a></li>
+    <li><a href="#porosita" class="sub">8.2 Evoluzione della porosità</a></li>
+    <li><a href="#kerogene" class="sub">8.3 Maturazione kerogene</a></li>
+    <li><a href="#sistema-petro" class="sub">8.4 Sistema petrolifero</a></li>
+    <li class="sec-label">Riferimenti</li>
+    <li><a href="#biblio">9. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Sedimentologia</div>
+  <h1>Rocce Sedimentarie, Ambienti di Sedimentazione e Diagenesi</h1>
+  <p class="subtitle">Classificazione petrografica, analisi degli ambienti deposizionali e processi diagenetici con approfondimento sugli idrocarburi</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="intro">
+  <span class="section-num">01</span>
+  <h2>Il Ciclo Sedimentario</h2>
+  <div class="section-line"></div>
+
+  <p>Le rocce sedimentarie coprono circa il <strong>75% della superficie terrestre emersa</strong> e rappresentano meno del 5% in volume della crosta terrestre. La loro importanza scientifica è inversamente proporzionale al loro volume: contengono la quasi totalità dei fossili, registrano la storia degli ambienti superficiali passati e ospitano la maggior parte delle risorse energetiche mondiali (petrolio, gas, carbone).</p>
+
+  <p>Il <strong>ciclo sedimentario</strong> comprende quattro processi fondamentali: (1) <em>erosione e alterazione</em> delle rocce sorgente, (2) <em>trasporto</em> del materiale clastio o in soluzione, (3) <em>deposizione</em> nell'ambiente sedimentario e (4) <em>diagenesi</em>, ovvero l'insieme delle trasformazioni fisico-chimiche che convertono il sedimento in roccia.</p>
+
+  <h3>Classificazione generale</h3>
+  <p>Le rocce sedimentarie si classificano in tre grandi famiglie in base all'origine del materiale costituente:</p>
+
+  <table>
+    <tr><th>Famiglia</th><th>Origine</th><th>Esempi principali</th></tr>
+    <tr><td><strong>Clastiche (detritiche)</strong></td><td>Frammenti fisici di rocce preesistenti</td><td>Conglomerati, arenarie, siltiti, argilliti, shale</td></tr>
+    <tr><td><strong>Biochimiche / Organogene</strong></td><td>Accumulo di resti organici o precipitazione biochimica</td><td>Calcari, dolomie, chalk, diatomiti, carbon fossile</td></tr>
+    <tr><td><strong>Chimiche</strong></td><td>Precipitazione inorganica da soluzione</td><td>Evaporiti (gesso, alite), selce, travertino, ooliti</td></tr>
+  </table>
+
+  <div class="note"><p>Una quarta categoria, le <strong>rocce piroclastiche</strong> (tufi, ignimbriti, agglomerati), è spesso trattata nella sedimentologia per la sua deposizione in ambiente superficiale secondo meccanismi analoghi a quelli sedimentari, pur avendo origine magmatica.</p></div>
+
+  <h3>Strutture sedimentarie primarie</h3>
+  <p>Le strutture sedimentarie primarie si formano durante o immediatamente dopo la deposizione e sono fondamentali per l'interpretazione paleoambientale. Le principali categorie sono:</p>
+
+  <dl class="deflist">
+    <dt>Stratificazione incrociata (cross-bedding)</dt>
+    <dd>Lamine oblique rispetto alla stratificazione principale. La stratificazione incrociata a grande scala (>5 cm) indica alta energia (dune eoliche, barre fluviali); a piccola scala (ripple cross-lamination) indica bassa energia. L'angolo di inclinazione delle lamine indica la direzione di paleoflusso.</dd>
+    <dt>Laminazione planare parallela</dt>
+    <dd>Lamine parallele ai piani di stratificazione. Indica deposizione in regime di flusso superiore (upper flow regime, Fr>1) nelle arenarie o sedimentazione lenta da sospensione nelle peliti. Nelle arenarie è spesso associata a parting lineation (allineamento dei grani di muscovite nella direzione del flusso).</dd>
+    <dt>Hummocky Cross-Stratification (HCS)</dt>
+    <dd>Struttura diagnostica delle tempestiti: lamine ondulate a bassa inclinazione (~5-10°) con geometria a cupola (hummocks) e a conca (swales). Si forma durante tempeste sulla piattaforma continentale al di sopra dello storm wave base. Raramente confusa con altre strutture.</dd>
+    <dt>Gradazione granulometrica (grading)</dt>
+    <dd>Variazione della granulometria all'interno di uno strato. La gradazione <em>normale</em> (grossolano in basso, fine in alto) indica deposizione da corrente in decelerazione (torbiditi, alluvioni). La gradazione <em>inversa</em> indica accelerazione del flusso o trazione in fondo (debris flow).</dd>
+    <dt>Bioturbazione</dt>
+    <dd>Strutture prodotte dall'attività biologica (alimentazione, deambulazione, abitazione) che distrugge le strutture fisiche primarie. L'ichnofacies (associazione di tracce fossili) indica l'energia e la natura dell'ambiente. Le principali ichnofacies sono: Skolithos (alta energia, substrato mobile), Cruziana (moderata energia, offshore), Zoophycos (bassa energia, offshore distale), Nereites (bassissima energia, abissale).</dd>
+  </dl>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="clastiche">
+  <span class="section-num">02</span>
+  <h2>Rocce Clastiche (Detritiche)</h2>
+  <div class="section-line"></div>
+
+  <p>Le rocce clastiche sono formate da frammenti (clasti) di rocce preesistenti trasportati e depositati da agenti fisici (acqua, vento, ghiaccio). La loro classificazione si basa su due criteri principali: la <strong>granulometria</strong> e la <strong>composizione mineralogica</strong>.</p>
+
+  <section id="wentworth">
+    <h3>2.1 Scala di Wentworth (1922)</h3>
+    <p>La scala di Wentworth (<em>Wentworth, 1922</em>) è la classificazione granulometrica standard per i sedimenti clastici. È una scala logaritmica in base 2, espressa anche come valore Φ (phi = −log₂ d, dove d è il diametro in mm).</p>
+
+    <div class="formula">Φ = −log₂(d[mm])</div>
+
+    <table>
+      <tr><th>Classe</th><th>Diametro (mm)</th><th>Φ</th><th>Gruppo</th><th>Roccia consolidata</th></tr>
+      <tr><td><strong>Masso</strong></td><td>&gt;256</td><td>&gt;−8</td><td>Rudite</td><td>Conglomerato / Breccia</td></tr>
+      <tr><td><strong>Ciottolo</strong></td><td>64–256</td><td>−8–−6</td><td>Rudite</td><td>Conglomerato</td></tr>
+      <tr><td><strong>Ghiaia</strong></td><td>4–64</td><td>−6–−2</td><td>Rudite</td><td>Conglomerato</td></tr>
+      <tr><td><strong>Granulo</strong></td><td>2–4</td><td>−2–−1</td><td>Rudite</td><td>Conglomerato / Arenaria gr.</td></tr>
+      <tr><td><strong>Sabbia grossolana</strong></td><td>0.5–2</td><td>−1–1</td><td>Arenite</td><td>Arenaria grossolana</td></tr>
+      <tr><td><strong>Sabbia media</strong></td><td>0.25–0.5</td><td>1–2</td><td>Arenite</td><td>Arenaria media</td></tr>
+      <tr><td><strong>Sabbia fine</strong></td><td>0.0625–0.25</td><td>2–4</td><td>Arenite</td><td>Arenaria fine</td></tr>
+      <tr><td><strong>Silt</strong></td><td>0.0039–0.0625</td><td>4–8</td><td>Lutite</td><td>Siltite</td></tr>
+      <tr><td><strong>Argilla</strong></td><td>&lt;0.0039</td><td>&gt;8</td><td>Lutite</td><td>Argillite / Shale / Pelite</td></tr>
+    </table>
+
+    <p>Le <strong>ruditi</strong> (ghiaie e ciottoli) si formano in ambienti ad altissima energia o per breve trasporto (conoidi alluvionali, spiagge ghiaiose, ghiacciai). La distinzione tra <em>conglomerato</em> (clasti arrotondati) e <em>breccia</em> (clasti angolosi) riflette la distanza di trasporto. Le <strong>areniti</strong> sono le rocce clastiche più comuni e costituiscono importanti reservoir per idrocarburi e acquiferi. Le <strong>lutiti</strong> (siltiti e argilliti) sono le rocce sedimentarie più abbondanti in volume (~60% dei sedimenti) e includono gli shale, potenziali source rock per gli idrocarburi.</p>
+  </section>
+
+  <section id="folk74">
+    <h3>2.2 Triangolo composizionale Folk (1974)</h3>
+    <p>Per le <em>arenarie</em> (sabbie consolidate con clasti 0.0625–2 mm), la granulometria non è sufficiente a caratterizzare la roccia. Folk (<em>Folk, 1974</em>; ripresa da Pettijohn et al., <em>1972</em>) propone una classificazione composizionale nel triangolo Q-F-L:</p>
+
+    <ul class="plain">
+      <li><strong>Q (Quarzo)</strong> — quarzo monocristallino, policristallino e selce (chert)</li>
+      <li><strong>F (Feldspato)</strong> — feldspati K (ortoclasio, sanidino, microclino) e plagioclasio</li>
+      <li><strong>L (Litici)</strong> — frammenti di rocce: vulcaniti (Lv), sedimentiti (Ls), metamorfiti (Lm)</li>
+    </ul>
+
+    <p>I confini principali nel triangolo Folk sono: Q=90% (quarzarenite), Q=75% (zona arenitica ricca in Q), Q=25% (zona arenitica povera in Q), F/(F+L)=0.75 (confine arcose/litarenite), F/(F+L)=0.25 (confine inverso). I 9 campi classificativi sono:</p>
+
+    <table>
+      <tr><th>Campo</th><th>Composizione</th><th>Maturità</th><th>Ambiente tipico</th></tr>
+      <tr><td><strong>Quarzarenite</strong></td><td>Q&gt;90%</td><td>Supermatura</td><td>Desertico eolico, piattaforme cratoniche stabili</td></tr>
+      <tr><td><strong>Subarcose</strong></td><td>Q 75–90%, F&gt;L</td><td>Submatura</td><td>Fluviale prossimale, rift incipiente</td></tr>
+      <tr><td><strong>Sublitarenite</strong></td><td>Q 75–90%, L&gt;F</td><td>Submatura</td><td>Fluviale, delta, piattaforma</td></tr>
+      <tr><td><strong>Arcose</strong></td><td>Q 25–75%, F/(F+L)&gt;75%</td><td>Immatura</td><td>Conoidi, pedemontano arido, rift</td></tr>
+      <tr><td><strong>Litarenite feldspatica</strong></td><td>Q 25–75%, F/(F+L) 25–75%</td><td>Immatura</td><td>Arco vulcanico, bacini di avanfossa</td></tr>
+      <tr><td><strong>Litarenite</strong></td><td>Q 25–75%, L/(F+L)&gt;75%</td><td>Immatura</td><td>Torbiditi, flysch, delta prossimali</td></tr>
+      <tr><td><strong>Arcosa (Q basso)</strong></td><td>Q&lt;25%, F dominante</td><td>Molto immatura</td><td>Erosione rapida di graniti, climi aridi</td></tr>
+      <tr><td><strong>Greywacke feldspatico</strong></td><td>Q&lt;25%, F/(F+L) 25–75%</td><td>Molto immatura</td><td>Torbiditi prossimali, prismi di accrezione</td></tr>
+      <tr><td><strong>Greywacke litico</strong></td><td>Q&lt;25%, L dominante</td><td>Molto immatura</td><td>Flysch, margini convergenti</td></tr>
+    </table>
+
+    <p>Il <strong>greywacke</strong> (o graywacke) merita una nota speciale: oltre alla composizione immatura, è caratterizzato da abbondante <em>matrice</em> argillosa (&gt;15%) che lo distingue dalle litareniti. La matrice deriva da compattazione di litici duttili (pseudomatrice) o da infiltrazione diagenetica. I greywacke sono tipici delle sequenze di flysch paleozoici e mesozoici.</p>
+  </section>
+
+  <section id="maturita">
+    <h3>2.3 Maturità tessiturale e composizionale</h3>
+    <p>La <strong>maturità compositiva</strong> riflette il grado di alterazione chimica dei costituenti instabili (feldspati, litici) durante il trasporto e l'alterazione superficiale. Il rapporto Q/(Q+F+L) aumenta con la maturità. La <strong>maturità tessiturale</strong> (Folk, 1951) considera quattro stadi:</p>
+
+    <ol class="steps">
+      <li><strong>Immatura</strong> — argilla &gt;5%, clasti angolosi, mal classata</li>
+      <li><strong>Submatura</strong> — argilla &lt;5%, clasti ancora angolosi, classazione moderata</li>
+      <li><strong>Matura</strong> — argilla assente, clasti arrotondati, buona classazione</li>
+      <li><strong>Supermatura</strong> — argilla assente, clasti sferici e arrotondati, ottima classazione, composizione quasi pura in quarzo</li>
+    </ol>
+
+    <div class="highlight blue">
+      <div class="hl-title">Indice petrologico di provenienza</div>
+      <p>La composizione QFL permette di identificare il <em>petrofacies</em> della sorgente (Dickinson &amp; Suczek, 1979; Dickinson et al., 1983). Le arenarie di craton interior hanno alti Q; quelle di orogeni riciclati hanno alti Qr+L; quelle di archi magmatici hanno alti Lv e F.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="carbonatiche">
+  <span class="section-num">03</span>
+  <h2>Rocce Carbonatiche</h2>
+  <div class="section-line"></div>
+
+  <p>Le rocce carbonatiche costituiscono circa il <strong>20% delle rocce sedimentarie</strong> e rivestono un'importanza straordinaria come reservoir per idrocarburi (~50% delle riserve mondiali), come acquiferi e come archivio paleoclimatico. Sono composte prevalentemente da calcite (CaCO₃), aragonite (CaCO₃ polimorfa), dolomite (CaMg(CO₃)₂) e minerali silicei accessori.</p>
+
+  <section id="dunham">
+    <h3>3.1 Classificazione di Dunham (1962)</h3>
+    <p>Dunham (<em>Dunham, 1962</em>) classifica le rocce carbonatiche in base al <strong>contenuto in grani</strong> e al <strong>tipo di supporto</strong> (matrice micritica vs. grani a contatto). È la classificazione più usata in campo applicativo (industria petrolifera) per la sua correlazione con la porosità.</p>
+
+    <table>
+      <tr><th>Termine</th><th>Definizione</th><th>Energia</th><th>Porosità tipica</th></tr>
+      <tr><td><strong>Mudstone</strong></td><td>&lt;10% grani, matrice micritica dominante</td><td>Molto bassa</td><td>1–5%</td></tr>
+      <tr><td><strong>Wackestone</strong></td><td>10–50% grani in matrice micritica (mud-supported)</td><td>Bassa</td><td>5–15%</td></tr>
+      <tr><td><strong>Packstone</strong></td><td>&gt;50% grani, grain-supported con micrite interstiziale</td><td>Media</td><td>10–20%</td></tr>
+      <tr><td><strong>Grainstone</strong></td><td>&gt;50% grani, grain-supported senza micrite, cemento sparite</td><td>Alta</td><td>20–35%</td></tr>
+      <tr><td><strong>Boundstone</strong></td><td>Organismi costruttori in posizione di vita</td><td>Variabile (reef)</td><td>Molto variabile</td></tr>
+      <tr><td><strong>Crystalline</strong></td><td>Struttura originale obliterata dalla ricristallizzazione</td><td>N/A (diagenetica)</td><td>Variabile</td></tr>
+    </table>
+
+    <p>Embry &amp; Klovan (<em>1971</em>) hanno esteso la classificazione di Dunham con due termini aggiuntivi per le ruditi carbonatiche: <em>Floatstone</em> (grani &gt;2 mm, mud-supported) e <em>Rudstone</em> (grani &gt;2 mm, grain-supported).</p>
+  </section>
+
+  <section id="folk59">
+    <h3>3.2 Classificazione di Folk (1959)</h3>
+    <p>Folk (<em>Folk, 1959</em>) propone una nomenclatura basata sulla combinazione di due elementi: il tipo di <strong>allochems</strong> (grani) e il tipo di <strong>pasta di fondo</strong>. Questa classificazione è più descrittiva e geneticamente informativa della classificazione di Dunham.</p>
+
+    <p>I quattro tipi principali di allochems sono: <em>bioclasti</em> (Bio-), <em>oidi</em> (Oo-), <em>pellet</em> (Pel-), <em>intraclasti</em> (Intra-). La pasta di fondo può essere <em>sparite</em> (-sparite, cemento calcitico limpido, alta energia) o <em>micrite</em> (-micrite, fango carbonatico, bassa energia).</p>
+
+    <table>
+      <tr><th>Allochem</th><th>+Sparite</th><th>+Micrite</th><th>Corrispondenza Dunham</th></tr>
+      <tr><td>Bioclasti</td><td><strong>Biosparite</strong></td><td><strong>Biomicrite</strong></td><td>Grainstone / Wackestone</td></tr>
+      <tr><td>Oidi</td><td><strong>Oosparite</strong></td><td><strong>Oomicrite</strong></td><td>Grainstone / Packstone</td></tr>
+      <tr><td>Pellet</td><td><strong>Pelsparite</strong></td><td><strong>Pelmicrite</strong></td><td>Grainstone / Wackestone</td></tr>
+      <tr><td>Intraclasti</td><td><strong>Intrasparite</strong></td><td><strong>Intramicrite</strong></td><td>Grainstone / Packstone</td></tr>
+    </table>
+
+    <p>A queste si aggiungono: <strong>Dismicrite</strong> (micrite con cavità fenestrale da essiccamento, ambiente intertidal-supratidale) e <strong>Micrite</strong> o calcilutite (roccia quasi esclusivamente micritica, equivalente al Mudstone di Dunham).</p>
+  </section>
+
+  <section id="allochems">
+    <h3>3.3 Componenti carbonatici principali</h3>
+
+    <h4>Micrite</h4>
+    <p>La micrite (Folk, 1959) è un fango carbonatico composto da cristalliti di calcite &lt;4 μm. Si forma per: (1) precipitazione chimica diretta dall'acqua di mare sovrassatura in CaCO₃ (<em>whiting events</em>); (2) degradazione di alghe codiacee (alghe verdi che producono acicule di aragonite); (3) bioturbazione che trita i grani carbonatici. La micrite è indicatore di acque calme e ambienti protetti.</p>
+
+    <h4>Sparite</h4>
+    <p>La sparite è calcite limpida a cristalli &gt;4 μm che riempie spazi interstiziali. Si forma per precipitazione diagenetica precoce in ambienti freatici marini (calcite fibrosa isopachica), freatici meteoritici (calcite a mosaico drusy) o vadosi (cemento meniscale). La morfologia del cemento indica il regime idrologico durante la diagenesi precoce.</p>
+
+    <h4>Oidi</h4>
+    <p>Gli oidi sono grani sferici con nucleo e cortex concentrico (0.1–2 mm) di carbonato. Si formano per precipitazione chimica-organica in acque agitate, calde (18–30°C), sovrassature in CaCO₃. Oggi si formano nelle Bahamas, nel Golfo Persico e nel Golfo di Aquaba. Fossili: Giurassico superiore (Malm), Triassico (Dolomiti), Carbonifero. Le ooliti indicano ambienti ad alta energia e bassa profondità (&lt;10 m).</p>
+
+    <h4>Bioclasti</h4>
+    <p>Frammenti scheletrici di organismi produttori di carbonato. La composizione mineralogica originale (aragonite, calcite alta-Mg, calcite bassa-Mg) controlla fortemente la diagenesi successiva: l'aragonite è instabile e si dissolve o si inverte in calcite bassa-Mg in pochi milioni di anni. Il tipo di bioclasti è il principale indicatore paleoambientale nei calcari.</p>
+
+    <h4>Dolomite e dolomitizzazione</h4>
+    <p>La <strong>dolomia</strong> è composta da dolomite CaMg(CO₃)₂. La dolomia primaria (precipitata direttamente) è molto rara; quasi sempre si forma per <em>dolomitizzazione</em>, ovvero sostituzione del Ca²⁺ nel reticolo della calcite da parte di Mg²⁺ proveniente da fluidi. I principali modelli di dolomitizzazione sono: (1) modello <em>sabkha</em> (evaporazione di acque marine interstiziali); (2) modello <em>mixing zone</em> o <em>Dorag</em> (miscelazione di acqua marina e meteoritica); (3) modello di <em>sepoltura</em> (fluidi di formazione caldi). La dolomitizzazione aumenta tipicamente la porosità del 12% (minore volume molare della dolomite rispetto alla calcite).</p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="evaporiti">
+  <span class="section-num">04</span>
+  <h2>Rocce Evaporitiche</h2>
+  <div class="section-line"></div>
+
+  <p>Le rocce evaporitiche si formano per <strong>evaporazione dell'acqua marina o lacustre</strong> oltre la soglia di saturazione dei vari sali disciolti. L'acqua di mare contiene circa 35 g/L di sali totali; per precipitare i diversi minerali è necessario un grado di concentrazione progressivo che segue una sequenza prevedibile basata sulla solubilità.</p>
+
+  <h3>4.1 Sequenza di precipitazione</h3>
+  <p>Quando l'acqua di mare evapora progressivamente, i minerali precipitano in ordine di solubilità crescente:</p>
+
+  <ol class="steps">
+    <li><strong>Calcite / Aragonite</strong> (CaCO₃) — precipita già al ~50% di evaporazione. Forma calcari evaporitici e stromatoliti basali.</li>
+    <li><strong>Dolomite</strong> (CaMg(CO₃)₂) — al ~50–60% di evaporazione, spesso diagenetica. Contesti: sabkha costiero, ambienti ipersalini.</li>
+    <li><strong>Gesso</strong> (CaSO₄·2H₂O) — al ~80% di evaporazione. Forma letti tabulari, noduli displacivi (sabkha) e cristalli di selenite in acque tranquille. Stabile &lt;42°C.</li>
+    <li><strong>Anidrite</strong> (CaSO₄) — stabile &gt;42°C o a profondità &gt;600 m. Costituisce il cap rock dei diapiri salini. L'idratazione inversa in gesso causa rigonfiamento del 38% (problema in ingegneria delle gallerie).</li>
+    <li><strong>Alite</strong> (NaCl, salgemma) — al ~90% di evaporazione. Forma corpi massicci e diapiri salini (halocinesi). Solubilità eccezionalmente alta (360 g/L).</li>
+    <li><strong>Silvite</strong> (KCl) — al ~95% di evaporazione. Principale minerale delle potasse (fertilizzanti).</li>
+    <li><strong>Carnallite</strong> (KMgCl₃·6H₂O) — al &gt;95% di evaporazione. Ultimo minerale a precipitare, molto instabile (deliquesce nell'aria umida).</li>
+  </ol>
+
+  <h3>4.2 Contesti deposizionali</h3>
+
+  <h4>Sabkha costiero</h4>
+  <p>Il sabkha (termine arabo per pianura costiera salina) è il modello per comprendere la genesi delle evaporiti in ambienti intertidali-supratidali. Il modello recente del Golfo Persico (Abu Dhabi) mostra: acque marine capillari che risalgono verso la superficie per evaporazione, precipitando gesso nodulare displacivo e anidrite nei carbonati intertidali. La sequenza verticale tipica è: carbonati intertidali → gesso nodulare → dolomia diagenetica. Questo modello si applica all'interpretazione di numerose evaporiti del Triassico e Permiano.</p>
+
+  <h4>Bacino evaporitico (basinale)</h4>
+  <p>In bacini con ingresso d'acqua marina limitato da una soglia (sill) e alta evaporazione, la concentrazione aumenta progressivamente dalla periferia verso il centro, producendo una <em>zonazione a bull's eye</em>: carbonati + gesso al bordo, anidrite nella fascia intermedia, alite al centro, sali di K e Mg nella parte più centrale e più concentrata. I bacini evaporitici possono produrre sequenze spesse centinaia di metri.</p>
+
+  <h4>Crisi di Salinità Messiniana (5.97–5.33 Ma)</h4>
+  <p>La chiusura degli Stretti Bético e Rifiano (~6 Ma) ha isolato il Mediterraneo dall'Atlantico, provocando una delle più straordinarie crisi evaporitiche del Cenozoico. Il Mediterraneo, profondo in media 1500 m, ha subìto un'evaporazione quasi totale con deposizione di &gt;3 km di evaporiti in ~600.000 anni. La fase 1 (5.97–5.60 Ma) ha prodotto gessi marginali; la fase 2 evaporiti profonde (alite); la fase 3 gessi di lago-mare durante la parziale riapertura. La riapertura catastrofica (~5.33 Ma, <em>Flood Zanclean</em>) ha riempito il bacino in tempi geologicamente brevissimi (centinaia-migliaia di anni).</p>
+
+  <div class="highlight orange">
+    <div class="hl-title">Importanza economica delle evaporiti</div>
+    <p>I depositi evaporitici hanno grande rilevanza economica: l'alite è materia prima per la chimica di base (NaOH, Cl₂); silvite e carnallite sono fonte di potassa (fertilizzanti); il gesso è la base del cemento Portland e dei materiali da costruzione; i diapiri salini fungono da trappola per idrocarburi e sono candidati per lo stoccaggio di scorie radioattive (WIPP, New Mexico). La Crisi Messiniana ha prodotto le miniere di sale della Sicilia e i depositi di zolfo (per ossidazione batterica dell'anidrite).</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="continentali">
+  <span class="section-num">05</span>
+  <h2>Ambienti Continentali</h2>
+  <div class="section-line"></div>
+
+  <p>Gli ambienti continentali sono caratterizzati dall'assenza di influenza marina diretta. La loro identificazione nelle sequenze antiche si basa principalmente sulle strutture sedimentarie, le associazioni di facies, le ichnofacies e la paleontologia (flora e fauna continentali). L'assenza di fossili marini è necessaria ma non sufficiente.</p>
+
+  <section id="fluviale">
+    <h3>5.1 Ambiente fluviale</h3>
+    <p>I sistemi fluviali trasportano sedimenti dall'area sorgente ai bacini di deposizione. La <strong>sinuosità</strong> del canale (rapporto tra lunghezza del canale e lunghezza della valle) è il parametro principale che distingue i tipi di sistema fluviale:</p>
+
+    <h4>Canale braided (anastomizzato)</h4>
+    <p>Canale a bassa sinuosità (&lt;1.5), alta larghezza/profondità (W/D &gt; 40), con barre emergenti (longitudinali e trasversali). Caratterizza ambienti ad alta energia e alta carica solida: conoidi alluvionali distali, piane glaciofluviali (sandur). Strutture diagnostiche: stratificazione incrociata a grande scala (barre), laminazione planare, embricatura dei clasti. Sequenza verticale: <em>fining-upward</em> modesto. Esempio: fiume Brahmaputra, Tagliamento (Italia).</p>
+
+    <h4>Canale meandriforme</h4>
+    <p>Sinuosità alta (&gt;1.5), W/D basso (~10–20). Dominato da barre laterali (point bar) con migrazione laterale del canale. Struttura diagnostica: <em>epsilon cross-stratification</em> (stratificazione incrociata inclinata nella direzione di migrazione della point bar, parallela all'asse del meandro). Sequenza verticale netta: fining-upward da ghiaia/sabbia grossolana (lag di canale) a sabbia fine-limo (point bar superiore) ad argilla (floodplain). Esempi: Mississippi, Po (tratto inferiore).</p>
+
+    <h4>Pianura alluvionale (floodplain)</h4>
+    <p>Area adiacente al canale, periodicamente inondata durante le piene (overbank deposits). Composizione: limo e argilla con sabbia nelle <em>crevasse splay</em> (ventagli di rotta). Strutture diagnostiche: laminazione orizzontale, desiccation cracks (poligoni da essiccamento), rizoliti (tracce di radici), paleosuoli (riconoscibili da colore ossidato, struttura a blocchi, accumulo di carbonati). I paleosuoli sono indicatori di periodi di non-deposizione e sono fondamentali per la stratigrafia sequenziale.</p>
+
+    <h4>Conoide alluvionale</h4>
+    <p>Forma a ventaglio alla base di rilievi, dove un torrente perde confinamento e carica. Dall'apice verso il piede: debris flow (diamicton, no struttura interna) → sheet flood (laminazione planare, sabbia e ghiaia) → canali effimeri. La granulometria diminuisce dall'apice al piede. Le conoidi sono siti di accumulo di importanti giacimenti minerari (miniere d'oro placer) e reservoir clastici.</p>
+
+    <div class="highlight green">
+      <div class="hl-title">Stratigrafia sequenziale fluviale</div>
+      <p>La successione di canali braided (amalgamati, connessi verticalmente) vs. meandriformi (isolati in floodplain) riflette variazioni del livello di base o del tasso di subsidenza. Un abbassamento del livello di base produce incisione e braiding; un'alzata produce aggradazione e meandrizzazione (Shanley &amp; McCabe, 1994).</p>
+    </div>
+  </section>
+
+  <section id="eolico">
+    <h3>5.2 Ambiente eolico</h3>
+    <p>L'ambiente eolico è dominato dall'azione del vento come agente di trasporto. Produce le arenarie più mature composizionalmente e tessituralemente: la selezione granulometrica del vento è eccellente (seleziona per densità e granulometria contemporaneamente) e il prolungato impatto intergranulare arrotonda i grani e li rende opachi (grani <em>frosted</em>, con superficie opaca per microscariche concoidali).</p>
+
+    <p>Le strutture diagnostiche principali sono: (1) <strong>stratificazione incrociata ad alto angolo</strong> (20–34°, corrispondente all'angolo di riposo della sabbia secca) su scale di decine di cm o metri; (2) <strong>laminazione planare da windripple</strong> (ripple asimmetrici migrati dal vento, con lamine a basso angolo); (3) <strong>superfici di deflazione</strong> (<em>lag gravel</em>, accumulo di clasti residui dopo rimozione eolica della sabbia).</p>
+
+    <p>I tipi principali di duna sono: barcana (crescente, vento unidirezionale, sabbia scarsa), duna trasversale (creste parallele alla direzione del vento, sabbia abbondante), duna longitudinale o sif (parallela al vento, regimi bimodali). Un <em>erg</em> (mare di sabbia) si forma quando la produzione di sabbia supera la capacità di trasporto fuori dalla zona desertica.</p>
+
+    <p>Le arenarie eoliche si riconoscono nelle sequenze antiche per: composizione quarzosa matura, grani arrotondati e opachi, assenza di fauna e flora, stratificazione incrociata ad alto angolo con geometria a cuneo. Esempi classici: Navajo Sandstone (Giurassico, SW USA), Rotliegend (Permiano, Europa NW, importante reservoir per gas nel Mare del Nord).</p>
+  </section>
+
+  <section id="lacustre">
+    <h3>5.3 Ambiente lacustre</h3>
+    <p>I laghi costituiscono ambienti di sedimentazione molto diversi per dimensione, profondità, chimica delle acque e regime idrologico. Le principali caratteristiche sedimentologiche variano con la profondità e la circolazione del lago:</p>
+
+    <p>La zona <strong>profondal</strong> (sotto il termoclino) è caratterizzata da sedimentazione molto lenta in acque anossiche. La struttura diagnostica sono le <strong>varve</strong>: coppie di lamine stagionali composte da un livello chiaro (silt inorganico depositato in estate per alta produttività o input clastio) e uno scuro (argilla organica depositata in inverno per precipitazione lenta dalla sospensione). Le varve permettono datazioni annuali (varvecrologia) e ricostruzioni paleoclimatiche ad alta risoluzione.</p>
+
+    <p>I <strong>laghi alcalini</strong> (pH &gt;9, grandi rift africani, Owens Valley) producono evaporiti sodiche inusuali: trona (Na₂CO₃·NaHCO₃·2H₂O), gaylussite, nahcolite. Il lago Magadi (Kenya) produce trona in abbondanza. I laghi salati del passato (Eocene del Green River, USA) hanno prodotto sequenze evaporitiche lacustri con kerogene di tipo I (algaceo), sorgente di importanti giacimenti di olio.</p>
+
+    <p>Le <strong>diatomiti</strong> si formano dall'accumulo di frustoli silicei di diatomee in laghi e mari temperati. Hanno densità molto bassa e porosità elevatissima. Importanti depositi di diatomiti mioceniche si trovano in California (Monterey Formation, anche source rock per olio) e in Italia (depositi delle aree vulcaniche).</p>
+  </section>
+
+  <section id="glaciale">
+    <h3>5.4 Ambiente glaciale</h3>
+    <p>I ghiacciai sono agenti di trasporto peculiari: non selezionano il materiale, trasportando indifferentemente blocchi metrici e argilla. Il prodotto tipico è il <strong>diamicton</strong> (till quando non consolidato): roccia mal classata con matrice argillosa contenente clasti di ogni dimensione. Il <strong>tillite</strong> è il diamicton consolidato e litificato.</p>
+
+    <p>I criteri di riconoscimento del glacialismo nelle sequenze antiche richiedono evidenze multiple: (1) presenza di diamicton; (2) clasti con <em>striature glaciali</em> (solchi rettilinei sulla superficie dei clasti prodotti dall'abrasione sul substrato); (3) <em>dropstone</em> (clasto caduto in sedimenti fini laminati, deformando le lamine circostanti, tipico di ambienti glaciomarini con iceberg); (4) <em>fabric</em> preferenziale dei clasti (orientazione statistica degli assi maggiori dei clasti parallela alla direzione di flusso del ghiaccio); (5) superficie di erosione sub-glaciale con striature e roche moutonnées.</p>
+
+    <div class="note"><p>Il diamicton non è esclusivo del glacialismo: anche i <em>debris flow</em> subacquei producono diamicton. La distinzione richiede l'analisi combinata di tutte le evidenze. Le <em>tilliti</em> del Neoproteroico sono centrali nel dibattito sulla <em>Snowball Earth</em> (Hoffman et al., 1998).</p></div>
+
+    <p>I depositi glaciofluviali (<strong>outwash</strong> o <strong>sandur</strong>) si formano in pianure di fusione glaciale, dominati da sistemi braided ad alta energia. I laghi proglaciali ricevono sedimenti fini e producono varve glaciali (molto diffuse in Scandinavia e Nord America). I depositi glaciomarini sono particolarmente importanti per la ricostruzione delle glaciazioni del Quaternario (carotaggi oceanici ODP/IODP).</p>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="transizionali">
+  <span class="section-num">06</span>
+  <h2>Ambienti Transizionali</h2>
+  <div class="section-line"></div>
+
+  <p>Gli ambienti transizionali occupano la fascia di transizione tra il dominio continentale e quello marino. Sono dominati dall'interazione tra tre forze: l'apporto fluviale, le onde e le maree. Il bilancio relativo di queste tre forze determina la morfologia e le caratteristiche sedimentologiche del sistema.</p>
+
+  <section id="delta">
+    <h3>6.1 Delta</h3>
+    <p>Un delta è un corpo sedimentario che prograda nella zona di ricevimento quando l'apporto fluviale supera la capacità di ridistribuzione di onde e maree. Il <strong>modello morfo-dinamico di Galloway (1975)</strong> classifica i delta in base al controllo dominante:</p>
+
+    <h4>Delta fluvio-dominati (es. Mississippi, Niger, Po)</h4>
+    <p>Energia fluviale &gt;&gt; onde e maree. Morfologia a "piede d'uccello" (elongate) o lobata, con progradazione rapida in acque calme. Le bocche barriera (<em>mouth bars</em>) progradano verso il largo producendo sequenze <em>coarsening-upward</em>: argille di prodelta (in basso) → siltiti di fronte delta → sabbie di bocca barra (in alto). La struttura interna delle mouth bar sands mostra stratificazione incrociata a grande scala. Il Mississippi prograda a ~50 m/anno e costruisce il suo delta attuale da ~1000 anni; i lobi abbandonati si subsidano per compattazione e carico.</p>
+
+    <h4>Delta onda-dominati (es. Nilo, São Francisco, Senegal)</h4>
+    <p>Energia delle onde ≈ energia fluviale. Le onde ridistribuiscono il sedimento lateralmente, costruendo beach ridge parallele (<em>cheniers</em>) e impedendo la progradazione diretta. La morfologia è arcuata con spiagge continue. Le beach ridges registrano l'avanzamento della linea di costa nel tempo e sono utili per la ricostruzione storica. Il Nilo ha perso &gt;80% del suo delta negli ultimi 50 anni a causa delle dighe (Aswan) che trattengono il sedimento.</p>
+
+    <h4>Delta marea-dominati (es. Gange-Brahmaputra, Colorado)</h4>
+    <p>Energia delle maree &gt; onde + fiume. Le maree bidirezionali creano canali radiali con barre tidali (<em>tidal sand bars</em>). Strutture diagnostiche: <em>herringbone cross-bedding</em> (stratificazione incrociata a "spina di pesce", prodotta da correnti di flusso e riflusso in direzioni opposte); <em>eteroliti</em> (alternanza millimetrica di sabbia e fango); laminazione flaser (sabbia con lamine di fango in posizione concava), wavy (alternanza regolare), lenticolare (lenticelle di sabbia in matrice fangosa). Le eteroliti sono diagnostiche di ambienti con alternanza di alta energia (maree) e quiete (stanca di marea).</p>
+
+    <div class="highlight blue">
+      <div class="hl-title">Importanza dei delta per gli idrocarburi</div>
+      <p>I delta antichi (Cretaceo–Eocene del Golfo del Messico, del Niger, di Mackenzie) sono tra i maggiori produttori mondiali di idrocarburi. Le mouth bar sands e i canali distributori costituiscono eccellenti reservoir; i prodelta shale fungono da source rock e seal. La stratigrafia sequenziale dei sistemi deltaici (Galloway &amp; Hobday, 1996) è strumento fondamentale per l'esplorazione petrolifera.</p>
+    </div>
+  </section>
+
+  <section id="estuario">
+    <h3>6.2 Estuario</h3>
+    <p>Un estuario è un corpo d'acqua costiero semi-chiuso in comunicazione con il mare aperto, dove l'acqua marina si mescola con acqua dolce fluviale (<em>Pritchard, 1967</em>). Dal punto di vista sedimentologico, è caratterizzato da:</p>
+
+    <p><strong>Strutture eteolitiche</strong> — Nelle zone di mudflat e nei canali tidali si formano le strutture più diagnostiche: laminazione <em>flaser</em> (lamine di fango nelle depressioni tra ripple di sabbia, alta energia dominante), laminazione <em>wavy</em> (alternanza subeguale sabbia/fango), laminazione <em>lenticolare</em> (lenticelle di sabbia in matrice fangosa, bassa energia dominante). Queste strutture registrano l'alternanza tra alta energia (correnti di marea) e quiete (stanca di marea e periodi di bassa corrente).</p>
+
+    <p><strong>Herringbone cross-bedding</strong> — L'alternanza di correnti di flusso (flood) e riflusso (ebb) produce strati di sabbia con inclinazione opposta, visibili in sezione verticale come spine di pesce. È la struttura più diagnostica di un sistema tidale bidirezionale.</p>
+
+    <p>Il <strong>tappo di sale</strong> (<em>salt wedge</em>) degli estuari stratificati crea una zona di massima torbidità dove flocculazione delle argille e sedimentazione dei fini è massima. Questa zona migra stagionalmente ed è critica per l'ecologia e la gestione delle portate.</p>
+  </section>
+
+  <section id="laguna">
+    <h3>6.3 Laguna e piattaforma carbonatica</h3>
+    <p>Le lagune carbonatiche (es. Bahamas, Belize, Maldive) sono i principali ambienti di produzione e accumulo di carbonato nel mondo moderno. La produzione media è di 1–3 kg CaCO₃/m²/anno. I processi principali sono:</p>
+
+    <p><strong>Piattaforma interna (laguna)</strong>: acque calde, bassa salinità, bassa energia. Dominata da fango carbonatico micritico. Strutture: bioturbazione intensa (che distrugge le strutture fisiche primarie), stromatoliti in ambienti ipersalini, strutture fenestrale (birds-eye) negli ambienti intertidali per essiccamento o intrappolamento di bolle di gas. Rocce: mudstone e wackestone di Dunham; biomicrite e pelmicrite di Folk.</p>
+
+    <p><strong>Shoal ooliti</strong>: zona di alta energia, acque agitate, bassa profondità (1–5 m), sovrassatura in CaCO₃. Produzione di oidi e grainstone oolitici. I grainstone ooliti sono eccellenti reservoir carbonatici se la porosità intergranulare è preservata (oosparite di Folk; grainstone di Dunham).</p>
+
+    <p>Il <strong>modello di Wilson (1975)</strong> definisce 9 cinture di facies (Standard Microfacies, SMF) nelle piattaforme carbonatiche, dal bacino profondo (SMF 1) alle aree di mare aperto (SMF 5) al reef (SMF 7) alla laguna (SMF 8) all'ambiente intertidal-supratidale (SMF 9). Questo schema è ampiamente usato in campo petrolifero per la correlazione di sequenze carbonatiche.</p>
+
+    <p>La <strong>sequenza di shallowing-upward</strong> (o <em>ciclo di Lofer</em>) è la sequenza stratigrafica più comune nelle piattaforme carbonatiche: parte da sedimenti lagunari profondi (wackestone-packstone) e culmina in sedimenti intertidali-supratidali (loferite, gesso nodulare, dolomia). Questi cicli, spessi 1–5 m, si ripetono per centinaia di volte nelle piattaforme triassiche (Dolomiti) e giurassiche e riflettono variazioni cicliche del livello del mare (ciclicità di Milankovitch).</p>
+  </section>
+
+  <section id="spiaggia">
+    <h3>6.4 Spiaggia e shoreface</h3>
+    <p>Il sistema spiaggia-shoreface è uno dei principali ambienti di deposizione di sabbie pure e ben classate. Si articola in cinque zone dalla linea di costa verso il largo:</p>
+
+    <ul class="plain">
+      <li><strong>Backshore</strong> — sopra il limite dell'alta marea; dominato da processi eolici e di storm washover</li>
+      <li><strong>Foreshore</strong> — zona di swash (battigia); laminazione planare orizzontale con faint parting lineation; angolo di inclinazione molto basso (&lt;3°) verso il mare</li>
+      <li><strong>Shoreface superiore</strong> — da FWWB a ~5–10 m; sabbie con stratificazione incrociata da onde e ripple asimmetrici; bioturbazione moderata (Skolithos)</li>
+      <li><strong>Shoreface inferiore</strong> — tra FWWB e SWB; Hummocky Cross-Stratification (HCS) prodotta da tempeste; intensa bioturbazione in periodi di bel tempo (Cruziana ichnofacies)</li>
+      <li><strong>Offshore</strong> — sotto SWB; laminazione fine, forte bioturbazione, fauna diversificata</li>
+    </ul>
+
+    <p>L'<strong>HCS (Hummocky Cross-Stratification)</strong>, descritta da Harms et al. (1975), è la struttura diagnostica delle tempestiti di shoreface: lamine ondulate a bassa inclinazione (&lt;15°) con geometria a hummocks (cupole) e swales (avvallamenti), senza orientazione preferenziale delle creste. Si forma durante eventi di tempesta quando le onde di tempesta raggiungono profondità normalmente non perturbate (tra FWWB e SWB).</p>
+
+    <div class="highlight green">
+      <div class="hl-title">Fair Weather Wave Base (FWWB) e Storm Wave Base (SWB)</div>
+      <p>La FWWB (profondità ~10–20 m) e la SWB (profondità ~50–150 m a seconda dell'intensità delle tempeste) sono i due parametri fisici fondamentali che controllano la distribuzione delle facies nella zona costiera. La sequenza di facies dalla costa al largo riflette la transizione da alta energia (dominata da onde di bel tempo) a media energia (onde di tempesta) a bassa energia (sedimentazione pelagica).</p>
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="marini">
+  <span class="section-num">07</span>
+  <h2>Ambienti Marini</h2>
+  <div class="section-line"></div>
+
+  <p>Gli ambienti marini si estendono dalla piattaforma continentale (0–200 m) alle grandi profondità abissali (&gt;4000 m). L'energia diminuisce progressivamente verso il largo, salvo eventi episodici (tempeste, torbiditi). La fauna bentonica è il principale indicatore paleoambientale nelle rocce marine.</p>
+
+  <section id="piattaforma">
+    <h3>7.1 Piattaforma continentale</h3>
+    <p>La piattaforma continentale è la zona sommersa marginale della crosta continentale, con pendenza media di 0.1°. La distribuzione delle facies è controllata da FWWB e SWB:</p>
+
+    <p><strong>Piattaforma interna</strong> (&lt;30 m): dominata da processi di bel tempo. Sabbie con stratificazione incrociata bidimensionale e tridimensionale. Ichnofacies Skolithos (organismi che abitano substrati instabili, alta energia): <em>Skolithos</em> (tubi verticali), <em>Diplocraterion</em> (strutture a U), <em>Ophiomorpha</em> (gallerie con pareti nodose). Fauna bentonica di piattaforma: bivalvi, gasteropodi, echinodermi, brachiopodi.</p>
+
+    <p><strong>Piattaforma mediana</strong> (30–100 m): tra FWWB e SWB. Alternanza di depositi di bel tempo (bioturbati, ichnofacies Cruziana) e tempestiti (HCS e SCS). Le tempestiti (<em>storm layers</em>) mostrano sequenza tipica: base erosiva → grading → HCS → laminazione planare → bioturbazione. L'ichnofacies <em>Cruziana</em> (organismi che si nutrono nel sedimento, energia moderata): <em>Cruziana</em> (gallerie di trilobiti), <em>Rhizocorallium</em> (strutture a U oblique), <em>Asterosoma</em> (strutture stellate).</p>
+
+    <p><strong>Piattaforma esterna</strong> (100–200 m): sotto SWB. Sedimentazione pelagica normale interrotta solo da grandi tempeste. Hardground (superficie di omissione cementata) e glauconite indicano sedimentazione lentissima (condensazione stratigrafica). Ichnofacies <em>Zoophycos</em> (bassa energia, organismi che lavorano nel sedimento): <em>Zoophycos</em> (complesse gallerie a spirale), <em>Chondrites</em> (gallerie ramificate).</p>
+  </section>
+
+  <section id="rampa">
+    <h3>7.2 Rampa e piattaforma carbonatica</h3>
+    <p>I sistemi carbonatici marini si sviluppano in acque tropicali calde (18–30°C), poco profonde e ben illuminate (zona fotica). Il modello geometrico distingue <strong>piattaforma</strong> (con scarpata netta al margine) da <strong>rampa</strong> (pendenza uniforme senza scarpata netta, che Read, 1985, suddivide in rampa omoclinalica e distale-steepened ramp).</p>
+
+    <p>Il <strong>modello di Wilson (1975)</strong> con le 9 Standard Microfacies è lo strumento interpretativo fondamentale per i carbonati di piattaforma. La cintura 7 (reef e mound) rappresenta il punto di massima produzione biologica. I reef costruiscono muri biologici che separano l'oceano aperto dalla laguna: questo dualismo energetico (forereef ad alta energia / backreef a bassa energia) è la chiave per comprendere la distribuzione delle facies carbonatiche.</p>
+
+    <p>L'evoluzione dei <strong>costruttori di reef</strong> nel tempo geologico riflette le grandi crisi biologiche: stromatoporoidi + tabulati nel Siluriano-Devonico (extinzione di fine Devonico); spugne + coralli scleractini nel Triassico (dopo extinction di fine Permiano); rudiste (bivalvi specializzati) nel Cretaceo; coralli scleractini moderni nel Cenozoico. Ogni tipo di costruttore lascia un boundstone con struttura caratteristica.</p>
+  </section>
+
+  <section id="scarpata">
+    <h3>7.3 Scarpata continentale e bacino</h3>
+    <p>La scarpata continentale (200–2000 m) è la zona di transizione tra crosta continentale e crosta oceanica. Ha pendenza media di 3–6° ma può raggiungere 45°. È sito di instabilità gravitativa: <em>slump</em> (scivolamento rotazionale di massa sedimentaria coesiva), <em>slide</em> (scivolamento traslazionale), <em>debris flow</em> (flusso granulare in massa, produce diamicton), che transitano verso valle in correnti di torbida.</p>
+
+    <p>La sedimentazione nella zona di bacino profondo è controllata dal <strong>CCD (Carbonate Compensation Depth)</strong>, la profondità al di sotto della quale il tasso di dissoluzione del CaCO₃ supera il tasso di produzione pelagica: ~4000–5000 m negli oceani moderni (varia con la latitudine, la produttività, la temperatura e la chimica delle acque). Sopra il CCD: calcari pelagici (coccoliti, foraminiferi planctonici) e marne. Sotto il CCD: argille rosse (ossidi di Fe-Mn), radiolariti (accumulo di radiolari silicei). La <em>lysocline</em> è la profondità al di sopra del CCD dove inizia la dissoluzione selettiva dei foraminiferi.</p>
+
+    <p>I sedimenti pelagici si accumulano molto lentamente: 1–10 mm/1000 anni per argille rosse abissali; 10–30 mm/1000 anni per calcari e marne pelagici. La stratigrafia dei fondali oceanici, ricostruita attraverso i carotaggi ODP (Ocean Drilling Program) e IODP (International Ocean Drilling Program), ha fornito la risoluzione più alta nella ricostruzione dei paleoclimi degli ultimi 200 Ma.</p>
+  </section>
+
+  <section id="bacino">
+    <h3>7.4 Bacino profondo e torbiditi</h3>
+    <p>Il bacino profondo alterna lunghi periodi di sedimentazione pelagica lenta a eventi episodici di deposizione rapida da <strong>correnti di torbida</strong> (turbidity currents). La <strong>sequenza di Bouma (1962)</strong> descrive la struttura interna ideale di un singolo strato torbiditico:</p>
+
+    <ol class="steps">
+      <li><strong>Intervallo Ta</strong> — Sabbioso massiccio o debolmente gradato. Deposizione rapidissima (secondi-minuti) da flusso iperconcentrato (densità &gt;1.5 kg/L). Spesso assente per erosione del fondo o mancanza di sabbia.</li>
+      <li><strong>Intervallo Tb</strong> — Laminazione planare in sabbia media-fine. Trazione da corrente turbolenta in regime di flusso superiore (Fr&gt;1). Caratteristica <em>parting lineation</em> (allineamento muscovite).</li>
+      <li><strong>Intervallo Tc</strong> — Ripple climbing da trazione + laminazione convoluta da fluidizzazione. Rip-up clasts di argilla alla base. Deposizione da lower flow regime in decelerazione.</li>
+      <li><strong>Intervallo Td</strong> — Laminazione fine in siltite e argillite. Deposizione lenta da sospensione diluita. Spesso bioturbata nei livelli superiori (ichnofacies Nereites).</li>
+      <li><strong>Intervallo Te</strong> — Argillite pelagica/emipelagica. Sedimentazione pelagica normale tra gli eventi torbiditici. Contiene fauna autoctona (foraminiferi planctonici, nannofossili). Indica periodi di quiete di anni-secoli tra eventi torbiditici.</li>
+    </ol>
+
+    <p>Le <em>correnti di torbida</em> si generano per: (1) sobsaturazione del sedimento sul margine della piattaforma per apporto eccessivo; (2) destabilizzazione di sedimenti coesivi da sismi (il terremoto del Grand Banks del 1929 ha generato correnti di torbida che hanno reciso cavi telegrafici a 700 km di distanza); (3) tempeste eccezionali; (4) disgelo di idrati di metano sul fondo oceanico.</p>
+
+    <p>I <strong>sistemi di fan subacquei</strong> (deep-sea fans) si articolano in: canyon e canale prossimale (ghiaie, sabbie grossolane, Ta dominante) → lobo mediale (sabbie, sequenza Bouma completa) → lobo distale (sabbie fini, Tc-Td-Te dominante) → piana abissale (Te quasi esclusivo). Le arenarie torbiditiche del flysch appenninico, delle Alpi esterne e di molti bacini di avanfossa paleozoici sono esempi classici di questa sequenza.</p>
+
+    <div class="highlight blue">
+      <div class="hl-title">Torbiditi come reservoir</div>
+      <p>Le arenarie torbiditiche sono reservoir di primaria importanza in bacini deepwater: Barents Sea, Nigeria Deep (Lagos), Golfo del Messico profondo, Brasil pre-salt. Le loro caratteristiche petrofisiche (porosità 15–25%, permeabilità 10–500 mD) le rendono bersagli esplorativi di elevato interesse. La comprensione dell'architettura del fan subacqueo è fondamentale per la caratterizzazione del reservoir.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<section id="diagenesi">
+  <span class="section-num">08</span>
+  <h2>Diagenesi e Idrocarburi</h2>
+  <div class="section-line"></div>
+
+  <p>La <strong>diagenesi</strong> comprende l'insieme dei processi fisici, chimici e biologici che trasformano un sedimento sciolto in roccia (litificazione) e che continuano ad agire sulla roccia durante la sepoltura, fino alle soglie del metamorfismo. Il limite convenzionale con il metamorfismo è fissato a circa 200–250°C o 200–300 MPa, corrispondenti alla facies delle zeoliti.</p>
+
+  <section id="zone-diag">
+    <h3>8.1 Zone diagenetiche</h3>
+    <p>La progressione diagenetica è tradizionalmente suddivisa in base alla profondità di sepoltura e alla temperatura:</p>
+
+    <h4>Eodiagenetica (0–1 km, 15–40°C)</h4>
+    <p>Dominata da processi fisici (compattazione meccanica) e biochimici (degradazione della materia organica batterica, produzione di CO₂ e H₂S, riduzione dei solfati). I fluidi sono prevalentemente marini o meteoritici. La materia organica è immatura: produce solo gas biogenico (metano batterico, ~85% del CH₄ biogenico totale). Processi principali: riduzione della porosità dal 40–50% iniziale a ~30% per compattazione; cementazione precoce carbonatica o ferruginosa; dissoluzione dell'aragonite instabile con precipitazione di calcite bassa-Mg (neomorfismo); bioturbazione intensa.</p>
+
+    <h4>Mesodiagenetica (1–3.5 km, 40–120°C)</h4>
+    <p>La zona più importante per la generazione di idrocarburi e per l'evoluzione delle proprietà petrofisiche dei reservoir. Processi principali:</p>
+    <ul class="plain">
+      <li><strong>Cementazione quarzifera</strong> — A T&gt;70–80°C, il quarzo precipita in overgrowth sulle superfici dei grani di quarzo preesistenti. Riduce irreversibilmente la porosità del 10–20% nei reservoir arenacei profondi. È il principale meccanismo di distruzione della porosità nelle arenarie.</li>
+      <li><strong>Trasformazione smectite → illite</strong> — A 70–90°C (dipende dalla composizione del fluido, principalmente dal rapporto K⁺/H⁺). La reazione libera H₂O (contribuisce alla pressione di fluido) e SiO₂ (substrato per la cementazione quarzifera). Usata come geotermometro qualitativo.</li>
+      <li><strong>Maturazione della materia organica → olio</strong> — A 60–120°C (finestra dell'olio, Ro 0.5–1.3%). La kerogene si decompone termicamente (cracking) producendo idrocarburi liquidi.</li>
+      <li><strong>Dissoluzione feldspato → caolinite</strong> — I feldspati (K-feldspato in particolare) si dissolvono per azione di acidi organici e CO₂, creando porosità secondaria e precipitando caolinite. Importantissimo per la porosità secondaria nei reservoir.</li>
+      <li><strong>Compattazione chimica (stiloliti)</strong> — Pressione-soluzione ai contatti grano-grano. Le stiloliti (superfici a interpenetrazione) indicano compattazione chimica intensa e possono fungere da barriere permeabili.</li>
+    </ul>
+
+    <h4>Tardi-diagenetica (3.5–6 km, 120–200°C)</h4>
+    <p>Porosità quasi completamente obliterata (&lt;5%). Cracking termico dell'olio in gas termogenico (&gt;120°C). La finestra del gas umido (Ro 1.3–2.0%) produce gas a 2–6 atomi di C (etano, propano, butano, pentano). Oltre Ro 2.0% si produce solo gas secco (metano termogenico). La transizione illite→clorite avviene a &gt;130°C. Inizio della facies zeoliti (laumontite a ~150°C in presenza di fluidi).</p>
+
+    <h4>Anchimetamorfismo (&gt;6 km, 200–300°C)</h4>
+    <p>Soglia convenzionale tra diagenesi e metamorfismo. Facies zeoliti (laumontite, analcime, wairakite) → facies prehnite-pumpellyite. La materia organica si converte in grafite. Le argilliti passano a filladi (primo stadio del metamorfismo). Il raccordo con il diagramma P-T del metamorfismo avviene in questa zona.</p>
+  </section>
+
+  <section id="porosita">
+    <h3>8.2 Evoluzione della porosità</h3>
+    <p>La porosità è la proprietà fondamentale che caratterizza un reservoir. La sua evoluzione con la profondità segue un andamento esponenziale decrescente, descritto dalla relazione di Athy (1930) per le argilliti e da Sclater &amp; Christie (1980) per le arenarie:</p>
+
+    <div class="formula">φ(z) = φ₀ · e^(−c·z)</div>
+
+    <p>dove φ₀ è la porosità iniziale in superficie, z è la profondità in km e c è una costante litologica. Valori tipici: arenaria (φ₀≈40%, c≈0.27), argillite (φ₀≈60%, c≈0.45), carbonato (φ₀≈40%, c≈0.35).</p>
+
+    <p>I meccanismi di riduzione della porosità sono due: <strong>compattazione meccanica</strong> (dominante &lt;1–2 km, irreversibile) e <strong>cementazione</strong> (dominante &gt;1–2 km, irreversibile). La <strong>dissoluzione</strong> può creare porosità secondaria localmente (da moldica per dissoluzione oidi, vugs per carsificazione, o intercrystallina per dolomitizzazione).</p>
+
+    <p>Le <strong>overpressure</strong> (pressione di fluido sopra la pressione idrostatica) possono preservare la porosità in profondità inibendo la compattazione meccanica e chimica. Il meccanismo principale di generazione di overpressure è il carico rapido di sedimento impermeabile (argilla). Le overpressure sono comuni nei delta olocenici progradanti (Niger, Mississippi, Golfo del Messico).</p>
+  </section>
+
+  <section id="kerogene">
+    <h3>8.3 Maturazione del kerogene: diagramma di van Krevelen</h3>
+    <p>Il <strong>kerogene</strong> è la frazione insolubile della materia organica sedimentaria, convertibile in idrocarburi per pirolisi termica. Il <strong>diagramma di van Krevelen (1950)</strong> classifica il kerogene in base ai rapporti atomici H/C (idrogeno/carbonio, asse y) e O/C (ossigeno/carbonio, asse x):</p>
+
+        <table>
+      <tr><th>Tipo</th><th>H/C iniziale</th><th>Origine</th><th>Prodotto principale</th><th>Esempi</th></tr>
+      <tr><td><strong>Tipo I</strong></td><td>1.5–1.7</td><td>Alghe lacustri, ambienti anossici</td><td>Olio (&gt;80%)</td><td>Green River Fm (USA), bacini lacustri cinesi</td></tr>
+      <tr><td><strong>Tipo II</strong></td><td>1.2–1.4</td><td>Fitoplancton marino, batteri</td><td>Olio + gas</td><td>Kimmeridge Clay (Mare del Nord), Toarciano (Europa)</td></tr>
+      <tr><td><strong>Tipo III</strong></td><td>0.7–1.1</td><td>Materiale ligno-cellulosico terrestre</td><td>Gas secco</td><td>Carbone, shale carbonacei continentali</td></tr>
+      <tr><td><strong>Tipo IV</strong></td><td>&lt;0.5</td><td>Materiale ossidato/carbonizzato rimaneggiato</td><td>Inerte</td><td>Inertinite, carbone di alto rango</td></tr>
+    </table>
+
+    <p>La <strong>riflettanza della vitrinite (Ro)</strong> è il principale indicatore di maturità termica: misura la percentuale di luce riflessa da particelle di vitrinite in sezione lucida. Le soglie principali: Ro &lt;0.5% (immaturo, gas biogenico); Ro 0.5–1.3% (finestra dell'olio); Ro 1.3–2.0% (gas umido, C2–C5); Ro &gt;2.0% (gas secco, metano); Ro &gt;4% (sovramatura, grafite).</p>
+
+    <p>La <strong>pirolisi Rock-Eval</strong> (Espitalié et al., 1977) è l'analisi standard per la caratterizzazione delle source rock: S1 (idrocarburi liberi, mg HC/g roccia), S2 (potenziale di generazione), Tmax (temperatura del picco S2, indicatore di maturità), HI (Hydrogen Index = S2/TOC×100), OI (Oxygen Index). Una buona source rock ha TOC &gt;2%, HI &gt;200 mg HC/g TOC per olio, Tmax tra 435° e 465°C nella finestra dell'olio.</p>
+  </section>
+
+  <section id="sistema-petro">
+    <h3>8.4 Il sistema petrolifero</h3>
+    <p>Un <strong>sistema petrolifero</strong> (Magoon &amp; Dow, 1994) comprende una source rock attiva e tutti gli accumuli di idrocarburi da essa derivati. I cinque elementi fondamentali devono coesistere:</p>
+
+    <ol class="steps">
+      <li><strong>Source rock</strong> — TOC &gt;0.5%, kerogene maturo (Ro &gt;0.5%). Esempi mondiali: Kimmeridge Clay (Mare del Nord, ~30 Gb), Barnett Shale (Texas), Monterey Fm (California).</li>
+      <li><strong>Reservoir</strong> — Porosità &gt;5%, permeabilità &gt;0.1 mD (convenzionale). Arenarie del Brent (Giurassico, Mare del Nord), carbonati del Cretaceo (Medio Oriente), chalk dell'Ekofisk (Norvegia).</li>
+      <li><strong>Seal</strong> — Permeabilità &lt;0.01 mD. Evaporiti (migliori), shale compattati (più comuni). La fratturazione può compromettere l'integrità del seal.</li>
+      <li><strong>Trappola</strong> — Anticlinale (~60% delle riserve mondiali), da faglia, stratigrafica (pinch-out, eteropia di facies), diapiro salino. La trappola deve essere formata prima della migrazione degli idrocarburi.</li>
+      <li><strong>Migrazione</strong> — Primaria (espulsione dalla source rock) e secondaria (lungo carrier beds permeabili fino alla trappola). Distanze di centinaia di km sono documentate.</li>
+    </ol>
+
+    <div class="highlight orange">
+      <div class="hl-title">Unconventional: shale gas e shale oil</div>
+      <p>Dal 2005, horizontal drilling e hydraulic fracturing (fracking) rendono economicamente sfruttabili i reservoir tight (k &lt;0.1 mD) e gli shale (k &lt;0.001 mD). Il Barnett Shale (Texas) è stato il banco di prova; Eagle Ford, Permian Basin e Marcellus hanno trasformato gli USA nel primo produttore mondiale. Gli unconventional stanno ridisegnando la geopolitica dell'energia.</p>
+    </div>
+  </section>
+</section>
+
+<!-- BIBLIOGRAFIA -->
+<section id="biblio">
+  <span class="section-num">09</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Athy L.F.</span> <span class="year">(1930)</span> — <span class="title">Density, porosity, and compaction of sedimentary rocks</span>. <span class="journal">AAPG Bulletin, 14, 1–24.</span></p>
+  <p class="ref"><span class="authors">Bouma A.H.</span> <span class="year">(1962)</span> — <span class="title">Sedimentology of some flysch deposits: a graphic approach to facies interpretation</span>. <span class="journal">Elsevier, Amsterdam, 168 pp.</span></p>
+  <p class="ref"><span class="authors">Dickinson W.R. &amp; Suczek C.A.</span> <span class="year">(1979)</span> — <span class="title">Plate tectonics and sandstone compositions</span>. <span class="journal">AAPG Bulletin, 63, 2164–2182.</span></p>
+  <p class="ref"><span class="authors">Dunham R.J.</span> <span class="year">(1962)</span> — <span class="title">Classification of carbonate rocks according to depositional texture</span>. In: Ham W.E. (ed.), Classification of Carbonate Rocks. <span class="journal">AAPG Memoir 1, 108–121.</span></p>
+  <p class="ref"><span class="authors">Embry A.F. &amp; Klovan J.E.</span> <span class="year">(1971)</span> — <span class="title">A late Devonian reef tract on northeastern Banks Island, NWT</span>. <span class="journal">Bull. Canadian Petroleum Geology, 19, 730–781.</span></p>
+  <p class="ref"><span class="authors">Espitalié J. et al.</span> <span class="year">(1977)</span> — <span class="title">Source rock characterization method for petroleum exploration</span>. <span class="journal">Offshore Technology Conference, OTC 2935.</span></p>
+  <p class="ref"><span class="authors">Folk R.L.</span> <span class="year">(1951)</span> — <span class="title">Stages of textural maturity in sedimentary rocks</span>. <span class="journal">Journal of Sedimentary Petrology, 21, 127–130.</span></p>
+  <p class="ref"><span class="authors">Folk R.L.</span> <span class="year">(1959)</span> — <span class="title">Practical petrographic classification of limestones</span>. <span class="journal">AAPG Bulletin, 43, 1–38.</span></p>
+  <p class="ref"><span class="authors">Folk R.L.</span> <span class="year">(1974)</span> — <span class="title">Petrology of Sedimentary Rocks</span>. <span class="journal">Hemphill Publishing, Austin TX, 182 pp.</span></p>
+  <p class="ref"><span class="authors">Galloway W.E.</span> <span class="year">(1975)</span> — <span class="title">Process framework for describing the morphologic and stratigraphic evolution of deltaic depositional systems</span>. In: Broussard (ed.), Deltas: Models for Exploration. <span class="journal">Houston Geol. Soc., 87–98.</span></p>
+  <p class="ref"><span class="authors">Galloway W.E. &amp; Hobday D.K.</span> <span class="year">(1996)</span> — <span class="title">Terrigenous clastic depositional systems</span>. <span class="journal">Springer, 2nd ed., 489 pp.</span></p>
+  <p class="ref"><span class="authors">Harms J.C. et al.</span> <span class="year">(1975)</span> — <span class="title">Depositional environments as interpreted from primary sedimentary structures and stratification sequences</span>. <span class="journal">SEPM Short Course Notes 2, 161 pp.</span></p>
+  <p class="ref"><span class="authors">Hoffman P.F. et al.</span> <span class="year">(1998)</span> — <span class="title">A Neoproterozoic snowball Earth</span>. <span class="journal">Science, 281, 1342–1346.</span></p>
+  <p class="ref"><span class="authors">Magoon L.B. &amp; Dow W.G. (eds.)</span> <span class="year">(1994)</span> — <span class="title">The Petroleum System — From Source to Trap</span>. <span class="journal">AAPG Memoir 60, 655 pp.</span></p>
+  <p class="ref"><span class="authors">Pettijohn F.J., Potter P.E. &amp; Siever R.</span> <span class="year">(1972)</span> — <span class="title">Sand and Sandstone</span>. <span class="journal">Springer, New York, 618 pp.</span></p>
+  <p class="ref"><span class="authors">Pritchard D.W.</span> <span class="year">(1967)</span> — <span class="title">What is an estuary: physical viewpoint</span>. In: Lauff (ed.), Estuaries. <span class="journal">AAAS Publication 83, 3–5.</span></p>
+  <p class="ref"><span class="authors">Read J.F.</span> <span class="year">(1985)</span> — <span class="title">Carbonate platform facies models</span>. <span class="journal">AAPG Bulletin, 69, 1–21.</span></p>
+  <p class="ref"><span class="authors">Sclater J.G. &amp; Christie P.A.F.</span> <span class="year">(1980)</span> — <span class="title">Continental stretching: an explanation of the post-Mid-Cretaceous subsidence of the Central North Sea Basin</span>. <span class="journal">Journal of Geophysical Research, 85, 3711–3739.</span></p>
+  <p class="ref"><span class="authors">Shanley K.W. &amp; McCabe P.J.</span> <span class="year">(1994)</span> — <span class="title">Perspectives on the sequence stratigraphy of continental strata</span>. <span class="journal">AAPG Bulletin, 78, 544–568.</span></p>
+  <p class="ref"><span class="authors">Van Krevelen D.W.</span> <span class="year">(1950)</span> — <span class="title">Graphical-statistical method for the study of structure and reaction processes of coal</span>. <span class="journal">Fuel, 29, 269–284.</span></p>
+  <p class="ref"><span class="authors">Wentworth C.K.</span> <span class="year">(1922)</span> — <span class="title">A scale of grade and class terms for clastic sediments</span>. <span class="journal">Journal of Geology, 30, 377–392.</span></p>
+  <p class="ref"><span class="authors">Wilson J.L.</span> <span class="year">(1975)</span> — <span class="title">Carbonate Facies in Geologic History</span>. <span class="journal">Springer, New York, 471 pp.</span></p>
+</section>
+
+</main>
+
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
