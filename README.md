@@ -29,16 +29,16 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 
 | Argomento | Descrizione | Link | Manuale |
 |-------------|-------------|------|---------|
-| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/diagrammi_fase.html) | — |
-| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/microscopio_polarizzato.html) | — |
-| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/diffrattometro_xrd_v5.html) | — |
+| [💎 Diagrammi di Fase](#diagrammi-fase) | Ab-An, Di-An, Lc-SiO₂, Ab-Or (fusi silicatici) | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/diagrammi_fase.html) | [📖](https://montinigeo.github.io/GeoExplore/petrografia/manuale_diagrammi_fase.html) |
+| [🔬 Microscopio Polarizzato](#microscopio) | Ortoscopica, conoscopica, lamina λ, Michel-Lévy | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/microscopio_polarizzato.html) | [📖](https://montinigeo.github.io/GeoExplore/petrografia/manuale_microscopio_polarizzato.html) |
+| [⚛️ Diffrattometro XRD](#xrd) | Diffrazione a raggi X, legge di Bragg | [Apri](https://montinigeo.github.io/GeoExplore/petrografia/diffrattometro_xrd_v5.html) | [📖](https://montinigeo.github.io/GeoExplore/petrografia/manuale_xrd.html) |
 
 ### 📡 Geofisica
 
 | Argomento | Descrizione | Link | Manuale |
 |-------------|-------------|------|---------|
 | [🌀 Moto Armonico](#moto-armonico) | Fasore, spostamento, velocità, accelerazione | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/moto_armonico.html) | — |
-| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/onde_sismiche.html) | — |
+| [🌍 Onde Sismiche](#onde-sismiche) | Onde P, S, PKP con raggi curvilinei e struttura interna | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/onde_sismiche.html) | [📖](https://montinigeo.github.io/GeoExplore/geofisica/manuale_onde_sismiche.html) |
 | [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/dinsar.html) | — |
 | [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/visibilita_sar_frane.html) | — |
 
@@ -250,7 +250,7 @@ Evoluzione diagenetica dei sedimenti dalla sepoltura alla generazione di idrocar
 <a name="diagrammi-fase"></a>
 ## 💎 Diagrammi di Fase — Fusi Silicatici
 
-**File:** `diagrammi_fase.html`
+**File:** `diagrammi_fase.html` &nbsp;·&nbsp; **Manuale:** `manuale_diagrammi_fase.html`
 
 Quattro diagrammi di fase binari: Ab-An (soluzione solida completa), Di-An (eutettico semplice a ~1274°C), Lc-SiO₂ (punto peritettico, cristallizzazione incongruente), Ab-Or (solvus e pertitizzazione).
 
@@ -259,7 +259,7 @@ Quattro diagrammi di fase binari: Ab-An (soluzione solida completa), Di-An (eute
 <a name="microscopio"></a>
 ## 🔬 Microscopio Polarizzato
 
-**File:** `microscopio_polarizzato.html`
+**File:** `microscopio_polarizzato.html` &nbsp;·&nbsp; **Manuale:** `manuale_microscopio_polarizzato.html`
 
 Simulazione di microscopio petrografico a luce polarizzata con modalità ortoscopica e conoscopica, tavola Michel-Lévy, rotazione della platina in tempo reale.
 
@@ -268,7 +268,7 @@ Simulazione di microscopio petrografico a luce polarizzata con modalità ortosco
 <a name="xrd"></a>
 ## ⚛️ Diffrattometro XRD
 
-**File:** `diffrattometro_xrd_v5.html`
+**File:** `diffrattometro_xrd_v5.html` &nbsp;·&nbsp; **Manuale:** `manuale_xrd.html`
 
 Simulazione di diffrazione a raggi X su polveri: legge di Bragg, spaziature reticolari, diffractogramma con picchi di diffrazione.
 
@@ -292,6 +292,22 @@ Propagazione delle onde sismiche: onde P (con PKP), onde S, struttura interna; r
 
 ---
 
+<a name="onde-sismiche"></a>
+## 🌍 Onde Sismiche — Struttura Interna della Terra
+
+**File:** `onde_sismiche.html` &nbsp;·&nbsp; **Manuale:** `manuale_onde_sismiche.html`
+
+Simulazione interattiva della propagazione delle onde sismiche e della struttura interna della Terra.
+
+### Funzionalità
+
+- Onde P (con fasi PKP), onde S, struttura interna a strati
+- Raggi curvilinei calcolati con integrazione numerica della legge di Snell sferica
+- Zona d'ombra delle onde P (103°–143°) e assenza delle onde S nel nucleo esterno
+- Visualizzazione delle discontinuità principali: Moho, 410 km, 660 km, CMB, ICB
+
+---
+
 <a name="dinsar"></a>
 ## 📡 DInSAR — Interferometria SAR Differenziale
 
@@ -312,7 +328,7 @@ Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza 
 
 ## Autore
 
-Argomenti sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
+Diagrammi sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
