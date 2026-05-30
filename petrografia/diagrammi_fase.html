@@ -34,6 +34,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 canvas{width:100%;height:100%;display:block;background:#07090e}
 .ibar{flex-shrink:0;border-top:1px solid var(--border);padding:.25rem 1.2rem;background:var(--panel);display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.6rem;color:var(--muted)}
 .ibar span{color:var(--accent)}
+.gbtn{display:block;width:100%;padding:.2rem .45rem;margin-bottom:.15rem;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'Crimson Pro',serif;font-size:.73rem;cursor:pointer;border-radius:3px;transition:all .15s;text-align:left}
+.gbtn:hover{border-color:var(--accent);color:var(--accent)}
+.gbtn.on{border-color:var(--accent2);color:var(--accent2);background:rgba(168,255,120,.06)}
+#sbGeo{flex-direction:column;padding:.6rem;gap:.2rem;overflow-y:auto}
+#sbGeo .sl{font-size:.48rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);border-bottom:1px solid var(--border);padding-bottom:.1rem;margin-bottom:.1rem;margin-top:.3rem}
+#geoInfo{margin-top:.5rem;font-family:'Crimson Pro',serif;font-size:.67rem;color:var(--muted);line-height:1.65;border-top:1px solid var(--border);padding-top:.5rem}
+#geoInfo b{color:var(--text)}
 </style>
 </head>
 <body>
@@ -44,10 +51,11 @@ canvas{width:100%;height:100%;display:block;background:#07090e}
     <button class="tab" data-s="1">II. Di-An</button>
     <button class="tab" data-s="2">III. Lc-SiO2</button>
     <button class="tab" data-s="3">IV. Ab-Or</button>
+    <button class="tab" data-s="4">V. Geotermo &amp; Geobar.</button>
   </div>
 </header>
 <div class="main">
-<aside class="sb">
+<aside class="sb" id="sbBinary">
   <div><div class="sl">Descrizione</div><div class="info" id="desc">-</div></div>
   <div><div class="sl">Composizione % B</div>
     <div class="cr"><div class="ch">cx <span class="cv" id="xv">50%</span></div>
@@ -72,6 +80,23 @@ canvas{width:100%;height:100%;display:block;background:#07090e}
       <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#66bb6a;border:2px solid #111;vertical-align:middle"></span> Verde: temperatura corrente
     </div>
   </div>
+</aside>
+<aside class="sb" id="sbGeo" style="display:none">
+  <div><div class="sl">Sistemi a un componente</div>
+    <button class="gbtn on" data-geo="sio2">SiO₂ — Polimorfi</button>
+    <button class="gbtn" data-geo="al2sio5">Al₂SiO₅ — Polimorfi</button>
+  </div>
+  <div><div class="sl" style="margin-top:.5rem">Geotermometri</div>
+    <button class="gbtn" data-geo="plag">Plagioclasio-liquido</button>
+    <button class="gbtn" data-geo="2fsp">Due feldspati (Ab-Or)</button>
+    <button class="gbtn" data-geo="cpx">Clinopirosseno-Opx</button>
+  </div>
+  <div><div class="sl" style="margin-top:.5rem">Geobarometri</div>
+    <button class="gbtn" data-geo="alin">Al-in-anfibolo</button>
+    <button class="gbtn" data-geo="gapq">Granato-Plag-Qz (GAPQ)</button>
+    <button class="gbtn" data-geo="coes">Coesiteite/Quarzo</button>
+  </div>
+  <div id="geoInfo" style="margin-top:.6rem;font-family:'Crimson Pro',serif;font-size:.68rem;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:.5rem"></div>
 </aside>
 <div class="cw"><canvas id="c"></canvas></div>
 </div>
@@ -513,6 +538,12 @@ function rebuildPath(){
 // COORDINATE (delegano al sistema corrente)
 // =====================================================================
 function resize(){const r=C.getBoundingClientRect();C.width=Math.round(r.width);C.height=Math.round(r.height);draw();}
+document.querySelectorAll('.gbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.gbtn').forEach(x=>x.classList.remove('on'));
+  selGeo=b.dataset.geo;b.classList.add('on');
+  if(cs===4)draw();
+}));
+
 window.addEventListener('resize',resize);
 
 function mg(){
@@ -529,7 +560,363 @@ function dot(px,py,col,r){
   ctx.beginPath();ctx.arc(px,py,r,0,2*Math.PI);ctx.fillStyle=col;ctx.fill();
 }
 
+
+// =====================================================================
+// DATI GEOTERMOMETRIA E GEOBAROMETRIA
+// =====================================================================
+let selGeo='sio2';
+
+const GEO_INFO={
+  sio2:{
+    n:'Sistema SiO₂ — Polimorfi',
+    desc:'Il diossido di silicio esiste in diversi polimorfi stabili a diverse condizioni P-T. La transizione quarzo-α/β a 573°C e 1 atm è rapida e reversibile. La coesite (>3 GPa) è diagnostica del metamorfismo di ultra-alta pressione (UHP); la stishovite (>10 GPa) degli impatti meteoritici.',
+    refs:'Hemingway 1987; Bohlen & Boettcher 1982; Chopin 1984',
+    campi:[
+      {n:'Quarzo-α',col:'rgba(80,150,255,0.18)',Tmin:0,Tmax:573,Pmin:0,Pmax:3.0},
+      {n:'Quarzo-β',col:'rgba(100,180,255,0.18)',Tmin:573,Tmax:870,Pmin:0,Pmax:3.0},
+      {n:'Tridimite',col:'rgba(120,200,180,0.18)',Tmin:870,Tmax:1470,Pmin:0,Pmax:0.8},
+      {n:'Cristobalite',col:'rgba(140,220,140,0.18)',Tmin:1470,Tmax:1800,Pmin:0,Pmax:0.5},
+      {n:'Coesite',col:'rgba(180,100,255,0.22)',Tmin:0,Tmax:1800,Pmin:3.0,Pmax:10.5},
+      {n:'Stishovite',col:'rgba(255,80,80,0.22)',Tmin:0,Tmax:1800,Pmin:8.0,Pmax:10.5},
+    ],
+    // Curve di confine: array di {p1:[T,P], p2:[T,P], col, n}
+    curve:[
+      {n:'Qz-α/β',col:'rgba(100,180,255,0.8)',pts:[[573,0],[574,3.0]]},
+      {n:'Qz-β/Trid.',col:'rgba(120,200,180,0.7)',pts:[[870,0],[900,0.5]]},
+      {n:'Trid./Crist.',col:'rgba(140,220,120,0.7)',pts:[[1470,0],[1490,0.3]]},
+      {n:'Qz/Coesite',col:'rgba(180,100,255,0.9)',pts:[[0,3.0],[800,3.2],[1200,3.8],[1700,4.5]]},
+      {n:'Coesite/Stishovite',col:'rgba(255,80,80,0.8)',pts:[[0,8.0],[500,8.5],[1000,9.2],[1500,10.0]]},
+    ]
+  },
+  al2sio5:{
+    n:'Sistema Al₂SiO₅ — Tre polimorfi',
+    desc:'Andalusite, cianite e sillimanite sono i tre polimorfi di Al₂SiO₅, fondamentali per la geotermobaro­metria metamorfica. Il punto triplo (~500°C, 0.38 GPa) è il punto di riferimento per calibrare i percorsi P-T metamorfici. Ogni polimorfo è diagnostico di un diverso regime geodinamico.',
+    refs:'Holdaway 1971; Hemingway et al. 1991; Pattison 1992',
+    campi:[
+      {n:'Andalusite',col:'rgba(255,160,60,0.18)',},
+      {n:'Cianite',   col:'rgba(80,160,255,0.18)',},
+      {n:'Sillimanite',col:'rgba(168,255,120,0.18)',},
+    ],
+    curve:[
+      {n:'And/Ky',col:'rgba(255,160,60,0.9)',pts:[[0,0.22],[500,0.38]]},
+      {n:'And/Sill',col:'rgba(255,200,80,0.9)',pts:[[500,0.38],[900,0.50]]},
+      {n:'Ky/Sill', col:'rgba(80,200,255,0.9)',pts:[[500,0.38],[900,0.80],[1200,1.0]]},
+    ]
+  },
+  plag:{
+    n:'Geotermometro plagioclasio-liquido',
+    desc:'La composizione del plagioclasio (contenuto in anortite, XAn) in equilibrio con il liquido dipende dalla temperatura e dalla pressione di H₂O del magma. Confrontando XAn del nucleo e del bordo del fenocristallo con curve sperimentali si stimano T di cristallizzazione. Accuratezza: ±30–50°C.',
+    refs:'Ridolfi et al. 2010; Putirka 2008; Ghiorso & Sack 1995',
+    linee:[
+      {n:'XAn=0.3 (andesina)',col:'rgba(80,200,255,0.7)',T:850,Trange:[800,950]},
+      {n:'XAn=0.5 (labradorite)',col:'rgba(100,220,180,0.7)',T:1000,Trange:[950,1080]},
+      {n:'XAn=0.7 (bytownite)',col:'rgba(168,255,120,0.7)',T:1100,Trange:[1050,1180]},
+      {n:'XAn=0.9 (anortite)',col:'rgba(255,200,80,0.7)',T:1250,Trange:[1200,1350]},
+    ]
+  },
+  '2fsp':{
+    n:'Geotermometro due feldspati (Ab-Or)',
+    desc:'Le composizioni dei bordi di K-feldspato e plagioclasio coesistenti in equilibrio subsolidus sono funzione della temperatura di ultima riequ­librazione. Usa il solvus del sistema Ab-Or-An. Applicabile a graniti, metamorfiti, gneiss. Accuratezza: ±25–50°C.',
+    refs:'Whitney & Stormer 1977; Fuhrman & Lindsley 1988; Elkins & Grove 1990',
+    linee:[
+      {n:'Or=0.10 (K-fsp sanidinitico)',col:'rgba(255,150,60,0.8)',T:700,Trange:[650,800]},
+      {n:'Or=0.20 (K-fsp anortoclasico)',col:'rgba(255,180,60,0.8)',T:600,Trange:[550,700]},
+      {n:'Or=0.60 (ortoclasio)',col:'rgba(255,210,60,0.8)',T:500,Trange:[450,600]},
+      {n:'Or=0.85 (microclino)',col:'rgba(255,230,80,0.8)',T:400,Trange:[350,500]},
+    ]
+  },
+  cpx:{
+    n:'Geotermometro clinopirosseno-ortopirosseno',
+    desc:'La distribuzione di Fe-Mg, Al e Ca tra clinopirosseno e ortopirosseno coesistenti è fortemente dipendente dalla temperatura. Usato per xeno­liti mantellici, gabbri, granuliti. Accuratezza: ±30–50°C. Applicabile a 600–1300°C.',
+    refs:'Wells 1977; Brey & Köhler 1990; Putirka 2008',
+    box:{Tmin:600,Tmax:1300,Pmin:0.5,Pmax:5.0,col:'rgba(255,150,60,0.15)',label:'Campo applicabilità Cpx-Opx'}
+  },
+  alin:{
+    n:'Geobarometro Al-in-anfibolo',
+    desc:'Il contenuto di Al tetraedrico dell\'anfibolo in equilibrio con l\'assemblaglio standard (Plag+Kfsp+Qz+Bt+Ilm+Mag+liquido) è funzione della pressione. Usato per graniti e vulcaniti calco-alcalini. Accuratezza: ±0.5–1 kbar (±0.05–0.1 GPa).',
+    refs:'Hammarstrom & Zen 1986; Hollister et al. 1987; Anderson & Smith 1995; Ridolfi et al. 2010',
+    curve_bar:[
+      {n:'Al^iv=0.5',P:1.0,col:'rgba(168,255,120,0.8)'},
+      {n:'Al^iv=1.0',P:2.5,col:'rgba(100,220,150,0.8)'},
+      {n:'Al^iv=1.5',P:4.5,col:'rgba(60,180,120,0.8)'},
+      {n:'Al^iv=2.0',P:7.0,col:'rgba(30,150,100,0.8)'},
+    ]
+  },
+  gapq:{
+    n:'Geobarometro Granato-Plag-Al₂SiO₅-Quarzo (GAPQ)',
+    desc:'La reazione An = Grs + 2Ky + Qz è fortemente dipendente da P con bassa dipendenza da T. Applicabile ai gneiss, eclogiti e rocce metamorfiche con questi quattro minerali coesistenti. Accuratezza: ±0.1–0.2 GPa.',
+    refs:'Newton & Haselton 1981; Hodges & Crowley 1985; Hoisch 1990',
+    box:{Tmin:400,Tmax:900,Pmin:0.5,Pmax:3.0,col:'rgba(80,160,255,0.15)',label:'Campo GAPQ'}
+  },
+  coes:{
+    n:'Geobarometro coesite/quarzo',
+    desc:'Il confine di stabilità quarzo/coesite (P≈3.0 GPa a 700°C, P≈3.8 GPa a 1000°C) è il geobarometro più diretto e preciso: la presenza di coesite in inclusioni in granato indica P>3 GPa, ovvero profondità >90 km. Diagnostico del metamorfismo UHP. Accuratezza: ±0.1 GPa.',
+    refs:'Bohlen & Boettcher 1982; Chopin 1984; Schmidt et al. 2013',
+    box:{Tmin:500,Tmax:1400,Pmin:2.5,Pmax:5.0,col:'rgba(180,100,255,0.15)',label:'Campo coesite (UHP)'}
+  }
+};
+
+function drawGeo(){
+  const W=C.width,H=C.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
+  const pL=72,pR=25,pT=35,pB=45,gW=W-pL-pR,gH=H-pT-pB;
+  // Range P-T adattato per ogni strumento
+  const ranges={
+    sio2: {Tmax:1800, Pmax:10.5},
+    al2sio5:{Tmax:1200, Pmax:2.0},
+    plag:   {Tmax:1400, Pmax:1.5},
+    '2fsp': {Tmax:900,  Pmax:1.0},
+    cpx:    {Tmax:1400, Pmax:5.5},
+    alin:   {Tmax:1000, Pmax:8.0},
+    gapq:   {Tmax:1000, Pmax:3.5},
+    coes:   {Tmax:1400, Pmax:5.0},
+  };
+  const rng=ranges[selGeo]||{Tmax:1800,Pmax:10.5};
+  const Tmax=rng.Tmax, Pmax=rng.Pmax;
+  const tx=T=>pL+(T/Tmax)*gW;
+  const ty=P=>pT+gH-(P/Pmax)*gH;
+
+  // Griglia
+  ctx.strokeStyle='rgba(30,34,48,0.7)';ctx.lineWidth=0.5;
+  ctx.font='10px Space Mono';ctx.fillStyle='#8a8e9a';
+  // Griglia T adattata al range
+  const Tstep=Tmax<=900?100:Tmax<=1400?200:200;
+  const Tgrid=[];for(let t=0;t<=Tmax;t+=Tstep)Tgrid.push(t);
+  Tgrid.forEach(T=>{
+    ctx.beginPath();ctx.moveTo(tx(T),pT);ctx.lineTo(tx(T),pT+gH);ctx.stroke();
+    ctx.textAlign='center';ctx.fillText(T,tx(T),pT+gH+18);
+  });
+  const Pstep=Pmax<=1.0?0.2:Pmax<=2.0?0.5:Pmax<=5.5?1.0:2.0;
+  const Pgrid=[];for(let p=0;p<=Pmax+0.01;p+=Pstep)Pgrid.push(parseFloat(p.toFixed(1)));
+  Pgrid.forEach(P=>{
+    ctx.beginPath();ctx.moveTo(pL,ty(P));ctx.lineTo(pL+gW,ty(P));ctx.stroke();
+    ctx.textAlign='right';ctx.fillText(P.toFixed(Pmax<=2?1:0),pL-5,ty(P)+4);
+  });
+  ctx.strokeStyle='rgba(200,204,216,0.6)';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pT+gH);ctx.lineTo(pL+gW,pT+gH);ctx.stroke();
+  ctx.font='italic 12px Crimson Pro';ctx.fillStyle='#c8ccd8';ctx.textAlign='center';
+  ctx.fillText('Temperatura (°C)',pL+gW/2,pT+gH+36);
+  ctx.save();ctx.translate(18,pT+gH/2);ctx.rotate(-Math.PI/2);ctx.fillText('Pressione (GPa)',0,0);ctx.restore();
+
+  const geo=GEO_INFO[selGeo];
+  if(!geo){return;}
+
+  // ── SiO2 o Al2SiO5: disegna campi e curve ─────────────────────────
+  if(selGeo==='sio2'){
+    // Campi colorati
+    const fields=[
+      {n:'Quarzo-α',col:'rgba(80,150,255,0.15)',T1:0,T2:573,P1:0,P2:3.0},
+      {n:'Quarzo-β',col:'rgba(100,180,255,0.13)',T1:573,T2:870,P1:0,P2:3.0},
+      {n:'Tridimite',col:'rgba(120,200,180,0.13)',T1:870,T2:1470,P1:0,P2:0.8},
+      {n:'Cristobalite',col:'rgba(140,220,140,0.13)',T1:1470,T2:1800,P1:0,P2:0.5},
+      {n:'Coesite',col:'rgba(180,100,255,0.18)',T1:0,T2:1800,P1:3.2,P2:10.5},
+      {n:'Stishovite',col:'rgba(255,80,80,0.18)',T1:0,T2:1800,P1:9.0,P2:10.5},
+      {n:'Fuso SiO₂',col:'rgba(255,140,40,0.13)',T1:870,T2:1800,P1:0,P2:0.5},
+    ];
+    fields.forEach(f=>{
+      ctx.fillStyle=f.col;
+      ctx.fillRect(tx(f.T1),ty(f.P2),tx(f.T2)-tx(f.T1),ty(f.P1)-ty(f.P2));
+    });
+    // Curve di confine
+    function drawCurve(pts,col,label,lx,ly){
+      ctx.beginPath();pts.forEach(([T,P],i)=>i?ctx.lineTo(tx(T),ty(P)):ctx.moveTo(tx(T),ty(P)));
+      ctx.strokeStyle=col;ctx.lineWidth=2;ctx.stroke();
+      if(label){ctx.font='bold 10px Crimson Pro';ctx.fillStyle=col;ctx.textAlign='left';
+        ctx.strokeStyle='rgba(7,9,14,0.9)';ctx.lineWidth=3;ctx.lineJoin='round';
+        ctx.strokeText(label,lx,ly);ctx.fillText(label,lx,ly);}
+    }
+    drawCurve([[573,0],[573,3.0]],'rgba(150,200,255,0.85)','Qz-α/β 573°C',tx(573)+4,ty(1.5));
+    drawCurve([[870,0],[870,0.8]],'rgba(120,220,180,0.85)','Trid.',tx(870)+4,ty(0.3));
+    drawCurve([[1470,0],[1470,0.4]],'rgba(140,230,140,0.85)','Crist.',tx(1470)+4,ty(0.15));
+    // Qz/Coesite (Bohlen & Boettcher 1982)
+    drawCurve([[200,3.0],[600,3.1],[900,3.4],[1200,3.8],[1600,4.5]],'rgba(200,120,255,0.95)','Qz / Coesite',tx(300),ty(3.0)-12);
+    // Coesite/Stishovite
+    drawCurve([[0,9.0],[500,9.2],[1000,9.6],[1500,10.2]],'rgba(255,100,80,0.9)','Coesite / Stishovite',tx(100),ty(9.0)-10);
+    // Fusione SiO2
+    drawCurve([[870,0],[1200,0.15],[1713,0]],'rgba(255,160,60,0.7)','Fusione',tx(1300),ty(0.1)-10);
+    // Label campi
+    function lf(s,T,P,col){ctx.font='bold 11px Crimson Pro';ctx.textAlign='center';
+      ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;ctx.lineJoin='round';
+      ctx.strokeText(s,tx(T),ty(P));ctx.fillStyle=col;ctx.fillText(s,tx(T),ty(P));}
+    lf('Quarzo-α',250,1.5,'rgba(150,200,255,0.9)');
+    lf('Quarzo-β',700,1.5,'rgba(170,210,255,0.9)');
+    lf('Tridimite',1150,0.35,'rgba(140,215,195,0.9)');
+    lf('Coesite',900,6.5,'rgba(200,140,255,0.9)');
+    lf('Stishovite',700,9.8,'rgba(255,120,100,0.9)');
+    // Annotazioni geologiche
+    ctx.font='italic 10px Crimson Pro';ctx.fillStyle='rgba(200,120,255,0.75)';ctx.textAlign='left';
+    ctx.fillText('▶ UHP metamorfismo',tx(0)+4,ty(3.0)-2);
+    ctx.fillStyle='rgba(255,120,100,0.75)';
+    ctx.fillText('▶ Impatti meteoritici',tx(0)+4,ty(9.0)-2);
+
+  } else if(selGeo==='al2sio5'){
+    // Campi Al2SiO5 (Holdaway 1971, rivisto da Pattison 1992)
+    // Punto triplo: ~500°C, 0.38 GPa
+    const tp=[500,0.38];
+    // Andalusite: bassa P, alta T → a sinistra e sotto il punto triplo
+    ctx.beginPath();
+    ctx.moveTo(tx(0),ty(0));ctx.lineTo(tx(tp[0]),ty(tp[1]));
+    ctx.lineTo(tx(0),ty(tp[1]));ctx.closePath();
+    ctx.fillStyle='rgba(255,160,60,0.15)';ctx.fill();
+    // Aggiunge la parte sotto il confine And-Sill
+    ctx.beginPath();
+    ctx.moveTo(tx(tp[0]),ty(tp[1]));ctx.lineTo(tx(1000),ty(0.55));
+    ctx.lineTo(tx(1000),ty(0));ctx.lineTo(tx(tp[0]),ty(0));ctx.closePath();
+    ctx.fillStyle='rgba(255,160,60,0.15)';ctx.fill();
+    // Cianite: alta P → sopra entrambe le curve
+    ctx.beginPath();
+    ctx.moveTo(tx(0),ty(Pmax));ctx.lineTo(tx(Tmax),ty(Pmax));
+    ctx.lineTo(tx(Tmax),ty(1.0));ctx.lineTo(tx(900),ty(0.80));
+    ctx.lineTo(tx(tp[0]),ty(tp[1]));ctx.lineTo(tx(0),ty(tp[1]));ctx.closePath();
+    ctx.fillStyle='rgba(80,160,255,0.15)';ctx.fill();
+    // Sillimanite: alta T, P intermedia
+    ctx.beginPath();
+    ctx.moveTo(tx(tp[0]),ty(tp[1]));ctx.lineTo(tx(Tmax),ty(1.0));
+    ctx.lineTo(tx(Tmax),ty(0));ctx.lineTo(tx(1000),ty(0));ctx.lineTo(tx(1000),ty(0.55));ctx.closePath();
+    ctx.fillStyle='rgba(168,255,120,0.15)';ctx.fill();
+
+    // Curve di confine
+    function dc2(pts,col,lbl,lx,ly){
+      ctx.beginPath();pts.forEach(([T,P],i)=>i?ctx.lineTo(tx(T),ty(P)):ctx.moveTo(tx(T),ty(P)));
+      ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.stroke();
+      if(lbl){ctx.font='bold 11px Crimson Pro';ctx.fillStyle=col;ctx.textAlign='center';
+        ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;ctx.strokeText(lbl,lx,ly);ctx.fillText(lbl,lx,ly);}
+    }
+    dc2([[0,0.22],[tp[0],tp[1]]],'rgba(255,160,60,0.95)','And/Ky',tx(250),ty(0.30)+14);
+    dc2([[tp[0],tp[1]],[1000,0.55],[1400,0.55]],'rgba(255,200,80,0.95)','And/Sill',tx(750),ty(0.48)+14);
+    dc2([[tp[0],tp[1]],[900,0.80],[1400,1.05]],'rgba(80,200,255,0.95)','Ky/Sill',tx(900),ty(0.93)-8);
+
+    // Punto triplo
+    ctx.beginPath();ctx.arc(tx(tp[0]),ty(tp[1]),7,0,2*Math.PI);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.7)';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.font='bold 11px Crimson Pro';ctx.fillStyle='#fff';ctx.textAlign='left';
+    ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;
+    ctx.strokeText('Punto triplo (500°C, 0.38 GPa)',tx(tp[0])+10,ty(tp[1])+4);
+    ctx.fillText('Punto triplo (500°C, 0.38 GPa)',tx(tp[0])+10,ty(tp[1])+4);
+
+    // Label campi
+    function lf2(s,T,P,col){ctx.font='bold 13px Crimson Pro';ctx.textAlign='center';
+      ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3.5;ctx.lineJoin='round';
+      ctx.strokeText(s,tx(T),ty(P));ctx.fillStyle=col;ctx.fillText(s,tx(T),ty(P));}
+    lf2('Andalusite',250,0.15,'rgba(255,180,80,0.95)');
+    lf2('Cianite',300,2.0,'rgba(100,180,255,0.95)');
+    lf2('Sillimanite',1100,0.25,'rgba(168,255,120,0.95)');
+
+    // Annotazioni geologiche
+    const annots=[
+      {s:'← Subduzione fredda',T:200,P:3.5,col:'rgba(100,180,255,0.7)',al:'left'},
+      {s:'Collisione continentale →',T:600,P:1.8,col:'rgba(130,200,255,0.7)',al:'center'},
+      {s:'Metamorfismo di contatto',T:700,P:0.08,col:'rgba(255,180,80,0.7)',al:'center'},
+      {s:'← Arco magmatico',T:800,P:0.35,col:'rgba(168,255,120,0.7)',al:'left'},
+    ];
+    annots.forEach(a=>{
+      ctx.font='italic 10px Crimson Pro';ctx.fillStyle=a.col;ctx.textAlign=a.al;
+      ctx.fillText(a.s,tx(a.T),ty(a.P));
+    });
+
+  } else {
+    // ── Geotermometri e geobarometri: diagramma P-T con box/linee ────
+    const geo=GEO_INFO[selGeo];
+
+    // Sfondo
+    ctx.fillStyle='rgba(15,20,30,0.5)';
+    ctx.fillRect(pL,pT,gW,gH);
+
+    // Box campo applicabilità
+    if(geo.box){
+      const b=geo.box;
+      ctx.fillStyle=b.col;
+      ctx.fillRect(tx(b.Tmin),ty(b.Pmax),tx(b.Tmax)-tx(b.Tmin),ty(b.Pmin)-ty(b.Pmax));
+      ctx.strokeStyle=b.col.replace('0.15','0.6');ctx.lineWidth=1.5;
+      ctx.strokeRect(tx(b.Tmin),ty(b.Pmax),tx(b.Tmax)-tx(b.Tmin),ty(b.Pmin)-ty(b.Pmax));
+      ctx.font='bold 12px Crimson Pro';ctx.fillStyle=b.col.replace('0.15','0.85');
+      ctx.textAlign='center';
+      ctx.fillText(b.label,tx((b.Tmin+b.Tmax)/2),ty((b.Pmin+b.Pmax)/2));
+    }
+
+    // Linee isoterme (geotermometri)
+    if(geo.linee){
+      // Grafico T-XAn/XOr: asse X = T (già settato), asse Y = P usato come proxy per XAn/XOr
+      // Mostra fasce di cristallizzazione orizzontali distribuite su P (0.2 a 0.9)
+      const Ptot=geo.linee.length;
+      geo.linee.forEach((l,i)=>{
+        const P=Pmax*0.85-i*(Pmax*0.6/(Ptot-1));
+        const hh=gH*0.08;
+        // Fascia colorata del range T
+        ctx.fillStyle=l.col.replace('0.8','0.12').replace('0.7','0.12');
+        ctx.fillRect(tx(l.Trange[0]),ty(P)+hh/2,tx(l.Trange[1])-tx(l.Trange[0]),-hh);
+        // Linea centrale
+        ctx.beginPath();ctx.moveTo(tx(l.Trange[0]),ty(P));ctx.lineTo(tx(l.Trange[1]),ty(P));
+        ctx.strokeStyle=l.col;ctx.lineWidth=2.5;ctx.stroke();
+        // Punto T ottimale
+        ctx.beginPath();ctx.arc(tx(l.T),ty(P),6,0,2*Math.PI);
+        ctx.fillStyle=l.col;ctx.fill();
+        ctx.font='bold 11px Crimson Pro';ctx.fillStyle=l.col;ctx.textAlign='left';
+        ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;ctx.lineJoin='round';
+        const lbl=selGeo==='2fsp'?l.n+' → '+l.T+'°C':l.n+' → T≈'+l.T+'°C';
+        ctx.strokeText(lbl,tx(l.T)+10,ty(P)+4);
+        ctx.fillText(lbl,tx(l.T)+10,ty(P)+4);
+      });
+      ctx.font='italic 11px Crimson Pro';ctx.fillStyle='rgba(200,204,216,0.55)';ctx.textAlign='center';
+      const axlbl=selGeo==='2fsp'?'T ultima riequ. (°C) — composizione bordo K-fsp e Plag':'T cristallizzazione (°C) — composizione XAn del plagioclasio';
+      ctx.fillText(axlbl,pL+gW/2,pT+gH+36);
+      // Nota asse Y
+      ctx.save();ctx.translate(18,pT+gH/2);ctx.rotate(-Math.PI/2);
+      ctx.fillText('distribuzione composizionale',0,0);ctx.restore();
+    }
+
+    // Isobare (geobarometri)
+    if(geo.curve_bar){
+      geo.curve_bar.forEach((l,i)=>{
+        const T0=400+i*120;
+        ctx.beginPath();ctx.moveTo(tx(T0),ty(0));ctx.lineTo(tx(T0),ty(l.P));
+        ctx.strokeStyle=l.col;ctx.lineWidth=2;ctx.setLineDash([5,3]);ctx.stroke();ctx.setLineDash([]);
+        ctx.beginPath();ctx.moveTo(tx(200),ty(l.P));ctx.lineTo(tx(T0),ty(l.P));
+        ctx.strokeStyle=l.col;ctx.lineWidth=2.5;ctx.stroke();
+        ctx.beginPath();ctx.arc(tx(T0),ty(l.P),5,0,2*Math.PI);
+        ctx.fillStyle=l.col;ctx.fill();
+        ctx.font='bold 11px Crimson Pro';ctx.fillStyle=l.col;ctx.textAlign='left';
+        ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;ctx.lineJoin='round';
+        ctx.strokeText(l.n+' → '+l.P.toFixed(1)+' GPa',tx(T0)+8,ty(l.P)-4);
+        ctx.fillText(l.n+' → '+l.P.toFixed(1)+' GPa',tx(T0)+8,ty(l.P)-4);
+      });
+      ctx.font='italic 11px Crimson Pro';ctx.fillStyle='rgba(200,204,216,0.6)';ctx.textAlign='center';
+      ctx.fillText('Pressione stimata in funzione del contenuto Al in anfibolo',pL+gW/2,ty(Pmax)+20);
+    }
+
+    // Coesite: ridisegna il confine Qz/Coesite per evidenziarlo
+    if(selGeo==='coes'){
+      const pts=[[200,3.0],[600,3.1],[900,3.4],[1200,3.8],[1400,4.2]];
+      ctx.beginPath();pts.forEach(([T,P],i)=>i?ctx.lineTo(tx(T),ty(P)):ctx.moveTo(tx(T),ty(P)));
+      ctx.strokeStyle='rgba(200,120,255,0.95)';ctx.lineWidth=3;ctx.stroke();
+      ctx.font='bold 12px Crimson Pro';ctx.fillStyle='rgba(200,120,255,0.95)';ctx.textAlign='left';
+      ctx.strokeStyle='rgba(7,9,14,0.95)';ctx.lineWidth=3;
+      ctx.strokeText('Quarzo / Coesite',tx(300),ty(3.0)-14);
+      ctx.fillText('Quarzo / Coesite',tx(300),ty(3.0)-14);
+      ctx.font='italic 11px Crimson Pro';ctx.fillStyle='rgba(200,120,255,0.75)';
+      ctx.fillText('▶ Presenza di coesite → P > 3 GPa → profondità > 90 km',tx(200)+4,ty(3.5));
+      // Dora-Maira e Dabie-Sulu come esempi
+      [[700,3.5,'Dora-Maira (Alps)'],[800,3.8,'Dabie-Sulu (China)']].forEach(([T,P,lbl])=>{
+        ctx.beginPath();ctx.arc(tx(T),ty(P),6,0,2*Math.PI);
+        ctx.fillStyle='rgba(200,120,255,0.8)';ctx.fill();
+        ctx.font='bold 10px Crimson Pro';ctx.fillStyle='rgba(220,180,255,0.9)';ctx.textAlign='left';
+        ctx.fillText('★ '+lbl,tx(T)+10,ty(P)+4);
+      });
+    }
+  }
+
+  // Titolo
+  ctx.font='italic 13px Crimson Pro';ctx.fillStyle='rgba(210,215,225,0.8)';ctx.textAlign='center';
+  ctx.fillText(geo.n,pL+gW/2,pT-12);
+
+  // Aggiorna pannello info
+  const el=document.getElementById('geoInfo');
+  if(el)el.innerHTML='<b>'+geo.n+'</b><br><br>'+geo.desc+'<br><br><span style="color:var(--dim);font-size:.62rem">Riferimenti: '+geo.refs+'</span>';
+}
+
 function draw(){
+  if(cs===4){drawGeo();return;}
   const W=C.width,H=C.height; if(!W||!H)return;
   ctx.clearRect(0,0,W,H);ctx.fillStyle='#07090e';ctx.fillRect(0,0,W,H);
   const m=mg(), s=sys();
@@ -719,14 +1106,27 @@ function animLoop(ts){
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   b.classList.add('on'); cs=parseInt(b.dataset.s);
+  // Mostra sidebar corretta
+  document.getElementById('sbBinary').style.display=cs===4?'none':'flex';
+  document.getElementById('sbGeo').style.display=cs===4?'flex':'none';
+  if(cs===4){
+    selGeo='sio2';
+    document.querySelectorAll('.gbtn').forEach(x=>x.classList.remove('on'));
+    const firstGbtn=document.querySelector('.gbtn[data-geo="sio2"]');
+    if(firstGbtn)firstGbtn.classList.add('on');
+  }
   // Imposta cx e slider in base al sistema
-  const defaults=[0.5,0.5,0.25,0.5];
-  cx=defaults[cs];
+  const defaults=[0.5,0.5,0.25,0.5,0];
+  cx=defaults[cs]||0.5;
   document.getElementById('xs').value=Math.round(cx*100);
   document.getElementById('xv').textContent=Math.round(cx*100)+'%';
-  document.getElementById('desc').innerHTML=sys().desc;
+  if(cs!==4){document.getElementById('desc').innerHTML=sys().desc;}
   anim=false;lastTs=null;accumulator=0;
-  rebuildPath();draw();
+  if(cs===4){
+    setTimeout(()=>{const r=C.getBoundingClientRect();C.width=Math.round(r.width);C.height=Math.round(r.height);draw();},20);
+  } else {
+    rebuildPath();draw();
+  }
   document.getElementById('btnP').textContent='\u25B6 Raffredda';
 }));
 
