@@ -1,4 +1,4 @@
-# GeoExplore — Diagrammi Interattivi per le Scienze della Terra
+# GeoExplore — Approfondimenti su argomrnti riguardanti le Scienze della Terra
 
 Raccolta di diagrammi e strumenti di visualizzazione interattivi per la geologia, realizzati in HTML/JavaScript senza dipendenze esterne. Ogni file è autonomo e funziona direttamente nel browser.
 
@@ -328,7 +328,7 @@ Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza 
 
 ## Autore
 
-Diagrammi sviluppati da Giovanni Montini con l'assistenza di Claude (Anthropic).
+Argomenti sviluppati con l'assistenza di Claude (Anthropic).
 
 ## Licenza
 
