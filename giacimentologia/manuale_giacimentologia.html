@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuale di Giacimentologia</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#f0a030;--accent2:#00c8f0;--accent3:#a8ff78;--accent4:#ff6b35;--accent5:#c060f0;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent3);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ol.steps{counter-reset:step;list-style:none;margin:1rem 0}
+ol.steps li{counter-increment:step;padding:.5rem 0 .5rem 2.5rem;position:relative;border-bottom:1px solid var(--border);color:var(--muted);font-size:.93rem}
+ol.steps li::before{content:counter(step);position:absolute;left:0;top:.45rem;width:1.6rem;height:1.6rem;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;font-family:var(--mono);font-size:.62rem;color:var(--accent);text-align:center;line-height:1.6rem}
+ol.steps li strong{color:var(--text)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.orange{border-color:rgba(240,160,48,.3);background:rgba(240,160,48,.04)}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.green{border-color:rgba(168,255,120,.3);background:rgba(168,255,120,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight.red{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.orange .hl-title{color:var(--accent)}
+.highlight.blue .hl-title{color:var(--accent2)}
+.highlight.green .hl-title{color:var(--accent3)}
+.highlight.purple .hl-title{color:var(--accent5)}
+.highlight.red .hl-title{color:var(--accent4)}
+.highlight p{margin:0;font-size:.9rem}
+.esempio{background:var(--surface);border-left:3px solid var(--accent);padding:.7rem 1rem;margin:1.2rem 0;border-radius:0 4px 4px 0}
+.esempio::before{content:'ESEMPI ';font-family:var(--mono);font-size:.52rem;letter-spacing:.18em;color:var(--accent);display:block;margin-bottom:.4rem}
+.esempio p{margin:0;font-size:.88rem;color:var(--muted)}
+.esempio p strong{color:var(--accent)}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Manuale · Giacimentologia</p>
+  </div>
+  <ul>
+    <li class="sec-label">Fondamenti</li>
+    <li><a href="#intro">1. Introduzione</a></li>
+    <li><a href="#terminologia" class="sub">1.1 Terminologia</a></li>
+    <li><a href="#classificazione" class="sub">1.2 Classificazione genetica</a></li>
+    <li class="sec-label">Giacimenti Magmatici</li>
+    <li><a href="#magmatici">2. Giacimenti Magmatici</a></li>
+    <li><a href="#segregaz" class="sub">2.1 Segregazione magmatica</a></li>
+    <li><a href="#carbonatiti" class="sub">2.2 Carbonatiti</a></li>
+    <li><a href="#kimberliti" class="sub">2.3 Kimberliti e diamante</a></li>
+    <li><a href="#pegmatiti" class="sub">2.4 Pegmatiti</a></li>
+    <li class="sec-label">Giacimenti Idrotermali</li>
+    <li><a href="#idrotermali">3. Giacimenti Idrotermali</a></li>
+    <li><a href="#porphyry" class="sub">3.1 Porphyry Cu-Mo-Au</a></li>
+    <li><a href="#epitermali" class="sub">3.2 Epitermali Au-Ag</a></li>
+    <li><a href="#skarn" class="sub">3.3 Skarn</a></li>
+    <li><a href="#vms" class="sub">3.4 VMS</a></li>
+    <li><a href="#mvt" class="sub">3.5 MVT</a></li>
+    <li><a href="#iocg" class="sub">3.6 IOCG</a></li>
+    <li><a href="#orogenic-gold" class="sub">3.7 Orogenic Gold</a></li>
+    <li class="sec-label">Giacimenti Sedimentari</li>
+    <li><a href="#sedimentari">4. Giacimenti Sedimentari</a></li>
+    <li><a href="#bif" class="sub">4.1 BIF e ferro oolitico</a></li>
+    <li><a href="#bauxite" class="sub">4.2 Bauxite</a></li>
+    <li><a href="#placer" class="sub">4.3 Placer</a></li>
+    <li><a href="#evaporiti-min" class="sub">4.4 Evaporiti minerarie</a></li>
+    <li><a href="#fosfati" class="sub">4.5 Fosfati e black shale</a></li>
+    <li class="sec-label">Altri Processi</li>
+    <li><a href="#metamorfici">5. Giacimenti Metamorfici</a></li>
+    <li><a href="#supergene">6. Weathering e Supergene</a></li>
+    <li class="sec-label">Applicazioni</li>
+    <li><a href="#esplorazione">7. Esplorazione Mineraria</a></li>
+    <li><a href="#critici">8. Metalli Critici</a></li>
+    <li><a href="#biblio">9. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Giacimentologia</div>
+  <h1>Ore Geology e Giacimentologia</h1>
+  <p class="subtitle">Genesi, classificazione ed esplorazione dei giacimenti minerali: dal magmatismo agli ambienti sedimentari, dalle risorse metalliche alle risorse critiche per la transizione energetica</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025 · Basato su Evans (1993) e letteratura aggiornata</div>
+</div>
+
+<!-- ══ 1. INTRO ══ -->
+<section id="intro">
+  <span class="section-num">01</span>
+  <h2>Introduzione alla Giacimentologia</h2>
+  <div class="section-line"></div>
+
+  <p>La <strong>giacimentologia</strong> (o <em>ore geology</em>) è la branca delle geoscienze che studia l'origine, la distribuzione, la classificazione e le caratteristiche geologiche delle <em>mineralizzazioni economicamente sfruttabili</em>. Un <strong>giacimento minerario</strong> è un'anomalia geochimica — una concentrazione di uno o più elementi o minerali — che supera la soglia economica di sfruttamento nelle condizioni tecnologiche e di mercato attuali. Evans (<em>1993</em>) definisce la giacimentologia come lo studio dei processi che portano alla concentrazione anomala di minerali utili nella crosta terrestre.</p>
+
+  <section id="terminologia">
+    <h3>1.1 Terminologia fondamentale</h3>
+    <dl class="deflist">
+      <dt>Ore (minerale utile o mena)</dt>
+      <dd>Minerale o aggregato di minerali dal quale si estrae economicamente uno o più metalli o elementi utili. Es.: calcopirite (CuFeS₂) è il principale minerale mena del rame.</dd>
+      <dt>Gangue</dt>
+      <dd>Minerali non economici associati alla mena nel giacimento. Es.: quarzo, calcite, fluorite, barite in un giacimento idrotermale. La gangue può diventare economica se ha usi industriali (fluorite, barite).</dd>
+      <dt>Tenore (grade)</dt>
+      <dd>Concentrazione del metallo o elemento utile nel minerale, espressa in % (Fe, Cu, Zn), g/t o ppm (Au, Ag, PGE). Il tenore medio globale della crosta: Cu ~55 ppm, Au ~2.5 ppb, Fe ~5%, Al ~8%.</dd>
+      <dt>Cut-off grade</dt>
+      <dd>Tenore minimo economicamente sfruttabile nelle condizioni attuali di mercato e tecnologia. Varia con il prezzo del metallo, i costi di estrazione e lavorazione. Es.: cut-off Au ~0.5–1 g/t per miniere a cielo aperto, ~3–5 g/t per miniere sotterranee.</dd>
+      <dt>Clarke di concentrazione</dt>
+      <dd>Rapporto tra il tenore medio del giacimento e l'abbondanza media dell'elemento nella crosta (clarke). Un giacimento economico di Cu ha un Clarke di concentrazione ~100×; per Au ~1000×; per i diamanti ~1.000.000×.</dd>
+      <dt>Riserve e risorse</dt>
+      <dd>Le <em>riserve</em> (reserves) sono quantità di minerale economicamente estraibili con la tecnologia attuale; le <em>risorse</em> (resources) sono quantità stimate totali a diversi gradi di confidenza (misurate, indicate, inferite). Classificazione JORC/NI 43-101.</dd>
+      <dt>Tonnage e grade</dt>
+      <dd>I giacimenti si confrontano nel diagramma log-log tonnage vs. grade: i giacimenti di classe mondiale occupano posizioni specifiche (es. porphyry Cu: 100–10.000 Mt a 0.2–1.5% Cu).</dd>
+    </dl>
+  </section>
+
+  <section id="classificazione">
+    <h3>1.2 Classificazione genetica dei giacimenti</h3>
+    <p>Numerose classificazioni dei giacimenti sono state proposte. Evans (<em>1993</em>) segue principalmente un criterio <strong>genetico</strong> — basato sul processo di formazione — che rimane il più utile per la comprensione geologica e per la guida all'esplorazione. I grandi gruppi genetici sono:</p>
+
+    <table>
+      <tr><th>Gruppo genetico</th><th>Processo</th><th>Metalli tipici</th><th>Esempi</th></tr>
+      <tr><td><strong>Magmatici</strong></td><td>Cristallizzazione e segregazione da fuso silicatico o carbonatitico</td><td>Cr, PGE, Ni, Cu, Ti, V, REE, diamante</td><td>Bushveld, Noril'sk, Bayan Obo</td></tr>
+      <tr><td><strong>Pegmatitici</strong></td><td>Cristallizzazione da fuso residuale ricco in volatili</td><td>Li, Be, Cs, Ta, Nb, Sn, W, gemme</td><td>Greenbushes, Bikita</td></tr>
+      <tr><td><strong>Idrotermali</strong></td><td>Precipitazione da soluzioni acquose calde (50–500°C)</td><td>Cu, Au, Ag, Zn, Pb, Mo, W, As, Sb</td><td>Bingham Canyon, Yanacocha, VMS</td></tr>
+      <tr><td><strong>Sedimentari</strong></td><td>Sedimentazione chimica, detritica o evaporitica</td><td>Fe, Al, Mn, Au, Ti, P, K, Li</td><td>Hamersley, Weipa, Witwatersrand</td></tr>
+      <tr><td><strong>Metamorfici</strong></td><td>Rimobilizzazione e concentrazione durante il metamorfismo</td><td>Au, grafite, talco, Al₂SiO₅</td><td>Kalgoorlie, Silgará</td></tr>
+      <tr><td><strong>Supergene / Weathering</strong></td><td>Alterazione e arricchimento secondario per agenti atmosferici</td><td>Al (bauxite), Ni, Co, Cu, Au</td><td>Nickel Rim, Weipa, Río Tinto</td></tr>
+    </table>
+  </section>
+</section>
+
+<!-- ══ 2. MAGMATICI ══ -->
+<section id="magmatici">
+  <span class="section-num">02</span>
+  <h2>Giacimenti Magmatici</h2>
+  <div class="section-line"></div>
+
+  <p>I giacimenti magmatici si formano durante la cristallizzazione di magmi silicatici o carbonatitici per processi di <strong>segregazione</strong>, <strong>immiscibilità dei liquidi</strong> o <strong>cristallizzazione frazionata</strong>. Sono tipicamente associati a complessi intrusivi mafici-ultramafici stratificati o a kimberliti/carbonatiti.</p>
+
+  <section id="segregaz">
+    <h3>2.1 Segregazione magmatica: Cr, PGE, Ni-Cu</h3>
+
+    <h4>Giacimenti di Cromo (Cr)</h4>
+    <p>Il cromo si concentra per <strong>cristallizzazione precoce della cromite</strong> (FeCr₂O₄) da magmi basaltici-picriti ad alta temperatura. La cromite cristallizza prima dei silicati e può segregare per gravità in strati (<em>chromitite layers</em>) o in corpi podiformi nelle peridotiti. Si distinguono due tipi principali:</p>
+    <ul class="plain">
+      <li><strong>Stratiform chromite</strong> — Strati lateralmente continui in complessi stratificati (layered intrusions). Tenori: 40–55% Cr₂O₃. Il rapporto Cr/Fe controlla il tipo di utilizzo (metallurgico, refrattario, chimico).</li>
+      <li><strong>Podiform chromite</strong> — Corpi lentiformi irregolari in peridotiti di mantello ofiolitico. Più ricchi in Cr (Cr# alto) ma di dimensioni minori.</li>
+    </ul>
+
+    <div class="esempio"><p><strong>Bushveld Complex, Sudafrica (~2.05 Ga)</strong> — La più grande intrusione stratificata del mondo (~65.000 km²), con riserve di cromo stimate in ~5.5 miliardi di tonnellate (75% delle riserve mondiali). I <em>Chromitite Layers</em> (LG6, MG1-4, UG1-2) si estendono per centinaia di km con continuità. <strong>Great Dyke, Zimbabwe</strong> — Intrusione lineare di 550 km con strati di cromite e PGE. <strong>Ofioliti della Turchia e dell'Albania</strong> — Cromite podiforme nelle sequenze ofiolitiche tetidee.</p></div>
+
+    <h4>Giacimenti di Elementi del Gruppo del Platino (PGE)</h4>
+    <p>I <strong>PGE</strong> (Pt, Pd, Rh, Ru, Ir, Os) si concentrano in strati ultrasottili (<em>reef</em>) nelle layered intrusions, associati a solfuri (pentlandite, calcopirite, pirrotina) e a cromite. Il meccanismo predominante è la <strong>raccolta dei PGE da un liquido solfurico immiscibile</strong> che, per alta affinità con i solfuri, si arricchisce in PGE di 1000–10.000× rispetto al magma parentale.</p>
+
+    <div class="esempio"><p><strong>Merensky Reef, Bushveld (Sudafrica)</strong> — Strato di 20–90 cm con tenori medi 3–7 g/t PGE; produce ~70% del platino mondiale. Scoperto nel 1924 da Hans Merensky. <strong>UG2 Reef, Bushveld</strong> — Strato di cromite con Pd > Pt; secondo più importante. <strong>J-M Reef, Stillwater Complex, Montana (USA, 2.7 Ga)</strong> — Analogo nordamericano del Merensky, con Pd dominante (Pd/Pt ~3). <strong>Lac des Iles, Ontario</strong> — Giacimento di PGE in dunite e websterite.</p></div>
+
+    <h4>Giacimenti di Nichel-Rame (Ni-Cu) nei complessi mafici-ultramafici</h4>
+    <p>I giacimenti Ni-Cu-PGE nei complessi mafici si formano per <strong>immiscibilità di un liquido solfurico</strong> nel magma basaltico: oltre una certa concentrazione di S, il magma si separa in due liquidi immiscibili (silicatico + solfuro). Il liquido solfurico, molto più denso, si raccoglie alla base dell'intrusione o nelle zone di iniezione. Il fattore R (rapporto magma/solfuro) controlla il tenore: elevato R → maggiore raccolta di metalli → tenori più alti.</p>
+
+    <div class="esempio"><p><strong>Noril'sk-Talnakh, Siberia, Russia</strong> — Il più grande distretto Ni-Cu-PGE al mondo, associato ai Siberian Traps (~250 Ma). Riserve stimate ~2 miliardi di t di minerale a ~2.5% Ni, 3.5% Cu. Il magma attraversò evaporiti e carbone, arricchendosi in S. <strong>Sudbury, Ontario (~1.85 Ga)</strong> — Struttura di impatto meteoritico che ha fuso la crosta producendo un magma anomalo; 1.65 miliardi di t a 1.2% Ni, 1.0% Cu. <strong>Kambalda, Australia Occidentale (2.7 Ga)</strong> — Giacimenti komatiitici Ni-Cu in greenstone belt archeani; il Ni precipitò alla base di flussi di komatiite su substrato solfuro-ricco.</p></div>
+  </section>
+
+  <section id="carbonatiti">
+    <h3>2.2 Carbonatiti: REE, Nb, P</h3>
+    <p>Le <strong>carbonatiti</strong> sono rocce magmatiche con &gt;50% di minerali carbonatici (calcite, dolomite, ankerite, siderite) di origine mantellica. Sono geneticamente associate a complessi alcalini (nefeliniti, fonoliti, kimberliti) in ambienti di rift continentale o hotspot. Nonostante la loro rarità, ospitano la maggior parte delle riserve mondiali di <strong>REE</strong> (terre rare), <strong>Nb</strong> (niobio), <strong>P</strong> (fosforo) e <strong>F</strong> (fluorite).</p>
+
+    <p>Le carbonatiti sono arricchite in REE perché questi elementi, incompatibili nei silicati, si concentrano nei fusi carbonatitici residuali. Il minerale principale delle REE nelle carbonatiti è la <strong>bastnäsite</strong> (Ce,La)(CO₃)F e la <strong>monazite</strong> (Ce,La,Nd,Th)PO₄. Il <strong>pirocloro</strong> (Na,Ca)₂Nb₂O₆F è il principale minerale del niobio.</p>
+
+    <div class="esempio"><p><strong>Mountain Pass, California, USA (~1.4 Ga)</strong> — Storico primo produttore mondiale di REE (bastnäsite); riaperto nel 2018 dopo anni di inattività. <strong>Bayan Obo, Mongolia Interna, Cina (~1.3 Ga)</strong> — Il più grande giacimento di REE al mondo (riserve ~40 Mt REO), in carbonatiti intrusive in dolomie precambriane. Produce &gt;50% delle REE mondiali. <strong>Araxá e Catalão, Brasile</strong> — Complessi carbonatitici con imensi giacimenti di Nb (pirocloro) e P (apatite); Araxá fornisce ~80% del Nb mondiale. <strong>Oldoinyo Lengai, Tanzania</strong> — L'unico vulcano natrocarbonatitice attivo; la lava a base di Na-carbonati erutta a ~500°C.</p></div>
+  </section>
+
+  <section id="kimberliti">
+    <h3>2.3 Kimberliti e Lamproiti: il Giacimento del Diamante</h3>
+    <p>Il <strong>diamante</strong> (polimorfo di C stabile a P &gt;4.5 GPa, profondità &gt;135 km) si forma nel mantello litosferico sub-cratonico e viene trasportato in superficie da <strong>kimberliti</strong> e <strong>lamproiti</strong> — magmi ultrabasici K-ricchi che risalgono a velocità elevatissima (decine di km/h) attraverso pipe esplosive (<em>diatremi</em>).</p>
+
+    <p>La struttura di una <strong>pipe kimberlitica</strong> mostra dall'alto verso il basso: (1) cratere superficiale (eroso); (2) diatrema (zona di frammentazione con tuffisite e xenoliti); (3) zona radice (rock kimberlitica primaria). La mineralizzazione a diamanti è economicamente valutata in <em>carati per 100 t</em> (cpht); i giacimenti economici hanno in media 10–500 cpht.</p>
+
+    <div class="esempio"><p><strong>Kimberley, Sudafrica (Cretaceo, ~85 Ma)</strong> — La "Big Hole" di Kimberley fu la prima grande miniera di diamanti, scoperta nel 1871; ha dato il nome alla roccia. Oggi le miniere sudafricane più importanti sono Premier (Cullinan, 1902 — diamante di 3106 carati) e Venetia. <strong>Argyle, Australia Occidentale (lamproite, ~1.2 Ga)</strong> — Il giacimento con la produzione numerica di diamanti più alta al mondo (~20 milioni di carati/anno); noto per i rari diamanti rosa. Chiuso nel 2020. <strong>Mirny e Udachnaya, Siberia</strong> — Le più grandi pipe kimberlitiche del mondo per volume; la Mirny ha 525 m di diametro. <strong>Ekati e Diavik, Canada</strong> — Prime miniere canadesi (anni 1990), in kimberliti archeane dello Slave Craton.</p></div>
+  </section>
+
+  <section id="pegmatiti">
+    <h3>2.4 Pegmatiti: Li, Be, Cs, Ta, Sn e Gemme</h3>
+    <p>Le <strong>pegmatiti</strong> sono rocce ignee a grana molto grossa (cristalli da cm a m) che cristallizzano da fusi residuali ricchi in acqua e altri volatili (F, B, P, Cl) nelle fasi finali della cristallizzazione granitica. La grande dimensione dei cristalli riflette la bassa viscosità e la rapida diffusione in un fuso idrato. Le pegmatiti possono contenere concentrazioni eccezionali di elementi rari.</p>
+
+    <p>La classificazione di Černý &amp; Ercit (<em>2005</em>) distingue: pegmatiti <strong>LCT</strong> (Li-Cs-Ta, derive da graniti S-type peraluminosi) e pegmatiti <strong>NYF</strong> (Nb-Y-F, derive da graniti A-type o I-type). Le pegmatiti LCT sono le più importanti economicamente per litio, tantalio, cesio e gemme (berillo, tormalina, topazio, lepidolite).</p>
+
+    <div class="esempio"><p><strong>Greenbushes, Australia Occidentale (~2.5 Ga)</strong> — Il più grande giacimento di spodumene (LiAlSi₂O₆) del mondo; ~186 Mt a 2.5% Li₂O. Oggi il principale fornitore di litio per le batterie. <strong>Bikita, Zimbabwe</strong> — Pegmatita LCT con spodumene, petalite, lepidolite, pollucite (Cs). <strong>Bernic Lake (Tanco), Manitoba, Canada</strong> — Giacimento di pollucite (Cs), spodumene e tantalite; le più grandi riserve di cesio al mondo. <strong>Wodgina, Australia Occidentale</strong> — Spodumene; terzo giacimento mondiale di litio. <strong>Pegmatiti di Minas Gerais, Brasile</strong> — Famose per gemme di alta qualità: acquamarina, tormalina, topazio imperiale, morganite.</p></div>
+</section>
+
+<!-- ══ 3. IDROTERMALI ══ -->
+<section id="idrotermali">
+  <span class="section-num">03</span>
+  <h2>Giacimenti Idrotermali</h2>
+  <div class="section-line"></div>
+
+  <p>I giacimenti idrotermali si formano per precipitazione di minerali da <strong>soluzioni acquose calde</strong> (50–500°C) che circolano attraverso fratture e porosità della crosta. I fluidi idrotermali possono avere diverse origini: magmatica (essoluti dal magma), meteoritica (acque meteoriche riscaldate), marina (acqua di mare che circola nei fondali), metamorfica (fluidi liberati dal metamorfismo) — spesso in miscela. Trasportano metalli in soluzione come complessi clorurati, bisolfurati o organici, e li precipitano per variazioni di temperatura, pressione, pH o fO₂.</p>
+
+  <section id="porphyry">
+    <h3>3.1 Giacimenti Porphyry Cu-Mo-Au</h3>
+    <p>I giacimenti <strong>porphyry</strong> sono i più importanti per la produzione mondiale di rame (~75% del Cu mondiale), molibdeno e oro. Si formano al di sopra di intrusioni calcoalcaline (dioriti, granodioriti, porfidi quarziferi) in ambienti di arco magmatico, per circolazione di fluidi magmatico-idrotermali ad alte temperature (300–700°C).</p>
+
+    <p>La <strong>struttura zonata</strong> di un deposito porphyry comprende: (1) <em>zona potassica</em> centrale (K-feldspato + biotite + calcopirite ± bornite, alta T); (2) <em>zona fillitica</em> (sericite + quarzo + pirite, T intermedia); (3) <em>zona argillitica avanzata</em> (alunite + caolinite ± dickite, alta acidità); (4) <em>zona propiilitica</em> esterna (clorite + epidoto + carbonati). I minerali di mena principali sono <strong>calcopirite</strong> (CuFeS₂) e <strong>molibdenite</strong> (MoS₂). Il tonnellaggio è enorme (100–10.000 Mt) a bassi tenori (0.2–1.5% Cu, 0.01–0.1% Mo).</p>
+
+    <div class="esempio"><p><strong>Bingham Canyon (Kennecott), Utah, USA</strong> — Uno dei più grandi giacimenti porphyry Cu-Mo-Au al mondo; la miniera a cielo aperto più grande del mondo (~4 km diametro, 1.2 km profondità). Produzione dal 1906; ~2 miliardi di t estratte. <strong>El Teniente, Cile</strong> — La più grande miniera sotterranea di rame del mondo; giacimento porphyry Cu-Mo del Miocene. <strong>Grasberg, Papua, Indonesia</strong> — Porphyry Cu-Au (con anomalia in Au eccezionale, 1 g/t); terza miniera di Cu e prima di Au del mondo. <strong>Chuquicamata, Cile</strong> — Immensa miniera a cielo aperto; riserve di oltre 10 miliardi di t. <strong>Ok Tedi, Papua Nuova Guinea</strong> — Porphyry Cu-Au con grave controversia ambientale per scarico nei fiumi.</p></div>
+  </section>
+
+  <section id="epitermali">
+    <h3>3.2 Giacimenti Epitermali Au-Ag</h3>
+    <p>I giacimenti <strong>epitermali</strong> si formano a profondità ridotte (da superficie a ~1.5 km) e a basse temperature (50–300°C), tipicamente in ambienti vulcanici attivi o recenti. Si distinguono due famiglie principali in base alle caratteristiche del fluido:</p>
+
+    <dl class="deflist">
+      <dt>Epitermali High-Sulphidation (HS, o acido-solfato)</dt>
+      <dd>Fluidi acidi, ossidati, ricchi in SO₄²⁻, con acidità derivante dalla condensazione di vapori magmatici. Alterazione tipica: alunite-caolinite-dickite-diasporo. Minerali di mena: enargite (Cu₃AsS₄), luzonite, orpimento; elevati rapporti Au/Ag. Esempi: Yanacocha (Perù), Pierina (Perù), Summitville (Colorado).</dd>
+      <dt>Epitermali Low-Sulphidation (LS, o adularia-sericite)</dt>
+      <dd>Fluidi quasi neutri, ridotti, ricchi in CO₂ e H₂S. Alterazione: adularia + calcite + quarzo (vene) + sericite. Minerali di mena: elettro (Au-Ag nativo), argento nativo, argentite, pirargirite. Strutture: vene, stockwork, brecce. Esempi: Creede e Comstock Lode (USA), Waihi (Nuova Zelanda), Hishikari (Giappone).</dd>
+    </dl>
+
+    <div class="esempio"><p><strong>Yanacocha, Perù</strong> — Il più grande giacimento Au epitermale HS del mondo (~50 Moz Au prodotto); miniera a cielo aperto nelle Ande peruviane. <strong>Comstock Lode, Nevada, USA (1859)</strong> — Storico giacimento LS che alimentò la Silver Rush americana; ~8 Moz Au e 190 Moz Ag estratti. <strong>Hishikari, Giappone</strong> — Epitermale LS con tenori eccezionalmente alti (40–80 g/t Au); tra le più ricche miniere Au del mondo. <strong>Lihir, Papua Nuova Guinea</strong> — Epitermale HS in un sistema idrotermale geotermico attivo; 40 Moz Au di riserve.</p></div>
+  </section>
+
+  <section id="skarn">
+    <h3>3.3 Giacimenti di Skarn</h3>
+    <p>Gli <strong>skarn</strong> (dal termine svedese per "scarto di roccia") si formano per <strong>metasomatismo di contatto</strong>: i fluidi idrotermali essoluti da un'intrusione granitica reagiscono con le rocce carbonatiche incassanti (calcari, dolomie) producendo un'assemblaggio di silicati calcici (granato grossulare-andradite, diopsido, wollastonite, vesuvianite, epidoto) in cui precipitano solfuri e ossidi metallici. I principali skarn economici sono di Fe, Cu, W, Mo, Zn-Pb, Sn e Au.</p>
+
+    <p>La <strong>zonazione</strong> tipica di uno skarn comprende, dall'intrusione verso l'esterno: (1) marmo a silicati (wollastonite, diopsido); (2) skarn interno (granato ± pirosseno + mena); (3) skarn esterno (epidoto + clorite + mena); (4) calcare/dolomia inalterata o metamorfosata.</p>
+
+    <div class="esempio"><p><strong>Antamina, Perù</strong> — Skarn Cu-Zn-Mo-Ag; tra i 10 più grandi produttori di Cu e Zn. <strong>Pine Creek e Bishop, California</strong> — Skarn a scheelite (CaWO₄); importanti giacimenti di tungsteno storici. <strong>Daye, Cina</strong> — Skarn Fe-Cu; tra i più grandi e longevi produttori di ferro e rame della Cina. <strong>Erzgebirge, Germania-Ceca</strong> — Skarn a cassiterite (Sn) e wolframite; produzione storica di stagno e tungsteno. <strong>Casapalca, Perù</strong> — Skarn Pb-Zn-Ag nelle Ande.</p></div>
+  </section>
+
+  <section id="vms">
+    <h3>3.4 VMS — Volcanogenic Massive Sulphides</h3>
+    <p>I giacimenti <strong>VMS</strong> (solfuri massivi vulcanogenici) si formano sul fondo oceanico per precipitazione di solfuri da fluidi idrotermali caldi (250–350°C) che esalano attraverso la crosta oceanica (black smokers moderni). Sono tra i giacimenti più importanti per Zn, Pb, Cu, Ag, Au. Morfologicamente mostrano: (1) un <em>mound</em> di solfuri massivi (pirite, sfalerite, galena, calcopirite) sul fondale; (2) una <em>stockwork</em> di vene di solfuri sottostante (zona feeder); (3) una <em>plume di esaliti</em> (chert, jasper, siderite) laterale.</p>
+
+    <p>Si classificano in base all'ambiente vulcanico ospite: <strong>Cipro-type</strong> (Cu, in basalti MORB), <strong>Besshi-type</strong> (Cu-Zn, in sequenze mafiche-pelitiche di fondi oceanici), <strong>Kuroko-type</strong> (Zn-Pb-Cu-Au-Ag, in sequenze bimodali di arco insulare), <strong>Abitibi-type</strong> (archeani, in greenstone belt).</p>
+
+    <div class="esempio"><p><strong>Río Tinto, Spagna (Iberian Pyrite Belt)</strong> — La più grande concentrazione di VMS Zn-Pb-Cu del mondo; in produzione dall'antichità (Fenici, Romani). Il nome del fiume deriva dall'acidità delle acque di drenaggio (pH ~2). <strong>Kidd Creek, Ontario (2.7 Ga)</strong> — Uno dei più grandi VMS Zn-Cu-Ag del mondo (archeano); estratto dalla superficie a oltre 3 km di profondità. <strong>Flin Flon, Manitoba-Saskatchewan</strong> — Distretto VMS Cu-Zn archeano; in produzione dal 1927. <strong>Troodos, Cipro</strong> — VMS-type ciprioti in ofiioliti giurassiche; giacimento di riferimento per il tipo Cipro. <strong>Kuroko, Giappone (Miocene)</strong> — I giacimenti Kuroko del Giappone settentrionale (Honshu) hanno dato il nome all'omonimo tipo.</p></div>
+  </section>
+
+  <section id="mvt">
+    <h3>3.5 MVT — Mississippi Valley Type</h3>
+    <p>I giacimenti <strong>MVT</strong> (Mississippi Valley Type) sono giacimenti di Pb-Zn epigenici in carbonati di piattaforma (calcari e dolomie), formati da fluidi di formazione caldi (80–150°C) — <em>basinal brines</em> — che migrano lateralmente per lunghe distanze (~500 km) attraverso acquiferi carbonatici. Sono privi di associazione con intrusioni magmatiche; i metalli derivano da strati sottostanti (shale nere, evaporiti) e sono trasportati come complessi clorurati. La precipitazione avviene per miscelazione di fluidi, variazione di pH o temperatura.</p>
+
+    <p>Caratteristiche mineralogiche: sfalerite (ZnS, marrone-ambra) + galena (PbS) + calcopirite accessoria + pirite, in gangue di dolomite, calcite, fluorite, barite. Strutture: riempimento di cavità (vugs, brecce), sostituzione (replacements) e disseminazioni in dolomia (<em>zebra dolomite</em>).</p>
+
+    <div class="esempio"><p><strong>Tri-State District (Missouri-Kansas-Oklahoma, USA)</strong> — Il distretto MVT più esteso del mondo; ha prodotto enormi quantità di Zn-Pb-Cd dal XIX secolo. <strong>Pine Point, Northwest Territories, Canada</strong> — MVT Zn-Pb in dolomie devoniane; 60 Mt a 7% Zn + 3.4% Pb. <strong>Upper Mississippi Valley, Wisconsin-Iowa</strong> — Distretto Zn-Pb storico. <strong>Viburnum Trend, Missouri</strong> — Il principale distretto produttore di Pb negli USA. <strong>Silesia, Polonia</strong> — MVT Zn-Pb in Triassico; tra i più importanti d'Europa.</p></div>
+  </section>
+
+  <section id="iocg">
+    <h3>3.6 IOCG — Iron Oxide Copper-Gold</h3>
+    <p>Gli <strong>IOCG</strong> (Iron Oxide Copper-Gold) sono una classe di giacimenti idrotermali relativamente recentemente definita (Hitzman et al., 1992) caratterizzati da: abbondanti ossidi di ferro (magnetite ± ematite), contenuto in Cu (calcopirite ± bornite) e Au variabile, assenza di silicificazione pervasiva, alterazione sodico-calcica. Sono associati a sistemi di faglia profondi in ambienti di rift o margini continentali attivi, con fluidi di origine mista (magmatica + meteoritica).</p>
+
+    <div class="esempio"><p><strong>Olympic Dam, South Australia (~1.6 Ga)</strong> — Il più grande giacimento IOCG al mondo e la quarta riserva di Cu del mondo; contiene anche U, Au, Ag, REE. Riserve: ~10 miliardi di t a 0.77% Cu, 0.24 kg/t U₃O₈, 0.32 g/t Au. <strong>Candelaria, Cile (Cretaceo)</strong> — IOCG Cu-Au in ematite-breccia; 450 Mt a 1% Cu. <strong>Ernest Henry, Queensland, Australia</strong> — IOCG Cu-Au in magnetite-breccia (1.5 Ga). <strong>Sossego e Salobo, Pará, Brasile (Precambriano)</strong> — Importanti IOCG nella cintura metallogenica dell'Amazzonia.</p></div>
+  </section>
+
+  <section id="orogenic-gold">
+    <h3>3.7 Orogenic Gold</h3>
+    <p>I giacimenti <strong>orogenic gold</strong> (o <em>lode gold</em>, o <em>mesothermal gold</em>) sono la principale fonte di oro nella storia e nella produzione attuale. Si formano durante eventi orogenici per circolazione di fluidi metamorfici ricchi in CO₂ e H₂S a temperature di 200–450°C in zone di taglio duttile-fragile. L'oro viene trasportato come complesso bisolfurato (Au(HS)₂⁻) e precipita per variazioni di fO₂, fS₂ o temperatura. Le strutture principali sono vene di quarzo-carbonato in zone di taglio, stockwork e disseminazioni in wall rock argillitico.</p>
+
+    <div class="esempio"><p><strong>Kalgoorlie (Super Pit), Australia Occidentale (2.66 Ga)</strong> — Il più grande giacimento orogenic gold archeano del mondo; 1800 t Au prodotte. Le Golden Mile vene di quarzo aurifero sono ospitate in dolerite. <strong>Homestake, South Dakota, USA (Proterozoico)</strong> — Produttore per 125 anni (1876–2002); 40 Moz Au da BIF altersiti. <strong>Muruntau, Uzbekistan</strong> — Il più grande giacimento Au del mondo per riserve (~170 Moz); orogenic gold in metamorfiti paleozoiche del Kyzylkum Desert. <strong>Bendigo e Ballarat, Victoria, Australia (Ordoviciano)</strong> — Storici giacimenti orogenic gold della Gold Rush australiana del 1851. <strong>Abitibi Greenstone Belt, Canada</strong> — Il più importante distretto Au archeano del mondo, con decine di giacimenti (Timmins, Kirkland Lake, Val d'Or).</p></div>
+  </section>
+</section>
+<!-- ══ 4. SEDIMENTARI ══ -->
+<section id="sedimentari">
+  <span class="section-num">04</span>
+  <h2>Giacimenti Sedimentari</h2>
+  <div class="section-line"></div>
+
+  <p>I giacimenti sedimentari si formano per processi di <strong>sedimentazione chimica, biochimica o clastica</strong> in bacini marini, lacustri o continentali. Sono spesso di dimensioni gigantesche e a basso tenore, sfruttati in miniere a cielo aperto. Includono alcune delle più importanti risorse minerarie del mondo: ferro, alluminio, fosfati, potassio, litio e metalli preziosi nei placer.</p>
+
+  <section id="bif">
+    <h3>4.1 Banded Iron Formations (BIF) e Ferro Oolitico</h3>
+    <p>Le <strong>BIF</strong> (formazioni di ferro a bande) sono rocce sedimentarie chimiche precambriane composte da alternanze millimetriche-centimetriche di strati ricchi in ferro (ossidi: magnetite, ematite; siderite; pirite) e strati di silice (chert). Si depositarono in oceani privi di ossigeno tra ~3.8 e 1.8 Ga, con picco nel Paleoproterozoico (2.5–1.8 Ga). Il Fe²⁺ disciolto negli oceani anossici veniva ossidato — probabilmente dalla fotosintesi ossigenica nascente — precipitando come ossidi di Fe³⁺.</p>
+
+    <p>Le BIF sono la principale fonte di ferro del mondo: i giacimenti tipo <strong>Lake Superior</strong> (Nord America) e tipo <strong>Hamersley</strong> (Australia) sono arricchiti superficialmente per alterazione supergene che rimuove la silice lasciando concentrazioni di ematite-goethite fino a 60–67% Fe.</p>
+
+    <div class="esempio"><p><strong>Hamersley Basin, Australia Occidentale (~2.5 Ga)</strong> — Le formazioni Brockman e Marra Mamba contengono le più grandi riserve di ferro del mondo (~100 miliardi di t a 55–65% Fe); miniere di Mount Tom Price, Paraburdoo, Newman. <strong>Carajás, Pará, Brasile (~2.7 Ga)</strong> — Il più grande giacimento di ferro ad alto tenore del mondo (66–67% Fe); produzione di 200 Mt/anno. <strong>Kiruna, Svezia (Proterozoico)</strong> — Giacimento di magnetite-apatite (tipo Kiruna) di origine controversa (magmatica vs. idrotermale); 2 miliardi di t a 60% Fe. <strong>Minette, Lorena-Lussemburgo (Giurassico)</strong> — Ferro oolitico (ooliti di goethite-siderite); base dell'industria siderurgica europea storica.</p></div>
+  </section>
+
+  <section id="bauxite">
+    <h3>4.2 Bauxite</h3>
+    <p>La <strong>bauxite</strong> è il principale minerale di alluminio, formata per <strong>lateritizzazione</strong> intensa di rocce alluminosilicatiche (graniti, basalti, argilliti) in climi tropicali caldo-umidi con forte stagionalità. Il processo implica la rimozione di Si, Ca, Na, K per lisciviazione lasciando un residuo arricchito in idrossidi di Al (gibbsite Al(OH)₃, boehmite AlOOH, diasporo AlOOH) e ossidi di Fe (goethite, ematite). I giacimenti più importanti si trovano su superfici di erosione piatte (laterite profiles) su piattaforme cratoniche tropicali.</p>
+
+    <div class="esempio"><p><strong>Weipa, Queensland, Australia</strong> — Il più grande giacimento di bauxite del mondo (riserve ~3.8 miliardi di t); su lateriti su arenarie triassiche. <strong>Guinea (Africa occidentale)</strong> — La Guinea possiede ~25% delle riserve mondiali di bauxite (Sangarédi, Boké); bauxite su basalti e graniti. <strong>Pará, Brasile (Trombetas, Paragominas)</strong> — Enormi giacimenti su lateriti dell'Amazzonia. <strong>Gove, Northern Territory, Australia</strong> — Bauxite su arenarie; importante produttore. <strong>Nicalat e Fria, Guinea</strong> — Storici giacimenti coloniali.</p></div>
+  </section>
+
+  <section id="placer">
+    <h3>4.3 Giacimenti Placer</h3>
+    <p>I <strong>placer</strong> sono giacimenti clastici formati per concentrazione meccanica di minerali densi, stabili chimicamente, durante il trasporto fluviale, litorale o eolico. La densità elevata (Au: 19.3 g/cm³; cassiterite: 7.0; ilmenite: 4.7; zircone: 4.7) permette la separazione idraulica dai minerali leggeri (quarzo: 2.65). I principali tipi sono: <em>placer fluviali</em> (beach placers), <em>placer litorali</em> (beach placers), <em>placer offshore</em> e <em>paleoplacer</em> (antichi placer litificati).</p>
+
+    <ul class="plain">
+      <li><strong>Au placer</strong> — Concentrazioni di oro nativo in alluvioni fluviali o in beach placers. Il Klondike (Yukon, 1896) e California (1848) alimentarono le Gold Rush.</li>
+      <li><strong>Cassiterite placer</strong> — Sn in depositi alluvionali. Il SEAsian Tin Belt (Malesia, Indonesia, Tailandia) è il principale produttore mondiale di stagno da placer.</li>
+      <li><strong>Sabbie a minerali pesanti</strong> — Ilmenite + rutilo + zircone + monazite in beach placers. Australia orientale, Sudafrica, India (Kerala), Sri Lanka.</li>
+      <li><strong>Paleoplacer Witwatersrand</strong> — Conglomerati auriferi e uraniferi (uraninite detritica) del Neoarcheano (~2.9–2.7 Ga); interpretazione controversa (placer vs. idrotermale). Le più grandi riserve di Au mai estratte (~40% Au prodotto nella storia).</li>
+    </ul>
+
+    <div class="esempio"><p><strong>Witwatersrand, Sudafrica (2.9–2.7 Ga)</strong> — ~50.000 t Au estratte in 130 anni; ancora in produzione con miniere sotterranee fino a 4 km di profondità (TauTona). <strong>Klondike, Yukon, Canada (1896)</strong> — Placer fluviali Au; la più famosa Gold Rush della storia. <strong>Malaysia (Kinta Valley)</strong> — Cassiterite placer alluvionale; storicamente il maggior produttore mondiale di stagno. <strong>Murray Basin, Australia</strong> — Placer costieri a ilmenite, rutilo, zircone su antiche linee di costa.</p></div>
+  </section>
+
+  <section id="evaporiti-min">
+    <h3>4.4 Evaporiti Minerarie: K, B, Li</h3>
+    <p>Le evaporiti ospitano giacimenti di <strong>potassio</strong> (silvite KCl, carnallite KMgCl₃·6H₂O), <strong>boro</strong> (borax, kernite, colemanite) e sempre più importanti giacimenti di <strong>litio</strong> in salari (salar brines). Il potassio è indispensabile per i fertilizzanti agricoli (~90% del K estratto va ai concimi); il litio è fondamentale per le batterie.</p>
+
+    <dl class="deflist">
+      <dt>Potassio (K)</dt>
+      <dd>Le evaporiti marine paleozoiche (Permiano del New Mexico, Devoniano del Canadà, Triassico dell'Alsazia) sono le principali fonti. La Russia (Ural: Berezniki) e il Canada (Saskatchewan: Esterhazy) dominano le riserve mondiali.</dd>
+      <dt>Boro (B)</dt>
+      <dd>Concentrazioni in laghi e bacini continentali arid-volcanici (Turkey: Kırka; USA: Boron, California; Argentina: laghi andini). La Turchia possiede ~70% delle riserve mondiali di boro (tincal, colemanite, ulexite).</dd>
+      <dt>Litio (Li) in brines di salar</dt>
+      <dd>Le acque interstiziali altamente concentrate dei salari andini (Atacama, Uyuni, Coipasa) contengono Li in soluzione. L'evaporazione solare produce una salamoia arricchita che viene poi trattata. Processo più economico ed ecologico rispetto all'estrazione da spodumene.</dd>
+    </dl>
+
+    <div class="esempio"><p><strong>Salar de Atacama, Cile</strong> — Le più alte concentrazioni di Li in brine del mondo (1500–2000 mg/L Li); ~40% delle riserve mondiali di Li. Produzione da SQM e Albemarle. <strong>Salar de Uyuni, Bolivia</strong> — Le più grandi riserve di Li stimate (~21 Mt Li), ma difficoltà estrattive per l'alto contenuto in Mg. <strong>Carlsbad (Delaware Basin), New Mexico, USA</strong> — Giacimento di potassio in evaporiti permiane; storica miniera di silvite e langbeinite. <strong>Kırka, Turchia</strong> — Il più grande giacimento di boro del mondo (tincal); 72 Mt di riserve.</p></div>
+  </section>
+
+  <section id="fosfati">
+    <h3>4.5 Fosfati e Black Shale</h3>
+    <p>I <strong>fosfati sedimentari</strong> si depositano in ambienti di upwelling oceanico (risalita di acque fredde profonde ricche in P) come fosforiti (francolite, Ca₅(PO₄,CO₃)₃F) in ambienti di piattaforma continentale. Sono fondamentali per la produzione di fertilizzanti (il P è un macronutriente irrinunciabile e non ha sostituti nell'agricoltura). Le principali regioni produttrici sono il Nord Africa (Marocco: ~70% riserve mondiali), il Medio Oriente e la Cina.</p>
+
+    <p>Le <strong>black shale</strong> (argilliti nere) sono sedimenti finissimi depositati in condizioni anossiche, ricchi in materia organica e con anomalie di metalli (V, Ni, Zn, Mo, U, PGE). Sono economicamente interessanti in alcuni casi (Kupferschiefer per Cu-Ag; black shale a V in Cina; Alum Shale a U in Scandinavia) anche se generalmente a basso tenore.</p>
+
+    <div class="esempio"><p><strong>Bou Craa, Sahara Occidentale, Marocco</strong> — Il più grande giacimento di fosfato al mondo (~10 miliardi di t); in produzione da OCP (Office Chérifien des Phosphates). <strong>Kupferschiefer, Germania-Polonia (Permiano)</strong> — Black shale a Cu-Ag-Pb-Zn di piattaforma; produzione ininterrotta dal XII secolo. Il distretto di Lubin (KGHM, Polonia) è oggi il quarto produttore mondiale di Cu. <strong>Phosphoria Formation, Idaho, USA</strong> — Fosfato marino permiano; importante giacimento americano.</p></div>
+  </section>
+</section>
+
+<!-- ══ 5. METAMORFICI ══ -->
+<section id="metamorfici">
+  <span class="section-num">05</span>
+  <h2>Giacimenti Metamorfici</h2>
+  <div class="section-line"></div>
+
+  <p>Il metamorfismo può sia <strong>creare</strong> nuovi giacimenti (concentrando elementi per mobilizzazione dei fluidi metamorfici) sia <strong>modificare</strong> mineralizzazioni preesistenti (migliorandone o degradandone il tenore). I fluidi metamorfici — ricchi in CO₂, H₂O, CH₄, H₂S — che fuoriescono dalle rocce durante il metamorfismo progressivo trasportano metalli in soluzione e li depositano in vene e zone di taglio a condizioni di T-P più basse.</p>
+
+  <h3>5.1 Orogenic Gold Metamorfico</h3>
+  <p>Come già descritto al §3.7, l'orogenic gold è fondamentalmente un prodotto metamorfico: i fluidi che trasportano l'oro derivano dalla deidratazione e decarbonatazione delle rocce metamorfosate (metabasiti, BIF, metasedimenti). L'oro si concentra in vene di quarzo-carbonato lungo zone di taglio duttile-fragile durante le fasi tardive dell'orogenesi.</p>
+
+  <h3>5.2 Grafite, Talco, Sillimanite e Andalusite</h3>
+  <p>Il metamorfismo produce numerosi minerali industriali di interesse economico: la <strong>grafite</strong> cristallina (da materia organica nelle peliti) è usata in batterie, lubrificanti e materiali refrattari. Il <strong>talco</strong> (Mg₃Si₄O₁₀(OH)₂) si forma per metamorfismo idrotermale di ultrabasiti dolomitiche ed è usato in ceramiche, carta, cosmetica. <strong>Sillimanite</strong>, <strong>cianite</strong> e <strong>andalusite</strong> — i polimorfi di Al₂SiO₅ — trovano applicazioni nei refrattari ad alta temperatura.</p>
+
+  <div class="esempio"><p><strong>Graphite deposits, Sri Lanka</strong> — Grafite di vena ad alta purezza (>&nbsp;90% C) in gneiss granulitici; la più pregiata al mondo per usi elettrochimici. <strong>Luzenac, Ariège, Francia</strong> — Il più grande giacimento di talco d'Europa, in ultrabasiti triassiche metamorfosate; in produzione da Imerys. <strong>Andalosite di Andalusia, Spagna e del Transvaal, Sudafrica</strong> — Importanti produttori di andalusite per refrattari. <strong>Kyanite deposits, Virginia, USA</strong> — Cianite in quarziti metamorfiche; storico produttore americano. <strong>Graphite Creek, Alaska</strong> — Uno dei maggiori giacimenti di grafite dei North America, in fase di sviluppo.</p></div>
+
+  <h3>5.3 Mobilizzazione Metamorfica di Mineralizzazioni</h3>
+  <p>Il metamorfismo può rimobilizzare mineralizzazioni sedimentarie o magmatiche preesistenti. I classici esempi sono: (1) il metamorfismo regionale dei VMS archeani (es. Broken Hill, Australia) che ha trasformato i solfuri originali in corpi massicci di Pb-Zn ad alto tenore; (2) la metamorfosi dei BIF che ha concentrato il ferro per rimozione della silice; (3) la rimobilizzazione dell'oro nei greenstone belt per fluidi metamorfici.</p>
+
+  <div class="esempio"><p><strong>Broken Hill, New South Wales, Australia (Proterozoico, 1.69 Ga)</strong> — Il più grande giacimento di Pb-Zn-Ag del mondo per tenore; interpretato come VMS metamorfosato ad alta temperatura (granulite). Riserve originali: 200 Mt a 10% Zn, 6% Pb, 150 g/t Ag. In produzione dal 1883. <strong>Mount Isa, Queensland, Australia (Proterozoico)</strong> — Giacimento Pb-Zn-Ag-Cu in metasedimenti; 500 Mt a 6% Zn, 4% Pb.</p></div>
+</section>
+
+<!-- ══ 6. SUPERGENE ══ -->
+<section id="supergene">
+  <span class="section-num">06</span>
+  <h2>Weathering e Giacimenti Supergene</h2>
+  <div class="section-line"></div>
+
+  <p>I processi di <strong>alterazione meteorica</strong> (weathering) possono concentrare elementi economici per lisciviazione dei componenti solubili e accumulo dei componenti resistivi, o per ricristallizzazione nella zona di ossidazione. Si distinguono due meccanismi principali: (1) <strong>lateritizzazione</strong> con formazione di lateriti a Ni, Co, Al; (2) <strong>arricchimento supergene</strong> nei giacimenti di solfuri primari per ridistribuzione dei metalli verso il basso.</p>
+
+  <section id="lateriti-ni">
+    <h3>6.1 Lateriti Nichelifere e Cobaltifere</h3>
+    <p>L'alterazione tropicale delle peridotiti e duniti (rocce ultramafiche ricche in olivina forsterite-Mg con Ni ~0.3%) produce profili lateritici con arricchimento in Ni fino a 1.5–2.5%. Il Ni si concentra in due zone: (1) zona ossidica superiore (goethite ferrifera, Ni sostituisce Fe); (2) zona saprolítica inferiore (serpentinite alterata con garnierite Ni-Mg-silicato verde). Il Co si concentra prevalentemente nella zona ossidica associato a minerali di Mn.</p>
+
+    <div class="esempio"><p><strong>Nickel Laterites della Nuova Caledonia</strong> — Enormi riserve (~30 Mt Ni) su peridotiti mesozoiche; la Nuova Caledonia possiede ~25% delle riserve mondiali Ni. Goro (Vale) e Koniambo (Glencore) sono tra i più importanti. <strong>Philippines (Palawan, Surigao)</strong> — Lateriti Ni-Co su ultrabasiti; le Filippine sono il principale esportatore mondiale di minerale di Ni. <strong>Cerro Matoso, Colombia</strong> — Laterite Ni-Co su peridotiti; il maggiore produttore sudamericano di ferronickel. <strong>Murrin Murrin, Australia Occidentale</strong> — Laterite Ni-Co su duniti; produzione di Ni+Co con processo HPAL (High-Pressure Acid Leach).</p></div>
+  </section>
+
+  <section id="arricch-sup">
+    <h3>6.2 Arricchimento Supergene nei Porphyry</h3>
+    <p>Nei giacimenti porphyry Cu (e in altri giacimenti di solfuri), l'ossidazione della pirite primaria produce acido solforico che liscivia il Cu dalla zona di ossidazione e lo ridepositine nella <strong>zona di arricchimento supergene</strong> (cementation zone) come calcosina (Cu₂S), covellina (CuS) e digenite. Il tenore in Cu nella zona supergene può raddoppiare o triplicare rispetto alla mineralizzazione primaria ipogea. Sopra la falda freatica si ha la <strong>zona di ossidazione</strong> con malachite, azzurrite, crisocolla, turrite — spesso molto colorate e visibili in superficie, usate come indicatori di prospezione.</p>
+
+    <div class="esempio"><p><strong>Chuquicamata e Radomiro Tomic, Cile</strong> — Enormi zone di arricchimento supergene (chalcocite blanket) sopra il porphyry primario; calcolite con tenori fino a 1.5% Cu. <strong>Morenci, Arizona, USA</strong> — Porphyry Cu con importante zona supergene; la più grande miniera Cu degli USA. <strong>Río Tinto, Spagna</strong> — Zona di ossidazione storica con gossan (cappello ferroso) su VMS; l'aspetto rossastro delle acque è da Fe³⁺ da ossidazione della pirite.</p></div>
+  </section>
+</section>
+
+<!-- ══ 7. ESPLORAZIONE ══ -->
+<section id="esplorazione">
+  <span class="section-num">07</span>
+  <h2>Esplorazione Mineraria</h2>
+  <div class="section-line"></div>
+
+  <p>L'esplorazione mineraria è il processo sistematico di ricerca, identificazione e valutazione di giacimenti minerari economicamente sfruttabili. Segue una sequenza logica di fasi, dalla ricognizione regionale alla fattibilità di miniera, con costi e rischi crescenti a ogni fase.</p>
+
+  <ol class="steps">
+    <li><strong>Ricognizione regionale</strong> — Analisi di dati esistenti (geologia, geofisica aerea, immagini satellitari), selezione di aree di interesse metallogenico. Scala 1:250.000–1:100.000.</li>
+    <li><strong>Prospezione</strong> — Rilevamento geologico di dettaglio, campionamento geochimico (stream sediment, soil sampling, rock chip), geofisica (magnetometria, gravimetria, elettromagnetismo). Scala 1:25.000–1:10.000.</li>
+    <li><strong>Esplorazione</strong> — Trincee, perforazioni esplorative (RC drilling, diamond drilling), analisi petrografica e geochimica. Definizione del target. Scala 1:5.000–1:2.000.</li>
+    <li><strong>Delimitazione</strong> — Griglia di perforazioni sistematiche, stima delle risorse (geostatistica, kriging), classificazione JORC. Studio di prefattibilità.</li>
+    <li><strong>Fattibilità</strong> — Perforazioni di dettaglio, test metallurgici, studio ambientale, studio di fattibilità economica (bankable feasibility study).</li>
+  </ol>
+
+  <h3>7.1 Metodi Geochimici</h3>
+  <p>La geochimica di esplorazione sfrutta le <strong>anomalie chimiche</strong> associate ai giacimenti per localizzarli. I principali metodi sono: <em>stream sediment sampling</em> (campionamento dei sedimenti fluviali per individuare anomalie in bacini drenanti), <em>soil sampling</em> (campionamento del suolo lungo transetti), <em>rock chip sampling</em> (campionamento di affioramenti), <em>lithogeochemistry</em> (profili geochimici nelle rocce). Gli elementi indicatori (pathfinder elements) — As, Sb, Hg, Bi, Te per l'oro; Mo, Re per il Cu-porphyry — hanno anomalie più estese dei metalli di interesse e sono più facilmente rilevabili.</p>
+
+  <h3>7.2 Metodi Geofisici</h3>
+  <p>La geofisica di esplorazione misura variazioni delle proprietà fisiche della roccia per individuare corpi mineralizzati in profondità:</p>
+
+  <dl class="deflist">
+    <dt>Magnetometria (aerea e terrestre)</dt>
+    <dd>Misura le variazioni del campo magnetico terrestre; efficace per localizzare corpi di magnetite (BIF, skarn, IOCG), kimberliti e contatti geologici. I gradiometri aerei moderni raggiungono sensibilità di 0.01 nT.</dd>
+    <dt>Elettromagnetismo (EM)</dt>
+    <dd>Misura la conducibilità elettrica; efficace per solfuri massivi (VMS, Ni-Cu), grafite, argille. Il metodo Time-Domain EM (TDEM) e il metodo Frequency-Domain (FDEM) raggiungono profondità di 300–500 m.</dd>
+    <dt>Indotta Polarizzazione (IP)</dt>
+    <dd>Misura il fenomeno di carica-scarica elettrochimica nei solfuri disseminati; fondamentale per porphyry Cu-Mo, giacimenti epitermali. Permette di individuare solfuri disseminati non visibili superficialmente.</dd>
+    <dt>Gravimetria</dt>
+    <dd>Misura le variazioni del campo gravitazionale; utile per corpi densi (minerali di ferro, solfuri massivi) o per cavità (kimberliti). Risoluzione moderna ~0.01 mGal.</dd>
+    <dt>Sismica a riflessione</dt>
+    <dd>Usata sempre più in esplorazione mineraria profonda per mappare strutture geologiche a grandi profondità (&gt;500 m). Particolarmente utile nei VMS e nei SEDEX profondi.</dd>
+  </dl>
+
+  <h3>7.3 Telerilevamento e Geologia Strutturale</h3>
+  <p>Le immagini satellitari multispettrali e iperspettrali (ASTER, AVIRIS, WorldView) permettono di mappare alterazioni idrotermali (sericite, argille, ossidi di Fe, carbonati) su vaste aree in modo rapido ed economico. Le immagini radar (SAR) sono utili per la mappatura strutturale in aree remote o con copertura vegetale. La geologia strutturale è fondamentale per capire i controlli strutturali dei giacimenti: le zone di taglio sono il principale controllo per l'orogenic gold; i sistemi di fratture per i porphyry e gli epitermali.</p>
+</section>
+
+<!-- ══ 8. CRITICI ══ -->
+<section id="critici">
+  <span class="section-num">08</span>
+  <h2>Metalli Critici e Transizione Energetica</h2>
+  <div class="section-line"></div>
+
+  <p>La <strong>transizione energetica</strong> — la sostituzione dei combustibili fossili con energie rinnovabili (solare, eolico) e mobilità elettrica — richiede enormi quantità di <strong>metalli critici</strong> (critical minerals) la cui disponibilità è considerata a rischio per ragioni geologiche, geopolitiche o tecnologiche. L'UE, USA, Giappone e altri paesi hanno definito liste di metalli critici; le convergenze principali includono REE, Li, Co, Ni, Cu, Mn, Grafite, PGE, Nb, Ta, Te, Ga, Ge, In.</p>
+
+  <h3>8.1 Terre Rare (REE)</h3>
+  <p>Le <strong>terre rare</strong> (La, Ce, Pr, Nd, Sm, Eu, Gd, Tb, Dy, Ho, Er, Tm, Yb, Lu + Y + Sc) sono indispensabili per magneti permanenti (NdFeB per motori elettrici e turbine eoliche), fosfori, catalizzatori e batterie. La Cina controlla ~85% della produzione mondiale di REE e ~60% delle riserve. I giacimenti principali sono carbonatiti (Bayan Obo, Mountain Pass), lateriti a ioni adsorbiti (Cina meridionale, ricche in HREE), placers monazitici.</p>
+
+  <div class="esempio"><p><strong>Bayan Obo, Cina</strong> — Vedi §2.2. <strong>Ion-adsorption clays, Cina meridionale (Jiangxi, Fujian, Guangdong)</strong> — REE adsorbite su argille in profili di alterazione di graniti; ricche in HREE (Dy, Tb, Eu) essenziali per magneti. Bassissimi tenori (~0.05–0.2% REO) ma facilmente estraibili per lisciviazione in situ con soluzione di solfato di ammonio. <strong>Mt Weld, Australia Occidentale</strong> — Carbonatite con REE; il giacimento di REE più ricco dell'emisfero meridionale. <strong>Kiruna REE-skarn, Svezia</strong> — Progetto di REE associato alla miniera di ferro.</p></div>
+
+  <h3>8.2 Litio (Li)</h3>
+  <p>Il litio è il componente fondamentale delle <strong>batterie Li-ion</strong> (anodo di grafite, catodo Li-Co-Ni-Mn-Al). La domanda è cresciuta del ~30%/anno dal 2015 e si prevede una domanda 10–40× entro 2040. Le principali fonti sono: (1) <strong>spodumene</strong> in pegmatiti (Australia ~47% produzione mondiale); (2) <strong>brines di salar</strong> (Cile, Argentina, Bolivia ~30%); (3) <strong>evaporiti lacustri</strong> (Tibet, Nevada). Nuove fonti includono acque geotermali (Salton Sea, California; Cornwall, UK) e argille litifere (McDermitt Caldera, Nevada).</p>
+
+  <div class="esempio"><p><strong>Triangolo del Litio (Cile-Argentina-Bolivia)</strong> — ~58% delle riserve mondiali di Li in brines saline; Atacama (SQM, Albemarle), Olaroz (Livent), Uyuni (ancora in sviluppo). <strong>Greenbushes, Australia</strong> — Vedi §2.4. <strong>Jadar, Serbia (lepidolite-jadarite)</strong> — Scoperto nel 2004, potenziale giacimento di Li-B in evaporiti lacustri miocenica; controverso per impatto ambientale.</p></div>
+
+  <h3>8.3 Cobalto (Co)</h3>
+  <p>Il cobalto è essenziale per i catodi delle batterie (LCO, NMC, NCA). Il 70% della produzione mondiale proviene dalla <strong>Cintura Rameife del Congo</strong> (DRC), con rischi geopolitici e di supply chain elevati. I principali giacimenti sono stratiformi Cu-Co sedimentari (Central African Copperbelt) e lateriti Ni-Co.</p>
+
+  <div class="esempio"><p><strong>Katanga (DRC) — Central African Copperbelt</strong> — Giacimenti stratiformi Cu-Co in dolomie proterozoiche (Roan Group); Tenke Fungurume (500 Mt a 1.5% Cu, 0.3% Co), Mutanda. Il DRC produce ~70% del Co mondiale. <strong>Bou Azzer, Marocco</strong> — Giacimento idrotermale Co-Ni-As in arsenuri; unico produttore africano non-DRC. <strong>Jervois, Australia (Idaho Cobalt Belt)</strong> — Co-Cu-Au in complesso ultramafics; sviluppo recente.</p></div>
+
+  <h3>8.4 Il Futuro: Noduli Polimetallici e Giacimenti Profondi</h3>
+  <p>I <strong>noduli polimetallici</strong> degli abissi oceanici (Mn-Fe-Co-Ni-Cu-REE, profondità 4000–6000 m) e i <strong>solfuri idrotermali oceanici</strong> (Cu-Zn-Au) rappresentano le risorse minerali del futuro, sebbene lo sfruttamento sollevi questioni ambientali ed economiche ancora irrisolte. La <strong>Clarion-Clipperton Zone</strong> (Pacifico) ospita ~21 miliardi di t di noduli con >1.3% Ni, 1.1% Cu, 0.2% Co.</p>
+
+  <div class="highlight purple">
+    <div class="hl-title">Circolarità e Miniere Urbane</div>
+    <p>Il riciclo dei metalli critici da rifiuti elettronici (<em>urban mining</em>) è sempre più importante: una tonnellata di telefoni cellulari contiene ~300 g Au, 3 kg Ag e 130 kg Cu — tenori 50–100× superiori ai migliori giacimenti minerari. Il riciclo di batterie Li-ion (Co, Li, Ni, Mn) è oggi al centro di investimenti miliardari in Europa e USA per ridurre la dipendenza da importazioni critiche.</p>
+  </div>
+</section>
+
+<!-- ══ 9. BIBLIO ══ -->
+<section id="biblio">
+  <span class="section-num">09</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Černý P. &amp; Ercit T.S.</span> <span class="year">(2005)</span> — <span class="title">The classification of granitic pegmatites revisited</span>. <span class="journal">Canadian Mineralogist, 43, 2005–2026.</span></p>
+  <p class="ref"><span class="authors">Evans A.M.</span> <span class="year">(1993)</span> — <span class="title">Ore Geology and Industrial Minerals: an Introduction</span>. <span class="journal">Blackwell Scientific Publications, Oxford, 3rd ed., 390 pp.</span></p>
+  <p class="ref"><span class="authors">Guilbert J.M. &amp; Park C.F.</span> <span class="year">(1986)</span> — <span class="title">The Geology of Ore Deposits</span>. <span class="journal">W.H. Freeman, New York, 985 pp.</span></p>
+  <p class="ref"><span class="authors">Hedenquist J.W. &amp; Lowenstern J.B.</span> <span class="year">(1994)</span> — <span class="title">The role of magmas in the formation of hydrothermal ore deposits</span>. <span class="journal">Nature, 370, 519–527.</span></p>
+  <p class="ref"><span class="authors">Hitzman M.W., Oreskes N. &amp; Einaudi M.T.</span> <span class="year">(1992)</span> — <span class="title">Geological characteristics and tectonic setting of Proterozoic iron oxide (Cu-U-Au-REE) deposits</span>. <span class="journal">Precambrian Research, 58, 241–287.</span></p>
+  <p class="ref"><span class="authors">Kerrich R., Goldfarb R. &amp; Richards J.P.</span> <span class="year">(2005)</span> — <span class="title">Metallogenic provinces, tectonics, mantle and supercrustal processes</span>. <span class="journal">Economic Geology, 100th Anniversary Volume, 1097–1136.</span></p>
+  <p class="ref"><span class="authors">Large R.R. et al.</span> <span class="year">(2017)</span> — <span class="title">Gold in the oceans through time</span>. <span class="journal">Earth and Planetary Science Letters, 428, 139–150.</span></p>
+  <p class="ref"><span class="authors">Naldrett A.J.</span> <span class="year">(2004)</span> — <span class="title">Magmatic Sulfide Deposits: Geology, Geochemistry and Exploration</span>. <span class="journal">Springer, Heidelberg, 727 pp.</span></p>
+  <p class="ref"><span class="authors">Pirajno F.</span> <span class="year">(2009)</span> — <span class="title">Hydrothermal Processes and Mineral Systems</span>. <span class="journal">Springer, Dordrecht, 1250 pp.</span></p>
+  <p class="ref"><span class="authors">Seedorff E. et al.</span> <span class="year">(2005)</span> — <span class="title">Porphyry deposits: characteristics and origin of hypogene features</span>. <span class="journal">Economic Geology, 100th Anniversary Volume, 251–298.</span></p>
+  <p class="ref"><span class="authors">Sillitoe R.H.</span> <span class="year">(2010)</span> — <span class="title">Porphyry copper systems</span>. <span class="journal">Economic Geology, 105, 3–41.</span></p>
+  <p class="ref"><span class="authors">Skinner B.J.</span> <span class="year">(1997)</span> — <span class="title">Hydrothermal mineral deposits: what we do and don't know</span>. In: Barnes H.L. (ed.), <span class="title">Geochemistry of Hydrothermal Ore Deposits</span>. <span class="journal">Wiley, 1–29.</span></p>
+  <p class="ref"><span class="authors">Taylor R.G. &amp; Pollard P.J.</span> <span class="year">(1988)</span> — <span class="title">Pb-Zn mineralization in carbonate host rocks</span>. In: Burt D.M. &amp; Sheridan M.F. (eds.), <span class="title">Proceedings of IAGOD Symposium</span>. <span class="journal">E. Schweizerbartsche Verlagsbuchhandlung, 137–152.</span></p>
+  <p class="ref"><span class="authors">Tornos F. et al.</span> <span class="year">(2017)</span> — <span class="title">Ore-forming processes in the Iberian Pyrite Belt</span>. <span class="journal">Ore Geology Reviews, 80, 765–777.</span></p>
+</section>
+
+</main>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.15,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

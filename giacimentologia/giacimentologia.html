@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classificazione dei Giacimenti Minerari</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090e;--panel:#0d0f16;--border:#1e2130;--border2:#2a2e42;
+  --text:#e0e3f0;--muted:#8a8fa8;--dim:#444860;
+  --mag:#f0a030;--mag2:#f0c060;
+  --hyd:#00b8e0;--hyd2:#60d8f8;
+  --sed:#40b870;--sed2:#80e0a0;
+  --met:#c060f0;--met2:#e090ff;
+  --sup:#e05050;--sup2:#f09090;
+  --mono:'Space Mono',monospace;--sans:'Crimson Pro',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{background:var(--panel);border-bottom:1px solid var(--border);padding:.5rem 1.2rem;display:flex;align-items:center;gap:1.2rem;flex-shrink:0}
+header h1{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mag)}
+header p{font-family:var(--sans);font-size:.8rem;color:var(--muted);font-style:italic}
+.filters{margin-left:auto;display:flex;gap:.4rem;flex-wrap:wrap}
+.fb{border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;padding:.2rem .5rem;border-radius:3px;cursor:pointer;transition:all .15s}
+.fb:hover,.fb.on{border-color:var(--mag);color:var(--mag)}
+.fb[data-f="hyd"].on{border-color:var(--hyd);color:var(--hyd)}
+.fb[data-f="sed"].on{border-color:var(--sed);color:var(--sed)}
+.fb[data-f="met"].on{border-color:var(--met);color:var(--met)}
+.fb[data-f="sup"].on{border-color:var(--sup);color:var(--sup)}
+.main-wrap{display:flex;flex:1;overflow:hidden}
+.sb{width:230px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-top{padding:.6rem .7rem;border-bottom:1px solid var(--border)}
+.sb-top .sl{font-family:var(--mono);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.3rem}
+.metal-btns{display:flex;flex-wrap:wrap;gap:.2rem}
+.mb{border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--mono);font-size:.52rem;padding:.15rem .35rem;border-radius:2px;cursor:pointer;transition:all .12s}
+.mb:hover,.mb.on{background:rgba(240,160,48,.12);border-color:var(--mag);color:var(--mag)}
+.info-panel{flex:1;overflow-y:auto;padding:.7rem}
+.info-panel .sl{font-family:var(--mono);font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem}
+.info-box{font-size:.75rem;color:var(--muted);line-height:1.65}
+.info-box b{color:var(--text);font-family:var(--mono);font-size:.65rem}
+.info-box .tag{display:inline-block;padding:.1rem .35rem;border-radius:2px;font-family:var(--mono);font-size:.5rem;letter-spacing:.06em;margin:.1rem .1rem .1rem 0}
+.tag.mag{background:rgba(240,160,48,.15);color:var(--mag)}
+.tag.hyd{background:rgba(0,184,224,.15);color:var(--hyd)}
+.tag.sed{background:rgba(64,184,112,.15);color:var(--sed)}
+.tag.met{background:rgba(192,96,240,.15);color:var(--met)}
+.tag.sup{background:rgba(224,80,80,.15);color:var(--sup)}
+.info-box .row{display:flex;gap:.3rem;margin:.25rem 0}
+.info-box .lbl{color:var(--dim);font-family:var(--mono);font-size:.55rem;width:70px;flex-shrink:0}
+.info-box .val{color:var(--muted);flex:1}
+.info-box .esempi{margin-top:.5rem;padding:.4rem .5rem;background:rgba(240,160,48,.05);border-left:2px solid var(--mag);border-radius:0 3px 3px 0;font-size:.72rem}
+.canvas-wrap{flex:1;position:relative;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+.legend{position:absolute;bottom:.6rem;left:.6rem;display:flex;flex-direction:column;gap:.2rem}
+.leg-item{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.52rem;color:var(--muted)}
+.leg-dot{width:10px;height:10px;border-radius:50%}
+.tooltip{position:absolute;background:var(--panel);border:1px solid var(--border2);border-radius:4px;padding:.4rem .6rem;font-family:var(--mono);font-size:.58rem;color:var(--text);pointer-events:none;display:none;white-space:nowrap;z-index:10}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--border2)}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Classificazione Giacimenti Minerari</h1>
+    <p>Seleziona un nodo per dettagli · Filtra per tipo o metallo</p>
+  </div>
+  <div class="filters">
+    <button class="fb on" data-f="mag">⬤ Magmatici</button>
+    <button class="fb on" data-f="hyd">⬤ Idrotermali</button>
+    <button class="fb on" data-f="sed">⬤ Sedimentari</button>
+    <button class="fb on" data-f="met">⬤ Metamorfici</button>
+    <button class="fb on" data-f="sup">⬤ Supergene</button>
+  </div>
+</header>
+<div class="main-wrap">
+  <div class="sb">
+    <div class="sb-top">
+      <div class="sl">Filtra per metallo</div>
+      <div class="metal-btns" id="metalBtns"></div>
+    </div>
+    <div class="info-panel">
+      <div class="sl">Informazioni giacimento</div>
+      <div class="info-box" id="infoBox">
+        <span style="color:var(--dim);font-style:italic">Seleziona un nodo nel diagramma per vedere i dettagli del tipo di giacimento.</span>
+      </div>
+    </div>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="c"></canvas>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--mag)"></div>Magmatico</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--hyd)"></div>Idrotermale</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--sed)"></div>Sedimentario</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--met)"></div>Metamorfico</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--sup)"></div>Supergene/Weathering</div>
+    </div>
+    <div class="tooltip" id="tip"></div>
+  </div>
+</div>
+
+<script>
+// ─── DATI GIACIMENTI ───────────────────────────────────────────────
+const TYPES = {
+  mag:'magmatico', hyd:'idrotermale', sed:'sedimentario', met:'metamorfico', sup:'supergene'
+};
+const COLS = {
+  mag:'#f0a030', hyd:'#00b8e0', sed:'#40b870', met:'#c060f0', sup:'#e05050'
+};
+
+const DEPOSITS = [
+  // ── MAGMATICI ──────────────────────────────────────────────────
+  {id:'cr', t:'mag', n:'Cromite stratiforme', sub:'Segregazione magmatica',
+   metalli:['Cr'], tenore:'40–55% Cr₂O₃', dim:'Decine–centinaia Mt',
+   amb:'Complessi stratificati mafici-ultramafici (layered intrusions)',
+   geodin:'Piattaforma cratonico / Rifting continentale',
+   min:'Cromite (FeCr₂O₄), olivina, pirosseno',
+   esempi:'Bushveld (SA), Great Dyke (Zimbabwe), Kempirsai (Kazakhstan)',
+   expl:'Magnetometria, gravimetria, rilevamento geologico',
+   x:.15, y:.18},
+  {id:'pge', t:'mag', n:'PGE reef', sub:'Segregazione + liquido solfurico',
+   metalli:['PGE','Ni','Cu'], tenore:'3–10 g/t PGE',dim:'Milioni Mt (continuità km)',
+   amb:'Layered intrusions mafiche',
+   geodin:'Piattaforma cratonico', min:'Solfuri (pentlandite, calcopirite) + arsenuri + alloy PGE',
+   esempi:'Merensky Reef e UG2 (Bushveld), J-M Reef (Stillwater), Lac des Iles',
+   expl:'Perforazioni sistematiche, geochimica di precisione',
+   x:.15, y:.32},
+  {id:'nicu', t:'mag', n:'Ni-Cu-(PGE) magmatico', sub:'Immiscibilità solfurica',
+   metalli:['Ni','Cu','PGE','Co'], tenore:'0.5–3% Ni, 0.5–3.5% Cu',dim:'100–2000 Mt',
+   amb:'Intrusioni mafiche-ultramafiche, komatiiti',
+   geodin:'Rift continentale, flood basalt, greenstone belt',
+   min:'Pentlandite (Ni), calcopirite (Cu), pirrotina, PGE alloy',
+   esempi:'Noril\'sk-Talnakh (Russia), Sudbury (Canada), Kambalda (Australia)',
+   expl:'Elettromagnetismo (EM), IP, magnetometria',
+   x:.15, y:.46},
+  {id:'carb', t:'mag', n:'Carbonatiti', sub:'Magmatismo alcalino',
+   metalli:['REE','Nb','P','F'], tenore:'1–15% REO, 0.3–5% Nb₂O₅',dim:'10–500 Mt',
+   amb:'Complessi alcalini, rift continentale, hotspot',
+   geodin:'Rift continentale (EARS, Brasile), cratonico',
+   min:'Bastnäsite, monazite (REE), pirocloro (Nb), apatite (P), fluorite',
+   esempi:'Bayan Obo (Cina), Mountain Pass (USA), Araxá (Brasile), Lofdal (Namibia)',
+   expl:'Magnetometria, gravimetria, campionamento geochimico',
+   x:.15, y:.60},
+  {id:'kimb', t:'mag', n:'Kimberlite / Lamproite', sub:'Risalita ultrarapida da mantello',
+   metalli:['Diamante'], tenore:'10–500 cpht',dim:'Pipe di 50–500 m ⌀',
+   amb:'Pipe esplosive in scudi cratonici',
+   geodin:'Piattaforma cratonico stabile (&gt;2.5 Ga)',
+   min:'Diamante, olivina serpentinizzata, flogopite, ilmenite, piropo',
+   esempi:'Kimberley e Venetia (SA), Mirny e Udachnaya (Russia), Ekati e Diavik (Canada), Argyle (Australia)',
+   expl:'Gravimetria, magnetometria, kimberlite indicator minerals (KIM) in stream sediment',
+   x:.15, y:.74},
+  {id:'peg', t:'mag', n:'Pegmatiti (LCT/NYF)', sub:'Fuso residuale idrato',
+   metalli:['Li','Be','Cs','Ta','Nb','Sn','Gemme'], tenore:'1–4% Li₂O; 100–1000 ppm Ta',dim:'Da pochi kt a 200 Mt',
+   amb:'Aureole di graniti peraluminosi (S-type)',
+   geodin:'Collisione continentale, orogenesi',
+   min:'Spodumene, petalite, lepidolite (Li); tantalite-columbite (Ta-Nb); berillo; cassiterite (Sn)',
+   esempi:'Greenbushes (Australia), Bikita (Zimbabwe), Bernic Lake (Canada), Wodgina (Australia)',
+   expl:'Rilevamento geologico, campionamento, geochimica Li-Cs-Ta',
+   x:.15, y:.88},
+
+  // ── IDROTERMALI ───────────────────────────────────────────────
+  {id:'por', t:'hyd', n:'Porphyry Cu-Mo-Au', sub:'Fluidi magmatico-idrotermali ad alta T',
+   metalli:['Cu','Mo','Au','Ag'], tenore:'0.2–1.5% Cu; 0.01–0.1% Mo',dim:'100–10.000 Mt',
+   amb:'Intrusioni calcoalcaline in arco magmatico',
+   geodin:'Arco continentale o insulare (subduzione)',
+   min:'Calcopirite, molibdenite, bornite, pirite; gangue: quarzo, K-fsp, sericite',
+   esempi:'Bingham Canyon (USA), El Teniente e Chuquicamata (Cile), Grasberg (Indonesia)',
+   expl:'IP, magnetometria, alterazione da satellite (ASTER), perforazioni RC+diamond',
+   x:0.38, y:0.1},
+  {id:'epi_hs', t:'hyd', n:'Epitermale High-Sulphidation', sub:'Fluidi acidi magmatici',
+   metalli:['Au','Ag','Cu'], tenore:'0.5–5 g/t Au',dim:'10–500 Mt',
+   amb:'Sistemi vulcanici sub-aerei (caldera, domi)',
+   geodin:'Arco magmatico, vulcanismo calcoalcalino',
+   min:'Enargite, luzonite, covelline; alterazione: alunite-caolinite-dickite',
+   esempi:'Yanacocha e Pierina (Perù), Lepanto (Filippine), Summitville (USA)',
+   expl:'Teleosservazione iperspettrale, campionamento soil, trincee',
+   x:0.38, y:0.22},
+  {id:'epi_ls', t:'hyd', n:'Epitermale Low-Sulphidation', sub:'Fluidi neutri ridotti',
+   metalli:['Au','Ag'], tenore:'1–20 g/t Au',dim:'1–200 Mt',
+   amb:'Campi geotermali, sistemi di faglia in ambiente vulcanico',
+   geodin:'Rift, retro-arco, vulcanismo bimodale',
+   min:'Elettro, argento nativo, argentite; vene quarzo-adularia-calcite',
+   esempi:'Comstock Lode (USA), Hishikari (Giappone), Waihi (NZ), Creede (USA)',
+   expl:'Geochimica As-Sb-Hg-Tl (pathfinders Au), EM, trincee',
+   x:0.38, y:0.33},
+  {id:'skarn', t:'hyd', n:'Skarn', sub:'Metasomatismo di contatto',
+   metalli:['Fe','Cu','W','Mo','Zn','Sn','Au'], tenore:'Variabile: 0.5–2% Cu; 0.3–1% WO₃',dim:'10–500 Mt',
+   amb:'Contatto intrusione granitica con carbonati',
+   geodin:'Orogenesi collisionale, arco continentale',
+   min:'Granato grossulare-andradite, diopsido, wollastonite + solfuri/scheelite/magnetite',
+   esempi:'Antamina (Perù), Pine Creek (USA, W), Daye (Cina, Fe-Cu), Erzgebirge (Sn-W)',
+   expl:'Rilevamento geologico, magnetometria (magnetite), IP',
+   x:0.38, y:0.44},
+  {id:'vms', t:'hyd', n:'VMS — Volcanogenic Massive Sulphides', sub:'Esalazioni idrotermali su fondale',
+   metalli:['Zn','Pb','Cu','Au','Ag'], tenore:'3–15% Zn+Pb; 0.5–3% Cu',dim:'1–500 Mt',
+   amb:'Fondali oceanici in ambiente di dorsale o arco insulare',
+   geodin:'Dorsale oceanica (tipo Cipro), arco insulare (tipo Kuroko), rift',
+   min:'Pirite, sfalerite, galena, calcopirite; gangue: chert, barite',
+   esempi:'Río Tinto (Spagna), Kidd Creek (Canada), Flin Flon (Canada), Kuroko (Giappone)',
+   expl:'EM, IP, magnetometria, stream sediment',
+   x:0.38, y:0.55},
+  {id:'mvt', t:'hyd', n:'MVT — Mississippi Valley Type', sub:'Basinal brines in carbonati',
+   metalli:['Zn','Pb'], tenore:'5–15% Zn+Pb',dim:'10–600 Mt',
+   amb:'Carbonati di piattaforma, lontano da intrusioni',
+   geodin:'Piattaforma carbonatica (cratone, passivo margin)',
+   min:'Sfalerite (ZnS), galena (PbS), fluorite, barite, dolomite',
+   esempi:'Tri-State District (USA), Pine Point (Canada), Silesia (Polonia), Viburnum Trend (USA)',
+   expl:'Gravimetria, EM, drill su target strutturali in carbonati',
+   x:0.38, y:0.66},
+  {id:'iocg', t:'hyd', n:'IOCG — Iron Oxide Cu-Au', sub:'Fluidi misti ossidanti',
+   metalli:['Cu','Au','U','REE'], tenore:'0.5–2% Cu; 0.1–1 g/t Au',dim:'100–10.000 Mt',
+   amb:'Sistemi di faglia profondi, brecce idrotermali',
+   geodin:'Rift continentale, margine continentale transpressivo',
+   min:'Magnetite, ematite, calcopirite, bornite, uraninite',
+   esempi:'Olympic Dam (Australia), Candelaria (Cile), Ernest Henry (Australia)',
+   expl:'Magnetometria (magnetite), gravimetria, EM',
+   x:0.38, y:0.77},
+  {id:'oro_oro', t:'hyd', n:'Orogenic Gold', sub:'Fluidi metamorfici in zone di taglio',
+   metalli:['Au','Ag'], tenore:'2–20 g/t Au',dim:'1–200 Mt',
+   amb:'Zone di taglio duttile-fragile in cinture orogeniche',
+   geodin:'Orogenesi collisionale, accretion orogens',
+   min:'Oro nativo, pirite arsenopirite; vene quarzo-carbonato-sericite',
+   esempi:'Kalgoorlie (Australia), Muruntau (Uzbekistan), Homestake (USA), Abitibi (Canada)',
+   expl:'Geochimica As-Sb-Te (pathfinders), EM, perforazioni in zone di taglio',
+   x:0.38, y:0.88},
+
+  // ── SEDIMENTARI ───────────────────────────────────────────────
+  {id:'bif', t:'sed', n:'BIF — Banded Iron Formations', sub:'Sedimentazione chimica marina precambriana',
+   metalli:['Fe'], tenore:'55–67% Fe (dopo arricchimento supergene)',dim:'Miliardi di Mt',
+   amb:'Bacini marini precambriani (Archeano-Proterozoico)',
+   geodin:'Piattaforma passiva, rift, bacini cratonici',
+   min:'Ematite, magnetite, goethite, siderite, chert (alternanze mm-cm)',
+   esempi:'Hamersley (Australia), Carajás (Brasile), Kiruna (Svezia), Lake Superior (USA-Canada)',
+   expl:'Magnetometria, gravimetria; spesso in affioramento',
+   x:.72, y:.18},
+  {id:'baux', t:'sed', n:'Bauxite', sub:'Lateritizzazione tropicale',
+   metalli:['Al'], tenore:'40–60% Al₂O₃',dim:'Centinaia di Mt – miliardi Mt',
+   amb:'Superfici di erosione piatte in clima tropicale',
+   geodin:'Piattaforma cratonico in fascia equatoriale',
+   min:'Gibbsite Al(OH)₃, boehmite AlOOH, goethite, kaolinite',
+   esempi:'Weipa (Australia), Sangarédi (Guinea), Trombetas (Brasile), Gove (Australia)',
+   expl:'Rilevamento geologico, campionamento sistematico, perforazioni RC a poca profondità',
+   x:.72, y:.32},
+  {id:'placer', t:'sed', n:'Placer (Au, Sn, sabbie pesanti)', sub:'Concentrazione meccanica',
+   metalli:['Au','Sn','Ti','Zr','REE'], tenore:'Au: 0.1–5 g/m³; Sn: 0.3–1 kg/m³',dim:'1–100 Mt',
+   amb:'Alluvioni fluviali, spiagge, offshore',
+   geodin:'Tutti i contesti, su rocce madri con mineralizzazioni primarie',
+   min:'Oro nativo, cassiterite, ilmenite, rutilo, zircone, monazite',
+   esempi:'Witwatersrand (SA, paleoplacer), Klondike (Canada), Malaysia (Sn), Murray Basin (Australia)',
+   expl:'Campionamento alluvioni, draghe, perforazioni superficiali',
+   x:.72, y:.46},
+  {id:'evap_min', t:'sed', n:'Evaporiti minerarie (K, B, Li)', sub:'Evaporazione lacustre o marina',
+   metalli:['K','B','Li','Mg'], tenore:'Li: 0.5–2 g/L (brine); K: 10–25% KCl',dim:'Centinaia Mt – salar interi',
+   amb:'Laghi salati chiusi, bacini marini ristretti',
+   geodin:'Rift continentale (salar andini), bacini intracratonici',
+   min:'Silvite (KCl), carnallite (KMgCl₃), spodumene da brine Li, borax, colemanite',
+   esempi:'Atacama (Cile, Li), Uyuni (Bolivia, Li), Carlsbad (USA, K), Kırka (Turchia, B)',
+   expl:'Campionamento brine, analisi geochimica acque, perforazioni shallow',
+   x:.72, y:.60},
+  {id:'fosfati', t:'sed', n:'Fosfati marini', sub:'Upwelling oceanico',
+   metalli:['P'], tenore:'15–35% P₂O₅',dim:'Miliardi Mt',
+   amb:'Piattaforme continentali in zone di upwelling',
+   geodin:'Margini continentali passivi a latitudini subtropicali',
+   min:'Francolite (fluorapatite carbonatica), collofane',
+   esempi:'Bou Craa (Marocco), Phosphoria FM (USA), Togo-Benin, Israel Negev',
+   expl:'Rilevamento sismico, campionamento, cartografia geologica',
+   x:.72, y:.74},
+  {id:'sedex', t:'sed', n:'SEDEX — Sedimentary Exhalative', sub:'Esalazioni in bacino marino',
+   metalli:['Zn','Pb','Ag','Ba'], tenore:'5–20% Zn+Pb',dim:'10–500 Mt',
+   amb:'Bacini marines in rift o margini continentali',
+   geodin:'Rift continentale, margine passivo con faulting siinsedimentario',
+   min:'Sfalerite, galena, pirite, barite, argillite nera',
+   esempi:'Sullivan (Canada), Mount Isa (Australia, Pb-Zn), Broken Hill (Australia)',
+   expl:'EM, IP, perforazioni sistematiche',
+   x:.72, y:.88},
+
+  // ── METAMORFICI ────────────────────────────────────────────────
+  {id:'oro_met', t:'met', n:'Orogenic Gold (metamorfico)', sub:'Fluidi metamorfici deidrogenazione',
+   metalli:['Au'], tenore:'2–30 g/t Au',dim:'1–500 Mt',
+   amb:'Cinture metamorfiche, greenstone belt',
+   geodin:'Orogenesi collisionale e accretion',
+   min:'Oro nativo, pirite, arsenopirite; vene quarzo-carbonato',
+   esempi:'Kalgoorlie (Australia), Val d\'Or (Canada), Muruntau (Uzbekistan)',
+   expl:'Geochimica, EM, perforazioni nelle zone di taglio',
+   x:.88, y:.18},
+  {id:'grafite', t:'met', n:'Grafite cristallina', sub:'Metamorfismo di materia organica',
+   metalli:['C (grafite)'], tenore:'10–90% C grafite',dim:'1–100 Mt',
+   amb:'Peliti e marne metamorfosate (gneiss, granuliti)',
+   geodin:'Orogeni collisionali ad alta T',
+   min:'Grafite cristallina lamellare',
+   esempi:'Sri Lanka, Graphite Creek (Alaska), Syama (Mali), Imerys Rhône-Alpes',
+   expl:'Rilevamento geologico, campionamento',
+   x:.88, y:.34},
+  {id:'ind_met', t:'met', n:'Minerali industriali metamorfici', sub:'Reazioni metamorfiche',
+   metalli:['Al₂SiO₅','talco','amianto'], tenore:'Variabile',dim:'1–100 Mt',
+   amb:'Metabasiti, ultrabasiti, peliti metamorfosate',
+   geodin:'Orogeni di collisione e subduzione',
+   min:'Sillimanite, cianite, andalusite, talco, tremolite',
+   esempi:'Luzenac-France (talco), Virginia (cianite), Andalusia (andalusite), Transvaal (talco)',
+   expl:'Rilevamento geologico, mappatura facies metamorfiche',
+   x:.88, y:.50},
+  {id:'mob_met', t:'met', n:'Mineralizzazioni rimobilizzate', sub:'Mobilizzazione metamorfica',
+   metalli:['Pb','Zn','Ag','Au'], tenore:'Alto per rimobilizzazione',dim:'100–500 Mt',
+   amb:'Successioni metamorfosate con mineralizzazioni precedenti',
+   geodin:'Orogeni policicliche su terreni precambriani',
+   min:'Galena, sfalerite, pirrotina, arsenopirite',
+   esempi:'Broken Hill (Australia), Mount Isa (Australia), Lady Loretta (Australia)',
+   expl:'Profili sismici, EM, perforazioni profonde',
+   x:.88, y:.66},
+
+  // ── SUPERGENE ─────────────────────────────────────────────────
+  {id:'lat_ni', t:'sup', n:'Laterite nichelifera', sub:'Weathering di ultrabasiti',
+   metalli:['Ni','Co'], tenore:'1–2.5% Ni; 0.05–0.15% Co',dim:'10–500 Mt',
+   amb:'Profili lateritici su peridotiti in clima tropicale',
+   geodin:'Piattaforme tropicali su terreni ultramafici',
+   min:'Goethite (zona ossidica), garnierite, smectite Ni (zona saprolite)',
+   esempi:'Nuova Caledonia, Filippine, Cerro Matoso (Colombia), Murrin Murrin (Australia)',
+   expl:'Perforazioni RC a poca profondità, campionamento sistematico profilo',
+   x:.55, y:.55},
+  {id:'sup_cu', t:'sup', n:'Arricchimento supergene Cu', sub:'Ridistribuzione Cu in zona vadosa',
+   metalli:['Cu'], tenore:'0.5–2% Cu (zona supergene)',dim:'100–5000 Mt',
+   amb:'Zona di ossidazione + cementation zone sopra porphyry primario',
+   geodin:'Arco magmatico (stesso del porphyry)',
+   min:'Calcosina (Cu₂S), covellina; zona ossidica: malachite, azzurrite, crisocolla',
+   esempi:'Chuquicamata e Radomiro Tomic (Cile), Morenci (USA), Río Tinto (gossan)',
+   expl:'Campionamento gossan, trincee, perforazioni RC shallow',
+   x:.55, y:.70},
+  {id:'bauxite_sup', t:'sup', n:'Bauxite (laterite Al)', sub:'Lateritizzazione intensa',
+   metalli:['Al'], tenore:'40–60% Al₂O₃',dim:'Grandi depositi piatti',
+   amb:'Superfici planare su rocce alluminosilicatiche',
+   geodin:'Piattaforma cratonico intertropicale',
+   min:'Gibbsite, boehmite, diasporo, goethite, ematite',
+   esempi:'Guinea (Sangarédi), Weipa (Australia), Paragominas (Brasile)',
+   expl:'Rilevamento da satellite, perforazioni superficiali, campionamento',
+   x:.55, y:.85},
+];
+
+// ─── METALLI UNICI ────────────────────────────────────────────────
+const allMetals=[...new Set(DEPOSITS.flatMap(d=>d.metalli))].sort();
+const metalBtns=document.getElementById('metalBtns');
+allMetals.forEach(m=>{
+  const b=document.createElement('button');
+  b.className='mb'; b.textContent=m; b.dataset.m=m;
+  b.addEventListener('click',()=>{
+    b.classList.toggle('on');
+    draw();
+  });
+  metalBtns.appendChild(b);
+});
+
+// ─── FILTRI TIPO ──────────────────────────────────────────────────
+const activeTypes=new Set(['mag','hyd','sed','met','sup']);
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const f=b.dataset.f;
+    if(activeTypes.has(f)){activeTypes.delete(f);b.classList.remove('on');}
+    else{activeTypes.add(f);b.classList.add('on');}
+    draw();
+  });
+});
+
+// ─── CANVAS ───────────────────────────────────────────────────────
+const C=document.getElementById('c');
+const ctx=C.getContext('2d');
+let W,H,sel=null;
+
+function resize(){
+  const r=C.getBoundingClientRect();
+  W=C.width=Math.round(r.width);
+  H=C.height=Math.round(r.height);
+  draw();
+}
+window.addEventListener('resize',resize);
+
+function getActiveMetals(){
+  return [...document.querySelectorAll('.mb.on')].map(b=>b.dataset.m);
+}
+
+function isVisible(d){
+  if(!activeTypes.has(d.t)) return false;
+  const am=getActiveMetals();
+  if(am.length===0) return true;
+  return d.metalli.some(m=>am.includes(m));
+}
+
+function nodePos(d){
+  return {x: Math.round(d.x*W), y: Math.round(d.y*H)};
+}
+
+// Gruppi per le etichette a sfondo
+const GROUPS = [
+  {t:'mag', label:'MAGMATICI', x:.15, col:'rgba(240,160,48,.06)'},
+  {t:'hyd', label:'IDROTERMALI', x:.38, col:'rgba(0,184,224,.06)'},
+  {t:'sed', label:'SEDIMENTARI', x:.72, col:'rgba(64,184,112,.06)'},
+  {t:'met', label:'METAMORFICI', x:.88, col:'rgba(192,96,240,.06)'},
+  {t:'sup', label:'SUPERGENE', x:.55, col:'rgba(224,80,80,.06)'},
+];
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#07090e'; ctx.fillRect(0,0,W,H);
+
+  // Connessioni tra tipi collegati
+  const links=[
+    ['por','epi_hs'],['por','skarn'],['por','sup_cu'],
+    ['epi_hs','epi_ls'],
+    ['vms','mob_met'],['bif','lat_ni'],
+    ['peg','grafite'],['nicu','lat_ni'],
+    ['oro_oro','oro_met'],
+  ];
+  ctx.lineWidth=1; ctx.setLineDash([3,4]);
+  links.forEach(([a,b])=>{
+    const da=DEPOSITS.find(d=>d.id===a);
+    const db=DEPOSITS.find(d=>d.id===b);
+    if(!da||!db||!isVisible(da)||!isVisible(db)) return;
+    const pa=nodePos(da), pb=nodePos(db);
+    ctx.strokeStyle='rgba(100,110,150,0.25)';
+    ctx.beginPath(); ctx.moveTo(pa.x,pa.y); ctx.lineTo(pb.x,pb.y); ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  // Sfondo gruppi
+  const groupW=W*0.14;
+  GROUPS.forEach(g=>{
+    if(!activeTypes.has(g.t)) return;
+    ctx.fillStyle=g.col;
+    ctx.fillRect(Math.round(g.x*W-groupW/2),0,groupW,H);
+    ctx.font=`700 ${Math.max(9,Math.min(11,W*0.008))}px Space Mono`;
+    ctx.fillStyle='rgba(180,185,210,0.2)';
+    ctx.textAlign='center';
+    ctx.fillText(g.label, Math.round(g.x*W), 20);
+  });
+
+  // Nodi
+  DEPOSITS.forEach(d=>{
+    const vis=isVisible(d);
+    const p=nodePos(d);
+    const col=COLS[d.t];
+    const r=sel===d.id?10:(d.t==='hyd'?5:7);
+    const alpha=vis?1:0.15;
+
+    ctx.globalAlpha=alpha;
+    // Alone selezione
+    if(sel===d.id && vis){
+      ctx.beginPath(); ctx.arc(p.x,p.y,r+5,0,Math.PI*2);
+      ctx.fillStyle=col+'33'; ctx.fill();
+    }
+    // Cerchio
+    ctx.beginPath(); ctx.arc(p.x,p.y,r,0,Math.PI*2);
+    ctx.fillStyle=col+'cc'; ctx.fill();
+    ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.stroke();
+
+    // Label
+    ctx.font=`${Math.max(8,Math.min(10,W*0.007))}px Crimson Pro`;
+    ctx.fillStyle=vis?'#c8ccdc':'#404458';
+    ctx.textAlign='center';
+    const lx=p.x, ly=p.y+r+12;
+    ctx.fillText(d.n, lx, ly);
+    ctx.globalAlpha=1;
+  });
+}
+
+// ─── INTERAZIONE ──────────────────────────────────────────────────
+const tip=document.getElementById('tip');
+const infoBox=document.getElementById('infoBox');
+
+function hitTest(mx,my){
+  let best=null, bestD=999;
+  DEPOSITS.forEach(d=>{
+    if(!isVisible(d)) return;
+    const p=nodePos(d);
+    const dist=Math.hypot(mx-p.x,my-p.y);
+    if(dist<16 && dist<bestD){bestD=dist;best=d;}
+  });
+  return best;
+}
+
+C.addEventListener('mousemove',e=>{
+  const r=C.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const d=hitTest(mx,my);
+  if(d){
+    tip.style.display='block';
+    tip.style.left=(mx+14)+'px'; tip.style.top=(my-10)+'px';
+    tip.textContent=d.n+' · '+d.metalli.join(', ');
+    C.style.cursor='pointer';
+  } else {
+    tip.style.display='none';
+    C.style.cursor='default';
+  }
+});
+
+C.addEventListener('click',e=>{
+  const r=C.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const d=hitTest(mx,my);
+  if(d){
+    sel=d.id;
+    draw();
+    showInfo(d);
+  }
+});
+
+function showInfo(d){
+  const col=COLS[d.t];
+  infoBox.innerHTML=`
+    <div style="margin-bottom:.5rem">
+      <span class="tag ${d.t}">${TYPES[d.t].toUpperCase()}</span>
+      ${d.metalli.map(m=>`<span class="tag ${d.t}">${m}</span>`).join('')}
+    </div>
+    <b style="color:${col};font-size:.8rem">${d.n}</b>
+    <div style="color:var(--muted);font-size:.7rem;margin:.2rem 0 .5rem;font-style:italic">${d.sub}</div>
+    <div class="row"><span class="lbl">Tenore</span><span class="val">${d.tenore}</span></div>
+    <div class="row"><span class="lbl">Dimensioni</span><span class="val">${d.dim}</span></div>
+    <div class="row"><span class="lbl">Ambiente</span><span class="val">${d.amb}</span></div>
+    <div class="row"><span class="lbl">Geodinamica</span><span class="val">${d.geodin}</span></div>
+    <div class="row"><span class="lbl">Minerali</span><span class="val">${d.min}</span></div>
+    <div class="row"><span class="lbl">Esplorazione</span><span class="val">${d.expl}</span></div>
+    <div class="esempi"><b>Esempi:</b> ${d.esempi}</div>
+  `;
+}
+
+resize();
+</script>
+</body>
+</html>

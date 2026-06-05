@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evoluzione della Terra — Geodinamica, Clima e Vita</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#09090c;--surface:#0f1015;--surface2:#141419;
+  --border:#22242e;--border2:#2e3040;
+  --accent:#40c080;--accent2:#00c8f0;--accent3:#ffcc44;--accent4:#ff6b35;--accent5:#c060f0;
+  --text:#e8eaf2;--muted:#a0a4b8;--dim:#606478;
+  --serif:'EB Garamond',Georgia,serif;
+  --mono:'Space Mono',monospace;
+  --sans:'Crimson Pro',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.75;display:flex;min-height:100vh}
+nav{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto;padding:1.5rem 0}
+nav .logo{padding:0 1.2rem 1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+nav .logo h2{font-family:var(--mono);font-size:.72rem;color:var(--accent);letter-spacing:.12em;text-transform:uppercase}
+nav .logo p{font-family:var(--serif);font-style:italic;font-size:.85rem;color:var(--muted);margin-top:.2rem}
+nav ul{list-style:none}
+nav li a{display:block;padding:.28rem 1.2rem;font-family:var(--mono);font-size:.62rem;color:var(--muted);text-decoration:none;letter-spacing:.04em;border-left:2px solid transparent;transition:all .15s}
+nav li a:hover{color:var(--text);border-left-color:var(--border2)}
+nav li a.active{color:var(--accent);border-left-color:var(--accent)}
+nav .sec-label{padding:.6rem 1.2rem .2rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+nav li a.sub{padding-left:1.8rem;font-size:.58rem}
+main{flex:1;max-width:860px;padding:3rem 3.5rem;overflow-x:hidden}
+.doc-header{margin-bottom:3rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.doc-header .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem}
+.doc-header h1{font-family:var(--serif);font-size:2.8rem;font-weight:400;line-height:1.15;color:var(--text);margin-bottom:.8rem}
+.doc-header .subtitle{font-family:var(--serif);font-style:italic;font-size:1.1rem;color:var(--muted)}
+.doc-header .meta{margin-top:1.2rem;font-family:var(--mono);font-size:.6rem;color:var(--dim);letter-spacing:.06em}
+section{margin-bottom:3.5rem;scroll-margin-top:1.5rem}
+h2{font-family:var(--serif);font-size:1.9rem;font-weight:500;color:var(--text);margin-bottom:.3rem;padding-top:1.5rem}
+.section-num{font-family:var(--mono);font-size:.62rem;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:.4rem}
+.section-line{width:2.5rem;height:2px;background:var(--accent);margin:.7rem 0 1.5rem;opacity:.7}
+h3{font-family:var(--serif);font-size:1.3rem;font-weight:500;color:var(--text);margin:1.8rem 0 .7rem;padding-top:.5rem}
+h4{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin:1.4rem 0 .5rem}
+p{margin-bottom:1rem;color:var(--muted);font-size:.98rem}
+p strong{color:var(--text);font-weight:600}
+p em{font-style:italic;color:var(--text)}
+.note{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:.9rem 1.1rem;margin:1.2rem 0}
+.note::before{content:'NOTA ';font-family:var(--mono);font-size:.55rem;letter-spacing:.15em;color:var(--accent2);display:block;margin-bottom:.3rem}
+.note p{margin:0;font-size:.9rem}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.87rem}
+th{background:var(--surface2);border:1px solid var(--border2);padding:.5rem .8rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);text-align:left}
+td{border:1px solid var(--border);padding:.45rem .8rem;color:var(--muted);vertical-align:top}
+td strong{color:var(--text)}
+tr:hover td{background:var(--surface)}
+ul.plain{list-style:none;margin:1rem 0}
+ul.plain li{padding:.3rem 0 .3rem 1.2rem;position:relative;color:var(--muted);font-size:.93rem;border-bottom:1px solid var(--border)}
+ul.plain li::before{content:'—';position:absolute;left:0;color:var(--dim)}
+ul.plain li strong{color:var(--text)}
+dl.deflist{margin:1rem 0}
+dl.deflist dt{font-family:var(--mono);font-size:.65rem;letter-spacing:.08em;color:var(--accent2);margin-top:1rem;text-transform:uppercase}
+dl.deflist dd{padding:.3rem 0 .3rem 1rem;color:var(--muted);font-size:.93rem;border-left:2px solid var(--border2);margin-left:.5rem}
+.ref{font-size:.82rem;color:var(--dim);margin:.3rem 0;padding-left:1.5rem;text-indent:-1.5rem;font-family:var(--sans)}
+.ref .authors{color:var(--muted)}
+.ref .year{color:var(--accent);font-family:var(--mono);font-size:.75rem}
+.ref .title{font-style:italic;color:var(--text)}
+.ref .journal{color:var(--muted)}
+.highlight{border:1px solid;border-radius:5px;padding:1rem 1.2rem;margin:1.5rem 0}
+.highlight.green{border-color:rgba(64,192,128,.3);background:rgba(64,192,128,.04)}
+.highlight.blue{border-color:rgba(0,200,240,.3);background:rgba(0,200,240,.04)}
+.highlight.yellow{border-color:rgba(255,204,68,.3);background:rgba(255,204,68,.04)}
+.highlight.orange{border-color:rgba(255,107,53,.3);background:rgba(255,107,53,.04)}
+.highlight.purple{border-color:rgba(192,96,240,.3);background:rgba(192,96,240,.04)}
+.highlight .hl-title{font-family:var(--mono);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.5rem}
+.highlight.green .hl-title{color:var(--accent)}
+.highlight.blue .hl-title{color:var(--accent2)}
+.highlight.yellow .hl-title{color:var(--accent3)}
+.highlight.orange .hl-title{color:var(--accent4)}
+.highlight.purple .hl-title{color:var(--accent5)}
+.highlight p{margin:0;font-size:.9rem}
+/* Luoghi di riferimento */
+.luoghi{background:var(--surface);border-left:3px solid var(--accent3);padding:.7rem 1rem;margin:1.2rem 0;border-radius:0 4px 4px 0}
+.luoghi::before{content:'📍 LUOGHI DI RIFERIMENTO';font-family:var(--mono);font-size:.52rem;letter-spacing:.18em;color:var(--accent3);display:block;margin-bottom:.4rem}
+.luoghi p{margin:0;font-size:.88rem;color:var(--muted)}
+.luoghi p strong{color:var(--accent3)}
+.timebar{font-family:var(--mono);font-size:.65rem;color:var(--accent);background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:.3rem .7rem;display:inline-block;margin-bottom:.8rem;letter-spacing:.06em}
+nav::-webkit-scrollbar{width:4px}
+nav::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:900px){nav{display:none}main{padding:2rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">
+    <h2>GeoExplore</h2>
+    <p>Evoluzione della Terra</p>
+  </div>
+  <ul>
+    <li class="sec-label">Precambriano</li>
+    <li><a href="#formazione">1. Formazione della Terra</a></li>
+    <li><a href="#accrezione" class="sub">1.1 Accrezione e differenziazione</a></li>
+    <li><a href="#luna" class="sub">1.2 Formazione della Luna</a></li>
+    <li><a href="#lhb" class="sub">1.3 Grande Bombardamento Tardivo</a></li>
+    <li><a href="#archeano-antico">2. Eoarcheano e Paleoarcheano</a></li>
+    <li><a href="#prime-croste" class="sub">2.1 Prime croste continentali</a></li>
+    <li><a href="#prima-vita" class="sub">2.2 Origini della vita</a></li>
+    <li><a href="#archeano-tardo">3. Mesoarcheano e Neoarcheano</a></li>
+    <li><a href="#tettonica" class="sub">3.1 Tettonica a zolle</a></li>
+    <li><a href="#goe" class="sub">3.2 Grande Ossidazione</a></li>
+    <li><a href="#proterozoico">4. Proterozoico</a></li>
+    <li><a href="#supercontinenti" class="sub">4.1 Columbia e Rodinia</a></li>
+    <li><a href="#snowball" class="sub">4.2 Snowball Earth</a></li>
+    <li><a href="#ediacara" class="sub">4.3 Fauna ediacariana</a></li>
+    <li class="sec-label">Paleozoico</li>
+    <li><a href="#cambriano">5. Cambriano e Ordoviciano</a></li>
+    <li><a href="#esplosione" class="sub">5.1 Esplosione Cambriana</a></li>
+    <li><a href="#ext-ord" class="sub">5.2 Estinzione Ordoviciana</a></li>
+    <li><a href="#siluriano">6. Siluriano e Devonico</a></li>
+    <li><a href="#terraferma" class="sub">6.1 Colonizzazione terraferma</a></li>
+    <li><a href="#ext-dev" class="sub">6.2 Estinzione del Devonico</a></li>
+    <li><a href="#carbonifero">7. Carbonifero e Permiano</a></li>
+    <li><a href="#pangea" class="sub">7.1 Formazione di Pangea</a></li>
+    <li><a href="#ext-perm" class="sub">7.2 Grande Estinzione del Permiano</a></li>
+    <li class="sec-label">Mesozoico</li>
+    <li><a href="#triassico">8. Triassico e Giurassico</a></li>
+    <li><a href="#rifting" class="sub">8.1 Rifting di Pangea</a></li>
+    <li><a href="#dinosauri-jur" class="sub">8.2 Dinosauri e Tethys</a></li>
+    <li><a href="#cretaceo">9. Cretaceo</a></li>
+    <li><a href="#apogeo-mes" class="sub">9.1 Apogeo del Mesozoico</a></li>
+    <li><a href="#kpg" class="sub">9.2 Estinzione K-Pg</a></li>
+    <li class="sec-label">Cenozoico</li>
+    <li><a href="#paleogene">10. Paleogene e Neogene</a></li>
+    <li><a href="#mammiferi" class="sub">10.1 Radiazione dei mammiferi</a></li>
+    <li><a href="#orogenesi" class="sub">10.2 Orogenesi alpino-himalayana</a></li>
+    <li><a href="#raffredd" class="sub">10.3 Raffreddamento globale</a></li>
+    <li><a href="#quaternario">11. Quaternario</a></li>
+    <li><a href="#glaciazioni" class="sub">11.1 Cicli glaciali</a></li>
+    <li><a href="#homo" class="sub">11.2 Homo sapiens</a></li>
+    <li><a href="#antropocene" class="sub">11.3 Antropocene</a></li>
+    <li><a href="#biblio">12. Bibliografia</a></li>
+  </ul>
+</nav>
+
+<main>
+<div class="doc-header">
+  <div class="tag">Manuale · Storia della Terra</div>
+  <h1>Evoluzione della Terra</h1>
+  <p class="subtitle">Geodinamica, clima e vita dalle origini del Sistema Solare all'Antropocene: 4.567 miliardi di anni di storia terrestre</p>
+  <div class="meta">GeoExplore · Giovanni Montini · 2025</div>
+</div>
+
+<!-- ══════════ 1. FORMAZIONE ══════════ -->
+<section id="formazione">
+  <span class="section-num">01</span>
+  <h2>Formazione della Terra</h2>
+  <div class="timebar">4.567 — 4.0 Ga</div>
+  <div class="section-line"></div>
+
+  <p>La Terra si è formata circa <strong>4.567 miliardi di anni fa</strong> (Ga) per accrezione di materiale solido nella nebulosa solare. L'età è determinata con grande precisione dalla datazione radiometrica delle <em>condriti carbonacee</em> (meteoriti primitive che non hanno mai subito differenziazione) e dei <em>calcio-alluminium-rich inclusions</em> (CAI) nelle condriti, che rappresentano i primi solidi condensati dal disco protoplanetario (Amelin et al., 2010; Bouvier &amp; Wadhwa, 2010).</p>
+
+  <section id="accrezione">
+    <h3>1.1 Accrezione e differenziazione interna</h3>
+    <p>La formazione della Terra avvenne in tre fasi principali. Nella prima fase, polvere e gas della nebulosa solare si condensarono e aggregarono per formare <em>planetesimi</em> (corpi di diametro ~1–100 km) in ~1–3 milioni di anni. Nella seconda fase, i planetesimi si accrebbero per collisioni catastrofiche formando <em>proto-pianeti</em>. Nella terza fase, collisioni giganti (incluso l'impatto che formò la Luna, ~4.51 Ga) completarono la crescita della Terra alla sua massa attuale in ~50–100 milioni di anni.</p>
+
+    <p>Il calore generato dall'energia cinetica degli impatti, dalla decadenza degli isotopi radioattivi a vita breve (²⁶Al, ⁶⁰Fe) e dalla compressione gravitazionale portò la Terra allo stato fuso (magma ocean). Questo permise la <strong>differenziazione per gravità</strong>: il ferro e il nichel, più densi, affondarono verso il centro formando il nucleo metallico; i silicati più leggeri salirono formando il mantello e la crosta primitiva. La differenziazione avvenne in poche decine di milioni di anni (Kleine et al., 2002), evidenziata dal sistema cronometrico Hf-W.</p>
+
+    <p>L'<strong>atmosfera primordiale</strong> era dominata da H₂, He e vapore acqueo, poi erosa dal vento solare. La successiva atmosfera secondaria si formò per degassamento del mantello (CO₂, N₂, H₂O, SO₂, H₂S) e per apporto di volatili da meteoriti e comete. La composizione riducente (assenza di O₂ libero) permase fino alla Grande Ossidazione (~2.4 Ga).</p>
+
+    <div class="luoghi"><p><strong>Groenlandia (Isua, 3.8 Ga)</strong> — Le rocce metasedimentarie di Isua sono tra le più antiche sulla Terra, con evidenze di oceani liquidi già a 3.8 Ga. <strong>Canada (Nuvvuagittuq, ~4.0 Ga?)</strong> — Possibili rocce crustali più antiche note, anche se l'età è dibattuta. <strong>Australia Occidentale (Jack Hills, 4.4 Ga)</strong> — Zirconi detritici con le datazioni U-Pb più antiche mai ottenute su materiale terrestre, indicando crosta solida già poche centinaia di Ma dopo la formazione della Terra.</p></div>
+  </section>
+
+  <section id="luna">
+    <h3>1.2 Formazione della Luna: l'ipotesi del Grande Impatto</h3>
+    <p>La Luna si formò circa <strong>4.51 Ga</strong> per il colossale impatto di un corpo della dimensione di Marte (~0.1 M⊕), chiamato <em>Theia</em>, con la proto-Terra (Hartmann &amp; Davis, 1975; Cameron &amp; Ward, 1976). L'impatto vaporizzò i mantelli di entrambi i corpi; il materiale espulso in orbita si aggregò rapidamente (in ~100 anni) formando la Luna. Le prove sono molteplici: la Luna ha la stessa composizione isotopica della Terra (O, Si, Ti, W), è impoverita in elementi volatili e ha un nucleo molto piccolo rispetto alle dimensioni.</p>
+
+    <p>L'impatto ebbe conseguenze enormi per l'evoluzione terrestre: (1) inclinò l'asse di rotazione della Terra (~23.5°, generando le stagioni); (2) accelerò la rotazione terrestre (giorno iniziale di ~5–6 ore); (3) generò le maree lunari che, frenando progressivamente la rotazione, hanno portato al giorno attuale di 24 ore; (4) stabilizzò l'asse di rotazione terrestre (la Luna protegge da variazioni caotiche dell'obliquità come quelle di Marte).</p>
+
+    <div class="luoghi"><p><strong>Apollo Lunar Sample Laboratory (NASA/JSC, Houston)</strong> — Campioni lunari delle missioni Apollo (1969–1972), fondamentali per la datazione della Luna e la verifica dell'ipotesi del Grande Impatto. I campioni mostrano età di 4.51–4.44 Ga per le croste lunari anortositiche.</p></div>
+  </section>
+
+  <section id="lhb">
+    <h3>1.3 Il Grande Bombardamento Tardivo (Late Heavy Bombardment)</h3>
+    <p>Tra ~4.1 e 3.8 Ga, la Terra e la Luna subirono un intenso periodo di impatti da parte di asteroidi e comete, noto come <strong>Late Heavy Bombardment (LHB)</strong> o <em>Cataclisma Lunare</em>. L'evidenza principale è la concentrazione di datazioni dei bacini d'impatto lunari in questo periodo (Tera et al., 1974). Il modello <em>Nice</em> (Gomes et al., 2005) propone che il LHB fu causato dalla riorganizzazione orbitale dei pianeti giganti (in particolare Giove e Saturno in risonanza 1:2) che destabilizzò la fascia degli asteroidi proiettando enormi quantità di materiale verso il sistema solare interno.</p>
+
+    <p>Il LHB fu devastante per la Terra primitiva: decine di impatti con diametri &gt;100 km evaporarono probabilmente gli oceani primitivi più volte, sterilizzando la superficie. Paradossalmente, fu però anche una fonte importante di volatili (acqua, carbonio, azoto) per i corpi impattori di tipo carbonaceo. La vita, se già esisteva, avrebbe potuto sopravvivere solo in ambienti subsuperficiali o negli oceani profondi — rinforzando l'idea che i primi organismi fossero termofili ipertermofile.</p>
+
+    <div class="luoghi"><p><strong>Luna</strong> — I bacini d'impatto multipli (Imbrium, Serenitatis, Nectaris, Orientale) datano tutti a ~3.9–3.8 Ga, documentando il picco del LHB. <strong>Sudafrica (Vredefort, 2.02 Ga)</strong> e <strong>Canada (Sudbury, 1.85 Ga)</strong> — I più grandi crateri da impatto terrestri preservati, esempi di impatti post-LHB con conseguenze geologiche enormi (Sudbury è oggi una delle più grandi concentrazioni di nichel e rame al mondo).</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 2. EOARCHEANO ══════════ -->
+<section id="archeano-antico">
+  <span class="section-num">02</span>
+  <h2>Eoarcheano e Paleoarcheano</h2>
+  <div class="timebar">4.0 — 3.2 Ga</div>
+  <div class="section-line"></div>
+
+  <p>L'Archeano (4.0–2.5 Ga) è l'eone durante il quale si formarono le prime croste continentali stabili, si consolidò la tettonica globale e apparvero i primi organismi viventi. La Terra era profondamente diversa dall'attuale: il mantello era ~200°C più caldo, producendo magmatismo di alta temperatura (komatiiti); la crosta oceanica si riciclava rapidamente; l'atmosfera era priva di ossigeno; gli oceani erano caldi (~50–70°C), salati e con alta concentrazione di Fe²⁺.</p>
+
+  <section id="prime-croste">
+    <h3>2.1 Le prime croste continentali</h3>
+    <p>Le prime croste continentali stabili si formarono tra 4.0 e 3.5 Ga come suite <strong>TTG (Tonalite-Trondhjemite-Granodiorite)</strong>: rocce felsiche povere in K, ricche in Na e Sr, con forti deplezioni in HREE (terre rare pesanti) indicanti cristallizzazione con granato nel residuo — tipica di crosta oceanica basaltica subducente o underplated a profondità &gt;50 km. I cratons archeani (Kaapvaal, Pilbara, Superior, Slave) sono i nuclei stabili della moderna crosta continentale, costituiti da TTG incassati in <strong>greenstone belt</strong>: sequenze vulcanosedimentarie di basalti, komatiiti, BIF (Banded Iron Formations) e metasedimenti.</p>
+
+    <p>I <strong>greenstone belt</strong> rappresentano resti di crosta oceanica arcaica e ambienti vulcanici sottomarini. Le <em>komatiiti</em> — lave ultrabasiche con MgO &gt;18% e texture spinifex (cristalli di olivina a forma di foglia di pino) — sono quasi esclusive dell'Archeano e indicano un mantello ~200–300°C più caldo. La loro abbondanza massima a ~2.7 Ga coincide con il picco di produzione crostale dell'Archeano.</p>
+
+    <div class="luoghi"><p><strong>Pilbara Craton, Australia Occidentale (3.5–2.9 Ga)</strong> — Tra i craton archeani meglio preservati, con greenstone belt contenenti le stromatoliti più antiche (~3.48 Ga, Dresser Formation), komatiiti e BIF. <strong>Kaapvaal Craton, Sudafrica (3.6–2.5 Ga)</strong> — Ospita il Barberton Greenstone Belt (3.5–3.2 Ga), il record geologico continuo più antico, con komatiiti, BIF e possibili evidenze di vita. <strong>Isua Greenstone Belt, Groenlandia (3.8–3.7 Ga)</strong> — Rocce metamorfosate con il più antico record di sedimenti marini, stromatoliti e possibili biosegnali isotopici del carbonio.</p></div>
+  </section>
+
+  <section id="prima-vita">
+    <h3>2.2 Le origini della vita</h3>
+    <p>Le prime evidenze di vita sulla Terra risalgono a ~3.7–3.8 Ga. La vita si originò in un periodo di intensa attività vulcanica, oceani caldi e atmosfera riducente, probabilmente in ambienti idrotermali oceanici o lacustri. I principali candidati come ambienti di origine sono i <strong>sistemi idrotermali sottomarini</strong> (black smokers e white smokers, ricchi di H₂, CH₄, HS⁻) e le <strong>piscine vulcaniche superficiali</strong> con cicli di bagnato-asciutto (Darwin's warm little pond, rivalutato da Sutherland et al.).</p>
+
+    <p>Le principali evidenze della vita precambriana precoce sono:</p>
+
+    <dl class="deflist">
+      <dt>Stromatoliti (3.48 Ga, Dresser Formation, Pilbara)</dt>
+      <dd>Strutture laminari costruite da tappeti microbici (principalmente cianobatteri). Le stromatoliti di Pilbara sono le più antiche macrostrutture biologiche accertate. Stromatoliti moderne si trovano ancora a Shark Bay (Australia) e nelle Bahamas.</dd>
+      <dt>Anomalie isotopiche del carbonio (3.7–3.8 Ga, Isua)</dt>
+      <dd>Il carbonio organico frazioni l'isotopo ¹²C rispetto al ¹³C (δ¹³C ≈ −25 a −35‰ per il carbonio biologico vs. ~0‰ per il carbonio inorganico). I grafiti di Isua mostrano δ¹³C fino a −28‰, interpretati come possibile biosegnale (Mojzsis et al., 1996), anche se l'interpretazione è dibattuta per il metamorfismo che ha alterato le rocce.</dd>
+      <dt>Microfossili (3.45 Ga, Apex Chert, Pilbara)</dt>
+      <dd>Strutture filamentose interpretate come batteri da Schopf (1993), ma la loro interpretazione biologica è stata contestata (Brasier et al., 2002). I microfossili di Strelley Pool (3.43 Ga) sono oggi considerati più affidabili.</dd>
+      <dt>Biofilm e tracce chimiche (3.22 Ga)</dt>
+      <dd>Evidenze di biofilm in ambienti idrotermali sottomarini (Moody Creek, Sud Africa) e lipidi biomarker (hopani) che indicano batteri.</dd>
+    </dl>
+
+    <p>I primi organismi erano quasi certamente <strong>chemioautotrofi anaerobici</strong>: batteri e archea che usavano reazioni chimiche inorganiche (ossidazione di H₂, Fe²⁺, H₂S) come fonte di energia. La fotosintesi ossigenica (produzione di O₂) appare più tardi, probabilmente tra 3.0 e 2.7 Ga, con i cianobatteri.</p>
+
+    <div class="highlight green">
+      <div class="hl-title">LUCA — Last Universal Common Ancestor</div>
+      <p>L'analisi filogenetica molecolare suggerisce che tutti gli organismi viventi discendono da un antenato comune universale (LUCA) vissuto probabilmente ~3.8–4.0 Ga. Le caratteristiche ricostruite di LUCA (Weiss et al., 2016) indicano un organismo termofilo, anaerobico, chemioautotrofo, associato ad ambienti idrotermali ricchi di H₂ e CO₂ — compatibile con i black smokers o i sistemi idrotermali alcalini (Lost City-type).</p>
+    </div>
+
+    <div class="luoghi"><p><strong>Dresser Formation, Pilbara (3.48 Ga)</strong> — Stromatoliti coniformi in ambiente di sabkha idrotermale; il sito più iconico per la vita precambriana precoce. <strong>Strelley Pool Chert, Pilbara (3.43 Ga)</strong> — Stromatoliti a ondulazioni e microfossili tra i più accettati dalla comunità scientifica. <strong>Lost City Hydrothermal Field, Oceano Atlantico</strong> — Sistema idrotermale alcalino attivo, analogo moderno proposto come habitat per l'origine della vita. <strong>Shark Bay, Australia Occidentale</strong> — Stromatoliti viventi in acque iper-saline, il migliore analogo moderno degli ecosistemi precambriani.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 3. ARCHEANO TARDO ══════════ -->
+<section id="archeano-tardo">
+  <span class="section-num">03</span>
+  <h2>Mesoarcheano e Neoarcheano</h2>
+  <div class="timebar">3.2 — 2.5 Ga</div>
+  <div class="section-line"></div>
+
+  <section id="tettonica">
+    <h3>3.1 L'avvio della tettonica a zolle</h3>
+    <p>L'inizio della <strong>tettonica a zolle moderna</strong> è uno dei temi più dibattuti in geoscienze. Le evidenze geochimiche e strutturali suggeriscono che una forma di subduzione (anche se diversa dall'attuale) fosse già attiva nel Neoarcheano (~2.7 Ga), quando si ha il picco di produzione crostale globale e compaiono le prime rocce con chimismo di arco magmatico (TTG di alta P, eclogiti archeane). Il modello alternativo della <em>stagnant-lid tectonics</em> (tettonica a coperchio rigido, come su Marte e Venere oggi) è proposto da alcuni per la Terra archeana precoce.</p>
+
+    <p>A ~2.7 Ga, nel Neoarcheano, si ha la prima comparsa di evidenze convincenti di subduzione oceanica: eclogiti archeane (Superior Province, Canada), magmatismo di arco calcalcalino, prismi di accrezione. La formazione del <strong>supercontinente Kenorland</strong> (~2.7 Ga, aggregazione dei craton Superior, Hearne, Rae) è spesso citata come il primo evento di amalgamazione continentale su larga scala.</p>
+
+    <div class="luoghi"><p><strong>Superior Province, Canada (2.7–2.5 Ga)</strong> — La più grande area di crosta continentale archeana del mondo (~1.6 milioni di km²), con greenstone belt, TTG e granitidi neoarcheani. Ospita depositi Au orogenici (Abitibi belt), Ni-Cu-EGP (Sudbury). <strong>Yilgarn Craton, Australia (2.7–2.5 Ga)</strong> — Simile alla Superior Province, con abbondanti greenstone belt auriferi (Kalgoorlie, Kambalda).</p></div>
+  </section>
+
+  <section id="goe">
+    <h3>3.2 La Grande Ossidazione (Great Oxidation Event, GOE)</h3>
+    <p>Intorno a <strong>2.4–2.3 Ga</strong>, l'ossigeno libero (O₂) cominciò ad accumularsi nell'atmosfera terrestre per la prima volta, evento noto come <strong>Grande Ossidazione</strong> o GOE (Holland, 2002). Questa è probabilmente la più drammatica transizione geochimica nella storia della Terra.</p>
+
+    <p>Le <strong>prove del GOE</strong> sono molteplici e convergenti:</p>
+
+    <ul class="plain">
+      <li><strong>Scomparsa delle masse uraninite e pirite detritica</strong> — Prima del GOE, questi minerali instabili in condizioni ossidanti erano trasportati dai fiumi come clasti detritici. Dopo il GOE scompaiono (es. Witwatersrand, Sudafrica, 3.0–2.7 Ga).</li>
+      <li><strong>Comparsa dei red beds</strong> — Sedimenti continentali rossi per ossidazione del Fe²⁺ in Fe³⁺ (ematite), assenti prima del GOE.</li>
+      <li><strong>Scomparsa del frazionamento di massa indipendente dello zolfo (MIF-S)</strong> — Prima del GOE, la fotolisi UV della SO₂ produceva un segnale isotopico anomalo (Δ³³S ≠ 0) registrato nei sedimenti. L'ozono atmosferico (prodotto da O₂) schermò la UV eliminando questo segnale a ~2.32 Ga (Farquhar et al., 2000).</li>
+      <li><strong>Comparsa dei paleosol ossidati</strong> — Suoli fossili con arricchimento in Fe³⁺ e impoverimento in Fe²⁺ dopo il GOE.</li>
+    </ul>
+
+    <p>La causa del GOE fu la fotosintesi ossigenica dei <strong>cianobatteri</strong>, che evolsero probabilmente intorno a 3.0–2.7 Ga ma la cui produzione di O₂ fu inizialmente neutralizzata dall'ossidazione del Fe²⁺ disciolto negli oceani (formando le <em>Banded Iron Formations</em>, BIF) e dei gas riducenti vulcanici. Quando questi sink si saturarono, O₂ si accumulò nell'atmosfera.</p>
+
+    <p>Il GOE ebbe conseguenze enormi: (1) fu catastrofico per gli organismi anaerobici (la prima grande estinzione di massa della storia); (2) permise la formazione dello strato di ozono (scudo UV); (3) portò alla prima glaciazione globale (<strong>Huronian glaciation</strong>, 2.4–2.1 Ga, probabilmente la prima Snowball Earth); (4) aprì la strada a nuovi percorsi metabolici aerobici molto più efficienti energeticamente.</p>
+
+    <div class="luoghi"><p><strong>Witwatersrand Basin, Sudafrica (3.0–2.5 Ga)</strong> — Conglomerate auriferi con pirite detritica pre-GOE; la più grande concentrazione di oro mai formata (~40% delle riserve mondiali storiche). <strong>Huronian Supergroup, Ontario, Canada (2.4–2.1 Ga)</strong> — Sequenza classica con tilliti glaciali (Gowganda Formation) e red beds post-GOE, che documentano la prima glaciazione huroniena. <strong>Hamersley Basin, Australia Occidentale (2.5–2.4 Ga)</strong> — Sequenze di BIF (Brockman Iron Formation) tra le più spesse mai depositate, direttamente precedenti il GOE.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 4. PROTEROZOICO ══════════ -->
+<section id="proterozoico">
+  <span class="section-num">04</span>
+  <h2>Proterozoico</h2>
+  <div class="timebar">2.5 — 0.541 Ga</div>
+  <div class="section-line"></div>
+
+  <section id="supercontinenti">
+    <h3>4.1 I Supercontinenti: Columbia e Rodinia</h3>
+    <p>Il Proterozoico fu dominato dal ciclo dei <strong>supercontinenti</strong>: l'aggregazione e la dispersione di masse continentali su scala globale, guidata dalla convezione mantellica. Il primo supercontinente ben documentato è <strong>Columbia</strong> (detto anche Nuna, ~1.8–1.5 Ga), che aggregò quasi tutti i craton archeani in un'unica massa. La sua dispersione (~1.5–1.3 Ga) aprì oceani interni e fu seguita dalla reaggregazione in <strong>Rodinia</strong> (~1.1–0.75 Ga).</p>
+
+    <p><strong>Rodinia</strong> (dal russo <em>rodina</em> = patria) era centrata sul cratone laurenziano (Nord America) circondato da altri blocchi continentali. La sua frammentazione (~800–720 Ma) aprì nuovi oceani (proto-Pacifico, proto-Atlantico) e ridispose le masse continentali in posizioni equatoriali — condizione che contribuì alla Snowball Earth. Il supercontinente <strong>Gondwana</strong> (~550 Ma) si formò dalla coalescenza dei frammenti meridionali di Rodinia.</p>
+
+    <div class="luoghi"><p><strong>Trans-Hudson Orogen, Canada (1.8 Ga)</strong> — Orogene collisionale che testimonia la formazione di Columbia. <strong>Grenville Province, Canada-USA (1.1–0.98 Ga)</strong> — Orogene collisionale rappresentante la sutura di Rodinia; le rocce granulitiche del Grenville sono tra le più studiate della crosta profonda. <strong>Adelaide Rift Complex, Australia del Sud (800–600 Ma)</strong> — Sequenze sedimentarie che documentano il rifting di Rodinia e le successive glaciazioni criogeniane.</p></div>
+  </section>
+
+  <section id="snowball">
+    <h3>4.2 Snowball Earth — La Terra Palla di Neve</h3>
+    <p>Tra ~720 e 635 Ma (Periodo Criogeniano, ex Neoproterozoico), la Terra subì almeno due — forse tre — episodi di glaciazione globale catastrofica, la <strong>Snowball Earth</strong> (Hoffman et al., 1998). Durante questi eventi, i ghiacciai si estesero fino all'equatore e gli oceani si congelarono fino a profondità di centinaia di metri, creando un pianeta interamente ricoperto di ghiaccio.</p>
+
+    <p>Le evidenze geologiche sono stratigraficamente robuste:</p>
+    <ul class="plain">
+      <li><strong>Diamictiti glaciali</strong> (tilliti) a latitudini paleoequatoriali (es. Congo, Namibia, Cina)</li>
+      <li><strong>Dropstone</strong> in sequenze pelagiche equatoriali</li>
+      <li><strong>Cap carbonates</strong> — calcari e dolomie con anomalie isotopiche estreme (δ¹³C fino a −5‰) depositati immediatamente sopra le tilliti: evidenza di un degassamento massiccio di CO₂ alla fine della glaciazione</li>
+      <li><strong>Banded Iron Formations</strong> neoproterozoiche — Ripresa della deposizione di BIF dopo una pausa di ~1 Ga, indicando oceani anossici sotto il ghiaccio</li>
+    </ul>
+
+    <p>Il meccanismo proposto è quello del <strong>feedback di albedo</strong>: una glaciazione iniziale, favorita dalla posizione equatoriale dei continenti (Rodinia) che riduceva il weathering silicatico e quindi la sottrazione di CO₂, abbassò la temperatura globale fino a innescare l'avanzata dei ghiacciai verso i tropici. Una volta che il ghiaccio coprì l'oceano tropicale (alta albedo), si innescò un feedback positivo irreversibile. La deglaciazione avvenne per accumulo di CO₂ vulcanica (non più rimossa dal weathering) che, superata una soglia, indusse un riscaldamento globale catastrofico con temperature post-glaciali di ~50°C (<em>hothouse</em>).</p>
+
+    <p>La vita sopravvisse verosimilmente in rifugi sotto il ghiaccio marino (dove la luce penetrava ancora), in zone geotermalmente attive e in oasi equatoriali. La Snowball Earth potrebbe aver favorito lo sviluppo degli eucarioti complessi, selezionando organismi in grado di sopportare condizioni estreme e di sfruttare le risorse liberate dalla deglaciazione.</p>
+
+    <div class="luoghi"><p><strong>Namibia (Ghaub/Marinoan, ~635 Ma)</strong> — Le sequenze di Namibia (Otavi Group) sono il sito di riferimento per la Snowball Earth marinoan, con tilliti e cap dolomie classiche; qui Hoffman et al. (1998) formularono l'ipotesi. <strong>Gaskiers Formation, Terranova, Canada (~580 Ma)</strong> — Possibile terza glaciazione neoproterozoica, meno estesa. <strong>Cina meridionale (Nantuo tillite, 635 Ma)</strong> — Sequenze glaciali con cap carbonate contenenti i primi fossili di organismi pluricellulari (Doushantuo Formation).</p></div>
+  </section>
+
+  <section id="ediacara">
+    <h3>4.3 La Fauna Ediacariana e la Comparsa della Pluricellularità</h3>
+    <p>Dopo la Snowball Earth marinoan (~635 Ma), la Terra si riscaldò e la vita esplose in complessità. I <strong>primi eucarioti</strong> (organismi con nucleo) erano già comparsi prima della Snowball Earth (~1.8–1.5 Ga, acritarchi e alghe rosse), ma la diversificazione degli organismi pluricellulari complessi avvenne principalmente nel <strong>Periodo Ediacariano</strong> (635–541 Ma).</p>
+
+    <p>La <strong>fauna ediacariana</strong> è un assemblaggio di organismi macroscopici, pluricellulari, di morfologia enigmatica — prevalentemente forme frondose, discoidali o nastriformi, prive di parti dure, senza evidenti simmetrie bilaterali. I principali taxa sono: <em>Dickinsonia</em> (forma ovale segmentata, fino a 1.4 m), <em>Charnia</em> (frondes), <em>Spriggina</em> (possibile protoartropode), <em>Kimberella</em> (possibile mollusco primitivo). Alcuni ricercatori interpretano la fauna ediacariana come un esperimento evolutivo estinto, altri come i progenitori dei phyla animali moderni.</p>
+
+    <p>La <strong>Doushantuo Formation</strong> (Cina meridionale, 635–550 Ma) conserva fossili eccezionali di embrioni, alghe e possibili animali nelle facies fosforite, offrendo una finestra unica sull'evoluzione cellulare precambriana. I fossili di tubicini e gusci minerali nelle ultime sequenze ediacariane (~550–541 Ma) segnalano la comparsa delle prime strutture scheletriche (<em>small shelly fossils</em>, SSF), preludio all'Esplosione Cambriana.</p>
+
+    <div class="luoghi"><p><strong>Ediacara Hills, South Australia (575–541 Ma)</strong> — Il sito che ha dato il nome alla fauna; scoperto nel 1946, conserva impressioni di organismi molli in arenarie di mare poco profondo. <strong>Mistaken Point, Terranova, Canada (565 Ma, UNESCO)</strong> — Eccezionali impressioni di fronde ediacariane su superfici di cenere vulcanica; il più antico assemblaggio di organismi pluricellulari complessi. <strong>Doushantuo Formation, Guizhou, Cina (635–550 Ma)</strong> — Fossilizzazione tridimensionale in fosforiti di embrioni e organismi multicellulari. <strong>White Sea Region, Russia (555–548 Ma)</strong> — Eccezionale diversità di fauna ediacariana terminale.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 5. CAMBRIANO ══════════ -->
+<section id="cambriano">
+  <span class="section-num">05</span>
+  <h2>Cambriano e Ordoviciano</h2>
+  <div class="timebar">541 — 444 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="esplosione">
+    <h3>5.1 L'Esplosione Cambriana</h3>
+    <p>La transizione Ediacariano-Cambriano (~541 Ma) segna uno degli eventi biologici più straordinari nella storia della vita: l'<strong>Esplosione Cambriana</strong>. In un intervallo di ~20–25 milioni di anni, la quasi totalità dei <em>phyla</em> animali moderni comparve nel registro fossile, con la brusca acquisizione di parti scheletriche mineralizzate (gusci, spine, denti), simmetria bilaterale e occhi. Questo non fu un'esplosione improvvisa ma il culmine di una diversificazione accelerata.</p>
+
+    <p>I principali gruppi comparsi includono: trilobiti, brachiopodi, molluschi, echinodermi, cordati, artropodi, vermi, spugne. I <strong>Lagerstätten cambrani</strong> (depositi a conservazione eccezionale) rivelano la fauna con parti molli: il <em>Burgess Shale</em> (510 Ma) con <em>Anomalocaris</em> (predatore apicale di 1 m), <em>Hallucigenia</em>, <em>Opabinia</em>, <em>Pikaia</em> (possibile protocordato); il <em>Chengjiang Biota</em> (520 Ma, Cina) ancora più antico e diversificato.</p>
+
+    <p>Le cause dell'Esplosione Cambriana sono ancora dibattute ma probabilmente comprendono: (1) aumento dell'O₂ oceanico e atmosferico post-GOE, che permise la biomineralizzazione e il metabolismo aerobico ad alta energia; (2) comparsa dei predatori (corsa agli armamenti evolutiva che selezionò gusci e spine difensive); (3) apertura di nuove nicchie ecologiche dopo la Snowball Earth; (4) variazioni del livello del mare (trasgressioni cambrane) che ampliarono le piattaforme carbonatiche tropicali.</p>
+
+    <div class="luoghi"><p><strong>Burgess Shale, British Columbia, Canada (508 Ma, UNESCO)</strong> — Scoperto da Charles Walcott nel 1909; il Lagerstätten più famoso al mondo, con fauna di acque profonde conservata con parti molli. <strong>Chengjiang Biota, Yunnan, Cina (520 Ma, UNESCO)</strong> — Più antico del Burgess, con fauna ancora più diversificata inclusi i primi cordati accertati (<em>Haikouichthys</em>). <strong>Sirius Passet, Groenlandia del Nord (518 Ma)</strong> — Lagerstätten artico con fauna analoga al Burgess. <strong>Emu Bay Shale, Kangaroo Island, Australia (515 Ma)</strong> — Fauna cambriana eccezionale dell'emisfero meridionale.</p></div>
+  </section>
+
+  <section id="ext-ord">
+    <h3>5.2 L'Ordoviciano e la Prima Grande Estinzione di Massa</h3>
+    <p>L'Ordoviciano (485–444 Ma) vide una delle più grandi radiazioni biologiche marine della storia: la <strong>Grande Biodiversificazione Ordoviciana</strong> (GOBE, Great Ordovician Biodiversification Event), con la triplicazione della diversità di generi marini. Il mare ordoviciano era dominato da brachiopodi, briozoi, coralli tabulati, graptoliti e tricordate. I continenti erano dominati da Gondwana (centrato sul polo sud) e Laurentia (nord tropicale).</p>
+
+    <p>La fine dell'Ordoviciano (~444 Ma) fu segnata dalla <strong>Prima Grande Estinzione di Massa</strong>, che eliminò ~85% delle specie marine in due brevi polsi. La causa principale fu una <strong>glaciazione improvvisa</strong> correlata alla deriva di Gondwana sul polo sud e all'orogenesi caledoniana-taconica (che incrementò il weathering silicatico sottraendo CO₂ all'atmosfera). Il calo del livello del mare per glacio-eustatismo decimò le piattaforme carbonatiche tropicali; la successiva deglaciazione rapida causò un secondo polso estintivo per risalita delle acque fredde anossiche profonde.</p>
+
+    <div class="luoghi"><p><strong>Baltoscandia (Estonia, Svezia)</strong> — Sequenze carbonatiche ordoviciane tra le meglio preservate, con abbondante fauna di brachiopodi, echinodermi e coralli. <strong>Anti-Atlas, Marocco</strong> — Depositi glaciali hirnantiani (~444 Ma) con la famosa fauna a <em>Hirnantia</em> (brachiopodi adattati al freddo). <strong>Cincinnati Arch, Ohio-Indiana-Kentucky, USA</strong> — Strati ordoviciani con una delle faunе di invertebrati marini meglio documentate al mondo.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 6. SILURIANO-DEVONICO ══════════ -->
+<section id="siluriano">
+  <span class="section-num">06</span>
+  <h2>Siluriano e Devonico</h2>
+  <div class="timebar">444 — 359 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="terraferma">
+    <h3>6.1 La Colonizzazione della Terraferma</h3>
+    <p>Il Siluriano (444–419 Ma) e il Devonico (419–359 Ma) segnano la più importante transizione ecologica dopo l'Esplosione Cambriana: la <strong>colonizzazione della terraferma</strong> da parte di piante e animali. Fino al Siluriano le terre emerse erano quasi completamente sterili, dominate al più da tappeti di cianobatteri e funghi. La colonizzazione terrestre richiese adattamenti fondamentali: resistenza all'essiccazione, sostegno contro la gravità (tessuto vascolare, legno), riproduzione senza acqua libera.</p>
+
+    <p>Le <strong>prime piante terrestri vascolari</strong> compaiono nel Siluriano (~430 Ma): <em>Cooksonia</em> (minuscola pianta dicotomizzante senza foglie) e <em>Rhynia</em> sono tra i primissimi. Nel Devonico le piante diversificarono rapidamente: piante a semi, felci arboree, licofite — formando le prime <strong>foreste</strong> (~385 Ma, Catskill Delta, New York). La formazione di suoli ricchi di materia organica e il weathering accelerato delle radici sottrasse enormi quantità di CO₂, contribuendo al raffreddamento climatico di fine Devonico.</p>
+
+    <p>I <strong>tetrapodi</strong> (vertebrati con quattro arti) derivarono dai pesci con lobi finali (Sarcopterygii) nel tardo Devonico (~375 Ma). La transizione è documentata da fossili di transizione: <em>Tiktaalik roseae</em> (375 Ma, Ellesmere Island, Canada) mostra collo, costole, protopolso; <em>Acanthostega</em> e <em>Ichthyostega</em> (~365 Ma, Groenlandia) erano già tetrapodi con 8 dita ma ancora acquatici. I tetrapodi conquistarono le terre emerse, dando origine successivamente agli anfibi, rettili, mammiferi e uccelli.</p>
+
+    <div class="luoghi"><p><strong>Rhynie Chert, Scozia (407 Ma)</strong> — Sito di eccezionale conservazione in silice idrotermale; conserva piante devoniane, funghi, artropodi terrestri in dettaglio cellulare. Modello di riferimento per i primi ecosistemi terrestri. <strong>Ellesmere Island, Nunavut, Canada (375 Ma)</strong> — Sito di scoperta di <em>Tiktaalik roseae</em>, il "pesce-zampa" che documenta la transizione acqua-terra. <strong>Miguasha National Park, Quebec, Canada (380 Ma, UNESCO)</strong> — Lagerstätten devonico con pesci sarcopterigi di transizione verso i tetrapodi. <strong>Catskill Delta, New York, USA (385 Ma)</strong> — Prime foreste documentate con tronchi fossili di <em>Archaeopteris</em>.</p></div>
+  </section>
+
+  <section id="ext-dev">
+    <h3>6.2 La Grande Estinzione del Devonico</h3>
+    <p>La fine del Devonico (~359 Ma) fu segnata da una delle più severe estinzioni di massa, il <strong>Late Devonian Mass Extinction</strong> (o evento Kellwasser e Hangenberg), che eliminò ~70–75% delle specie marine e terrestri in più polsi distribuiti su ~20 milioni di anni. La crisi fu particolarmente grave negli ambienti marini tropicali: scomparvero i reef a stromatoporoidi e coralli tabulati, molti gruppi di pesci, quasi tutti i trilobiti.</p>
+
+    <p>Le cause sono ancora dibattute ma includono: (1) <strong>anossie oceaniche</strong> episodiche causate dall'eutrofizzazione per arrivo di nutrienti da suoli in formazione e dalle prime foreste; (2) raffreddamento climatico da drawdown di CO₂ per weathering delle radici arboree; (3) possibile impatto meteoritico (evidenze nei Charlevoix, Canada e in Belgio); (4) vulcanismo dei Viluy Traps (Siberia, ~374 Ma).</p>
+
+    <div class="luoghi"><p><strong>Coumiac, Francia meridionale (374 Ma)</strong> — Sezione di riferimento per il confine Frasniano-Famenniano (evento Kellwasser superiore). <strong>Eifel, Germania (Rheinhisches Schiefergebirge)</strong> — Reef devoniani a coralli e stromatoporoidi perfettamente preservati, modello di studio per la crisi dei reef paleozoici.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 7. CARBONIFERO-PERMIANO ══════════ -->
+<section id="carbonifero">
+  <span class="section-num">07</span>
+  <h2>Carbonifero e Permiano</h2>
+  <div class="timebar">359 — 252 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="pangea">
+    <h3>7.1 La Formazione di Pangea</h3>
+    <p>Il Carbonifero (359–299 Ma) e il Permiano (299–252 Ma) furono dominati dall'assemblaggio del supercontinente <strong>Pangea</strong>, completato intorno a ~300 Ma dalla collisione di Laurasia (Nord America + Europa) con Gondwana (Sud America + Africa + Antarctica + Australia + India). L'orogene <strong>Varisco-Appalachiano</strong> (380–300 Ma) segnò la collisione Laurussia-Gondwana lungo l'equatore, sollevando catene montuose paragonabili all'Himalaya attuale.</p>
+
+    <p>Il Carbonifero fu il periodo delle <strong>grandi foreste di paludi</strong>: foreste dense di licofite arboree (<em>Lepidodendron</em>, fino a 40 m), felci arboree, sigillarie e cordaiti in ambienti deltizi equatoriali. La lignina delle foreste carbonifere era ancora parzialmente resistente alla decomposizione batterica (i funghi della carie bianca non si erano ancora evoluti), portando all'accumulo di enormi quantità di materia organica che si trasformò in <strong>carbone</strong>. Le riserve carbonifere oggi sfruttate nell'emisfero settentrionale (USA, Europa, Cina) derivano principalmente da questo periodo.</p>
+
+    <p>La decomposizione della lignina e il drawdown di CO₂ da parte delle foreste portò a una <strong>glaciazione carbonifero-permiana</strong> (Gondwana glaciation, ~320–280 Ma) con calotte polari estese su Gondwana meridionale, evidenziate da tilliti permocarbonifere in Africa meridionale, Sud America, Australia e Arabia.</p>
+
+    <div class="luoghi"><p><strong>Ruhr Basin, Germania; Yorkshire Coalfield, UK; Appalachian Coalfield, USA</strong> — Le più importanti sequenze di carbone carbonifero, con resti di foreste e insetti giganti (libellule con apertura alare di 70 cm, <em>Meganeura</em>). <strong>Dwyka Group, Sudafrica (~300 Ma)</strong> — Tilliti gondwaniane della glaciazione carbonifera, evidenza chiave per la ricostruzione di Pangea. <strong>Mazon Creek, Illinois, USA (307 Ma)</strong> — Lagerstätten carbonifero con fauna e flora eccezionalmente preservate in noduli sideriti.</p></div>
+  </section>
+
+  <section id="ext-perm">
+    <h3>7.2 La Grande Estinzione di Fine Permiano</h3>
+    <p>La fine del Permiano (~252 Ma) segnò la più catastrofica estinzione di massa nella storia della vita: l'<strong>End-Permian Mass Extinction</strong> (EPME), che eliminò circa il <strong>96% delle specie marine</strong> e ~70% delle specie terrestri in un intervallo di meno di 200.000 anni (Erwin, 2006; Shen et al., 2011). Questo evento è talmente severo da essere chiamato <em>The Great Dying</em>.</p>
+
+    <p>La causa principale è oggi ampiamente attribuita all'eruzione dei <strong>Siberian Traps</strong> (~252 Ma): una delle più grandi province ignee (LIP) della storia, con ~3 milioni di km³ di basalti e intrusioni nel bacino del Tunguska (Siberia). L'eruzione durò ~1–2 milioni di anni e rilasciò enormi quantità di CO₂, SO₂, HCl, CH₄ (da combustione di carbone e carbonati contattati dai magmi), provocando:</p>
+
+    <ul class="plain">
+      <li><strong>Riscaldamento globale catastrofico</strong> (+10–16°C, temperature tropicali fino a 35–40°C)</li>
+      <li><strong>Acidificazione degli oceani</strong> (dissoluzione dei carbonati, crisi dei reef)</li>
+      <li><strong>Anossie marine estese</strong> (dead zones oceaniche)</li>
+      <li><strong>Piogge acide</strong> (SO₂, HCl) che distrussero le foreste terrestri</li>
+      <li><strong>Crisi dell'ozono</strong> per emissione di alogenuri (evidenziata da spore mutate = malformazioni meiotiche)</li>
+    </ul>
+
+    <p>Il recovery biologico fu lento: ~5–10 milioni di anni prima che la diversità si riportasse a livelli significativi. La scomparsa dei trilobiti, dei coralli rugosi e tabulati, degli echinodermi blastoidei e di interi ordini di brachiopodi aprì la strada alla rivoluzione mesozoica della vita marina.</p>
+
+    <div class="luoghi"><p><strong>Meishan, Zhejiang, Cina</strong> — Il sito GSSP (Global Boundary Stratotype Section and Point) per il confine Permiano-Triassico, con il record stratigrafico più completo dell'estinzione. <strong>Siberian Traps, Russia centrale</strong> — La LIP responsabile dell'estinzione; i basalti affiorano su ~2 milioni di km². <strong>Karoo Basin, Sudafrica</strong> — Sequenze permiane e triassiche con fauna di vertebrati (Lystrosaurus, dicynodontia) che documentano il before-after dell'estinzione.</p></div>
+  </section>
+</section>
+<!-- ══════════ 8. TRIASSICO-GIURASSICO ══════════ -->
+<section id="triassico">
+  <span class="section-num">08</span>
+  <h2>Triassico e Giurassico</h2>
+  <div class="timebar">252 — 145 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="rifting">
+    <h3>8.1 Il Rifting di Pangea e l'Apertura dell'Atlantico</h3>
+    <p>Il Triassico (252–201 Ma) iniziò con un mondo devastato dall'estinzione permiana, dominato da Pangea. Il lento recupero biologico si accompagnò ai primissimi segni del rifting: nel Triassico Medio (~240 Ma) iniziò la separazione tra Laurasia e Gondwana, con l'apertura della <strong>Tetide</strong> (Tethys) verso est — un oceano tropicale che separava le due masse e dove si depositarono le spesse sequenze carbonatiche delle future Alpi, Dolomiti e Himalaya.</p>
+
+    <p>Nel Giurassico (201–145 Ma) il rifting si intensificò. L'<strong>apertura dell'Atlantico Centrale</strong> iniziò ~175 Ma con il rifting tra Nord America e Africa settentrionale; l'Atlantico meridionale aprì nel Cretaceo (~130 Ma). La separazione dell'America del Nord dall'Africa è documentata dalle sequenze di evaporiti giurassiche del Golfo del Messico. La <strong>Central Atlantic Magmatic Province (CAMP)</strong> (~201 Ma) — una LIP correlata alla frammentazione di Pangea — è associata all'estinzione di fine Triassico.</p>
+
+    <div class="luoghi"><p><strong>Dolomiti, Italia settentrionale (Triassico, UNESCO)</strong> — Le piattaforme carbonatiche triassiche delle Dolomiti (Formazione di Schlern, Gruppo Dolomia Principale) sono tra le più belle sequenze di reef triassici al mondo, con coralli scleractini, spugne e alghe. Il Col Margherita e le Pale di San Martino mostrano la sequenza completa. <strong>Richmond Basin, Virginia, USA (~200 Ma)</strong> — Rift basin triassico-giurassico con la sezione di riferimento per la CAMP. <strong>Svalbard, Norvegia</strong> — Sequenze triassiche con record dell'estinzione fine-Triassica.</p></div>
+  </section>
+
+  <section id="dinosauri-jur">
+    <h3>8.2 I Dinosauri, i Mammiferi e l'Oceano di Tetide</h3>
+    <p>I <strong>dinosauri</strong> comparvero nel Triassico Medio (~235 Ma) come un gruppo di arcosauri, inizialmente di dimensioni modeste. Dopo l'estinzione di fine Triassico (~201 Ma, che eliminò i loro concorrenti), radieranno in forme enormemente diverse nel Giurassico, dominando gli ecosistemi terrestri per ~135 milioni di anni. I Sauropodi giurassici (<em>Diplodocus</em>, <em>Brachiosaurus</em>, <em>Apatosaurus</em>) raggiunsero lunghezze di 25–35 m; i Teropodi (<em>Allosaurus</em>) erano i predatori apicali.</p>
+
+    <p>I <strong>mammiferi</strong> comparvero anch'essi nel Triassico (~225 Ma) dai cinodontia, ma rimasero piccoli e prevalentemente notturni per tutto il Mesozoico, soppressi dalla competizione con i rettili. I <strong>dinosauri volanti</strong> (pterosauri, dal Triassico) e i <strong>dinosauri-uccelli</strong> (<em>Archaeopteryx</em>, 150 Ma) testimoniano la diversificazione verso il volo. I mari giurassici erano dominati da rettili marini: ittiosauri, plesiosauri, mosasauri. Le <strong>prime angiosperme</strong> (piante con fiori) compaiono nel Cretaceo Inferiore (~130 Ma), ma le prime evidenze molecolari suggeriscono un'origine giurassica.</p>
+
+    <div class="luoghi"><p><strong>Morrison Formation, USA occidentale (150 Ma)</strong> — La più produttiva formazione di dinosauri giurassici del mondo; si estende dal New Mexico al Montana con decine di specie. <strong>Solnhofen Limestone, Baviera, Germania (150 Ma)</strong> — Lagerstätten di eccezionale preservazione con <em>Archaeopteryx</em> (transizione dinosauri-uccelli), pterosauri e pesci; 12 esemplari di <em>Archaeopteryx</em> finora rinvenuti. <strong>Lias di Holzmaden, Baden-Württemberg, Germania (182 Ma)</strong> — Ittiosauri preservati con contorni corporei molli; scheletri di femmine con embrioni in situ. <strong>Tetide: Appennini, Alpi, Turchia, Iran</strong> — Carbonati giurassici dell'oceano di Tetide affiorano lungo tutta la cintura alpino-himalayana.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 9. CRETACEO ══════════ -->
+<section id="cretaceo">
+  <span class="section-num">09</span>
+  <h2>Cretaceo</h2>
+  <div class="timebar">145 — 66 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="apogeo-mes">
+    <h3>9.1 L'Apogeo del Mesozoico</h3>
+    <p>Il Cretaceo (145–66 Ma) fu il periodo più caldo degli ultimi 250 milioni di anni: un <strong>greenhouse world</strong> con temperature medie globali ~8–12°C più alte delle attuali, livello del mare ~200 m più alto (assenza di calotte polari), oceani caldi fino ai poli. Le vaste piattaforme carbonatiche equatoriali producevano chalk (calcare a nannofossili, come la Chalk Formation delle Cliffs of Dover). La CO₂ atmosferica era 3–5 volte quella pre-industriale.</p>
+
+    <p>I dinosauri raggiunsero la loro massima diversità e dimensione: <em>Tyrannosaurus rex</em> (68 Ma, Nord America), <em>Triceratops</em>, <em>Spinosaurus</em> (fino a 14 m), <em>Argentinosaurus</em> (possibilmente il più grande animale terrestre mai vissuto, ~70–80 t). Le <strong>angiosperme</strong> si diversificarono enormemente nel Cretaceo, coevolvendo con gli insetti impollinatori (api, farfalle) e rivoluzionando gli ecosistemi terrestri. La piattaforma carbonatica di Tetide era dominata dalle <strong>rudiste</strong> (bivalvi cementanti altamente specializzati) invece dei coralli.</p>
+
+    <p>Le <strong>Deccan Traps</strong> (India, ~66–65 Ma) iniziarono la loro attività prima dell'impatto K-Pg, contribuendo al deterioramento climatico dei 300.000 anni precedenti all'estinzione.</p>
+
+    <div class="luoghi"><p><strong>Cliffs of Dover e Basin de Paris, UK/Francia</strong> — Chalk cretacea a nannofossili, tipo di riferimento per il Cretaceo superiore. <strong>Hell Creek Formation, Montana/Dakota USA (68–66 Ma)</strong> — La formazione di riferimento per il Cretaceo terminale nordamericano; contiene T. rex, Triceratops e il record dell'estinzione K-Pg. <strong>Deccan Traps, India occidentale (~66 Ma)</strong> — LIP cretacea con basalti fino a 2000 m di spessore; possibile co-causa dell'estinzione K-Pg.</p></div>
+  </section>
+
+  <section id="kpg">
+    <h3>9.2 L'Estinzione K-Pg e l'Impatto di Chicxulub</h3>
+    <p>Circa <strong>66.0 Ma</strong>, un asteroide di ~10–12 km di diametro colpì la penisola dello Yucatán (Messico) con un'energia equivalente a ~10⁸ megatoni di TNT, creando il cratere di <strong>Chicxulub</strong> (~180 km di diametro, ora sepolto). L'impatto scatenò l'<strong>estinzione di fine Cretaceo</strong> (K-Pg), eliminando ~75% delle specie terrestri inclusi tutti i dinosauri non-aviari, i mosasauri, i plesiosauri, gli ammoniti, i belemniti e la maggior parte delle specie di foraminiferi planctonici.</p>
+
+    <p>La scoperta dell'impatto fu rivoluzionaria: nel 1980 Luis e Walter Alvarez rilevarono un'anomalia globale di <strong>iridio</strong> (elemento siderofilo raro nella crosta terrestre) esattamente al limite K-Pg in tutto il mondo, interpretata come firma di un impatto meteorico (Alvarez et al., 1980). Successivamente furono trovati <strong>quartz scioccato</strong> (quartz con planar deformation features), <strong>spherules</strong> di impatto e <strong>suevite</strong> (breccia di impatto) al limite K-Pg globalmente.</p>
+
+    <p>Il meccanismo dell'estinzione comprendeva: (1) <em>impact winter</em> — il particolato iniettato nella stratosfera bloccò la luce solare per mesi-anni, collassando la fotosintesi; (2) incendi globali da radiazione termica e rientro di materiale eiettato; (3) piogge acide da SO₂ evaporata dagli anidrite dello Yucatán; (4) riscaldamento successivo da CO₂ rilasciata. I <strong>sopravvissuti</strong> furono i piccoli vertebrati (mammiferi placentali, uccelli, coccodrilli, tartarughe, serpenti), le piante angiosperme e i microorganismi marini.</p>
+
+    <div class="luoghi"><p><strong>Chicxulub, Penisola dello Yucatán, Messico</strong> — Il cratere è sepolto sotto 1 km di sedimenti cenozoici; identificato nel 1991 con sismografia e gravimetria. La struttura ad anello è visibile nelle immagini satellitari della penisola. <strong>Caravaca de la Cruz, Spagna</strong> — Sezione K-Pg di riferimento in Europa, con anomalia di Ir, spherules e quartz scioccato. <strong>Brazos River, Texas, USA</strong> — Sezione K-Pg con evidenze di maremoto. <strong>El Kef, Tunisia</strong> — GSSP del confine K-Pg; sezione continua con l'anomalia di Ir e la crisi dei foraminiferi planctonici.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 10. CENOZOICO ══════════ -->
+<section id="paleogene">
+  <span class="section-num">10</span>
+  <h2>Paleogene e Neogene</h2>
+  <div class="timebar">66 — 2.6 Ma</div>
+  <div class="section-line"></div>
+
+  <section id="mammiferi">
+    <h3>10.1 La Radiazione dei Mammiferi</h3>
+    <p>Dopo l'estinzione K-Pg, i mammiferi — rimasti piccoli e marginali per 160 milioni di anni — radieranno in modo esplosivo occupando tutte le nicchie ecologiche lasciate vuote dai dinosauri. In ~10–15 milioni di anni dal confine K-Pg apparvero tutti gli ordini moderni di mammiferi placentali: Perissodattili (cavalli, rinoceronti), Artiodattili (bovini, suini, cetacei), Carnivori, Primati, Cetacei, Roditori, Chirotteri.</p>
+
+    <p>Il <strong>Paleocene-Eocene Thermal Maximum (PETM, ~55.8 Ma)</strong> fu un episodio di riscaldamento rapido (+5–8°C in ~20.000 anni) causato dall'iniezione di ~3000 Gt di CO₂ (e/o metano da idrati) nell'atmosfera — per cause ancora dibattute (vulcanismo Nord Atlantico, dissociazione di idrati). Il PETM è un analogico parziale del cambiamento climatico attuale, sebbene su scala temporale più lenta. Favorì l'espansione delle foreste tropicali e la radiazione dei primati verso alte latitudini.</p>
+
+    <p>Nel <strong>Miocene</strong> (23–5.3 Ma) i mammiferi raggiunsero la massima diversità: l'espansione delle praterie a graminacee (~15 Ma) guidò la radiazione degli erbivori a passo veloce (cavalli, bovini, antilopi) e dei predatori. La proliferazione delle graminacee abbassò ulteriormente la CO₂ atmosferica. I <strong>cetacei</strong> tornarono al mare dal Paleocene (~53 Ma) attraverso una serie di forme di transizione eccezionalmente documentate.</p>
+
+    <div class="luoghi"><p><strong>Messel Pit, Assia, Germania (47 Ma, UNESCO)</strong> — Lagerstätten eccezionale in un maar vulcanico; conserva mammiferi, uccelli, rettili, insetti con peli, piume e contenuto stomacale. <strong>Bighorn Basin, Wyoming, USA (56 Ma)</strong> — Sequenza di riferimento per il PETM con le prime forme dei moderni ordini di mammiferi. <strong>Fayum Depression, Egitto (~35 Ma)</strong> — I migliori fossili di primati oligocenici, antenati degli antropoidi. <strong>Pakistan (Tethys Himalayan Belt)</strong> — Sequenze con cetacei primitivi (<em>Pakicetus</em>, ~53 Ma; <em>Ambulocetus</em>, ~49 Ma) che documentano il ritorno al mare.</p></div>
+  </section>
+
+  <section id="orogenesi">
+    <h3>10.2 L'Orogenesi Alpino-Himalayana e la Chiusura della Tetide</h3>
+    <p>Il Cenozoico fu dominato da due grandi collisioni continentali che rimodellarono la geografia del Vecchio Mondo:</p>
+
+    <p><strong>Collisione India-Asia</strong> (~50 Ma, iniziata): L'India, separatasi da Gondwana ~130 Ma e derivata verso nord a 15–20 cm/anno, collise con l'Asia ~50 Ma. La subdu­zione della crosta oceanica di Tetide fu seguita dalla collisione continentale che sollevò l'<strong>Himalaya</strong> (massima altezza raggiunta negli ultimi 10–15 Ma) e il <strong>Plateau Tibetano</strong> (~4500 m di media). La collisione continua tuttora (India si muove verso NNE a ~5 cm/anno). L'Himalaya è la principale fonte di sedimenti per il Bengala Fan (il più grande fan sottomarino del mondo) e il principal driver del monsone asiatico.</p>
+
+    <p><strong>Collisione Africa-Europa</strong> (~35 Ma, progressiva): La chiusura della Tetide occidentale per deriva dell'Africa verso nord sollevò le <strong>Alpi</strong> (picco orogenico ~30–20 Ma), gli <strong>Appennini</strong>, i Pirenei, i Carpazi, le Dinaridi. La chiusura dei gateway oceanici (Paratetide, seaway di Turgai) riorganizzò le correnti oceaniche e il clima europeo. La <strong>Crisi di Salinità Messiniana</strong> (~6 Ma) isolò il Mediterraneo causando evaporazione parziale (~3 km di evaporiti).</p>
+
+    <div class="luoghi"><p><strong>Himalaya (Nepal, India, Pakistan)</strong> — Affiora crosta continentale e crosta oceanica di Tetide (ofioliti del Ladakh); sismicità attiva da collisione in corso. <strong>Alpi (Svizzera, Austria, Francia settentrionale)</strong> — Rocce metamorfiche di alta pressione (Dora-Maira, Zermatt-Saas) testimoniano subduzione profonda; le Alpi sono il laboratorio naturale della tettonica a zolle europea. <strong>Appennino settentrionale</strong> — Ofioliti giurassiche di Tetide (Liguria, Emilia) ora incorporate nell'orogene. <strong>Sicilia e Calabria</strong> — I depositi di evaporiti messiniane affiorano in Sicilia (miniere di Realmonte, Cianciana).</p></div>
+  </section>
+
+  <section id="raffredd">
+    <h3>10.3 Il Raffreddamento Globale del Cenozoico</h3>
+    <p>Il Cenozoico è caratterizzato da un progressivo <strong>raffreddamento globale</strong> a partire dall'Eocene (~50 Ma), da un greenhouse world cretaceo-paleocenico a un icehouse world pleistocenico. La curva isotopica δ¹⁸O dei foraminiferi bentonici (proxy di temperatura e volume dei ghiacci) documenta questa tendenza con diversi eventi chiave:</p>
+
+    <ul class="plain">
+      <li><strong>Eocene-Oligocene boundary (~34 Ma)</strong> — Prima glaciazione antartica e formazione della calotta di ghiaccio dell'Antartide orientale, correlata all'apertura del <em>Drake Passage</em> (~34 Ma) e del <em>Tasman Gateway</em> (~36 Ma) che permisero la corrente circumpolare antartica (ACC), isolando termicamente l'Antartide.</li>
+      <li><strong>Mi-1 event (~23 Ma)</strong> — Raffreddamento intenso nell'Oligocene terminale.</li>
+      <li><strong>Middle Miocene Climate Transition (~14 Ma)</strong> — Seconda glaciazione antartica; espansione della calotta occidentale.</li>
+      <li><strong>Messinian (~6 Ma)</strong> — Raffreddamento associato alla chiusura del Mediterraneo.</li>
+      <li><strong>Pliocene (~3.2 Ma)</strong> — Prima glaciazione dell'emisfero settentrionale con formazione di calotte sull'America del Nord e l'Europa; correlata alla chiusura dell'istmo di Panama (~3.5–3.0 Ma) che deviò le correnti oceaniche e intensificò la Gulf Stream.</li>
+    </ul>
+
+    <div class="luoghi"><p><strong>Ocean Drilling Program/IODP (carotaggi oceanici)</strong> — La ricostruzione del raffreddamento cenozoico si basa principalmente sui δ¹⁸O e Mg/Ca dei foraminiferi bentonici in carotaggi dal Pacifico meridionale (ODP Sites 689, 690) e dall'Oceano Indiano. <strong>Drake Passage, Antartide-America del Sud</strong> — L'apertura del passaggio (~34 Ma) è considerata il trigger della glaciazione antartica; la corrente circumpolare è oggi la più potente del mondo (~130 Sv). <strong>Istmo di Panama</strong> — La chiusura (~3.5–3.0 Ma) è datata tramite foraminiferi e molluschi; separò le faune marine atlantica e pacifica e intensificò la circolazione termoalina nordatlantica.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ 11. QUATERNARIO ══════════ -->
+<section id="quaternario">
+  <span class="section-num">11</span>
+  <h2>Quaternario</h2>
+  <div class="timebar">2.6 Ma — oggi</div>
+  <div class="section-line"></div>
+
+  <section id="glaciazioni">
+    <h3>11.1 I Cicli Glaciali di Milankovitch</h3>
+    <p>Il Quaternario (2.6 Ma – presente) è caratterizzato da ripetuti cicli di glaciazioni e interglacialie controllati dalle <strong>variazioni orbitali di Milankovitch</strong>: tre parametri astronomici che modificano la distribuzione stagionale e latitudinale della radiazione solare:</p>
+
+    <dl class="deflist">
+      <dt>Eccentricità (ciclo ~100 ka e ~413 ka)</dt>
+      <dd>Variazione della forma dell'orbita terrestre da quasi circolare a più ellittica. Modula l'irradianza totale ricevuta.</dd>
+      <dt>Obliquità (ciclo ~41 ka)</dt>
+      <dd>Variazione dell'angolo di inclinazione dell'asse terrestre tra 22.1° e 24.5°. Controlla l'intensità delle stagioni e domina le glaciazioni prima di ~900 ka (dominanza del ciclo a 41 ka).</dd>
+      <dt>Precessione (ciclo ~23 ka e ~19 ka)</dt>
+      <dd>Variazione dell'orientazione dell'asse terrestre nello spazio (come una trottola). Modula l'intensità dell'estate nell'emisfero settentrionale.</dd>
+    </dl>
+
+    <p>La teoria di Milankovitch (1941) prevedeva che le glaciazioni si innescassero quando le estati nell'emisfero settentrionale erano relativamente fredde (bassa insolazione estiva a 65°N), permettendo alla neve di persistere anno dopo anno. La conferma sperimentale arrivò nel 1976 (Hays, Imbrie &amp; Shackleton) dall'analisi spettrale dei δ¹⁸O nei carotaggi oceanici, che mostrarono picchi di periodicità a ~100, 41 e ~23 ka.</p>
+
+    <p>La transizione dal <strong>ciclo a 41 ka</strong> al <strong>ciclo a 100 ka</strong> (~900 ka, Mid-Pleistocene Transition, MPT) non è ancora pienamente spiegata e potrebbe essere correlata a una riduzione della CO₂ atmosferica o a una variazione nelle dinamiche delle calotte glaciali.</p>
+
+    <p>Durante i massimi glaciali (es. <strong>Last Glacial Maximum, LGM, ~21 ka</strong>), le calotte coprivano il Canada fino agli Great Lakes, Scandinavia fino alla Germania settentrionale, le Alpi erano glaciate fino alle pianure padane. Il livello del mare era ~120 m più basso dell'attuale: il Canale della Manica era terraferma, l'Australia era collegata alla Nuova Guinea, le isole dell'Indonesia erano una penisola continentale (Sundaland).</p>
+
+    <div class="luoghi"><p><strong>Valais e Ticino, Svizzera-Italia</strong> — Morene glaciali pleistoceniche con erratici alpini a centinaia di km; strumento chiave per la ricostruzione dell'estensione glaciale. <strong>Vostok e EPICA, Antartide</strong> — Carote di ghiaccio che conservano bolle d'aria con CO₂ e CH₄ degli ultimi 800.000 anni (8 cicli glaciali completi); il miglior proxy diretto della composizione atmosferica passata. <strong>Mammoth Cave e Lechuguilla Cave, USA</strong> — Speleotemi (stalattiti e stalagmiti) con record isotopici di alta risoluzione dei cicli pluviali/aridi quaternari. <strong>Loess Plateau, Cina settentrionale</strong> — ~75 m di loess continui che coprono 130 cicli glaciali, secondo miglior registro continentale dopo le carote di ghiaccio.</p></div>
+  </section>
+
+  <section id="homo">
+    <h3>11.2 L'Evoluzione di Homo sapiens</h3>
+    <p>La linea evolutiva umana (tribù Hominini) si separò dai Pan (scimpanzé) ~7–6 Ma in Africa orientale, probabilmente correlata all'espansione delle praterie nel Miocene tardivo. I principali tappe dell'evoluzione umana nel Quaternario:</p>
+
+    <table>
+      <tr><th>Specie</th><th>Età (Ma)</th><th>Caratteristiche chiave</th><th>Luogo</th></tr>
+      <tr><td><em>Australopithecus afarensis</em></td><td>3.9–2.9</td><td>Bipedismo, cervello ~450 cc</td><td>Etiopia, Tanzania</td></tr>
+      <tr><td><em>Homo habilis</em></td><td>2.4–1.4</td><td>Primi strumenti litici (Olduvai)</td><td>Africa orientale</td></tr>
+      <tr><td><em>Homo erectus</em></td><td>1.9–0.1</td><td>Prima migrazione out-of-Africa, fuoco</td><td>Africa, Asia, Europa</td></tr>
+      <tr><td><em>Homo heidelbergensis</em></td><td>0.7–0.2</td><td>Caccia organizzata, sepolture primitive</td><td>Africa, Europa</td></tr>
+      <tr><td><em>Homo neanderthalensis</em></td><td>0.4–0.04</td><td>Cervello ~1500 cc, culture, interbreeding con H. sapiens</td><td>Europa, Asia occidentale</td></tr>
+      <tr><td><em>Homo sapiens</em></td><td>0.315–oggi</td><td>Arte, simbolismo, migrazione globale</td><td>Africa (~315 ka), poi globale</td></tr>
+    </table>
+
+    <p><em>Homo sapiens</em> è comparso in Africa ~315 ka (Jebel Irhoud, Marocco; Omo Kibish, Etiopia). La migrazione <em>Out of Africa</em> avvenne in più ondate: ~120 ka verso Levante e Penisola Arabica; la migrazione principale ~70–60 ka che portò alla colonizzazione dell'Eurasia, Australia (~65 ka) e infine delle Americhe (~20–16 ka attraverso il Beringia). L'interazione con le popolazioni di Neanderthal (estinti ~40 ka) e Denisoviani è evidenziata dal DNA antico: le popolazioni non-africane moderne portano ~2% di DNA neanderthaliano, e le popolazioni melanesiane ~4% di DNA denisoviano.</p>
+
+    <p>Le <strong>megafaune pleistoceniche</strong> (mammut, mastodonte, megacervo, leone americano, bradipo gigante) si estinsero prevalentemente tra 50 ka e 10 ka, probabilmente per una combinazione di caccia umana (<em>overkill hypothesis</em>) e cambiamenti climatici della deglaciazione.</p>
+
+    <div class="luoghi"><p><strong>Olduvai Gorge, Tanzania (1.9–1.2 Ma)</strong> — Sito iconico scoperto da Louis e Mary Leakey; sequenza stratigrafica con ominidi (<em>H. habilis</em>, <em>H. erectus</em>) e industrie litiche olduvayane e acheuleane. <strong>Jebel Irhoud, Marocco (315 ka)</strong> — I fossili di <em>H. sapiens</em> più antichi; ridatati da Hublin et al. (2017) con uranio-torio. <strong>Blombos Cave, Sudafrica (~100 ka)</strong> — Ocra incisa, conchiglie forate (ornamenti), comportamento simbolico precoce. <strong>Altamira, Spagna e Lascaux, Francia (~17–15 ka)</strong> — Le più belle grotte dipinte del Paleolitico superiore; arte rupestre di bisonte, cavallo, cervo che testimonia capacità simbolica pienamente moderna.</p></div>
+  </section>
+
+  <section id="antropocene">
+    <h3>11.3 L'Olocene e l'Antropocene</h3>
+    <p>L'<strong>Olocene</strong> (11.7 ka – presente) è l'interglaciale attuale, caratterizzato da clima relativamente stabile e caldo rispetto ai massimi glaciali. La stabilità climatica olocenica (variazioni di temperatura globale &lt;1°C) ha probabilmente favorito lo sviluppo delle civiltà umane: addomesticamento di piante e animali (~10 ka, Mezzaluna Fertile), prime città (~6 ka, Mesopotamia), diffusione dell'agricoltura.</p>
+
+    <p>A partire dalla Rivoluzione Industriale (~1750–1800), l'attività umana ha modificato il sistema terrestre a una velocità senza precedenti nella storia geologica. Il termine <strong>Antropocene</strong> (proposto da Crutzen &amp; Stoermer, 2000; definito formalmente nel 2023 dall'IUGS con base al 1952, coincidendo con il picco delle detonazioni nucleari registrato nei sedimenti) descrive questa nuova epoca geologica in cui <em>Homo sapiens</em> è diventato il principale agente di cambiamento planetario:</p>
+
+    <ul class="plain">
+      <li><strong>CO₂ atmosferica</strong>: da ~280 ppm (pre-industriale) a ~424 ppm (2024), valore più alto degli ultimi 3 milioni di anni</li>
+      <li><strong>Temperatura media globale</strong>: +1.2°C rispetto alla media pre-industriale (2023); tendenza a +1.5–3°C entro 2100 secondo i modelli IPCC</li>
+      <li><strong>Tasso di estinzione specie</strong>: 100–1000× il tasso di background; è in atto la <strong>Sesta Estinzione di Massa</strong></li>
+      <li><strong>Acidificazione degli oceani</strong>: pH passato da 8.2 a 8.1, crisi dei coralli</li>
+      <li><strong>Alterazione del ciclo idrologico</strong>: scioglimento di ghiacciai e calotte, risalita del livello del mare (~3.7 mm/anno attualmente)</li>
+      <li><strong>Azoto reattivo</strong>: produzione industriale di NH₃ (Haber-Bosch) ha raddoppiato il ciclo globale dell'azoto</li>
+    </ul>
+
+    <div class="highlight orange">
+      <div class="hl-title">L'Antropocene come livello geologico</div>
+      <p>Nel 2023 l'Anthropocene Working Group (AWG) ha proposto formalmente la base dell'Antropocene al 1952 (livello di Pu239 da test nucleari nei sedimenti del lago Crawford, Ontario, Canada). La proposta è stata tuttavia respinta nel 2024 dal sottogruppo della Commissione Internazionale di Stratigrafia, avviando un dibattito in corso sulla formalizzazione. L'impatto umano è comunque inequivocabilmente registrato nei sedimenti, nelle carote di ghiaccio e negli archivi biologici contemporanei.</p>
+    </div>
+
+    <div class="luoghi"><p><strong>Crawford Lake, Ontario, Canada</strong> — Il sito proposto come GSSP dell'Antropocene; i sedimenti laminati conservano un record annuale con picco di Pu239 al 1952 e altri marcatori antropogenici. <strong>Stazione di Mauna Loa, Hawaii (USA)</strong> — Misurazioni di CO₂ atmosferica in continuo dal 1958 (Keeling Curve); il dato di riferimento per il cambiamento climatico. <strong>Maldive e Tuvalu (Oceano Indiano e Pacifico)</strong> — I paesi più vulnerabili alla risalita del livello del mare; già oggi isole abitate vanno sott'acqua durante le tempeste. <strong>Grande Barriera Corallina, Australia</strong> — Il reef più grande del mondo, che ha subìto bleaching di massa nel 2016, 2017, 2020, 2022 e 2024 per il riscaldamento delle acque.</p></div>
+  </section>
+</section>
+
+<!-- ══════════ BIBLIO ══════════ -->
+<section id="biblio">
+  <span class="section-num">12</span>
+  <h2>Riferimenti Bibliografici</h2>
+  <div class="section-line"></div>
+
+  <p class="ref"><span class="authors">Alvarez L.W. et al.</span> <span class="year">(1980)</span> — <span class="title">Extraterrestrial cause for the Cretaceous-Tertiary extinction</span>. <span class="journal">Science, 208, 1095–1108.</span></p>
+  <p class="ref"><span class="authors">Amelin Y. et al.</span> <span class="year">(2010)</span> — <span class="title">U-Pb chronology of the Solar System's oldest solids with variable 238U/235U</span>. <span class="journal">Earth and Planetary Science Letters, 300, 343–350.</span></p>
+  <p class="ref"><span class="authors">Bouvier A. &amp; Wadhwa M.</span> <span class="year">(2010)</span> — <span class="title">The age of the Solar System redefined by the oldest Pb-Pb age of a meteoritic inclusion</span>. <span class="journal">Nature Geoscience, 3, 637–641.</span></p>
+  <p class="ref"><span class="authors">Brasier M.D. et al.</span> <span class="year">(2002)</span> — <span class="title">Questioning the evidence for Earth's oldest fossils</span>. <span class="journal">Nature, 416, 76–81.</span></p>
+  <p class="ref"><span class="authors">Cameron A.G.W. &amp; Ward W.R.</span> <span class="year">(1976)</span> — <span class="title">The origin of the Moon</span>. <span class="journal">Lunar and Planetary Science Conference Abstracts, 7, 120–122.</span></p>
+  <p class="ref"><span class="authors">Crutzen P.J. &amp; Stoermer E.F.</span> <span class="year">(2000)</span> — <span class="title">The Anthropocene</span>. <span class="journal">IGBP Newsletter, 41, 17–18.</span></p>
+  <p class="ref"><span class="authors">Erwin D.H.</span> <span class="year">(2006)</span> — <span class="title">Extinction: How Life on Earth Nearly Ended 250 Million Years Ago</span>. <span class="journal">Princeton University Press, 296 pp.</span></p>
+  <p class="ref"><span class="authors">Farquhar J., Bao H. &amp; Thiemens M.</span> <span class="year">(2000)</span> — <span class="title">Atmospheric influence of Earth's earliest sulfur cycle</span>. <span class="journal">Science, 289, 756–758.</span></p>
+  <p class="ref"><span class="authors">Gomes R. et al.</span> <span class="year">(2005)</span> — <span class="title">Origin of the cataclysmic Late Heavy Bombardment period of the terrestrial planets</span>. <span class="journal">Nature, 435, 466–469.</span></p>
+  <p class="ref"><span class="authors">Hartmann W.K. &amp; Davis D.R.</span> <span class="year">(1975)</span> — <span class="title">Satellite-sized planetesimals and lunar origin</span>. <span class="journal">Icarus, 24, 504–515.</span></p>
+  <p class="ref"><span class="authors">Hays J.D., Imbrie J. &amp; Shackleton N.J.</span> <span class="year">(1976)</span> — <span class="title">Variations in the Earth's orbit: pacemaker of the ice ages</span>. <span class="journal">Science, 194, 1121–1132.</span></p>
+  <p class="ref"><span class="authors">Hoffman P.F. et al.</span> <span class="year">(1998)</span> — <span class="title">A Neoproterozoic snowball Earth</span>. <span class="journal">Science, 281, 1342–1346.</span></p>
+  <p class="ref"><span class="authors">Holland H.D.</span> <span class="year">(2002)</span> — <span class="title">Volcanic gases, black smokers, and the Great Oxidation Event</span>. <span class="journal">Geochimica et Cosmochimica Acta, 66, 3811–3826.</span></p>
+  <p class="ref"><span class="authors">Hublin J.J. et al.</span> <span class="year">(2017)</span> — <span class="title">New fossils from Jebel Irhoud, Morocco and the pan-African origin of Homo sapiens</span>. <span class="journal">Nature, 546, 289–292.</span></p>
+  <p class="ref"><span class="authors">Kleine T. et al.</span> <span class="year">(2002)</span> — <span class="title">Rapid accretion and early core formation on asteroids and the terrestrial planets from Hf-W chronometry</span>. <span class="journal">Nature, 418, 952–955.</span></p>
+  <p class="ref"><span class="authors">Milankovitch M.</span> <span class="year">(1941)</span> — <span class="title">Kanon der Erdbestrahlung und seine Anwendung auf das Eiszeitenproblem</span>. <span class="journal">Royal Serbian Academy, Belgrade, 633 pp.</span></p>
+  <p class="ref"><span class="authors">Mojzsis S.J. et al.</span> <span class="year">(1996)</span> — <span class="title">Evidence for life on Earth before 3,800 million years ago</span>. <span class="journal">Nature, 384, 55–59.</span></p>
+  <p class="ref"><span class="authors">Shen S.Z. et al.</span> <span class="year">(2011)</span> — <span class="title">Calibrating the end-Permian mass extinction</span>. <span class="journal">Science, 334, 1367–1372.</span></p>
+  <p class="ref"><span class="authors">Tera F., Papanastassiou D.A. &amp; Wasserburg G.J.</span> <span class="year">(1974)</span> — <span class="title">Isotopic evidence for a terminal lunar cataclysm</span>. <span class="journal">Earth and Planetary Science Letters, 22, 1–21.</span></p>
+  <p class="ref"><span class="authors">Weiss M.C. et al.</span> <span class="year">(2016)</span> — <span class="title">The physiology and habitat of the last universal common ancestor</span>. <span class="journal">Nature Microbiology, 1, 16116.</span></p>
+</section>
+
+</main>
+<script>
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('nav a[href^="#"]');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const active=document.querySelector(`nav a[href="#${e.target.id}"]`);
+      if(active)active.classList.add('active');
+    }
+  });
+},{threshold:0.15,rootMargin:'-10% 0px -70% 0px'});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

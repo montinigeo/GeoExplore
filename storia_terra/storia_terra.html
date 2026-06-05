@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evoluzione della Terra — Timeline Interattiva</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090e;--panel:#0c0e16;--panel2:#10121c;
+  --border:#1c1f2e;--border2:#262a3c;
+  --text:#e0e3f2;--muted:#8a8fa8;--dim:#3a3e52;
+  --geo:#3090f8;--geo2:#70b8ff;
+  --cli:#40c878;--cli2:#80e8a8;
+  --vit:#f06040;--vit2:#f8a090;
+  --eone0:#1a1030;--eone1:#0e1a28;--eone2:#141a10;--eone3:#1a1410;
+  --mono:'Space Mono',monospace;--sans:'Crimson Pro',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column}
+
+/* ── HEADER ── */
+header{background:var(--panel);border-bottom:1px solid var(--border);padding:.5rem 1.2rem;display:flex;align-items:center;gap:1rem;flex-shrink:0;flex-wrap:wrap}
+header h1{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:#3090f8}
+header p{font-family:var(--sans);font-style:italic;font-size:.78rem;color:var(--muted)}
+.hfil{display:flex;gap:.4rem;margin-left:auto;flex-wrap:wrap;align-items:center}
+.fb{border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;padding:.22rem .5rem;border-radius:3px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.3rem}
+.fb.on.geo{border-color:var(--geo);color:var(--geo)}
+.fb.on.cli{border-color:var(--cli);color:var(--cli)}
+.fb.on.vit{border-color:var(--vit);color:var(--vit)}
+.era-btns{display:flex;gap:.3rem;flex-wrap:wrap}
+.eb{border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:var(--mono);font-size:.72rem;padding:.25rem .6rem;border-radius:3px;cursor:pointer;transition:all .12s}
+.eb:hover,.eb.on{border-color:#f0a030;color:#f0a030;background:rgba(240,160,48,.08)}
+
+/* ── LAYOUT ── */
+.wrap{display:flex;flex:1;overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sb{width:280px;flex-shrink:0;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-header{padding:.6rem .8rem;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+.sb-body{flex:1;overflow-y:auto;padding:.7rem .8rem}
+.sb-placeholder{color:var(--muted);font-style:italic;font-size:.78rem;line-height:1.65}
+.ev-card{}
+.ev-card .ev-type{font-family:var(--mono);font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem}
+.ev-card .ev-name{font-family:var(--sans);font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:.2rem;line-height:1.25}
+.ev-card .ev-age{font-family:var(--mono);font-size:.6rem;color:var(--muted);margin-bottom:.7rem}
+.ev-card .ev-section{margin:.55rem 0}
+.ev-card .ev-sl{font-family:var(--mono);font-size:.5rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);margin-bottom:.15rem}
+.ev-card .ev-txt{font-size:.8rem;color:var(--muted);line-height:1.6}
+.ev-card .ev-txt b{color:var(--text)}
+.ev-card .luoghi-box{background:var(--panel2);border-left:2px solid #f0a030;padding:.4rem .6rem;border-radius:0 3px 3px 0;margin-top:.5rem}
+.ev-card .luoghi-box .ev-sl{color:#f0a030}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-thumb{background:var(--border2)}
+
+/* ── CANVAS AREA ── */
+.cv-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.cv-inner{flex:1;overflow:hidden;position:relative;cursor:grab}
+.cv-inner.dragging{cursor:grabbing}
+canvas{display:block;width:100%;height:100%}
+.zoom-bar{position:absolute;right:.6rem;bottom:.6rem;display:flex;flex-direction:column;gap:.3rem}
+.zb{width:28px;height:28px;border:1px solid var(--border2);background:var(--panel);color:var(--muted);font-family:var(--mono);font-size:.9rem;cursor:pointer;border-radius:3px;transition:all .12s;display:flex;align-items:center;justify-content:center}
+.zb:hover{border-color:var(--geo);color:var(--geo)}
+.tooltip{position:absolute;background:var(--panel2);border:1px solid var(--border2);border-radius:4px;padding:.35rem .6rem;font-family:var(--mono);font-size:.58rem;color:var(--text);pointer-events:none;display:none;white-space:nowrap;z-index:10;max-width:260px;white-space:normal;line-height:1.4}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Evoluzione della Terra</h1>
+    <p>Timeline geologica interattiva · Scorri o usa la rotellina · Clicca sugli eventi</p>
+  </div>
+  <div class="hfil">
+    <div class="era-btns" id="erabtns">
+      <button class="eb on" data-era="all">Tutto</button>
+      <button class="eb" data-era="precamb">Precambriano</button>
+      <button class="eb" data-era="paleozo">Paleozoico</button>
+      <button class="eb" data-era="mesozo">Mesozoico</button>
+      <button class="eb" data-era="cenozo">Cenozoico</button>
+    </div>
+    <div style="display:flex;gap:.3rem">
+      <button class="fb on geo" data-f="geo">⬤ Geodinamica</button>
+      <button class="fb on cli" data-f="cli">⬤ Clima</button>
+      <button class="fb on vit" data-f="vit">⬤ Vita</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="sb">
+    <div class="sb-header">Dettaglio evento</div>
+    <div class="sb-body">
+      <div class="sb-placeholder" id="sbContent">Seleziona un evento sulla timeline per vedere i dettagli.</div>
+    </div>
+  </div>
+  <div class="cv-wrap">
+    <div class="cv-inner" id="cvInner">
+      <canvas id="c"></canvas>
+    </div>
+    <div class="zoom-bar">
+      <button class="zb" id="zin">+</button>
+      <button class="zb" id="zout">−</button>
+      <button class="zb" id="zreset" title="Reset">⌂</button>
+    </div>
+    <div class="tooltip" id="tip"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// DATI EONI / ERE
+// ══════════════════════════════════════════════════════════════
+const EONS = [
+  {n:'Adeano',       start:4567, end:4000, col:'#1a0e2a', tcol:'#9060c0'},
+  {n:'Archeano',     start:4000, end:2500, col:'#0e1828', tcol:'#4080c0'},
+  {n:'Proterozoico', start:2500, end:541,  col:'#0e2018', tcol:'#40a060'},
+  {n:'Paleozoico',   start:541,  end:252,  col:'#1e1808', tcol:'#c0a040'},
+  {n:'Mesozoico',    start:252,  end:66,   col:'#0e1e10', tcol:'#40b860'},
+  {n:'Cenozoico',    start:66,   end:0,    col:'#1a1010', tcol:'#e06040'},
+];
+
+const ERAS = [
+  {n:'Eoarcheano',      start:4000,end:3600,eon:'Archeano'},
+  {n:'Paleoarcheano',   start:3600,end:3200,eon:'Archeano'},
+  {n:'Mesoarcheano',    start:3200,end:2800,eon:'Archeano'},
+  {n:'Neoarcheano',     start:2800,end:2500,eon:'Archeano'},
+  {n:'Paleoproterozoico',start:2500,end:1600,eon:'Proterozoico'},
+  {n:'Mesoproterozoico', start:1600,end:1000,eon:'Proterozoico'},
+  {n:'Neoproterozoico',  start:1000,end:541, eon:'Proterozoico'},
+  {n:'Cambriano',       start:541, end:485,  eon:'Paleozoico'},
+  {n:'Ordoviciano',     start:485, end:444,  eon:'Paleozoico'},
+  {n:'Siluriano',       start:444, end:419,  eon:'Paleozoico'},
+  {n:'Devonico',        start:419, end:359,  eon:'Paleozoico'},
+  {n:'Carbonifero',     start:359, end:299,  eon:'Paleozoico'},
+  {n:'Permiano',        start:299, end:252,  eon:'Paleozoico'},
+  {n:'Triassico',       start:252, end:201,  eon:'Mesozoico'},
+  {n:'Giurassico',      start:201, end:145,  eon:'Mesozoico'},
+  {n:'Cretaceo',        start:145, end:66,   eon:'Mesozoico'},
+  {n:'Paleogene',       start:66,  end:23,   eon:'Cenozoico'},
+  {n:'Neogene',         start:23,  end:2.6,  eon:'Cenozoico'},
+  {n:'Quaternario',     start:2.6, end:0,    eon:'Cenozoico'},
+];
+
+// ══════════════════════════════════════════════════════════════
+// EVENTI
+// ══════════════════════════════════════════════════════════════
+const EVENTS = [
+  // ── GEODINAMICA ───────────────────────────────────────────
+  {id:'e01',t:'geo',age:4567,n:'Formazione della Terra',
+   desc:'Accrezione della Terra da planetesimi nella nebulosa solare. Il calore degli impatti e della decadenza di ²⁶Al fonde il pianeta (magma ocean). Differenziazione per gravità: nucleo di Fe-Ni, mantello silicatico, crosta primitiva.',
+   cause:'Accrezione gravitazionale nella nebulosa solare protoplanetaria.',
+   conseg:'Differenziazione interna; formazione di crosta, mantello e nucleo metallico in <50 Ma.',
+   luoghi:'Zirconi di Jack Hills, Australia Occidentale (4.4 Ga) — i più antichi materiali terrestri.'},
+  {id:'e02',t:'geo',age:4510,n:'Grande Impatto Lunare (Theia)',
+   desc:'Collisione di un corpo delle dimensioni di Marte (Theia) con la proto-Terra. Il materiale espulso si aggregò in orbita formando la Luna in poche centinaia di anni.',
+   cause:'Instabilità orbitale del sistema protoplanetario interno.',
+   conseg:'Formazione della Luna; inclinazione asse terrestre ~23.5°; giorno iniziale ~5 ore; stabilizzazione dell\'obliquità.',
+   luoghi:'Campioni Apollo (NASA/JSC, Houston) — datati 4.51–4.44 Ga.'},
+  {id:'e03',t:'geo',age:4000,n:'Prime croste continentali (TTG)',
+   desc:'Formazione delle prime croste continentali stabili come suite TTG (Tonalite-Trondhjemite-Granodiorite). I craton archeani (Kaapvaal, Pilbara, Superior) costituiscono i nuclei della crosta attuale.',
+   cause:'Fusione parziale della crosta oceanica subducente/underplated a profondità >50 km con granato nel residuo.',
+   conseg:'Stabilizzazione dei primi nuclei continentali; base per l\'accumulo di sedimenti e lo sviluppo della vita subemersa.',
+   luoghi:'Isua Greenstone Belt, Groenlandia (3.8 Ga); Pilbara Craton, Australia (3.5 Ga); Kaapvaal Craton, Sudafrica.'},
+  {id:'e04',t:'geo',age:2700,n:'Avvio tettonica a zolle',
+   desc:'Prime evidenze convincenti di subduzione moderna: eclogiti archeane, magmatismo calcalcalino di arco, prismi di accrezione. Formazione del supercontinente Kenorland (~2.7 Ga). Picco di produzione crostale globale.',
+   cause:'Raffreddamento sufficiente del mantello per permettere la subduzione della litosfera oceanica rigida.',
+   conseg:'Ciclo dei supercontinenti; riciclaggio crostale; controllo geodinamico sul clima e sulla biogeografia.',
+   luoghi:'Superior Province, Canada (2.7–2.5 Ga); Yilgarn Craton, Australia.'},
+  {id:'e05',t:'geo',age:1800,n:'Supercontinente Columbia (Nuna)',
+   desc:'Prima aggregazione ben documentata di quasi tutti i craton in un unico supercontinente. La dispersione (~1.5–1.3 Ga) aprì oceani interni e portò alla deposizione di sequenze sedimentarie proterozoiche.',
+   cause:'Convezione mantellica e subduzione convergente dei craton.',
+   conseg:'Isolamento di bacini marini; variazioni del ciclo del carbonio; precondizioni per Rodinia.',
+   luoghi:'Trans-Hudson Orogen, Canada (1.8 Ga); Grenville Province, Canada-USA (1.1–0.98 Ga).'},
+  {id:'e06',t:'geo',age:1100,n:'Supercontinente Rodinia',
+   desc:'Rodinia (~1.1–0.75 Ga) centrata sul cratone laurenziano. La sua frammentazione (~800–720 Ma) posizionò le masse continentali in latitudini equatoriali, favorendo la Snowball Earth.',
+   cause:'Aggregazione dei frammenti di Columbia per orogenesi grenvilliana.',
+   conseg:'Frammentazione in placche equatoriali → alta albedo → Snowball Earth; apertura proto-Pacifico.',
+   luoghi:'Grenville Province; Adelaide Rift Complex, Australia del Sud (800–600 Ma).'},
+  {id:'e07',t:'geo',age:500,n:'Gondwana e Laurentia separati',
+   desc:'Dopo la frammentazione di Rodinia, i continenti si riorganizzano: Gondwana (SA+Africa+Antarctica+Australia+India) e Laurentia (Nord America) separati dall\'oceano Iapetus. La chiusura di Iapetus produrrà le Caledonidi e le Appalachi.',
+   cause:'Rifting di Rodinia e apertura dell\'oceano Iapetus.',
+   conseg:'Biogeografia divergente; barriere oceaniche per la fauna cambriana; precondizioni per le orogenesi paleozoiche.',
+   luoghi:'Appalachian Orogen, USA-Canada; Caledonidi, Scozia-Scandinavia.'},
+  {id:'e08',t:'geo',age:300,n:'Formazione di Pangea',
+   desc:'Collisione di Laurasia con Gondwana completa l\'assemblaggio di Pangea (~300 Ma). L\'orogene Varisco-Appalachiano (380–300 Ma) solleva catene montuose paragonabili all\'Himalaya attuale.',
+   cause:'Convergenza di Laurasia e Gondwana per subduzione dell\'oceano Reico.',
+   conseg:'Clima continentale estremo; riduzione nicchie marine costiere; concentrazione masse continentali → riduzione biodiversità marina.',
+   luoghi:'Appalachian Mts, USA; Variscidi, Europa centrale; Urali, Russia.'},
+  {id:'e09',t:'geo',age:175,n:'Rifting di Pangea (apertura Atlantico)',
+   desc:'Frammentazione di Pangea inizia con l\'apertura dell\'Atlantico Centrale (~175 Ma). La CAMP (Central Atlantic Magmatic Province) è associata all\'evento. L\'Atlantico Meridionale apre nel Cretaceo (~130 Ma).',
+   cause:'Plume mantellico + convezione; slab rollback; collasso orogeno variscide.',
+   conseg:'Separazione Africa-America; apertura Atlantico; formazione delle attuali pianure abissali.',
+   luoghi:'CAMP outcrops, USA orientale e Marocco (~201 Ma); Dolomiti (sequenze triassiche di Tetide).'},
+  {id:'e10',t:'geo',age:50,n:'Collisione India-Asia (Himalaya)',
+   desc:'L\'India collide con l\'Asia ~50 Ma dopo aver attraversato l\'Oceano Indiano a 15–20 cm/anno. Solleva l\'Himalaya e il Plateau Tibetano. La collisione continua a 5 cm/anno.',
+   cause:'Chiusura dell\'oceano di Tetide per subduzione della crosta oceanica; poi collisione continentale.',
+   conseg:'Himalaya più alto catena montuosa attuale; monsone asiatico; maggiore erosione e apporto sedimentario; drawdown CO₂.',
+   luoghi:'Himalaya (Nepal, India, Pakistan); Plateau Tibetano (~4500 m); Indus-Yarlung Suture Zone.'},
+  {id:'e11',t:'geo',age:35,n:'Orogenesi alpina (collisione Africa-Europa)',
+   desc:'La chiusura della Tetide occidentale per deriva dell\'Africa verso nord solleva le Alpi (picco 30–20 Ma), Appennini, Pirenei, Carpazi. La Crisi Messiniana (~6 Ma) isola il Mediterraneo.',
+   cause:'Subduzione della crosta oceanica di Tetide + collisione continentale Africa-Europa.',
+   conseg:'Sollevamento Alpi-Appennini; riorganizzazione idrografica europea; Crisi Messiniana (~3 km evaporiti).',
+   luoghi:'Alpi (CH, A, F); Appennini; Dora-Maira e Zermatt-Saas (eclogiti UHP); Sicilia (evaporiti messiniane).'},
+
+  // ── CLIMA ─────────────────────────────────────────────────
+  {id:'c01',t:'cli',age:4100,n:'Late Heavy Bombardment (LHB)',
+   desc:'Intenso bombardamento di asteroidi e comete tra ~4.1 e 3.8 Ga. Decine di impatti >100 km evaporarono più volte gli oceani primitivi. Anche fonte di volatili (H₂O, C, N) dai corpi carbonacei.',
+   cause:'Riorganizzazione orbitale dei pianeti giganti (modello Nice, Gomes et al. 2005) che destabilizzò la fascia degli asteroidi.',
+   conseg:'Sterilizzazione superficiale ripetuta; la vita sopravvisse solo in ambienti profondi/subsuperficiali; apporto di acqua e organici.',
+   luoghi:'Bacini d\'impatto lunari (Imbrium, Nectaris, ~3.9–3.8 Ga); Vredefort (SA, 2.02 Ga); Sudbury (Canada, 1.85 Ga).'},
+  {id:'c02',t:'cli',age:2400,n:'Prima Glaciazione (Huroniena)',
+   desc:'La prima grande glaciazione globale (~2.4–2.1 Ga), correlata al GOE. L\'aumento di O₂ distrusse il metano atmosferico (potente gas serra), causando un raffreddamento catastrofico. Possibile Snowball Earth.',
+   cause:'Grande Ossidazione → distruzione CH₄ atmosferico → raffreddamento; posizione equatoriale dei continenti (alta albedo).',
+   conseg:'Prima glaciazione globale documentata; stress enorme sugli organismi anaerobici; selezione verso organismi più resistenti.',
+   luoghi:'Huronian Supergroup, Ontario, Canada (Gowganda Formation, 2.4–2.1 Ga) — tilliti e varviti.'},
+  {id:'c03',t:'cli',age:720,n:'Snowball Earth (Sturtiano e Marinoan)',
+   desc:'Due o tre episodi di glaciazione globale catastrofica (~720 Ma Sturtiano; ~635 Ma Marinoan): ghiacciai fino all\'equatore, oceani congelati. Deglaciazione catastrofica per accumulo CO₂ vulcanica.',
+   cause:'Frammentazione Rodinia → continenti equatoriali → alto weathering silicatico → drawdown CO₂; feedback di albedo.',
+   conseg:'Vita sopravvisse in rifugi; selezione per organismi complessi; nutrienti rilasciati dalla deglaciazione → radiazione evolutiva ediacariana.',
+   luoghi:'Namibia (Otavi Group, tilliti + cap dolomie); Cina meridionale (Nantuo tillite); Gaskiers FM, Canada (~580 Ma).'},
+  {id:'c04',t:'cli',age:450,n:'Glaciazione Ordoviciana (Hirnantiana)',
+   desc:'Glaciazione rapida al termine dell\'Ordoviciano (~444 Ma) con calotte polari su Gondwana antartico. Calo del livello del mare per glacio-eustatismo. Causa principale della prima estinzione di massa.',
+   cause:'Deriva di Gondwana sul polo sud + orogenesi taconica (weathering → drawdown CO₂).',
+   conseg:'Prima grande estinzione di massa (~85% specie marine); crollo dei reef tropicali a coralli tabulati e stromatoporoidi.',
+   luoghi:'Anti-Atlas, Marocco (depositi glaciali hirnantiani); Baltoscandia (fauna di Hirnantia).'},
+  {id:'c05',t:'cli',age:305,n:'Glaciazione Carbonifera (Gondwana)',
+   desc:'Glaciazione estesa di Gondwana meridionale (~320–280 Ma): calotte polari su Africa meridionale, Sud America, Australia, Arabia. Contemporanea alle foreste carbonifere equatoriali.',
+   cause:'Deriva di Gondwana sul polo sud; drawdown CO₂ da foreste carbonifere (lignina non degradabile); riduzione vulcanismo.',
+   conseg:'Cicli glacioeustatici → ciclotemi carboniferi (sequenze sedimentarie cicliche); CO₂ bassissima; O₂ alto (~30%) → gigantismo degli insetti.',
+   luoghi:'Dwyka Group, Sudafrica (~300 Ma — tilliti gondwaniane); Paraná Basin, Brasile.'},
+  {id:'c06',t:'cli',age:55,n:'PETM — Paleocene-Eocene Thermal Maximum',
+   desc:'Riscaldamento rapido (+5–8°C in ~20.000 anni) ~55.8 Ma per iniezione massiva di CO₂/CH₄. Acque artiche a +23°C. Espansione foreste tropicali fino a latitudini polari. Analogico parziale del cambiamento climatico attuale.',
+   cause:'Origine dibattuta: vulcanismo Nord Atlantico (NAIP), dissociazione idrati di metano, combustione carbone.',
+   conseg:'Radiazione dei primati verso alte latitudini; estinzione foramimiferi bentonici profondi; acido­ficazione oceanica.',
+   luoghi:'Bighorn Basin, Wyoming, USA (56 Ma) — sezione PETM di riferimento; ODP Site 690, Oceano Australe.'},
+  {id:'c07',t:'cli',age:34,n:'Glaciazione Antartica (apertura Drake Passage)',
+   desc:'Prima calotta di ghiaccio permanente sull\'Antartide ~34 Ma, correlata all\'apertura del Drake Passage (~34 Ma) e del Tasman Gateway (~36 Ma) che isolano termicamente l\'Antartide con la Corrente Circumpolare.',
+   cause:'Apertura vie d\'acqua circumpolari → isolamento termico Antartide → raffreddamento progressivo.',
+   conseg:'Inizio del "icehouse world" cenozoico; abbassamento livello del mare; cambiamento delle correnti oceaniche globali.',
+   luoghi:'Drake Passage (Antartide–Sud America); carote ODP 689/690, Oceano Australe.'},
+  {id:'c08',t:'cli',age:2.6,n:'Glaciazioni Quaternarie (Milankovitch)',
+   desc:'Cicli ripetuti di glaciazione-deglaciazione controllati dai parametri orbitali di Milankovitch (eccentricità 100/413 ka, obliquità 41 ka, precessione 23 ka). Il LGM (~21 ka): ghiacciai fino agli Great Lakes e all\'Europa centrale.',
+   cause:'Variazioni dell\'insolazione estiva a 65°N per parametri orbitali; amplificati da feedback CO₂-albedo.',
+   conseg:'Livello del mare −120 m al LGM; ponti terrestri (Beringia, Sundaland); migrazioni umane; modellamento paesaggistico alpino.',
+   luoghi:'Carote di ghiaccio Vostok/EPICA, Antartide (800 ka); Loess Plateau, Cina (130 cicli); morene alpine.'},
+  {id:'c09',t:'cli',age:0.3,n:'Antropocene — Cambiamento Climatico',
+   desc:'CO₂ da ~280 ppm (pre-industriale) a ~424 ppm (2024), valore più alto da 3 Ma. Temperatura media +1.2°C. Scioglimento calotte; risalita livello del mare (~3.7 mm/anno); acidificazione oceanica.',
+   cause:'Combustione di combustibili fossili; deforestazione; agricoltura intensiva; cementificazione.',
+   conseg:'Sesta estinzione di massa in corso; bleaching coralli; eventi meteorologici estremi; migrazione specie; rifugiati climatici.',
+   luoghi:'Mauna Loa, Hawaii (misurazioni CO₂ dal 1958 — Keeling Curve); Crawford Lake, Canada (GSSP proposto Antropocene).'},
+
+  // ── VITA ──────────────────────────────────────────────────
+  {id:'v01',t:'vit',age:3800,n:'Prime tracce di vita (Isua)',
+   desc:'Anomalie isotopiche del carbonio (δ¹³C ≈ −28‰) nelle rocce metasedimentarie di Isua interpretate come possibile biosegnale. Probabile presenza di batteri chemioautotrofi anaerobici in ambienti idrotermali.',
+   cause:'Origine della vita in ambienti idrotermali (black smokers o sistemi alcalini tipo Lost City) per chimica prebiotica.',
+   conseg:'Inizio dell\'evoluzione biologica; metabolismo chemioautotrofo; precondizioni per la fotosintesi.',
+   luoghi:'Isua Greenstone Belt, Groenlandia (3.8–3.7 Ga); Lost City Hydrothermal Field (analogo moderno).'},
+  {id:'v02',t:'vit',age:3480,n:'Stromatoliti (Pilbara)',
+   desc:'Stromatoliti coniformi nella Dresser Formation (Pilbara, 3.48 Ga): le più antiche macrostrutture biologiche accertate, costruite da tappeti microbici di cianobatteri/batteri fotosintetici.',
+   cause:'Sviluppo di tappeti microbici in ambienti di sabkha idrotermale.',
+   conseg:'Prime strutture biologiche macroscopiche; inizio della modifica dell\'ambiente da parte della vita.',
+   luoghi:'Dresser Formation e Strelley Pool Chert, Pilbara, Australia Occidentale (3.48–3.43 Ga); Shark Bay, Australia (stromatoliti viventi).'},
+  {id:'v03',t:'vit',age:2700,n:'Cianobatteri e fotosintesi ossigenica',
+   desc:'I cianobatteri evolsero la fotosintesi ossigenica (produzione di O₂ come sottoprodotto) probabilmente ~3.0–2.7 Ga. La loro proliferazione portò al Grande Ossidazione Event (~2.4 Ga). Più antico gruppo di organismi fotosintetici ossigenici vivente oggi.',
+   cause:'Evoluzione del centro di reazione del Fotosistema II per usare H₂O come donatore di elettroni.',
+   conseg:'Produzione di O₂ → Grande Ossidazione → strato di ozono → protezione UV → colonizzazione terre emerse.',
+   luoghi:'Stromatoliti neoarcheane (Tumbiana FM, Australia, 2.72 Ga); Hamersley BIF (evidenza indiretta GOE).'},
+  {id:'v04',t:'vit',age:2400,n:'Grande Ossidazione (GOE)',
+   desc:'Accumulo di O₂ libero nell\'atmosfera per la prima volta ~2.4–2.3 Ga. Prove: scomparsa pirite detritica e uraninite; comparsa red beds; scomparsa del MIF-S (frazionamento di massa-indipendente dello zolfo).',
+   cause:'Saturazione dei sink di O₂ (BIF, gas riducenti vulcanici) da parte della fotosintesi ossigenica dei cianobatteri.',
+   conseg:'Catastrofe per organismi anaerobici (prima estinzione di massa); strato di ozono; nuovi metabolismi aerobici; prerequisito per vita multicellulare.',
+   luoghi:'Witwatersrand (pirite detritica pre-GOE); Huronian Supergroup (red beds post-GOE); Hamersley BIF.'},
+  {id:'v05',t:'vit',age:1800,n:'Primi eucarioti',
+   desc:'Comparsa delle prime cellule eucariotiche (con nucleo e organelli) ~1.8–1.5 Ga: acritarchi e alghe rosse. Probabilmente per endosimbiosi (mitocondri da α-proteobatteri; cloroplasti da cianobatteri — teoria di Lynn Margulis, 1967).',
+   cause:'Endosimbiosi seriale; aumento dell\'O₂ che permise il metabolismo aerobico ad alta efficienza energetica.',
+   conseg:'Cellule molto più complesse; prerequisito per la pluricellularità; aumento della diversità genetica (riproduzione sessuale).',
+   luoghi:'Grpaieni, Russia (1.5 Ga, alghe rosse più antiche); acritarchi in shale proterozoici globalmente.'},
+  {id:'v06',t:'vit',age:635,n:'Fauna Ediacariana',
+   desc:'Organismi pluricellulari macroscopici complessi (635–541 Ma): Dickinsonia, Charnia, Kimberella, Spriggina. Forme frondose, discoidali, nastriformi, prive di parti dure. Alcuni interpretati come progenitori dei phyla moderni.',
+   cause:'Aumento dell\'O₂ post-Snowball Earth; nutrienti liberati dalla deglaciazione; nicchie ecologiche disponibili.',
+   conseg:'Prima fauna macroscopica complessa; precursore dell\'Esplosione Cambriana; sperimentazione di piani corporei.',
+   luoghi:'Ediacara Hills, Australia del Sud (575–541 Ma); Mistaken Point, Canada (565 Ma, UNESCO); White Sea, Russia; Doushantuo FM, Cina.'},
+  {id:'v07',t:'vit',age:541,n:'Esplosione Cambriana',
+   desc:'Comparsa in ~20 Ma della quasi totalità dei phyla animali moderni con parti dure (541–520 Ma). Trilobiti, brachiopodi, molluschi, echinodermi, cordati, artropodi. Fauna del Burgess Shale (Anomalocaris, Hallucigenia, Pikaia).',
+   cause:'Aumento O₂; comparsa predatori (corsa agli armamenti); apertura nicchie dopo Snowball; trasgressioni marine.',
+   conseg:'Biodiversità animale moderna; ecosistemi complessi con predazione; costruzione di reef; cordata → vertebrati.',
+   luoghi:'Burgess Shale, Canada (508 Ma, UNESCO); Chengjiang Biota, Cina (520 Ma, UNESCO); Sirius Passet, Groenlandia.'},
+  {id:'v08',t:'vit',age:444,n:'Prima Estinzione di Massa (Ordoviciano)',
+   desc:'Fine Ordoviciano (~444 Ma): ~85% delle specie marine eliminate in due polsi. Scompaiono trilobiti, coralli tabulati, graptoliti, brachiopodi. Causa principale: glaciazione hirnantiana e variazioni del livello del mare.',
+   cause:'Glaciazione rapida di Gondwana antartico → calo livello del mare → anossie marine alla deglaciazione.',
+   conseg:'Apertura nicchie per la successiva radiazione siluriana; scomparsa reef paleozoici primitivi.',
+   luoghi:'Anti-Atlas, Marocco (tilliti hirnantiane); Baltoscandia (fauna Hirnantia); Cincinnati Arch, USA.'},
+  {id:'v09',t:'vit',age:430,n:'Colonizzazione delle terre emerse',
+   desc:'Prime piante vascolari terrestri nel Siluriano (~430 Ma: Cooksonia). Nel Devonico: foreste (Archaeopteris, 385 Ma); tetrapodi (Tiktaalik, 375 Ma; Acanthostega, 365 Ma). Conquista definitiva del suolo da acqua.',
+   cause:'Sviluppo di cutina (protezione dall\'essiccamento), tessuto vascolare, spore resistenti, poi semi.',
+   conseg:'Formazione dei primi suoli ricchi; drawdown CO₂ da weathering delle radici → raffreddamento devonico; base alimentare per gli animali terrestri.',
+   luoghi:'Rhynie Chert, Scozia (407 Ma — Lagerstätten terrestre); Ellesmere Island, Canada (Tiktaalik, 375 Ma); Miguasha, Canada (UNESCO).'},
+  {id:'v10',t:'vit',age:359,n:'Estinzione del Devonico (Kellwasser)',
+   desc:'Fine Devonico (~359 Ma): ~70% specie marine eliminate in più polsi. Scompaiono reef a stromatoporoidi, molti pesci corazzati, quasi tutti i trilobiti. Crisi prolungata 20 Ma.',
+   cause:'Anossie oceaniche da eutrofizzazione (suoli forestali); raffreddamento da drawdown CO₂; possibile vulcanismo (Viluy Traps).',
+   conseg:'Fine dei reef paleozoici; apertura nicchie per i tetrapodi; drastica riduzione pesci corazzati (placodermi).',
+   luoghi:'Coumiac, Francia (sezione di riferimento Frasniano-Famenniano); Eifel, Germania (reef devoniani).'},
+  {id:'v11',t:'vit',age:252,n:'Grande Estinzione (fine Permiano)',
+   desc:'La più catastrofica estinzione: ~96% specie marine, ~70% terrestri eliminate in <200.000 anni. Scompaiono trilobiti, coralli rugosi/tabulati, blastoidei, fusulinidi. "The Great Dying".',
+   cause:'Siberian Traps (~252 Ma): CO₂+SO₂+HCl → riscaldamento +10–16°C; acidificazione oceani; anossie; piogge acide; crisi ozono.',
+   conseg:'Azzeramento degli ecosistemi marini paleozoici; apertura nicchie per i dinosauri e i mammiferi; inizio Mesozoico.',
+   luoghi:'Meishan, Cina (GSSP confine P-T); Siberian Traps, Russia; Karoo Basin, SA (vertebrati Lystrosaurus).'},
+  {id:'v12',t:'vit',age:235,n:'Comparsa dei Dinosauri e dei Mammiferi',
+   desc:'Nel Triassico Medio (~235 Ma) compaiono i primi dinosauri da arcosauri; i mammiferi (~225 Ma) da cinodontia. Entrambi rimangono marginali nel Triassico; dopo l\'estinzione di fine Triassico i dinosauri dominano.',
+   cause:'Radiazione evolutiva nelle nicchie lasciate dalla Grande Estinzione permiana; clima caldo e secco del Triassico.',
+   conseg:'I dinosauri dominano gli ecosistemi terrestri per 165 Ma; i mammiferi rimangono piccoli e notturni fino al K-Pg.',
+   luoghi:'Ischigualasto FM, Argentina (231 Ma — i più antichi dinosauri); Triassic beds del Connecticut, USA; Solnhofen, Germania (150 Ma — Archaeopteryx).'},
+  {id:'v13',t:'vit',age:130,n:'Angiosperme (piante con fiori)',
+   desc:'Le angiosperme compaiono nel Cretaceo Inferiore (~130 Ma) e si diversificano rapidamente, coevolvendo con insetti impollinatori (api, farfalle, coleotteri). Rivoluzionano gli ecosistemi terrestri e l\'agricoltura umana.',
+   cause:'Innovazioni evolutive: doppia fecondazione, seme protetto, fiore attrattivo per impollinatori.',
+   conseg:'Dominano oggi l\'80% delle piante terrestri; base dell\'agricoltura umana; coevoluzione con insetti impollinatori.',
+   luoghi:'Cretaceo del Portogallo e del Maryland (USA, ~130 Ma — pollini fossili più antichi); Aptian Crato FM, Brasile.'},
+  {id:'v14',t:'vit',age:66,n:'Estinzione K-Pg (Chicxulub)',
+   desc:'~66 Ma: asteroide 10–12 km colpisce Yucatán (Chicxulub, cratere ~180 km). ~75% specie eliminated: tutti i dinosauri non-aviari, ammoniti, mosasauri, plesiosauri. Sopravvivono: mammiferi placentali, uccelli, coccodrilli, tartarughe.',
+   cause:'Impatto meteoritico → impact winter (blocco fotosintesi); incendi globali; piogge acide; riscaldamento post-impatto da CO₂. Deccan Traps come co-causa.',
+   conseg:'Fine del Mesozoico; radiazione esplosiva dei mammiferi; uccelli come unici dinosauri sopravvissuti; inizio Cenozoico.',
+   luoghi:'Chicxulub, Yucatán, Messico (cratere sepolto); Caravaca de la Cruz, Spagna (anomalia Ir); Hell Creek FM, Montana USA.'},
+  {id:'v15',t:'vit',age:55,n:'Radiazione dei Mammiferi',
+   desc:'Dopo il K-Pg, i mammiferi radiano in ~10–15 Ma in tutti gli ordini moderni: Perissodattili, Artiodattili (inclusi Cetacei), Carnivori, Primati, Roditori, Chirotteri. Il PETM (~55.8 Ma) accelera l\'espansione dei primati.',
+   cause:'Apertura delle nicchie ecologiche lasciaste dai dinosauri; clima caldo favorevole.',
+   conseg:'Attuale diversità dei mammiferi; evoluzione dei cetacei (ritorno al mare ~53 Ma); comparsa dei primati che evolveranno nell\'uomo.',
+   luoghi:'Messel Pit, Germania (47 Ma, UNESCO); Bighorn Basin, Wyoming, USA (56 Ma); Fayum, Egitto (primati oligocenici, ~35 Ma).'},
+  {id:'v16',t:'vit',age:6,n:'Origine della linea umana (Hominini)',
+   desc:'La linea evolutiva umana si separò dai Pan (scimpanzé) ~7–6 Ma in Africa orientale. I primi ominini (Sahelanthropus, Orrorin, Ardipithecus) mostrano i primi adattamenti al bipedismo parziale.',
+   cause:'Espansione delle praterie nel Miocene tardivo in Africa (raffreddamento, aridificazione) → adattamento alla savana.',
+   conseg:'Inizio della radiazione degli ominini; bipedismo → liberazione delle mani → sviluppo degli strumenti → linguaggio.',
+   luoghi:'Djurab Desert, Ciad (Sahelanthropus tchadensis, 7 Ma); Ethiopia e Kenya (Ardipithecus, Australopithecus, 4.4–3.9 Ma).'},
+  {id:'v17',t:'vit',age:0.315,n:'Homo sapiens e migrazioni globali',
+   desc:'H. sapiens compare in Africa ~315 ka (Jebel Irhoud). Migrazione Out-of-Africa principale ~70–60 ka. Colonizzazione Australia ~65 ka; Americhe ~20–16 ka. Interbreeding con Neanderthal (~40 ka estinti) e Denisoviani.',
+   cause:'Capacità cognitive avanzate (linguaggio simbolico, cooperazione); adattabilità a climi diversi.',
+   conseg:'Colonizzazione di tutti i continenti; estinzione megafauna pleistocenica; rivoluzione agricola (~10 ka); prime civiltà; Antropocene.',
+   luoghi:'Jebel Irhoud, Marocco (315 ka); Blombos Cave, SA (~100 ka); Altamira/Lascaux (~17–15 ka); Beringia (ponte verso le Americhe).'},
+];
+
+// ══════════════════════════════════════════════════════════════
+// SCALA TEMPORALE (logaritmica ibrida)
+// ══════════════════════════════════════════════════════════════
+// Usiamo scala ibrida: log10 per il Precambriano (>541 Ma),
+// lineare per il Fanerozoico (0-541 Ma) ma con peso maggiore
+// Per semplicità: scala potenza (age^0.45) normalizzata
+const TMIN=0, TMAX=4567;
+
+function ageToFrac(age){
+  // Scala con radice per dare più spazio al recente
+  const a=Math.pow(age/TMAX, 0.40);
+  return 1-a; // 0=oggi (destra), 1=4567 Ma (sinistra) — inversione per timeline
+}
+
+// ══════════════════════════════════════════════════════════════
+// STATO
+// ══════════════════════════════════════════════════════════════
+const C=document.getElementById('c');
+const ctx=C.getContext('2d');
+let W,H;
+let viewX=0, zoom=1; // pan in px, zoom
+let dragging=false, dragStartX=0, dragStartViewX=0;
+let selId=null;
+const activeTypes=new Set(['geo','cli','vit']);
+
+// ── FILTRI ────────────────────────────────────────────────────
+document.querySelectorAll('.fb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    const f=b.dataset.f;
+    if(activeTypes.has(f)){activeTypes.delete(f);b.classList.remove('on');}
+    else{activeTypes.add(f);b.classList.add('on');}
+    draw();
+  });
+});
+
+// ── ZOOM ERA ─────────────────────────────────────────────────
+const ERA_RANGES={
+  all:[0,4567],
+  precamb:[541,4567],
+  paleozo:[252,541],
+  mesozo:[66,252],
+  cenozo:[0,66],
+};
+document.querySelectorAll('.eb').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.eb').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    zoomToRange(ERA_RANGES[b.dataset.era]);
+  });
+});
+
+function zoomToRange([t0,t1]){
+  // t0=età minore (più recente), t1=età maggiore (più antica)
+  // ageToFrac: age=0 → frac=1 (destra), age=4567 → frac=0 (sinistra)
+  const fLeft  = ageToFrac(t1);  // età più antica → frac minore → sinistra
+  const fRight = ageToFrac(t0);  // età più recente → frac maggiore → destra
+  const span   = fRight - fLeft;
+  if(span <= 0) return;
+  const margin = 0.08; // 8% margine per lato
+  zoom = (1.0 - margin*2) / span;
+  // fLeft deve comparire a x = margin * W
+  viewX = margin * W - fLeft * W * zoom;
+  // NON clampare: vogliamo sempre mostrare il range richiesto
+  draw();
+}
+
+// ── CANVAS RESIZE ─────────────────────────────────────────────
+function resize(){
+  const r=C.getBoundingClientRect();
+  W=C.width=Math.round(r.width);
+  H=C.height=Math.round(r.height);
+  draw();
+}
+window.addEventListener('resize',resize);
+
+// ── COORDINATE ───────────────────────────────────────────────
+function ageToX(age){
+  return ageToFrac(age)*W*zoom + viewX;
+}
+function xToAge(x){
+  const frac=(x-viewX)/(W*zoom);
+  // Inversa di ageToFrac: frac=1-(age/TMAX)^0.40
+  const a=1-frac;
+  if(a<=0) return 0;
+  if(a>=1) return TMAX;
+  return Math.pow(a,1/0.40)*TMAX;
+}
+
+function clampView(){
+  const totalW=W*zoom;
+  if(totalW<W){viewX=0;return;}
+  if(viewX>0) viewX=0;
+  if(viewX<W-totalW) viewX=W-totalW;
+}
+
+// ── DRAW ─────────────────────────────────────────────────────
+const LANE={geo:0, cli:1, vit:2};
+const COL={geo:'#3090f8', cli:'#40c878', vit:'#f06040'};
+const COL2={geo:'#70b8ff', cli:'#80e8a8', vit:'#f8a090'};
+const LANE_LABELS={geo:'GEODINAMICA', cli:'CLIMA', vit:'VITA'};
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#07090e'; ctx.fillRect(0,0,W,H);
+
+  // Layout verticale:
+  // eoneBar: 32px top
+  // eraBar: 22px
+  // asse centrale + lanes
+  const TOP_BARS=54;
+  const BOTTOM_MARGIN=28;
+  const laneArea=H-TOP_BARS-BOTTOM_MARGIN;
+  const activeLanes=[...activeTypes].sort();
+  const nLanes=activeLanes.length||1;
+  const laneH=laneArea/nLanes;
+
+  // ── EONS BAR ──────────────────────────────────────────────
+  EONS.forEach(eon=>{
+    const x0=ageToX(eon.start), x1=ageToX(eon.end);
+    if(x1<0||x0>W) return;
+    ctx.fillStyle=eon.col;
+    ctx.fillRect(Math.max(0,x0),0,Math.min(W,x1)-Math.max(0,x0),32);
+    const cx=Math.max(0,x0)+(Math.min(W,x1)-Math.max(0,x0))/2;
+    ctx.font='700 9px Space Mono';
+    ctx.fillStyle=eon.tcol;
+    ctx.textAlign='center';
+    ctx.fillText(eon.n.toUpperCase(), cx, 20);
+  });
+
+  // ── ERAS BAR ──────────────────────────────────────────────
+  ERAS.forEach(era=>{
+    const x0=ageToX(era.start), x1=ageToX(era.end);
+    if(x1<0||x0>W) return;
+    const eon=EONS.find(e=>e.n===era.eon);
+    ctx.fillStyle=eon?eon.col+'aa':'#111';
+    ctx.fillRect(Math.max(0,x0),32,Math.min(W,x1)-Math.max(0,x0),22);
+    ctx.strokeStyle='rgba(255,255,255,0.08)';
+    ctx.lineWidth=0.5;
+    ctx.beginPath();
+    ctx.moveTo(Math.max(0,x0),32);
+    ctx.lineTo(Math.max(0,x0),54);
+    ctx.stroke();
+    const cx=Math.max(0,x0)+(Math.min(W,x1)-Math.max(0,x0))/2;
+    const barW=Math.min(W,x1)-Math.max(0,x0);
+    if(barW>30){
+      ctx.font='8px Space Mono';
+      ctx.fillStyle='rgba(200,210,230,0.5)';
+      ctx.textAlign='center';
+      ctx.fillText(era.n, cx, 47);
+    }
+  });
+
+  // ── LANES ─────────────────────────────────────────────────
+  ['geo','cli','vit'].forEach((t,li)=>{
+    if(!activeTypes.has(t)) return;
+    const laneIdx=activeLanes.indexOf(t);
+    const y0=TOP_BARS + laneIdx*laneH;
+    const ymid=y0+laneH/2;
+
+    // Sfondo lane
+    ctx.fillStyle=COL[t]+'08';
+    ctx.fillRect(0,y0,W,laneH);
+
+    // Label lane
+    ctx.font='700 8px Space Mono';
+    ctx.fillStyle=COL[t]+'60';
+    ctx.textAlign='left';
+    ctx.fillText(LANE_LABELS[t], 4, y0+14);
+
+    // Asse
+    ctx.strokeStyle=COL[t]+'30';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(0,ymid); ctx.lineTo(W,ymid);
+    ctx.stroke();
+
+    // Separatore lane
+    if(laneIdx<nLanes-1){
+      ctx.strokeStyle='rgba(100,110,160,0.15)';
+      ctx.lineWidth=1;
+      ctx.setLineDash([4,4]);
+      ctx.beginPath();
+      ctx.moveTo(0,y0+laneH); ctx.lineTo(W,y0+laneH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  });
+
+  // ── SCALA TEMPORALE ───────────────────────────────────────
+  const tickAges=[4500,4000,3500,3000,2500,2000,1500,1000,800,600,500,
+    450,400,350,300,250,200,150,100,66,55,34,23,10,5,2,1,0.5,0.1,0];
+  tickAges.forEach(age=>{
+    const x=ageToX(age);
+    if(x<0||x>W) return;
+    ctx.strokeStyle='rgba(140,150,190,0.25)';
+    ctx.lineWidth=0.5;
+    ctx.beginPath();
+    ctx.moveTo(x,TOP_BARS); ctx.lineTo(x,H-BOTTOM_MARGIN);
+    ctx.stroke();
+    if(x>30 && x<W-20){
+      ctx.font='8px Space Mono';
+      ctx.fillStyle='rgba(140,150,190,0.6)';
+      ctx.textAlign='center';
+      const lbl=age>=1000?Math.round(age/100)/10+' Ga':age>=1?Math.round(age)+' Ma':age*1000+' ka';
+      ctx.fillText(lbl, x, H-BOTTOM_MARGIN+14);
+    }
+  });
+  // Asse tempo label
+  ctx.font='8px Space Mono';
+  ctx.fillStyle='rgba(140,150,190,0.5)';
+  ctx.textAlign='center';
+  ctx.fillText('← PASSATO', W*0.15, H-4);
+  ctx.fillText('PRESENTE →', W*0.88, H-4);
+
+  // ── EVENTI ────────────────────────────────────────────────
+  EVENTS.forEach(ev=>{
+    if(!activeTypes.has(ev.t)) return;
+    const laneIdx=activeLanes.indexOf(ev.t);
+    const y0=TOP_BARS + laneIdx*laneH;
+    const ymid=y0+laneH/2;
+    const x=ageToX(ev.age);
+    if(x<-20||x>W+20) return;
+
+    const isSel=selId===ev.id;
+    const col=COL[ev.t];
+    const r=isSel?9:6;
+
+    // Gambo verticale
+    ctx.strokeStyle=col+'60';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(x,ymid-r); ctx.lineTo(x,ymid-r-8);
+    ctx.stroke();
+
+    // Cerchio evento
+    if(isSel){
+      ctx.beginPath(); ctx.arc(x,ymid,r+5,0,Math.PI*2);
+      ctx.fillStyle=col+'22'; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(x,ymid,r,0,Math.PI*2);
+    ctx.fillStyle=col+(isSel?'ff':'cc');
+    ctx.fill();
+    ctx.strokeStyle=isSel?'#fff':col;
+    ctx.lineWidth=isSel?1.5:1;
+    ctx.stroke();
+
+    // Label (solo se abbastanza zoom)
+    const txtY=ymid-r-12;
+    if(zoom>0.8 || isSel){
+      ctx.font=(isSel?'600 ':'')+'9px Crimson Pro';
+      ctx.fillStyle=isSel?'#e0e3f2':'rgba(180,185,210,0.75)';
+      ctx.textAlign='center';
+      // Tronca se troppo lungo
+      const label=ev.n.length>22?ev.n.slice(0,20)+'…':ev.n;
+      ctx.fillText(label, x, txtY);
+    }
+  });
+}
+
+// ── INTERAZIONE ───────────────────────────────────────────────
+const tip=document.getElementById('tip');
+
+function hitTest(mx,my){
+  const activeLanes=[...activeTypes].sort();
+  const nLanes=activeLanes.length||1;
+  const TOP_BARS=54, BOTTOM_MARGIN=28;
+  const laneH=(H-TOP_BARS-BOTTOM_MARGIN)/nLanes;
+  let best=null, bestD=999;
+  EVENTS.forEach(ev=>{
+    if(!activeTypes.has(ev.t)) return;
+    const laneIdx=activeLanes.indexOf(ev.t);
+    const ymid=TOP_BARS + laneIdx*laneH + laneH/2;
+    const x=ageToX(ev.age);
+    const dist=Math.hypot(mx-x, my-ymid);
+    if(dist<18 && dist<bestD){bestD=dist; best=ev;}
+  });
+  return best;
+}
+
+C.addEventListener('mousemove',e=>{
+  if(dragging){
+    viewX=dragStartViewX+(e.clientX-dragStartX);
+    clampView(); draw(); return;
+  }
+  const r=C.getBoundingClientRect();
+  const mx=e.clientX-r.left, my=e.clientY-r.top;
+  const ev=hitTest(mx,my);
+  if(ev){
+    tip.style.display='block';
+    const tx=Math.min(mx+14, W-200), ty=Math.max(my-40,4);
+    tip.style.left=tx+'px'; tip.style.top=ty+'px';
+    const age=ev.age>=1000?(ev.age/1000).toFixed(2)+' Ga':ev.age+' Ma';
+    tip.innerHTML=`<b>${ev.n}</b><br>${age}`;
+    C.style.cursor='pointer';
+  } else {
+    tip.style.display='none';
+    C.style.cursor=dragging?'grabbing':'grab';
+  }
+});
+
+C.addEventListener('mousedown',e=>{
+  dragging=true;
+  dragStartX=e.clientX;
+  dragStartViewX=viewX;
+  document.getElementById('cvInner').classList.add('dragging');
+});
+window.addEventListener('mouseup',e=>{
+  if(!dragging) return;
+  dragging=false;
+  document.getElementById('cvInner').classList.remove('dragging');
+});
+
+C.addEventListener('click',e=>{
+  if(Math.abs(e.clientX-dragStartX)>5) return; // era un drag
+  const r=C.getBoundingClientRect();
+  const ev=hitTest(e.clientX-r.left, e.clientY-r.top);
+  if(ev){ selId=ev.id; draw(); showInfo(ev); }
+});
+
+// Zoom con rotellina
+C.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const r=C.getBoundingClientRect();
+  const mx=e.clientX-r.left;
+  const oldZoom=zoom;
+  const delta=e.deltaY>0?0.85:1.18;
+  zoom=Math.max(0.8,Math.min(50,zoom*delta));
+  // Zoom centrato sul cursore
+  viewX=mx-(mx-viewX)*(zoom/oldZoom);
+  clampView(); draw();
+},{passive:false});
+
+// Touch pan & pinch
+let lastTouches=null, lastDist=null;
+C.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  if(e.touches.length===1){dragging=true;dragStartX=e.touches[0].clientX;dragStartViewX=viewX;}
+  if(e.touches.length===2){
+    lastTouches=e.touches;
+    lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+  }
+},{passive:false});
+C.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  if(e.touches.length===1 && dragging){
+    viewX=dragStartViewX+(e.touches[0].clientX-dragStartX);
+    clampView(); draw();
+  }
+  if(e.touches.length===2 && lastDist){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    const cx=(e.touches[0].clientX+e.touches[1].clientX)/2-C.getBoundingClientRect().left;
+    const oldZoom=zoom;
+    zoom=Math.max(0.8,Math.min(50,zoom*(d/lastDist)));
+    viewX=cx-(cx-viewX)*(zoom/oldZoom);
+    clampView(); lastDist=d; draw();
+  }
+},{passive:false});
+C.addEventListener('touchend',()=>{dragging=false;lastDist=null;});
+
+// Pulsanti zoom
+document.getElementById('zin').addEventListener('click',()=>{zoom=Math.min(50,zoom*1.4);clampView();draw();});
+document.getElementById('zout').addEventListener('click',()=>{zoom=Math.max(0.8,zoom/1.4);clampView();draw();});
+document.getElementById('zreset').addEventListener('click',()=>{zoom=1;viewX=0;draw();});
+
+// ── SHOW INFO ─────────────────────────────────────────────────
+function showInfo(ev){
+  const col=COL[ev.t], col2=COL2[ev.t];
+  const typeLabel={geo:'Geodinamica',cli:'Clima',vit:'Vita'}[ev.t];
+  const age=ev.age>=1000?(ev.age/1000).toFixed(2)+' Ga ('+ev.age.toFixed(0)+' Ma)':ev.age+' Ma';
+  document.getElementById('sbContent').innerHTML=`
+    <div class="ev-card">
+      <div class="ev-type" style="color:${col}">${typeLabel}</div>
+      <div class="ev-name">${ev.n}</div>
+      <div class="ev-age">${age}</div>
+      <div class="ev-section">
+        <div class="ev-sl">Descrizione</div>
+        <div class="ev-txt">${ev.desc}</div>
+      </div>
+      <div class="ev-section">
+        <div class="ev-sl">Cause</div>
+        <div class="ev-txt">${ev.cause}</div>
+      </div>
+      <div class="ev-section">
+        <div class="ev-sl">Conseguenze</div>
+        <div class="ev-txt">${ev.conseg}</div>
+      </div>
+      <div class="luoghi-box">
+        <div class="ev-sl">📍 Luoghi di riferimento</div>
+        <div class="ev-txt">${ev.luoghi}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+resize();
+</script>
+</body>
+</html>

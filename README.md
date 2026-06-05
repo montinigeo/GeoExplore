@@ -42,6 +42,18 @@ Sviluppati per uso personale come strumenti di esplorazione e visualizzazione di
 | [📡 DInSAR](#dinsar) | Interferometria SAR differenziale, deformazione del suolo | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/dinsar.html) | — |
 | [🛰️ Visibilità SAR Frane](#sar-frane) | Geometria di acquisizione SAR e ombre topografiche | [Apri](https://montinigeo.github.io/GeoExplore/geofisica/visibilita_sar_frane.html) | — |
 
+### ⛏️ Giacimentologia
+
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [⛏️ Classificazione Giacimenti](#giacimentologia) | Schema genetico interattivo: magmatici, idrotermali, sedimentari, metamorfici, supergene | [Apri](https://montinigeo.github.io/GeoExplore/giacimentologia/giacimentologia.html) | [📖](https://montinigeo.github.io/GeoExplore/giacimentologia/manuale_giacimentologia.html) |
+
+### 🌍 Storia della Terra
+
+| Argomento | Descrizione | Link | Manuale |
+|-------------|-------------|------|---------|
+| [🌍 Timeline Geologica](#storia-terra) | Timeline interattiva: geodinamica, clima e vita da 4.567 Ga a oggi | [Apri](https://montinigeo.github.io/GeoExplore/storia_terra/storia_terra.html) | [📖](https://montinigeo.github.io/GeoExplore/storia_terra/manuale_storia_terra.html) |
+
 ---
 
 ## 📖 Descrizione degli argomenti trattati
@@ -286,15 +298,6 @@ Piano fasoriale con fasore rotante e proiezione; grafico temporale di spostament
 <a name="onde-sismiche"></a>
 ## 🌍 Onde Sismiche — Struttura Interna della Terra
 
-**File:** `onde_sismiche.html`
-
-Propagazione delle onde sismiche: onde P (con PKP), onde S, struttura interna; raggi curvilinei calcolati con integrazione numerica della legge di Snell sferica; zona d'ombra delle onde P (103°–143°).
-
----
-
-<a name="onde-sismiche"></a>
-## 🌍 Onde Sismiche — Struttura Interna della Terra
-
 **File:** `onde_sismiche.html` &nbsp;·&nbsp; **Manuale:** `manuale_onde_sismiche.html`
 
 Simulazione interattiva della propagazione delle onde sismiche e della struttura interna della Terra.
@@ -323,6 +326,46 @@ Simulazione della tecnica DInSAR per la misura della deformazione del suolo: geo
 **File:** `visibilita_sar_frane.html`
 
 Geometria di acquisizione SAR in relazione alla topografia: angolo di incidenza locale, zone di foreshortening, layover e ombra radar; applicazione alla mappatura delle frane.
+
+---
+
+<a name="giacimentologia"></a>
+## ⛏️ Classificazione dei Giacimenti Minerari
+
+**File:** `giacimentologia.html` &nbsp;·&nbsp; **Manuale:** `manuale_giacimentologia.html`
+
+Schema genetico interattivo dei principali tipi di giacimento minerario, basato su Evans (1993) e letteratura aggiornata.
+
+### Funzionalità
+
+- 27 nodi interattivi distribuiti in cinque categorie genetiche: Magmatici, Idrotermali, Sedimentari, Metamorfici, Supergene/Weathering
+- Filtri per tipo genetico (5 toggle colorati) e per metallo (Cu, Au, Ni, Zn, Fe, REE, Li, Co, Cr, PGE, diamante...)
+- Click su nodo → pannello informativo con tenore tipico, dimensioni, ambiente geologico, contesto geodinamico, minerali principali, metodo di esplorazione ed esempi mondiali
+- Connessioni trattegiate tra tipi geneticamente correlati
+
+### Manuale
+
+Trattazione completa in 9 sezioni: terminologia (ore, gangue, tenore, cut-off, Clarke), giacimenti magmatici (segregazione Cr/PGE/Ni-Cu, carbonatiti REE, kimberliti, pegmatiti), idrotermali (porphyry, epitermali HS/LS, skarn, VMS, MVT, IOCG, orogenic gold), sedimentari (BIF, bauxite, placer, evaporiti, fosfati), metamorfici, supergene, esplorazione mineraria (metodi geochimici e geofisici), metalli critici per la transizione energetica, bibliografia.
+
+---
+
+<a name="storia-terra"></a>
+## 🌍 Evoluzione della Terra — Timeline Geologica
+
+**File:** `storia_terra.html` &nbsp;·&nbsp; **Manuale:** `manuale_storia_terra.html`
+
+Timeline geologica interattiva dell'evoluzione della Terra da 4.567 Ga a oggi.
+
+### Funzionalità
+
+- Timeline orizzontale con scala a potenza che dà spazio proporzionale al Cenozoico e Mesozoico pur mostrando l'intero Precambriano
+- 37 eventi interattivi distribuiti su tre corsie tematiche: 🔵 Geodinamica (formazione Terra, supercontinenti, orogenesi, LIP), 🟢 Clima (glaciazioni, PETM, Antropocene), 🔴 Vita (prime tracce, GOE, estinzioni di massa, dinosauri, H. sapiens)
+- Filtri per categoria; zoom con rotellina e drag; pulsanti di zoom rapido per Precambriano, Paleozoico, Mesozoico, Cenozoico
+- Click su evento → pannello con descrizione, cause, conseguenze e luoghi di riferimento
+
+### Manuale
+
+12 capitoli dalla formazione della Terra all'Antropocene: Adeano (accrezione, Luna, LHB), Archeano (TTG, stromatoliti, GOE), Proterozoico (supercontinenti, Snowball Earth, Ediacara), Paleozoico (Esplosione Cambriana, colonizzazione terraferma, estinzioni), Mesozoico (Pangea, dinosauri, angiosperme, K-Pg), Cenozoico (mammiferi, orogenesi alpino-himalayana, glaciazioni di Milankovitch, H. sapiens, Antropocene). 26 box luoghi di riferimento, 20 riferimenti bibliografici.
 
 ---
 
